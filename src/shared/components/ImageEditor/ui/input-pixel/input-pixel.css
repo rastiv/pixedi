@@ -1,0 +1,24 @@
+.input-pixel-container {
+  position: relative;
+}
+
+.input-pixel-legend {
+  position: absolute;
+  top: -9px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-left: 8px;
+  background: var(--background);
+}
+
+.input-pixel-suffix {
+  position: absolute;
+  right: 8px;
+  bottom: 2px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  pointer-events: none;
+  user-select: none;
+}

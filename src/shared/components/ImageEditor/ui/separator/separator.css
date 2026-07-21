@@ -1,0 +1,19 @@
+.separator {
+  display: block;
+  flex-shrink: 0;
+  background-color: var(--border);
+  border: none;
+  box-sizing: border-box;
+}
+
+.separator[data-orientation="horizontal"] {
+  height: 1px;
+  width: 100%;
+}
+
+.separator[data-orientation="vertical"] {
+  width: 1px;
+  height: 100%;
+  align-self: stretch;
+  margin: 0;
+}

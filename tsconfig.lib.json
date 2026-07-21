@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist/lib",
+    "rootDir": "."
+  },
+  "include": ["src/shared/components/ImageEditor/**/*"],
+  "exclude": [
+    "src/shared/components/ImageEditor/**/*.stories.tsx",
+    "src/shared/components/ImageEditor/**/*.stories.ts",
+    "src/shared/components/ImageEditor/**/*.test.tsx",
+    "src/shared/components/ImageEditor/**/*.test.ts",
+    "src/shared/components/ImageEditor/**/*.spec.tsx",
+    "src/shared/components/ImageEditor/**/*.spec.ts"
+  ]
+}

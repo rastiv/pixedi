@@ -1,0 +1,27 @@
+.header {
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.header-history {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.header-history-text {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
