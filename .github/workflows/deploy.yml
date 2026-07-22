@@ -11,18 +11,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Enable Corepack & Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.x --activate
-
+      # Setup pure node environment first
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
+      # Install pnpm without registry tokens block
+      - name: Install pnpm globally
+        run: npm install -g pnpm@9
+
+      # Install regular project dependencies
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
@@ -35,7 +34,10 @@ jobs:
       - name: Run Unified Build Configuration
         run: pnpm build
 
+      # Configure registry settings explicitly during the release stage
       - name: Publish React Component to NPM
-        run: pnpm publish --no-git-checks
+        run: |
+          pnpm config set registry https://npmjs.org
+          pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
