@@ -11,17 +11,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Enable Corepack & Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.x --activate
-
+      # Install Node first without custom caches to prevent environment store bugs
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npmjs.org'
+
+      # Standard global installation of pnpm to guarantee stable environment variables
+      - name: Install pnpm globally
+        run: npm install -g pnpm@9
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
