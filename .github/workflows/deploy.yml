@@ -33,9 +33,20 @@ jobs:
       - name: Run Unified Build Configuration
         run: pnpm build
 
+      # --- 1. Deploy to Cloudflare Pages ---
+      # This uploads the dist folder containing both the SPA app and the widget CDN
+      # Make sure you have CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in GitHub Secrets
+      - name: Deploy SPA & Widget CDN to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: 'pixedi' # The project name inside your Cloudflare Pages account
+          directory: 'dist' # Uploads everything generated in the previous step
+
+      # --- 2. EXISTING WORKING STEP: PUBLISH TO NPM ---
       - name: Publish React Component to NPM
         run: |
-          pnpm config set //registry.npmjs.org/:_authToken "$NODE_AUTH_TOKEN"
+          pnpm config set registry https://npmjs.org
+          pnpm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
           pnpm publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
