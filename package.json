@@ -1,6 +1,5 @@
 {
   "name": "pixedi",
-  "private": true,
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/lib/index.umd.js",
