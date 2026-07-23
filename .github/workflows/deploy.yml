@@ -47,6 +47,8 @@ jobs:
       # --- 2. EXISTING WORKING STEP: PUBLISH TO NPM ---
       - name: Publish React Component to NPM
         run: |
-          pnpm config set registry https://npmjs.org
-          pnpm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          pnpm config set registry https://registry.npmjs.org
+          pnpm config set //registry.npmjs.org/:_authToken "$NODE_AUTH_TOKEN"
           pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
