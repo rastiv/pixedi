@@ -1,11 +1,15 @@
 {
   "name": "pixedi",
   "version": "1.0.0",
-  "description": "A lightweight, embeddable React image editor component and UMD widget.",
+  "description": "A lightweight, embeddable React image editor component.",
   "type": "module",
   "main": "./dist/lib/index.umd.js",
   "module": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
+  "files": [
+    "dist/lib",
+    "README.md"
+  ],
   "scripts": {
     "dev": "vite",
     "build:app": "tsc -b tsconfig.app.json && vite build",
