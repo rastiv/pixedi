@@ -65,11 +65,27 @@ function App() {
 
 ### Props
 
-| Prop     | Type                          | Description                                                            |
-| -------- | ----------------------------- | ---------------------------------------------------------------------- |
-| `image`  | `string`                      | URL or base64 data URI of the image to edit.                             |
-| `onSave` | `(base64: string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as base64.   |
-| `onBack` | `() => void`                  | Called when the user clicks Back/Cancel.                                 |
+| Prop     | Type                                        | Description                                                            |
+| -------- | ------------------------------------------- | ---------------------------------------------------------------------- |
+| `image`  | `string`                                    | URL or base64 data URI of the image to edit.                           |
+| `onSave` | `(base64: string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as base64. |
+| `onBack` | `() => void`                                | Called when the user clicks Back/Cancel.                               |
+
+## Widget CDN
+
+For non-React environments, use the standalone UMD widget from a CDN. Pin to a specific version in production:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.0.5/dist/widget/pixedi-widget.js"></script>
+```
+
+For the latest version (use only for testing):
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/pixedi/dist/widget/pixedi-widget.js"></script>
+```
+
+The widget exposes `ImageEditorWidget` on the global `window` object after the script loads.
 
 ## TypeScript
 

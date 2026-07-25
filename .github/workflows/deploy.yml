@@ -5,51 +5,98 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
 
-      - name: Install pnpm globally
-        run: npm install -g pnpm@11
-
-      # Install regular project dependencies
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run Vitest Tests
-        run: pnpm test
+      - name: Lint
+        run: pnpm lint
 
       - name: Run TypeScript Type Check
         run: pnpm type-check
 
+      - name: Run Vitest Tests
+        run: pnpm test
+
       - name: Run Unified Build Configuration
         run: pnpm build
 
-      # --- 1. Deploy to Cloudflare Pages ---
-      # This uploads the dist folder containing both the SPA app and the widget CDN
-      # Make sure you have CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID in GitHub Secrets
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
       - name: Deploy SPA & Widget CDN to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: "pixedi" # The project name inside your Cloudflare Pages account
-          directory: "dist" # Uploads everything generated in the previous step
+          projectName: "pixedi"
+          directory: "dist"
 
-      # --- 2. EXISTING WORKING STEP: PUBLISH TO NPM ---
+  publish:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
       - name: Publish React Component to NPM
         run: |
           cp README.npm.md README.md
           pnpm config set registry https://registry.npmjs.org
           pnpm config set //registry.npmjs.org/:_authToken "$NODE_AUTH_TOKEN"
-          pnpm publish --no-git-checks
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view pixedi@$VERSION version > /dev/null 2>&1; then
+            echo "pixedi@$VERSION already published, skipping"
+          else
+            pnpm publish --no-git-checks
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

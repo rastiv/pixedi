@@ -1,14 +1,17 @@
 {
   "name": "pixedi",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A lightweight, embeddable React image editor component.",
   "type": "module",
+  "packageManager": "pnpm@11.17.0",
   "main": "./dist/lib/index.umd.js",
   "module": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
   "files": [
     "dist/lib",
-    "README.md"
+    "dist/widget",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite",
