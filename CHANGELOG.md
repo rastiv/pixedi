@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.6
+
+- Created a dedicated `README.widget.md` with full widget API documentation and examples.
+- Included `README.widget.md` in the npm package.
+- Updated npm README to link to the widget documentation.
+
 ## 1.0.5
 
 - Professionalized CI/CD pipeline: split build, deploy, and publish into separate jobs.
