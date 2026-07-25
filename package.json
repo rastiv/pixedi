@@ -1,6 +1,6 @@
 {
   "name": "pixedi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A lightweight, embeddable React image editor component.",
   "type": "module",
   "main": "./dist/lib/index.umd.js",
