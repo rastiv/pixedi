@@ -10,6 +10,11 @@
     "dist/lib",
     "README.md"
   ],
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
   "scripts": {
     "dev": "vite",
     "build:app": "tsc -b tsconfig.app.json && vite build",
