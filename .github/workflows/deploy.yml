@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -14,11 +14,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install pnpm globally
-        run: npm install -g pnpm@9
+        run: npm install -g pnpm@11
 
       # Install regular project dependencies
       - name: Install Dependencies
@@ -41,8 +41,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'pixedi' # The project name inside your Cloudflare Pages account
-          directory: 'dist' # Uploads everything generated in the previous step
+          projectName: "pixedi" # The project name inside your Cloudflare Pages account
+          directory: "dist" # Uploads everything generated in the previous step
 
       # --- 2. EXISTING WORKING STEP: PUBLISH TO NPM ---
       - name: Publish React Component to NPM
