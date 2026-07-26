@@ -60,7 +60,7 @@ export const Select: React.FC<SelectProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !event.composedPath().includes(containerRef.current)
       ) {
         setIsOpen(false);
       }
@@ -152,7 +152,7 @@ export const Select: React.FC<SelectProps> = ({
               {renderOption ? (
                 renderOption(item)
               ) : (
-                <span className={styles.itemLeft}>{item.label}1</span>
+                <span className={styles.itemLeft}>{item.label}</span>
               )}
               {value === item.value && <Check className={styles.itemCheck} />}
             </div>
