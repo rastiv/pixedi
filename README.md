@@ -4,7 +4,7 @@ A lightweight, embeddable React image editor component.
 
 Pixedi provides a ready-to-use image editing UI with cropping, resizing, filters, horizontal/vertical flip, undo/redo, and social-media presets. It is built with React and TypeScript and ships in three forms:
 
-1. **React component** — install from npm.
+1. **Pixedi React component** — install from npm.
 2. **Standalone UMD widget** — embed via CDN in any HTML page.
 3. **Demo SPA** — try it locally or view the deployed version.
 

@@ -1,2 +1,2 @@
-export { ImageEditor } from "./ImageEditor";
-export type { ImageEditorTheme } from "./ImageEditor";
+export { Pixedi } from "./ImageEditor";
+export type { PixediTheme } from "./ImageEditor";

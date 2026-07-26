@@ -1,5 +1,5 @@
 import { imagesData } from "@/app/entries";
-import { ImageEditor } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/ImageEditor";
 import styles from "./PackageDemo.module.css";
 
 export const PackageDemo = () => {
@@ -23,7 +23,7 @@ export const PackageDemo = () => {
   return (
     <div className={styles.packageDemo}>
       <div className={styles.packageDemoContainer}>
-        <ImageEditor
+        <Pixedi
           image={image?.original || ""}
           onBack={handleCancel}
           onSave={handleSave}

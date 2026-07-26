@@ -28,7 +28,7 @@ const groupedItems = [
 ] as SelectOption[];
 
 const meta = {
-  title: "ImageEditor/UI/Select",
+  title: "Pixedi/UI/Select",
   component: Select,
   tags: ["autodocs"],
   args: {

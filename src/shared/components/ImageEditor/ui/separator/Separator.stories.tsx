@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Separator } from "./Separator";
 
 const meta = {
-  title: "ImageEditor/UI/Separator",
+  title: "Pixedi/UI/Separator",
   component: Separator,
   tags: ["autodocs"],
 } satisfies Meta<typeof Separator>;

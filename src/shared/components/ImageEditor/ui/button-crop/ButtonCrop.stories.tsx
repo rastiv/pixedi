@@ -4,7 +4,7 @@ import { ButtonCrop } from "./ButtonCrop";
 import { Crop } from "../../assets/icons";
 
 const meta = {
-  title: "ImageEditor/UI/ButtonCrop",
+  title: "Pixedi/UI/ButtonCrop",
   component: ButtonCrop,
   tags: ["autodocs"],
   args: {

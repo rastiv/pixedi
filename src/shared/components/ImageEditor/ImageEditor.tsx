@@ -7,21 +7,21 @@ import { Sidebar } from "./sidebar";
 import type { FuncSaveArgs } from "./types";
 import styles from "./index.module.css";
 
-export type ImageEditorTheme = "light" | "dark";
+export type PixediTheme = "light" | "dark";
 
-type ImageEditorProps = {
+type PixediProps = {
   image: string;
   onSave: FuncSaveArgs;
   onBack: () => void;
-  theme?: ImageEditorTheme;
+  theme?: PixediTheme;
 };
 
-export const ImageEditor = ({
+export const Pixedi = ({
   image,
   onSave,
   onBack,
   theme = "light",
-}: ImageEditorProps) => {
+}: PixediProps) => {
   const { loading, error, width, height, base64, extension } =
     useImageLoader(image);
 

@@ -36,18 +36,18 @@ npm install react react-dom
 ### Import
 
 ```tsx
-import { ImageEditor } from "pixedi";
+import { Pixedi } from "pixedi";
 ```
 
 ### Usage
 
 ```tsx
-import { ImageEditor } from "pixedi";
+import { Pixedi } from "pixedi";
 
 function App() {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <ImageEditor
+      <Pixedi
         image="https://example.com/photo.jpg"
         onSave={async (base64) => {
           // Upload or persist the edited image

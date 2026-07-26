@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { injectCSS, removeCSS } from "virtual:css-injected-by-js";
 import type { FuncSaveArgs } from "@/shared/components/ImageEditor/types";
-import { ImageEditor } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/ImageEditor";
 
 type WidgetTheme = "light" | "dark";
 
@@ -78,7 +78,7 @@ const ImageEditorWidget: ImageEditorWidget = {
 
     root.render(
       <React.StrictMode>
-        <ImageEditor
+        <Pixedi
           image={options.image}
           onSave={options.onSave}
           onBack={options.onBack}

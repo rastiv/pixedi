@@ -3,7 +3,7 @@ import { fn } from "@storybook/test";
 import { Input } from "./Input";
 
 const meta = {
-  title: "ImageEditor/UI/Input",
+  title: "Pixedi/UI/Input",
   component: Input,
   tags: ["autodocs"],
   args: {
