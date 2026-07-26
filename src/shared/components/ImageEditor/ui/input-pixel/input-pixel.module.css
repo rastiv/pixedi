@@ -1,3 +1,21 @@
-.container { position: relative; }
-.legend { position: absolute; top: -9px; font-size: 12px; color: var(--muted-foreground); padding: 0 4px; margin-left: 8px; background: var(--background); }
-.suffix { position: absolute; right: 8px; bottom: 2px; font-size: 14px; color: var(--muted-foreground); pointer-events: none; user-select: none; }
+.container {
+  position: relative;
+}
+.legend {
+  position: absolute;
+  top: -9px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  padding: 0 4px;
+  margin-left: 8px;
+  background: var(--background);
+}
+.suffix {
+  position: absolute;
+  right: 8px;
+  bottom: 2px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  pointer-events: none;
+  user-select: none;
+}

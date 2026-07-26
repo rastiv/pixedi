@@ -69,7 +69,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
             </Button>
           </div>
         )}
-        <Button variant="outline" disabled={isSaving} onClick={resetHistory}>
+        <Button variant="outline" disabled={disableSave} onClick={resetHistory}>
           Reset
         </Button>
         <Button disabled={disableSave} onClick={handleSave}>

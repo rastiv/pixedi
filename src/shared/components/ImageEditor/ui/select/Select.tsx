@@ -73,7 +73,7 @@ export const Select: React.FC<SelectProps> = ({
     if (!isOpen || !triggerRef.current || !contentRef.current) return;
 
     const editorRect = containerRef.current
-      ?.closest<HTMLElement>(`.${rootStyles.root}.${rootStyles.main}`)
+      ?.closest<HTMLElement>(`.${rootStyles.main}`)
       ?.getBoundingClientRect();
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const contentRect = contentRef.current.getBoundingClientRect();
