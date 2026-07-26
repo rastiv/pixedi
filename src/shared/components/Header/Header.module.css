@@ -9,6 +9,13 @@
   padding: 0;
 }
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -16,7 +23,7 @@
   gap: 0.5rem;
 }
 
-.logo-icon {
+.logoIcon {
   width: 32px;
   height: 32px;
   fill: none;
@@ -24,21 +31,25 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.logo-icon-c-1 {
+
+.logoIconC1 {
   stroke: var(--primary);
 }
-.logo-icon-c-2 {
+
+.logoIconC2 {
   stroke: var(--accent);
 }
 
-.logo-name {
+.logoName {
   font-size: 1.5rem;
   font-weight: 600;
   letter-spacing: 1px;
 }
-.logo-name-c-1 {
+
+.logoNameC1 {
   color: var(--primary);
 }
-.logo-name-c-2 {
+
+.logoNameC2 {
   color: var(--accent);
 }

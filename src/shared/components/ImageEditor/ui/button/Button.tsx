@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import "./button.css";
+import styles from "./button.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "outline" | "ghost";
@@ -9,8 +9,8 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = "", variant = "default", children, ...props }, ref) => {
-    const variantClass = `btn-${variant}`;
-    const combinedClasses = `btn ${variantClass} ${className}`.trim();
+    const combinedClasses =
+      `${styles.button} ${styles[variant]} ${className}`.trim();
 
     return (
       <button ref={ref} className={combinedClasses} {...props}>

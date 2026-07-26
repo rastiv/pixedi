@@ -3,7 +3,8 @@ import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Button } from "../ui";
 import type { FuncSaveArgs } from "../types";
-import "./header.css";
+import styles from "./header.module.css";
+import buttonStyles from "../ui/button/button.module.css";
 
 type HeaderProps = {
   onBack: () => void;
@@ -39,29 +40,29 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   };
 
   return (
-    <div className="header">
-      <Button variant="ghost" className="btn-rect" onClick={onBack}>
+    <div className={styles.header}>
+      <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>
         <ArrowLeft />
       </Button>
 
-      <div className="header-tools">
+      <div className={styles.headerTools}>
         {showHistory && (
-          <div className="header-history">
+          <div className={styles.headerHistory}>
             <Button
               variant="outline"
               disabled={disabledUndo}
-              className="btn-rect"
+              className={buttonStyles.rect}
               onClick={undo}
             >
               <Undo />
             </Button>
-            <div className="header-history-text">
+            <div className={styles.headerHistoryText}>
               {history.pointer + 1}/{history.items.length}
             </div>
             <Button
               variant="outline"
               disabled={disabledRedo}
-              className="btn-rect"
+              className={buttonStyles.rect}
               onClick={redo}
             >
               <Redo />

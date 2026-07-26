@@ -1,4 +1,5 @@
 import type { Direction } from "../types";
+import styles from "./crop.module.css";
 
 type CropBordersProps = {
   onMouseDown: (e: React.MouseEvent, type: Direction, cursor: string) => void;
@@ -8,19 +9,19 @@ export const CropBorders = ({ onMouseDown }: CropBordersProps) => {
   return (
     <>
       <span
-        className="crop-b crop-b-t"
+        className={`${styles.cropBorder} ${styles.cropBorderTop}`}
         onMouseDown={(e: React.MouseEvent) => onMouseDown(e, "t", "ns")}
       />
       <span
-        className="crop-b crop-b-r"
+        className={`${styles.cropBorder} ${styles.cropBorderRight}`}
         onMouseDown={(e) => onMouseDown(e, "r", "ew")}
       />
       <span
-        className="crop-b crop-b-b"
+        className={`${styles.cropBorder} ${styles.cropBorderBottom}`}
         onMouseDown={(e) => onMouseDown(e, "b", "ns")}
       />
       <span
-        className="crop-b crop-b-l"
+        className={`${styles.cropBorder} ${styles.cropBorderLeft}`}
         onMouseDown={(e) => onMouseDown(e, "l", "ew")}
       />
     </>

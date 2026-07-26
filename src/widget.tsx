@@ -26,8 +26,6 @@ interface ActiveWidget {
   root: ReactDOM.Root;
   shadowRoot: ShadowRoot;
   mountElement: HTMLDivElement;
-  container: HTMLElement;
-  previousTheme: string | null;
 }
 
 declare global {
@@ -46,15 +44,6 @@ const destroyActiveWidget = () => {
   activeWidget.root.unmount();
   removeCSS({ target: activeWidget.shadowRoot });
   activeWidget.mountElement.remove();
-
-  if (activeWidget.previousTheme === null) {
-    activeWidget.container.removeAttribute("data-theme");
-  } else {
-    activeWidget.container.setAttribute(
-      "data-theme",
-      activeWidget.previousTheme,
-    );
-  }
 
   activeWidget = null;
 };
@@ -75,9 +64,6 @@ const ImageEditorWidget: ImageEditorWidget = {
       }
     }
 
-    const previousTheme = container.getAttribute("data-theme");
-    container.setAttribute("data-theme", options.theme ?? "light");
-
     injectCSS({ target: shadowRoot });
 
     const mountElement = document.createElement("div");
@@ -88,8 +74,6 @@ const ImageEditorWidget: ImageEditorWidget = {
       root,
       shadowRoot,
       mountElement,
-      container,
-      previousTheme,
     };
 
     root.render(
@@ -98,6 +82,7 @@ const ImageEditorWidget: ImageEditorWidget = {
           image={options.image}
           onSave={options.onSave}
           onBack={options.onBack}
+          theme={options.theme}
         />
       </React.StrictMode>,
     );

@@ -1,6 +1,7 @@
 import { Fullscreen } from "../assets/icons";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Button } from "../ui";
+import styles from "./sidebar.module.css";
 
 export const SidebarResize = () => {
   const { getLastHistoryItem, setCurrentAction, setSidebar } =
@@ -13,12 +14,16 @@ export const SidebarResize = () => {
   };
 
   return (
-    <Button variant="outline" className="sidebar-resize" onClick={handleClick}>
-      <div className="sidebar-resize-icon">
+    <Button
+      variant="outline"
+      className={styles.sidebarResize}
+      onClick={handleClick}
+    >
+      <div className={styles.sidebarResizeIcon}>
         <Fullscreen />
         Resize
       </div>
-      <div className="sidebar-resize-size">
+      <div className={styles.sidebarResizeSize}>
         {width} x {height}
       </div>
     </Button>

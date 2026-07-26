@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
-import "./button-crop.css";
+import styles from "./button-crop.module.css";
+import rootStyles from "../../index.module.css";
 
 interface ButtonCropProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   active?: boolean;
@@ -9,7 +10,7 @@ interface ButtonCropProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 
 export const ButtonCrop = forwardRef<HTMLButtonElement, ButtonCropProps>(
   ({ className = "", active = false, icon, label, ...props }, ref) => {
-    const combinedClasses = `btn-crop ${className}`.trim();
+    const combinedClasses = `${styles.button} ${className}`.trim();
 
     return (
       <button
@@ -20,7 +21,7 @@ export const ButtonCrop = forwardRef<HTMLButtonElement, ButtonCropProps>(
         {...props}
       >
         {icon}
-        <span className="semibold">{label}</span>
+        <span className={rootStyles.semibold}>{label}</span>
       </button>
     );
   },

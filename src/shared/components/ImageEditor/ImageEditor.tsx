@@ -5,25 +5,33 @@ import { Header } from "./header";
 import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
 import type { FuncSaveArgs } from "./types";
-import "./index.css";
+import styles from "./index.module.css";
+
+export type ImageEditorTheme = "light" | "dark";
 
 type ImageEditorProps = {
   image: string;
   onSave: FuncSaveArgs;
   onBack: () => void;
+  theme?: ImageEditorTheme;
 };
 
-export const ImageEditor = ({ image, onSave, onBack }: ImageEditorProps) => {
+export const ImageEditor = ({
+  image,
+  onSave,
+  onBack,
+  theme = "light",
+}: ImageEditorProps) => {
   const { loading, error, width, height, base64, extension } =
     useImageLoader(image);
 
   if (loading || error || !base64 || !extension) {
     return (
-      <div className="picedi sys">
+      <div className={`${styles.root} ${styles.system}`} data-theme={theme}>
         {loading && <Preloader size={48} />}
-        {error && <div className="text-red">{error}</div>}
+        {error && <div className={styles.textRed}>{error}</div>}
         {!loading && !error && (!base64 || !extension) && (
-          <div className="text-red">Failed to load image.</div>
+          <div className={styles.textRed}>Failed to load image.</div>
         )}
       </div>
     );
@@ -36,9 +44,9 @@ export const ImageEditor = ({ image, onSave, onBack }: ImageEditorProps) => {
       height={height}
       ext={extension}
     >
-      <div className="picedi main">
+      <div className={`${styles.root} ${styles.main}`} data-theme={theme}>
         <Header onSave={onSave} onBack={onBack} />
-        <div className="grid">
+        <div className={styles.grid}>
           <Frame />
           <Sidebar />
         </div>

@@ -9,7 +9,7 @@ import {
 } from "../crop";
 import { getInitalCrop } from "../utils";
 import { useMobile } from "../hooks";
-import "./crop.css";
+import styles from "./crop.module.css";
 
 export const Crop = () => {
   const { getCurrentAction, getLastHistoryItem } = useImageEditorContext();
@@ -37,12 +37,12 @@ export const Crop = () => {
         ref={imgRef}
         src={base64}
         alt="Image"
-        className="crop-image"
+        className={styles.cropImage}
         style={{ clipPath: `xywh(${x}% ${y}% ${w}% ${h}%)` }}
       />
       <div
         ref={cropRef}
-        className="crop-box"
+        className={styles.cropBox}
         style={{ width: `${w}%`, height: `${h}%`, top: `${y}%`, left: `${x}%` }}
       >
         <CropLines />

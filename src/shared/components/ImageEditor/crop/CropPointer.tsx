@@ -1,5 +1,6 @@
 import React from "react";
 import type { Direction } from "../types";
+import styles from "./crop.module.css";
 
 type CropPointerProps = {
   onMouseDown: (
@@ -11,9 +12,9 @@ type CropPointerProps = {
 
 export const CropPointer = ({ onMouseDown }: CropPointerProps) => {
   return (
-    <div className="crop-p-b">
+    <div className={styles.cropMobileBorder}>
       <div
-        className="crop-p-p"
+        className={styles.cropMobilePointer}
         onTouchStart={(e) => onMouseDown(e, "br", "nwse")}
       />
     </div>

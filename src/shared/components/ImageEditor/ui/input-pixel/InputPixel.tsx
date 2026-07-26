@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import "./input-pixel.css";
+import styles from "./input-pixel.module.css";
 import { Input } from "../../ui";
 
 interface InputPixelProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -10,13 +10,10 @@ interface InputPixelProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const InputPixel = forwardRef<HTMLInputElement, InputPixelProps>(
   ({ label, className = "", style, ...props }, ref) => {
     return (
-      <div
-        className={`input-pixel-container ${className}`.trim()}
-        style={style}
-      >
-        <span className="input-pixel-legend">{label}</span>
+      <div className={`${styles.container} ${className}`.trim()} style={style}>
+        <span className={styles.legend}>{label}</span>
         <Input ref={ref} type="number" {...props} />
-        <span className="input-pixel-suffix">px</span>
+        <span className={styles.suffix}>px</span>
       </div>
     );
   },

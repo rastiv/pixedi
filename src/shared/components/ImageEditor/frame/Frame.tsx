@@ -2,7 +2,8 @@ import { useRef } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Crop } from "../crop";
 import { CropTools } from "../crop";
-import "./frame.css";
+import styles from "./frame.module.css";
+import rootStyles from "../index.module.css";
 import { ResizeTools } from "../resize";
 
 export const Frame = () => {
@@ -21,8 +22,10 @@ export const Frame = () => {
     }
   };
 
-  const frameClassName = `frame ${isFade ? "mask" : ""}`;
-  const imageClassName = `frame-image ${isFade ? "frame-image--faded" : ""}`;
+  const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
+  const imageClassName = `${styles.frameImage} ${
+    isFade ? styles.frameImageFaded : ""
+  }`;
 
   return (
     <div className={frameClassName}>
@@ -31,7 +34,7 @@ export const Frame = () => {
         style={{
           aspectRatio: `${width} / ${height}`,
         }}
-        className="frame-preview"
+        className={styles.framePreview}
       >
         <img
           ref={imageRef}

@@ -10,45 +10,38 @@
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
-.resize-text {
+.resizeText {
   font-size: 14px;
   text-align: center;
   color: var(--muted-foreground);
 }
-
-.resize-border {
-  margin: 12px auto 4px auto;
+.resizeBorder {
+  margin: 12px auto 4px;
   display: inline-block;
   width: 60px;
   border-bottom: 1px solid var(--border);
 }
-
-.resize-tools {
+.resizeTools {
   display: flex;
   gap: 6px;
   align-items: center;
   margin-top: 16px;
 }
-
-.resize-tools-lock {
+.resizeToolsLock {
   width: 12px;
   height: 12px;
   color: var(--muted-foreground);
 }
-
-.resize-tools-buttons {
+.resizeToolsButtons {
   display: flex;
   margin-left: 4px;
 }
-
-.resize-tools-save {
+.resizeToolsSave {
   width: 36px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
-
-.resize-tools-close {
+.resizeToolsClose {
   width: 36px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;

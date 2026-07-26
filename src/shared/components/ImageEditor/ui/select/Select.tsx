@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useLayoutEffect } from "react";
 import { ChevronDown, Check } from "../../assets/icons";
-import "./select.css";
+import styles from "./select.module.css";
+import rootStyles from "../../index.module.css";
 
 export interface SelectOption {
   value: string;
@@ -72,7 +73,7 @@ export const Select: React.FC<SelectProps> = ({
     if (!isOpen || !triggerRef.current || !contentRef.current) return;
 
     const editorRect = containerRef.current
-      ?.closest<HTMLElement>(".picedi.main")
+      ?.closest<HTMLElement>(`.${rootStyles.root}.${rootStyles.main}`)
       ?.getBoundingClientRect();
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const contentRect = contentRef.current.getBoundingClientRect();
@@ -96,41 +97,43 @@ export const Select: React.FC<SelectProps> = ({
   return (
     <div
       ref={containerRef}
-      className={`select-wrapper ${className}`.trim()}
+      className={`${styles.wrapper} ${className}`.trim()}
       data-state={isOpen ? "open" : "closed"}
     >
       <button
         ref={triggerRef}
         type="button"
-        className="select-trigger"
+        className={styles.trigger}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{selectedOption ? selectedOption.fullName : placeholder}</span>
-        <ChevronDown className="select-trigger-arrow" />
+        <ChevronDown className={styles.triggerArrow} />
       </button>
 
-      <div ref={contentRef} className="select-content">
+      <div ref={contentRef} className={styles.content}>
         {items.map((item, index) => {
           if (item.options) {
             return (
               <div key={`group-${index}`}>
                 {/* Group Name */}
-                <div className="select-group-label semibold">{item.label}</div>
+                <div className={`${styles.groupLabel} ${rootStyles.semibold}`}>
+                  {item.label}
+                </div>
                 {item.options.map((option) => (
                   <div
                     key={option.value}
-                    className="select-item"
+                    className={styles.item}
                     onClick={() => handleSelectItem(option.value)}
                   >
                     {renderOption ? (
                       renderOption(option)
                     ) : (
-                      <span className="select-item-left">{option.label}</span>
+                      <span className={styles.itemLeft}>{option.label}</span>
                     )}
-                    <div className="select-item-addon">
+                    <div className={styles.itemAddon}>
                       {option.rightLabel && <span>{option.rightLabel}</span>}
                       {value === option.value && (
-                        <Check className="select-item-check" />
+                        <Check className={styles.itemCheck} />
                       )}
                       {value !== option.value && <b />}
                     </div>
@@ -143,15 +146,15 @@ export const Select: React.FC<SelectProps> = ({
           return (
             <div
               key={item.value}
-              className="select-item"
+              className={styles.item}
               onClick={() => handleSelectItem(item.value)}
             >
               {renderOption ? (
                 renderOption(item)
               ) : (
-                <span className="select-item-left">{item.label}1</span>
+                <span className={styles.itemLeft}>{item.label}1</span>
               )}
-              {value === item.value && <Check className="select-item-check" />}
+              {value === item.value && <Check className={styles.itemCheck} />}
             </div>
           );
         })}

@@ -1,10 +1,10 @@
-import "./HomePage.css";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => {
   return (
-    <section className="home-page">
-      <div className="container">
-        <h1 className="commingsoon">Comming soon</h1>
+    <section className={styles.homePage}>
+      <div className={styles.container}>
+        <h1 className={styles.commingsoon}>Comming soon</h1>
       </div>
     </section>
   );

@@ -4,7 +4,8 @@ import { Loader, Check, X, Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
 import { Button } from "../ui";
 import { InputPixel } from "../ui";
-import "./resize.css";
+import styles from "./resize.module.css";
+import rootStyles from "../index.module.css";
 
 const minScale = 10;
 const maxScale = 200;
@@ -136,12 +137,12 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
   }, [currentHeight, currentWidth, loading, mobile, onResizing, width]);
 
   return (
-    <div className="resize">
-      <div className="resize-text">
+    <div className={styles.resize}>
+      <div className={styles.resizeText}>
         {mobile ? "Slide UP/Down to Resize" : "Scroll UP/Down to Resize"}
       </div>
-      <div className="resize-border" />
-      <div className="resize-tools">
+      <div className={styles.resizeBorder} />
+      <div className={styles.resizeTools}>
         <InputPixel
           value={width}
           name="width"
@@ -150,7 +151,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           style={{ width: "88px" }}
           onChange={handleChangeWidth}
         />
-        <Lock className="resize-tools-lock" />
+        <Lock className={styles.resizeToolsLock} />
         <InputPixel
           value={height}
           name="height"
@@ -159,10 +160,10 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           style={{ width: "88px" }}
           onChange={handleChangeHeight}
         />
-        <div className="resize-tools-buttons">
+        <div className={styles.resizeToolsButtons}>
           <Button
             variant="outline"
-            className="resize-tools-save text-green"
+            className={`${styles.resizeToolsSave} ${rootStyles.textGreen}`}
             disabled={width === currentWidth || loading}
             onClick={() => handleSave()}
           >
@@ -170,7 +171,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           </Button>
           <Button
             variant="outline"
-            className="resize-tools-close text-red"
+            className={`${styles.resizeToolsClose} ${rootStyles.textRed}`}
             disabled={loading}
             onClick={handleClose}
           >

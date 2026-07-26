@@ -5,7 +5,8 @@ import { SidebarResize } from "./SidebarResize";
 import { SidebarCrop } from "./SidebarCrop";
 import { SidebarPresets } from "./SidebarPresets";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
-import "./sidebar.css";
+import styles from "./sidebar.module.css";
+import buttonStyles from "../ui/button/button.module.css";
 
 export const Sidebar = () => {
   const { getSidebar, setSidebar } = useImageEditorContext();
@@ -16,13 +17,13 @@ export const Sidebar = () => {
     <>
       <Button
         variant="outline"
-        className="sidebar-settings"
+        className={styles.sidebarSettings}
         onClick={() => setSidebar(true)}
       >
         <Settings />
       </Button>
       <div
-        className="sidebar"
+        className={styles.sidebar}
         style={{
           transform:
             isBellowMd && isSidebarOpen
@@ -30,21 +31,21 @@ export const Sidebar = () => {
               : "translateX(0%)",
         }}
       >
-        <div className="sidebar-container">
-          <div className="sidebar-content">
+        <div className={styles.sidebarContainer}>
+          <div className={styles.sidebarContent}>
             {isBellowMd && (
               <Button
                 variant="ghost"
-                className="sidebar-close-btn btn-rect"
+                className={`${styles.sidebarCloseBtn} ${buttonStyles.rect}`}
                 onClick={() => setSidebar(false)}
               >
                 <X />
               </Button>
             )}
             <SidebarResize />
-            <Separator className="sidebar-separator" />
+            <Separator className={styles.sidebarSeparator} />
             <SidebarCrop />
-            <Separator className="sidebar-separator" />
+            <Separator className={styles.sidebarSeparator} />
             <SidebarPresets />
           </div>
         </div>

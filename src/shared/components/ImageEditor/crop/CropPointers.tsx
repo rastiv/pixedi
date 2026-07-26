@@ -1,4 +1,5 @@
 import type { Direction } from "../types";
+import styles from "./crop.module.css";
 
 type CropPointersProps = {
   onMouseDown: (e: React.MouseEvent, type: Direction, cursor: string) => void;
@@ -8,35 +9,35 @@ export const CropPointers = ({ onMouseDown }: CropPointersProps) => {
   return (
     <>
       <span
-        className="crop-ps crop-ps-tl"
+        className={`${styles.cropPointer} ${styles.cropPointerTopLeft}`}
         onMouseDown={(e) => onMouseDown(e, "tl", "nwse")}
       />
       <span
-        className="crop-ps crop-ps-t"
+        className={`${styles.cropPointer} ${styles.cropPointerTop}`}
         onMouseDown={(e) => onMouseDown(e, "t", "ns")}
       />
       <span
-        className="crop-ps crop-ps-tr"
+        className={`${styles.cropPointer} ${styles.cropPointerTopRight}`}
         onMouseDown={(e) => onMouseDown(e, "tr", "nesw")}
       />
       <span
-        className="crop-ps crop-ps-r"
+        className={`${styles.cropPointer} ${styles.cropPointerRight}`}
         onMouseDown={(e) => onMouseDown(e, "r", "ew")}
       />
       <span
-        className="crop-ps crop-ps-br"
+        className={`${styles.cropPointer} ${styles.cropPointerBottomRight}`}
         onMouseDown={(e) => onMouseDown(e, "br", "nwse")}
       />
       <span
-        className="crop-ps crop-ps-b"
+        className={`${styles.cropPointer} ${styles.cropPointerBottom}`}
         onMouseDown={(e) => onMouseDown(e, "b", "ns")}
       />
       <span
-        className="crop-ps crop-ps-bl"
+        className={`${styles.cropPointer} ${styles.cropPointerBottomLeft}`}
         onMouseDown={(e) => onMouseDown(e, "bl", "nesw")}
       />
       <span
-        className="crop-ps crop-ps-l"
+        className={`${styles.cropPointer} ${styles.cropPointerLeft}`}
         onMouseDown={(e) => onMouseDown(e, "l", "ew")}
       />
     </>
