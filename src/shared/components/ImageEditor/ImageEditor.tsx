@@ -27,12 +27,14 @@ export const ImageEditor = ({
 
   if (loading || error || !base64 || !extension) {
     return (
-      <div className={`${styles.root} ${styles.system}`} data-theme={theme}>
-        {loading && <Preloader size={48} />}
-        {error && <div className={styles.textRed}>{error}</div>}
-        {!loading && !error && (!base64 || !extension) && (
-          <div className={styles.textRed}>Failed to load image.</div>
-        )}
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.system}>
+          {loading && <Preloader size={48} />}
+          {error && <div className={styles.textRed}>{error}</div>}
+          {!loading && !error && (!base64 || !extension) && (
+            <div className={styles.textRed}>Failed to load image.</div>
+          )}
+        </div>
       </div>
     );
   }
@@ -44,11 +46,13 @@ export const ImageEditor = ({
       height={height}
       ext={extension}
     >
-      <div className={`${styles.root} ${styles.main}`} data-theme={theme}>
-        <Header onSave={onSave} onBack={onBack} />
-        <div className={styles.grid}>
-          <Frame />
-          <Sidebar />
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.main}>
+          <Header onSave={onSave} onBack={onBack} />
+          <div className={styles.grid}>
+            <Frame />
+            <Sidebar />
+          </div>
         </div>
       </div>
     </ImageEditorProvider>

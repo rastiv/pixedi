@@ -1,7 +1,8 @@
+/// <reference types="vite/client" />
 import React from "react";
 import type { Preview } from "@storybook/react";
 import "@/app/styles/index.css";
-import "@/shared/components/ImageEditor/index.css";
+import rootStyles from "@/shared/components/ImageEditor/index.module.css";
 
 const preview: Preview = {
   parameters: {
@@ -35,7 +36,7 @@ const preview: Preview = {
         "div",
         {
           "data-theme": selectedTheme,
-          className: "root",
+          className: rootStyles.root,
           style: {
             padding: 24,
             minHeight: "100vh",

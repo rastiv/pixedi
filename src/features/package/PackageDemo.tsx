@@ -4,6 +4,7 @@ import styles from "./PackageDemo.module.css";
 
 export const PackageDemo = () => {
   const image = imagesData.find((img) => img.id === "78");
+  //   const image = imagesData.find((img) => img.id === "26");
 
   const handleSave = async (base64: string) => {
     return new Promise<void>((resolve) => {
