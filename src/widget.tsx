@@ -14,23 +14,22 @@ interface WidgetOptions {
   theme?: WidgetTheme;
 }
 
-interface ImageEditorWidgetInstance {
+interface PixediWidgetInstance {
   destroy: () => void;
 }
 
-interface ImageEditorWidget {
-  init: (options: WidgetOptions) => ImageEditorWidgetInstance | undefined;
+interface PixediWidget {
+  init: (options: WidgetOptions) => PixediWidgetInstance | undefined;
 }
 
 interface ActiveWidget {
   root: ReactDOM.Root;
   shadowRoot: ShadowRoot;
-  mountElement: HTMLDivElement;
 }
 
 declare global {
   interface Window {
-    ImageEditorWidget?: ImageEditorWidget;
+    PixediWidget?: PixediWidget;
   }
 }
 
@@ -43,12 +42,11 @@ const destroyActiveWidget = () => {
 
   activeWidget.root.unmount();
   removeCSS({ target: activeWidget.shadowRoot });
-  activeWidget.mountElement.remove();
 
   activeWidget = null;
 };
 
-const ImageEditorWidget: ImageEditorWidget = {
+const PixediWidget: PixediWidget = {
   init: (options) => {
     const container = document.getElementById(options.containerId);
     if (!container) return;
@@ -66,14 +64,10 @@ const ImageEditorWidget: ImageEditorWidget = {
 
     injectCSS({ target: shadowRoot });
 
-    const mountElement = document.createElement("div");
-    shadowRoot.append(mountElement);
-
-    const root = ReactDOM.createRoot(mountElement);
+    const root = ReactDOM.createRoot(shadowRoot as unknown as Element);
     activeWidget = {
       root,
       shadowRoot,
-      mountElement,
     };
 
     root.render(
@@ -98,7 +92,7 @@ const ImageEditorWidget: ImageEditorWidget = {
 };
 
 if (typeof window !== "undefined") {
-  window.ImageEditorWidget = ImageEditorWidget;
+  window.PixediWidget = PixediWidget;
 }
 
-export default ImageEditorWidget;
+export default PixediWidget;

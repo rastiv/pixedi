@@ -25,7 +25,7 @@ export default defineConfig({
     minify: "oxc",
     lib: {
       entry: "src/widget.tsx",
-      name: "ImageEditorWidget",
+      name: "PixediWidget",
       formats: ["umd"],
     },
     rolldownOptions: {
