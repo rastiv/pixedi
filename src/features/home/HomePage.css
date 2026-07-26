@@ -1,0 +1,27 @@
+.home-page {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.home-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--accent);
+  filter: blur(100px);
+  opacity: 0.2;
+  border-radius: 100%;
+  pointer-events: none;
+}
+
+.commingsoon {
+  text-align: center;
+  color: var(--primary);
+  font-size: 2rem;
+  font-weight: 600;
+}

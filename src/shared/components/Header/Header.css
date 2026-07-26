@@ -1,0 +1,44 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  background-color: var(--background);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.logo-icon-c-1 {
+  stroke: var(--primary);
+}
+.logo-icon-c-2 {
+  stroke: var(--accent);
+}
+
+.logo-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.logo-name-c-1 {
+  color: var(--primary);
+}
+.logo-name-c-2 {
+  color: var(--accent);
+}

@@ -1,12 +1,16 @@
 import { Route, Routes } from "react-router";
 import { ROUTES } from "@/shared/config";
-import { GalleryPage, ImageEditPage } from "@/features/gallery";
+import { ImageEditPage } from "@/features/gallery";
+import { HomePage } from "@/features/home";
+import { AppLayout } from "./AppLayout";
 
 export const AppRouter = () => {
   return (
     <Routes>
-      <Route path={ROUTES.HOME} element={<GalleryPage />} />
-      <Route path={ROUTES.IMAGE_EDIT} element={<ImageEditPage />} />
+      <Route element={<AppLayout />}>
+        <Route path={ROUTES.HOME} element={<HomePage />} />
+        <Route path={ROUTES.IMAGE_EDIT} element={<ImageEditPage />} />
+      </Route>
     </Routes>
   );
 };
