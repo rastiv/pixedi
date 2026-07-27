@@ -7,7 +7,7 @@ export const SidebarFlip = () => {
   const { setCurrentAction, setSidebar } = useImageEditorContext();
 
   const handleClick = () => {
-    setCurrentAction({ name: "flip", args: { h: false, v: false } });
+    setCurrentAction({ name: "flip", args: null });
     setSidebar(false);
   };
 

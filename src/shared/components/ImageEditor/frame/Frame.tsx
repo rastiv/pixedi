@@ -18,12 +18,6 @@ export const Frame = () => {
   const isFlip = currentAction?.name === "flip";
   const isFade = isCrop;
 
-  const handleResizing = (scale: number) => {
-    if (frameRef.current) {
-      frameRef.current.style.transform = `scale(${scale / 100})`;
-    }
-  };
-
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
   const imageClassName = `${styles.frameImage} ${
     isFade ? styles.frameImageFaded : ""
@@ -46,9 +40,9 @@ export const Frame = () => {
         />
         {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
       </div>
-      {isResize && <ResizeTools onResizing={handleResizing} />}
+      {isResize && <ResizeTools frameRef={frameRef} />}
       {isCrop && <CropTools />}
-      {isFlip && <FlipTools />}
+      {isFlip && <FlipTools frameRef={frameRef} />}
     </div>
   );
 };

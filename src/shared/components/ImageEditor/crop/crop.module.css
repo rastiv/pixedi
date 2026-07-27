@@ -15,8 +15,7 @@
   transform: translateX(-50%);
   background-color: var(--background);
   display: flex;
-  height: 36px;
-  padding-left: 12px;
+  padding: 4px 4px 4px 8px;
   align-items: center;
   border-radius: 4px;
   box-sizing: border-box;

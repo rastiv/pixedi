@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
@@ -20,10 +20,10 @@ const sizeCalculator = (scale: number, width: number, height: number) => {
 };
 
 type ResizeToolsProps = {
-  onResizing: (scale: number) => void;
+  frameRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
+export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
     useImageEditorContext();
   const {
@@ -38,6 +38,16 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
   const { resize } = useImageProcessor();
   const mobile = useMobile();
 
+  const handleFrameTransform = useCallback(
+    (scale: number) => {
+      if (frameRef.current) {
+        frameRef.current.style.transition = "transform 0.2s ease";
+        frameRef.current.style.transform = `scale(${scale / 100})`;
+      }
+    },
+    [frameRef],
+  );
+
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
       (parseInt(e.target.value) / currentWidth) * 100,
@@ -46,7 +56,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     );
     setWidth(updatedWidth);
     setHeight(updatedHeight);
-    onResizing(updatedScale);
+    handleFrameTransform(updatedScale);
   };
 
   const handleChangeHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,11 +67,11 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     );
     setHeight(updatedHeight);
     setWidth(updatedWidth);
-    onResizing(updatedScale);
+    handleFrameTransform(updatedScale);
   };
 
   const handleClose = () => {
-    onResizing(100);
+    handleFrameTransform(100);
     setCurrentAction(null);
     setSidebar(true);
   };
@@ -76,7 +86,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
         width,
         height,
       });
-      onResizing(100);
+      handleFrameTransform(100);
       setSidebar(true);
     } catch (error) {
       console.error("Failed to process image:", error);
@@ -96,7 +106,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
       );
       setHeight(updatedHeight);
       setWidth(updatedWidth);
-      onResizing(scale);
+      handleFrameTransform(scale);
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -133,7 +143,14 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     window.addEventListener("touchmove", handleTouchMove, { signal });
 
     return () => controller.abort();
-  }, [currentHeight, currentWidth, loading, mobile, onResizing, width]);
+  }, [
+    currentHeight,
+    currentWidth,
+    handleFrameTransform,
+    loading,
+    mobile,
+    width,
+  ]);
 
   return (
     <div className={styles.resize}>

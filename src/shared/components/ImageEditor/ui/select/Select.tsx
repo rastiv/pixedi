@@ -20,14 +20,14 @@ interface SelectProps {
   renderOption?: (option: SelectOption) => React.ReactNode;
 }
 
-export const Select: React.FC<SelectProps> = ({
+export const Select = ({
   items,
   value,
   onChange,
   placeholder = "Select an option",
   className = "",
   renderOption,
-}) => {
+}: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);

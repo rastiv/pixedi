@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Separator } from "../ui";
+import { SaveCloseGroup } from "../ui";
 import type { CropRect } from "../types";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { eventBus } from "../eventBus";
 import { getInitalCrop } from "../utils";
 import { useImageProcessor } from "../hooks";
-import { Check, Loader, X } from "../assets/icons";
 import styles from "./crop.module.css";
 import rootStyles from "../index.module.css";
 
@@ -128,25 +127,11 @@ export const CropTools = () => {
           ref={heightRef}
         />
       </div>
-      <Separator orientation="vertical" />
-      <Button
-        variant="ghost"
-        className={rootStyles.textGreen}
-        style={{ height: "36px", width: "36px" }}
-        disabled={loading}
-        onClick={handleSave}
-      >
-        {loading ? <Loader /> : <Check />}
-      </Button>
-      <Separator orientation="vertical" />
-      <Button
-        variant="ghost"
-        style={{ height: "36px", width: "36px" }}
-        disabled={loading}
-        onClick={handleClose}
-      >
-        <X className={rootStyles.textRed} />
-      </Button>
+      <SaveCloseGroup
+        saving={loading}
+        onSave={handleSave}
+        onClose={handleClose}
+      />
     </div>
   );
 };
