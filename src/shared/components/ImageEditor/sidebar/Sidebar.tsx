@@ -4,6 +4,7 @@ import { Button, Separator } from "../ui";
 import { SidebarResize } from "./SidebarResize";
 import { SidebarCrop } from "./SidebarCrop";
 import { SidebarPresets } from "./SidebarPresets";
+import { SidebarFlip } from "./SidebarFlip";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import styles from "./sidebar.module.css";
 import buttonStyles from "../ui/button/button.module.css";
@@ -47,6 +48,8 @@ export const Sidebar = () => {
             <SidebarCrop />
             <Separator className={styles.sidebarSeparator} />
             <SidebarPresets />
+            <Separator className={styles.sidebarSeparator} />
+            <SidebarFlip />
           </div>
         </div>
       </div>

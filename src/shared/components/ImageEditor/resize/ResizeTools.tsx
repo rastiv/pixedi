@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
-import { Loader, Check, X, Lock } from "../assets/icons";
+import { Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
-import { Button } from "../ui";
+import { SaveCloseGroup } from "../ui";
 import { InputPixel } from "../ui";
 import styles from "./resize.module.css";
-import rootStyles from "../index.module.css";
 
 const minScale = 10;
 const maxScale = 200;
@@ -160,24 +159,12 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           style={{ width: "88px" }}
           onChange={handleChangeHeight}
         />
-        <div className={styles.resizeToolsButtons}>
-          <Button
-            variant="outline"
-            className={`${styles.resizeToolsSave} ${rootStyles.textGreen}`}
-            disabled={width === currentWidth || loading}
-            onClick={() => handleSave()}
-          >
-            {loading ? <Loader /> : <Check />}
-          </Button>
-          <Button
-            variant="outline"
-            className={`${styles.resizeToolsClose} ${rootStyles.textRed}`}
-            disabled={loading}
-            onClick={handleClose}
-          >
-            <X />
-          </Button>
-        </div>
+        <SaveCloseGroup
+          onSave={() => handleSave()}
+          onClose={handleClose}
+          saving={loading}
+          disabled={width === currentWidth || loading}
+        />
       </div>
     </div>
   );

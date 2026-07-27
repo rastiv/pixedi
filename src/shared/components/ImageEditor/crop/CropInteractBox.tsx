@@ -6,12 +6,12 @@ import {
   CropPointers,
   CropLines,
   CropPointer,
-} from "../crop";
+} from ".";
 import { getInitalCrop } from "../utils";
 import { useMobile } from "../hooks";
 import styles from "./crop.module.css";
 
-export const Crop = () => {
+export const CropInteractBox = () => {
   const { getCurrentAction, getLastHistoryItem } = useImageEditorContext();
   const currentAction = getCurrentAction();
   const mobile = useMobile();

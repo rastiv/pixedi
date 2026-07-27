@@ -97,6 +97,28 @@ export const Fullscreen = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
+export const FlipH = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3" />
+    <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3" />
+    <path d="M12 20v2" />
+    <path d="M12 14v2" />
+    <path d="M12 8v2" />
+    <path d="M12 2v2" />
+  </svg>
+);
+
+export const FlipV = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
+    <path d="M21 16v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3" />
+    <path d="M4 12H2" />
+    <path d="M10 12H8" />
+    <path d="M16 12h-2" />
+    <path d="M22 12h-2" />
+  </svg>
+);
+
 export const Loader = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56">

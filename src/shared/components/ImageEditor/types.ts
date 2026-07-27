@@ -35,15 +35,19 @@ export type ActionCrop = {
   preset: CropSizes | null;
 };
 
+export type ActionFlip = {
+  h: boolean;
+  v: boolean;
+};
+
 export type ActionWithVal = {
-  val: number;
+  val: boolean;
 };
 
 export type Action =
   | { name: "resize"; args: Sizes }
   | { name: "crop"; args: ActionCrop }
-  | { name: "flipH"; args: ActionWithVal }
-  | { name: "flipV"; args: ActionWithVal }
+  | { name: "flip"; args: ActionFlip }
   | { name: "filters"; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {

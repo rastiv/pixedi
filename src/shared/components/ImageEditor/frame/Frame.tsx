@@ -1,10 +1,11 @@
 import { useRef } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
-import { Crop } from "../crop";
+import { ResizeTools } from "../resize";
 import { CropTools } from "../crop";
+import { CropInteractBox } from "../crop";
+import { FlipTools } from "../flip";
 import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
-import { ResizeTools } from "../resize";
 
 export const Frame = () => {
   const { getLastHistoryItem, currentAction } = useImageEditorContext();
@@ -14,7 +15,8 @@ export const Frame = () => {
 
   const isCrop = currentAction?.name === "crop";
   const isResize = currentAction?.name === "resize";
-  const isFade = isCrop || isResize;
+  const isFlip = currentAction?.name === "flip";
+  const isFade = isCrop;
 
   const handleResizing = (scale: number) => {
     if (frameRef.current) {
@@ -42,10 +44,11 @@ export const Frame = () => {
           alt="Image"
           className={imageClassName}
         />
-        {isCrop && <Crop key={currentAction?.args?.id} />}
+        {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
       </div>
       {isResize && <ResizeTools onResizing={handleResizing} />}
       {isCrop && <CropTools />}
+      {isFlip && <FlipTools />}
     </div>
   );
 };

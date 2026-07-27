@@ -1,0 +1,17 @@
+.scGroup {
+  display: flex;
+  margin-left: 4px;
+}
+
+.scGroupSave {
+  width: 36px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.scGroupClose {
+  width: 36px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+}
