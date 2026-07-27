@@ -21,11 +21,15 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
   const { base64, width, height } = getLastHistoryItem();
 
   const enableAnimation = () => {
-    frameRef.current.style.transition = "transform 0.2s ease";
+    if (frameRef.current) {
+      frameRef.current.style.transition = "transform 0.2s ease";
+    }
   };
 
   const disableAnimation = () => {
-    frameRef.current.style.transition = "none";
+    if (frameRef.current) {
+      frameRef.current.style.transition = "none";
+    }
   };
 
   const handleFrameTransform = (
