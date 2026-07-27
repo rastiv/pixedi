@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Separator } from "../ui";
+import { SaveCloseGroup } from "../ui";
 import type { CropRect } from "../types";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { eventBus } from "../eventBus";
 import { getInitalCrop } from "../utils";
 import { useImageProcessor } from "../hooks";
-import { Check, Loader, X } from "../assets/icons";
+import styles from "./crop.module.css";
+import rootStyles from "../index.module.css";
 
 export const CropTools = () => {
   const {
@@ -97,42 +98,40 @@ export const CropTools = () => {
   };
 
   return (
-    <div className="crop-tools">
-      <div className="crop-tools-info">
-        <div className="crop-tools-info-label">left</div>
-        <div className="crop-tools-info-value semibold" ref={leftRef} />
+    <div className={styles.cropTools}>
+      <div className={styles.cropToolsInfo}>
+        <div className={styles.cropToolsInfoLabel}>left</div>
+        <div
+          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          ref={leftRef}
+        />
       </div>
-      <div className="crop-tools-info">
-        <div className="crop-tools-info-label">top</div>
-        <div className="crop-tools-info-value semibold" ref={topRef} />
+      <div className={styles.cropToolsInfo}>
+        <div className={styles.cropToolsInfoLabel}>top</div>
+        <div
+          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          ref={topRef}
+        />
       </div>
-      <div className="crop-tools-info">
-        <div className="crop-tools-info-label">width</div>
-        <div className="crop-tools-info-value semibold" ref={widthRef} />
+      <div className={styles.cropToolsInfo}>
+        <div className={styles.cropToolsInfoLabel}>width</div>
+        <div
+          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          ref={widthRef}
+        />
       </div>
-      <div className="crop-tools-info">
-        <div className="crop-tools-info-label">height</div>
-        <div className="crop-tools-info-value semibold" ref={heightRef} />
+      <div className={styles.cropToolsInfo}>
+        <div className={styles.cropToolsInfoLabel}>height</div>
+        <div
+          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          ref={heightRef}
+        />
       </div>
-      <Separator orientation="vertical" />
-      <Button
-        variant="ghost"
-        className="text-green"
-        style={{ height: "36px", width: "36px" }}
-        disabled={loading}
-        onClick={handleSave}
-      >
-        {loading ? <Loader /> : <Check />}
-      </Button>
-      <Separator orientation="vertical" />
-      <Button
-        variant="ghost"
-        style={{ height: "36px", width: "36px" }}
-        disabled={loading}
-        onClick={handleClose}
-      >
-        <X className="text-red" />
-      </Button>
+      <SaveCloseGroup
+        saving={loading}
+        onSave={handleSave}
+        onClose={handleClose}
+      />
     </div>
   );
 };

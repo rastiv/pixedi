@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { injectCSS, removeCSS } from "virtual:css-injected-by-js";
 import type { FuncSaveArgs } from "@/shared/components/ImageEditor/types";
-import { ImageEditor } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/ImageEditor";
 
 type WidgetTheme = "light" | "dark";
 
@@ -14,25 +14,22 @@ interface WidgetOptions {
   theme?: WidgetTheme;
 }
 
-interface ImageEditorWidgetInstance {
+interface PixediWidgetInstance {
   destroy: () => void;
 }
 
-interface ImageEditorWidget {
-  init: (options: WidgetOptions) => ImageEditorWidgetInstance | undefined;
+interface PixediWidget {
+  init: (options: WidgetOptions) => PixediWidgetInstance | undefined;
 }
 
 interface ActiveWidget {
   root: ReactDOM.Root;
   shadowRoot: ShadowRoot;
-  mountElement: HTMLDivElement;
-  container: HTMLElement;
-  previousTheme: string | null;
 }
 
 declare global {
   interface Window {
-    ImageEditorWidget?: ImageEditorWidget;
+    PixediWidget?: PixediWidget;
   }
 }
 
@@ -45,21 +42,11 @@ const destroyActiveWidget = () => {
 
   activeWidget.root.unmount();
   removeCSS({ target: activeWidget.shadowRoot });
-  activeWidget.mountElement.remove();
-
-  if (activeWidget.previousTheme === null) {
-    activeWidget.container.removeAttribute("data-theme");
-  } else {
-    activeWidget.container.setAttribute(
-      "data-theme",
-      activeWidget.previousTheme,
-    );
-  }
 
   activeWidget = null;
 };
 
-const ImageEditorWidget: ImageEditorWidget = {
+const PixediWidget: PixediWidget = {
   init: (options) => {
     const container = document.getElementById(options.containerId);
     if (!container) return;
@@ -75,29 +62,21 @@ const ImageEditorWidget: ImageEditorWidget = {
       }
     }
 
-    const previousTheme = container.getAttribute("data-theme");
-    container.setAttribute("data-theme", options.theme ?? "light");
-
     injectCSS({ target: shadowRoot });
 
-    const mountElement = document.createElement("div");
-    shadowRoot.append(mountElement);
-
-    const root = ReactDOM.createRoot(mountElement);
+    const root = ReactDOM.createRoot(shadowRoot as unknown as Element);
     activeWidget = {
       root,
       shadowRoot,
-      mountElement,
-      container,
-      previousTheme,
     };
 
     root.render(
       <React.StrictMode>
-        <ImageEditor
+        <Pixedi
           image={options.image}
           onSave={options.onSave}
           onBack={options.onBack}
+          theme={options.theme}
         />
       </React.StrictMode>,
     );
@@ -113,7 +92,7 @@ const ImageEditorWidget: ImageEditorWidget = {
 };
 
 if (typeof window !== "undefined") {
-  window.ImageEditorWidget = ImageEditorWidget;
+  window.PixediWidget = PixediWidget;
 }
 
-export default ImageEditorWidget;
+export default PixediWidget;

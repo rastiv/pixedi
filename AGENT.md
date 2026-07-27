@@ -25,11 +25,11 @@ The core component lives in `src/shared/components/ImageEditor`.
 
 The repo produces three separate artifacts. Use the correct config for each:
 
-| Target | Config | Output | Purpose |
-|--------|--------|--------|---------|
-| Demo SPA | `vite.config.ts` | `dist/` | Local dev (`pnpm dev`) and Cloudflare Pages deploy |
-| NPM library | `vite.lib.config.ts` | `dist/lib/` | ESM + UMD bundle of `ImageEditor` |
-| UMD widget | `vite.widget.config.ts` | `dist/widget/` | Standalone `pixedi-widget.js` CDN bundle |
+| Target      | Config                  | Output         | Purpose                                            |
+| ----------- | ----------------------- | -------------- | -------------------------------------------------- |
+| Demo SPA    | `vite.config.ts`        | `dist/`        | Local dev (`pnpm dev`) and Cloudflare Pages deploy |
+| NPM library | `vite.lib.config.ts`    | `dist/lib/`    | ESM + UMD bundle of `Pixedi`                       |
+| UMD widget  | `vite.widget.config.ts` | `dist/widget/` | Standalone `pixedi-widget.js` CDN bundle           |
 
 Run the full unified build with:
 
@@ -44,13 +44,13 @@ src/
   app/          # Demo SPA entry, routing, providers, global styles
   features/     # Page-level/demo features (e.g. gallery)
   shared/       # Reusable code
-    components/ # ImageEditor, ImageCard, ui primitives
+    components/ # Pixedi, ImageCard, ui primitives
     config/     # Shared config/constants
     features/   # Cross-cutting feature slices
     hooks/      # Reusable hooks
     types/      # Shared TypeScript types
   main.tsx      # SPA entry point
-  widget.tsx    # UMD widget entry point (mounts ImageEditor into shadow DOM)
+  widget.tsx    # UMD widget entry point (mounts Pixedi into shadow DOM)
   test/setup.ts # Vitest setup (mocks canvas/ImageBitmap APIs)
 ```
 
@@ -76,7 +76,7 @@ pnpm storybook        # Run Storybook dev server on port 6006
 - **Always use `pnpm`**, not `npm` or `yarn`. A `pnpm-lock.yaml` is present.
 - **React and `react-dom` are `peerDependencies`** in the library build. Do not bundle them into `dist/lib`.
 - **Widget CSS is injected by JS** using `vite-plugin-css-injected-by-js` so the UMD bundle is self-contained.
-- **The widget mounts into a Shadow DOM** and exposes `window.ImageEditorWidget`.
+- **The widget mounts into a Shadow DOM** and exposes `window.PixediWidget`.
 - **Type declarations** for the library are emitted to `dist/lib/index.d.ts` from `tsconfig.lib.json`.
 - **Test environment mocks canvas APIs** because jsdom does not support `HTMLCanvasElement` rendering.
 

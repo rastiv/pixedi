@@ -14,6 +14,11 @@ export type Sizes = {
 
 export type Direction = "r" | "l" | "t" | "b" | "tl" | "tr" | "bl" | "br";
 
+export type FlipDirection = {
+  horizontal: boolean;
+  vertical: boolean;
+};
+
 export type CropSizes = {
   w: number;
   h: number;
@@ -36,14 +41,13 @@ export type ActionCrop = {
 };
 
 export type ActionWithVal = {
-  val: number;
+  val: boolean;
 };
 
 export type Action =
   | { name: "resize"; args: Sizes }
   | { name: "crop"; args: ActionCrop }
-  | { name: "flipH"; args: ActionWithVal }
-  | { name: "flipV"; args: ActionWithVal }
+  | { name: "flip"; args: null }
   | { name: "filters"; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {

@@ -1,9 +1,11 @@
 import { useRef } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
-import { Crop } from "../crop";
-import { CropTools } from "../crop";
-import "./frame.css";
 import { ResizeTools } from "../resize";
+import { CropTools } from "../crop";
+import { CropInteractBox } from "../crop";
+import { FlipTools } from "../flip";
+import styles from "./frame.module.css";
+import rootStyles from "../index.module.css";
 
 export const Frame = () => {
   const { getLastHistoryItem, currentAction } = useImageEditorContext();
@@ -13,16 +15,13 @@ export const Frame = () => {
 
   const isCrop = currentAction?.name === "crop";
   const isResize = currentAction?.name === "resize";
-  const isFade = isCrop || isResize;
+  const isFlip = currentAction?.name === "flip";
+  const isFade = isCrop;
 
-  const handleResizing = (scale: number) => {
-    if (frameRef.current) {
-      frameRef.current.style.transform = `scale(${scale / 100})`;
-    }
-  };
-
-  const frameClassName = `frame ${isFade ? "mask" : ""}`;
-  const imageClassName = `frame-image ${isFade ? "frame-image--faded" : ""}`;
+  const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
+  const imageClassName = `${styles.frameImage} ${
+    isFade ? styles.frameImageFaded : ""
+  }`;
 
   return (
     <div className={frameClassName}>
@@ -31,7 +30,7 @@ export const Frame = () => {
         style={{
           aspectRatio: `${width} / ${height}`,
         }}
-        className="frame-preview"
+        className={styles.framePreview}
       >
         <img
           ref={imageRef}
@@ -39,10 +38,11 @@ export const Frame = () => {
           alt="Image"
           className={imageClassName}
         />
-        {isCrop && <Crop key={currentAction?.args?.id} />}
+        {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
       </div>
-      {isResize && <ResizeTools onResizing={handleResizing} />}
+      {isResize && <ResizeTools frameRef={frameRef} />}
       {isCrop && <CropTools />}
+      {isFlip && <FlipTools frameRef={frameRef} />}
     </div>
   );
 };

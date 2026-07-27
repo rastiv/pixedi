@@ -39,7 +39,7 @@ export function useImagePreload(
     return () => {
       isMounted = false;
     };
-  }, [imageUrls, isAlreadyLoaded]);
+  }, [delay, imageUrls, isAlreadyLoaded]);
 
   if (imageUrls.length === 0) {
     return true;

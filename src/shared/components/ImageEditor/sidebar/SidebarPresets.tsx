@@ -2,6 +2,7 @@ import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { presetsData } from "../constants";
 import type { ActionCrop } from "../types";
 import { Select } from "../ui";
+import styles from "./sidebar.module.css";
 
 const presetOptions = presetsData.map((p) => p.options).flat();
 
@@ -39,9 +40,9 @@ export const SidebarPresets = () => {
   };
 
   return (
-    <div className="sidebar-preset">
+    <div className={styles.sidebarPreset}>
       <h4>Presets</h4>
-      <div className="relative">
+      <div>
         <Select
           value={currentValue}
           placeholder="Select a preset"

@@ -2,6 +2,7 @@ import { Crop, Image, Square } from "../assets/icons";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import type { ActionCrop } from "../types";
 import { ButtonCrop } from "../ui";
+import styles from "./sidebar.module.css";
 
 export const SidebarCrop = () => {
   const { currentAction, setCurrentAction, getLastHistoryItem, setSidebar } =
@@ -30,9 +31,9 @@ export const SidebarCrop = () => {
   };
 
   return (
-    <div className="sidebar-crop">
+    <div className={styles.sidebarCrop}>
       <h4>Crop</h4>
-      <div className="sidebar-crop-ratios">
+      <div className={styles.sidebarCropRatios}>
         <ButtonCrop
           label="Freeform"
           icon={<Crop />}

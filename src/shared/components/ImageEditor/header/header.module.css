@@ -3,25 +3,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding: 0 8px;
   box-sizing: border-box;
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
 }
-
-.header-tools {
+.headerTools {
   display: flex;
   gap: 8px;
 }
-
-.header-history {
+.headerHistory {
   display: flex;
   gap: 8px;
   align-items: center;
 }
-
-.header-history-text {
+.headerHistoryText {
   color: var(--muted-foreground);
   font-size: 14px;
 }

@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router";
 import { imagesData } from "@/app/entries";
-import { ImageEditor } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/ImageEditor";
 
 export const ImageEditPage = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export const ImageEditPage = () => {
 
   return (
     <div className="w-full h-screen">
-      <ImageEditor
+      <Pixedi
         image={image.original}
         onBack={handleCancel}
         onSave={handleSave}

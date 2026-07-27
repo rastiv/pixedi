@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
-import { Loader, Check, X, Lock } from "../assets/icons";
+import { Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
-import { Button } from "../ui";
+import { SaveCloseGroup } from "../ui";
 import { InputPixel } from "../ui";
-import "./resize.css";
+import styles from "./resize.module.css";
 
 const minScale = 10;
 const maxScale = 200;
@@ -20,10 +20,10 @@ const sizeCalculator = (scale: number, width: number, height: number) => {
 };
 
 type ResizeToolsProps = {
-  onResizing: (scale: number) => void;
+  frameRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
+export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
     useImageEditorContext();
   const {
@@ -38,6 +38,16 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
   const { resize } = useImageProcessor();
   const mobile = useMobile();
 
+  const handleFrameTransform = useCallback(
+    (scale: number) => {
+      if (frameRef.current) {
+        frameRef.current.style.transition = "transform 0.2s ease";
+        frameRef.current.style.transform = `scale(${scale / 100})`;
+      }
+    },
+    [frameRef],
+  );
+
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
       (parseInt(e.target.value) / currentWidth) * 100,
@@ -46,7 +56,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     );
     setWidth(updatedWidth);
     setHeight(updatedHeight);
-    onResizing(updatedScale);
+    handleFrameTransform(updatedScale);
   };
 
   const handleChangeHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,11 +67,11 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     );
     setHeight(updatedHeight);
     setWidth(updatedWidth);
-    onResizing(updatedScale);
+    handleFrameTransform(updatedScale);
   };
 
   const handleClose = () => {
-    onResizing(100);
+    handleFrameTransform(100);
     setCurrentAction(null);
     setSidebar(true);
   };
@@ -76,7 +86,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
         width,
         height,
       });
-      onResizing(100);
+      handleFrameTransform(100);
       setSidebar(true);
     } catch (error) {
       console.error("Failed to process image:", error);
@@ -96,7 +106,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
       );
       setHeight(updatedHeight);
       setWidth(updatedWidth);
-      onResizing(scale);
+      handleFrameTransform(scale);
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -133,15 +143,22 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
     window.addEventListener("touchmove", handleTouchMove, { signal });
 
     return () => controller.abort();
-  }, [currentHeight, currentWidth, loading, mobile, onResizing, width]);
+  }, [
+    currentHeight,
+    currentWidth,
+    handleFrameTransform,
+    loading,
+    mobile,
+    width,
+  ]);
 
   return (
-    <div className="resize">
-      <div className="resize-text">
+    <div className={styles.resize}>
+      <div className={styles.resizeText}>
         {mobile ? "Slide UP/Down to Resize" : "Scroll UP/Down to Resize"}
       </div>
-      <div className="resize-border" />
-      <div className="resize-tools">
+      <div className={styles.resizeBorder} />
+      <div className={styles.resizeTools}>
         <InputPixel
           value={width}
           name="width"
@@ -150,7 +167,7 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           style={{ width: "88px" }}
           onChange={handleChangeWidth}
         />
-        <Lock className="resize-tools-lock" />
+        <Lock className={styles.resizeToolsLock} />
         <InputPixel
           value={height}
           name="height"
@@ -159,24 +176,12 @@ export const ResizeTools = ({ onResizing }: ResizeToolsProps) => {
           style={{ width: "88px" }}
           onChange={handleChangeHeight}
         />
-        <div className="resize-tools-buttons">
-          <Button
-            variant="outline"
-            className="resize-tools-save text-green"
-            disabled={width === currentWidth || loading}
-            onClick={() => handleSave()}
-          >
-            {loading ? <Loader /> : <Check />}
-          </Button>
-          <Button
-            variant="outline"
-            className="resize-tools-close text-red"
-            disabled={loading}
-            onClick={handleClose}
-          >
-            <X />
-          </Button>
-        </div>
+        <SaveCloseGroup
+          onSave={() => handleSave()}
+          onClose={handleClose}
+          saving={loading}
+          disabled={width === currentWidth || loading}
+        />
       </div>
     </div>
   );

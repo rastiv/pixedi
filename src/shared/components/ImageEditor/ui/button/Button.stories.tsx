@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { Check } from "../../assets/icons";
 
 const meta = {
-  title: "ImageEditor/UI/Button",
+  title: "Pixedi/UI/Button",
   component: Button,
   tags: ["autodocs"],
   args: {

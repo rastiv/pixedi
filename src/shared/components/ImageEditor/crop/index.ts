@@ -1,4 +1,4 @@
-export { Crop } from "./Crop";
+export { CropInteractBox } from "./CropInteractBox";
 import { CropTools } from "./CropTools";
 export { CropBorders } from "./CropBorders";
 export { CropLines } from "./CropLines";

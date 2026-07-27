@@ -1,4 +1,4 @@
-.btn-crop {
+.button {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -16,23 +16,19 @@
   box-sizing: border-box;
   transition: all 0.2s ease;
 }
-
-.btn-crop:hover:not([aria-pressed="true"]) {
+.button:hover:not([aria-pressed="true"]) {
   background-color: var(--secondary);
 }
-
-.btn-crop[aria-pressed="true"] {
+.button[aria-pressed="true"] {
   border-color: var(--accent-blue);
   background-color: var(--accent-blue-light);
   color: var(--foreground);
 }
-
-.btn-crop svg {
+.button svg {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 }
-
-.btn-crop span {
+.button span {
   white-space: nowrap;
 }

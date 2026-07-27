@@ -1,17 +1,25 @@
-.picedi {
+:global(:host) {
+  display: block;
+  height: 100%;
+}
+:global(:host) * {
+  box-sizing: border-box;
+}
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
   font-size: 16px;
   font-family: var(--font-sans);
 
   --font-sans:
     system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma,
     Helvetica, Arial, sans-serif;
-
   --color-white: #fff;
   --color-black: #000;
   --color-transparent: transparent;
   --color-red: oklch(0.637 0.237 25.331);
   --color-green: oklch(0.768 0.188 151.716);
-
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -46,9 +54,7 @@
   --overlay-bg-white: color-mix(in srgb, var(--color-white) 80%, transparent);
 }
 
-:host([data-theme="dark"]) .picedi,
-[data-theme="dark"] .picedi,
-[data-theme="dark"].picedi {
+.root[data-theme="dark"] {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -78,64 +84,62 @@
   --overlay-bg: color-mix(in srgb, var(--color-black) 75%, transparent);
 }
 
-.picedi h1,
-.picedi h2,
-.picedi h3,
-.picedi h4,
-.picedi h5,
-.picedi h6 {
+.root h1,
+.root h2,
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
   margin: 0;
   font-weight: 600;
 }
 
-.text-red {
+.textRed {
   color: var(--color-red);
 }
-
-.bg-red {
+.bgRed {
   background-color: var(--color-red);
 }
-
-.bg-green {
+.bgGreen {
   background-color: var(--color-green);
 }
-
-.text-green {
+.textGreen {
   color: var(--color-green);
 }
-
 .mask {
   background-color: var(--overlay-bg);
 }
-
 .semibold {
   font-weight: 600;
   letter-spacing: 0.4px;
 }
-
 .bold {
   font-weight: bold;
   letter-spacing: 0.4px;
 }
-
-.sys {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.system {
+  position: absolute;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--muted-foreground);
+  background-color: var(--background);
 }
-
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+}
 .main {
+  position: absolute;
+  inset: 0;
   display: grid;
   grid-template-rows: auto 1fr;
-  height: 100%;
   overflow: hidden;
   background-color: var(--background);
 }
-
 .grid {
   position: relative;
   display: grid;

@@ -3,7 +3,8 @@ import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Button } from "../ui";
 import type { FuncSaveArgs } from "../types";
-import "./header.css";
+import styles from "./header.module.css";
+import buttonStyles from "../ui/button/button.module.css";
 
 type HeaderProps = {
   onBack: () => void;
@@ -19,6 +20,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     resetHistory,
     resetHistoryAfterSave,
     getLastHistoryItem,
+    setCurrentAction,
   } = useImageEditorContext();
 
   const { base64 } = getLastHistoryItem();
@@ -27,11 +29,17 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   const disabledRedo = history.pointer === history.items.length - 1;
   const disableSave = history.items.length < 2 || isSaving;
 
+  const handleReset = () => {
+    setCurrentAction(null);
+    resetHistory();
+  };
+
   const handleSave = async () => {
     if (!base64) return;
     setIsSaving(true);
     try {
       await onSave(base64);
+      setCurrentAction(null);
       resetHistoryAfterSave();
     } finally {
       setIsSaving(false);
@@ -39,36 +47,36 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   };
 
   return (
-    <div className="header">
-      <Button variant="ghost" className="btn-rect" onClick={onBack}>
+    <div className={styles.header}>
+      <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>
         <ArrowLeft />
       </Button>
 
-      <div className="header-tools">
+      <div className={styles.headerTools}>
         {showHistory && (
-          <div className="header-history">
+          <div className={styles.headerHistory}>
             <Button
               variant="outline"
               disabled={disabledUndo}
-              className="btn-rect"
+              className={buttonStyles.rect}
               onClick={undo}
             >
               <Undo />
             </Button>
-            <div className="header-history-text">
+            <div className={styles.headerHistoryText}>
               {history.pointer + 1}/{history.items.length}
             </div>
             <Button
               variant="outline"
               disabled={disabledRedo}
-              className="btn-rect"
+              className={buttonStyles.rect}
               onClick={redo}
             >
               <Redo />
             </Button>
           </div>
         )}
-        <Button variant="outline" disabled={isSaving} onClick={resetHistory}>
+        <Button variant="outline" disabled={disableSave} onClick={handleReset}>
           Reset
         </Button>
         <Button disabled={disableSave} onClick={handleSave}>

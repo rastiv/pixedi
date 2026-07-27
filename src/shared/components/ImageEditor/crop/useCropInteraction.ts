@@ -170,7 +170,7 @@ export const useCropInteraction = ({
       parentH: number,
     ) => {
       if (!startPointRef.current) return;
-      console.log("HandleDrag");
+
       const frmWidth = elCrop.offsetWidth;
       const frmHeight = elCrop.offsetHeight;
 

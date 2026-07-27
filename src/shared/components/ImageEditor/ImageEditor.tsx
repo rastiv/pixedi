@@ -5,26 +5,36 @@ import { Header } from "./header";
 import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
 import type { FuncSaveArgs } from "./types";
-import "./index.css";
+import styles from "./index.module.css";
 
-type ImageEditorProps = {
+export type PixediTheme = "light" | "dark";
+
+type PixediProps = {
   image: string;
   onSave: FuncSaveArgs;
   onBack: () => void;
+  theme?: PixediTheme;
 };
 
-export const ImageEditor = ({ image, onSave, onBack }: ImageEditorProps) => {
+export const Pixedi = ({
+  image,
+  onSave,
+  onBack,
+  theme = "light",
+}: PixediProps) => {
   const { loading, error, width, height, base64, extension } =
     useImageLoader(image);
 
   if (loading || error || !base64 || !extension) {
     return (
-      <div className="picedi sys">
-        {loading && <Preloader size={48} />}
-        {error && <div className="text-red">{error}</div>}
-        {!loading && !error && (!base64 || !extension) && (
-          <div className="text-red">Failed to load image.</div>
-        )}
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.system}>
+          {loading && <Preloader size={48} />}
+          {error && <div className={styles.textRed}>{error}</div>}
+          {!loading && !error && (!base64 || !extension) && (
+            <div className={styles.textRed}>Failed to load image.</div>
+          )}
+        </div>
       </div>
     );
   }
@@ -36,11 +46,13 @@ export const ImageEditor = ({ image, onSave, onBack }: ImageEditorProps) => {
       height={height}
       ext={extension}
     >
-      <div className="picedi main">
-        <Header onSave={onSave} onBack={onBack} />
-        <div className="grid">
-          <Frame />
-          <Sidebar />
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.main}>
+          <Header onSave={onSave} onBack={onBack} />
+          <div className={styles.grid}>
+            <Frame />
+            <Sidebar />
+          </div>
         </div>
       </div>
     </ImageEditorProvider>
