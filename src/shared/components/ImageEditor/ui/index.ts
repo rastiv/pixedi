@@ -5,3 +5,4 @@ export { Select } from "./select/Select";
 export { Input } from "./input/Input";
 export { InputPixel } from "./input-pixel/InputPixel";
 export { SaveCloseGroup } from "./save-close-group/SaveCloseGroup";
+export { Slider } from "./slider/Slider";

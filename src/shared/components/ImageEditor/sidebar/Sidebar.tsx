@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useBellow } from "../hooks";
 import { Settings, X } from "../assets/icons";
 import { Button, Separator } from "../ui";
@@ -8,11 +9,13 @@ import { SidebarFlip } from "./SidebarFlip";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import styles from "./sidebar.module.css";
 import buttonStyles from "../ui/button/button.module.css";
+import { Slider } from "../ui";
 
 export const Sidebar = () => {
   const { getSidebar, setSidebar } = useImageEditorContext();
   const isSidebarOpen = getSidebar();
   const isBellowMd = useBellow("md");
+  const [sliderValue, setSliderValue] = useState(50);
 
   return (
     <>
@@ -50,6 +53,14 @@ export const Sidebar = () => {
             <SidebarPresets />
             <Separator className={styles.sidebarSeparator} />
             <SidebarFlip />
+            <Separator className={styles.sidebarSeparator} />
+            <Slider
+              min={0}
+              max={100}
+              value={sliderValue}
+              disabled={false}
+              onChange={(value) => setSliderValue(value)}
+            />
           </div>
         </div>
       </div>

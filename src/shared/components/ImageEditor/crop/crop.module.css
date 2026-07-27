@@ -37,6 +37,7 @@
 .cropToolsInfoValue {
   font-size: 14px;
   line-height: 14px;
+  color: var(--foreground);
 }
 .cropBorder {
   position: absolute;
