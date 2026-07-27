@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
-import { SaveCloseGroup } from "../ui";
+import { SaveCloseGroup, Slider } from "../ui";
 import { InputPixel } from "../ui";
 import styles from "./resize.module.css";
 
@@ -34,6 +34,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(currentWidth);
   const [height, setHeight] = useState(currentHeight);
+  const [scale, setScale] = useState(100);
   const startVerticalSlideRef = useRef<number>(0);
   const { resize } = useImageProcessor();
   const mobile = useMobile();
@@ -48,6 +49,18 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     [frameRef],
   );
 
+  const handleChangeScale = (scale: number) => {
+    const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
+      scale,
+      currentWidth,
+      currentHeight,
+    );
+    setWidth(updatedWidth);
+    setHeight(updatedHeight);
+    setScale(updatedScale);
+    handleFrameTransform(updatedScale);
+  };
+
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
       (parseInt(e.target.value) / currentWidth) * 100,
@@ -56,6 +69,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     );
     setWidth(updatedWidth);
     setHeight(updatedHeight);
+    setScale(updatedScale);
     handleFrameTransform(updatedScale);
   };
 
@@ -67,6 +81,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     );
     setHeight(updatedHeight);
     setWidth(updatedWidth);
+    setScale(updatedScale);
     handleFrameTransform(updatedScale);
   };
 
@@ -106,6 +121,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
       );
       setHeight(updatedHeight);
       setWidth(updatedWidth);
+      setScale(scale);
       handleFrameTransform(scale);
     };
 
@@ -154,10 +170,13 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
 
   return (
     <div className={styles.resize}>
-      <div className={styles.resizeText}>
-        {mobile ? "Slide UP/Down to Resize" : "Scroll UP/Down to Resize"}
-      </div>
-      <div className={styles.resizeBorder} />
+      <Slider
+        min={minScale}
+        max={maxScale}
+        value={scale}
+        className={styles.resizeSlider}
+        onChange={handleChangeScale}
+      />
       <div className={styles.resizeTools}>
         <InputPixel
           value={width}
