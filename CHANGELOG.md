@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 1.0.7
+## 1.1.0
 
 - Added a flip tool with horizontal and vertical mirroring and live preview.
 
