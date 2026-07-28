@@ -119,6 +119,22 @@ export const FlipV = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
+export const Rotate = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+    <path d="M21 3v5h-5" />
+  </svg>
+);
+
+export const Presets = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M14 17H5" />
+    <path d="M19 7h-9" />
+    <circle cx="17" cy="17" r="3" />
+    <circle cx="7" cy="7" r="3" />
+  </svg>
+);
+
 export const Loader = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56">

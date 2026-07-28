@@ -48,6 +48,7 @@ export type Action =
   | { name: "resize"; args: Sizes }
   | { name: "crop"; args: ActionCrop }
   | { name: "flip"; args: null }
+  | { name: "rotate"; args: null }
   | { name: "filters"; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {

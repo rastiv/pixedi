@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { ResizeTools } from "../resize";
 import { CropTools } from "../crop";
@@ -22,6 +22,13 @@ export const Frame = () => {
   const imageClassName = `${styles.frameImage} ${
     isFade ? styles.frameImageFaded : ""
   }`;
+
+  useEffect(() => {
+    if (frameRef.current) {
+      frameRef.current.style.transition = "";
+      frameRef.current.style.transform = "";
+    }
+  }, [currentAction]);
 
   return (
     <div className={frameClassName}>
