@@ -1,5 +1,5 @@
 import styles from "./input-pixel.module.css";
-import { Input } from "../../ui";
+import { Input } from "..";
 
 interface InputPixelProps extends React.ComponentPropsWithRef<"input"> {
   label: string;

@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router";
 import { imagesData } from "@/app/entries";
-import { Pixedi } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/Pixedi";
 
 export const ImageEditPage = () => {
   const navigate = useNavigate();

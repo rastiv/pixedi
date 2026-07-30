@@ -44,7 +44,7 @@ src/
   widget.tsx    # UMD widget entry point
 ```
 
-The reusable editor component lives in `src/shared/components/ImageEditor`.
+The reusable editor component lives in `src/shared/components/Pixedi`.
 
 ## Consumer Documentation
 

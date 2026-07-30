@@ -100,7 +100,7 @@ describe("useImageProcessor", () => {
 
     await result.current.rotate(validPng, 90);
 
-    expect(context.translate).toHaveBeenCalledWith(60, 40);
+    expect(context.translate).toHaveBeenCalledWith(40, 60);
     expect(context.rotate).toHaveBeenCalledWith(Math.PI / 2);
     expect(context.drawImage).toHaveBeenCalledWith(bitmap, -60, -40);
     expect(context.restore).toHaveBeenCalledTimes(1);

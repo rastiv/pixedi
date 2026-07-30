@@ -15,7 +15,7 @@ export default defineConfig({
     outDir: "dist/lib",
     emptyOutDir: false,
     lib: {
-      entry: "src/shared/components/ImageEditor/ImageEditor.tsx",
+      entry: "src/shared/components/Pixedi/Pixedi.tsx",
       name: "Pixedi",
       fileName: (format) => `index.${format === "es" ? "js" : "umd.js"}`,
       formats: ["es", "umd"],

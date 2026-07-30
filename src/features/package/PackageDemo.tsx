@@ -1,5 +1,5 @@
 import { imagesData } from "@/app/entries";
-import { Pixedi } from "@/shared/components/ImageEditor";
+import { Pixedi } from "@/shared/components/Pixedi";
 import styles from "./PackageDemo.module.css";
 
 export const PackageDemo = () => {

@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { injectCSS, removeCSS } from "virtual:css-injected-by-js";
-import type { FuncSaveArgs } from "@/shared/components/ImageEditor/types";
-import { Pixedi } from "@/shared/components/ImageEditor";
+import type { FuncSaveArgs } from "@/shared/components/Pixedi/types";
+import { Pixedi } from "@/shared/components/Pixedi";
 
 type WidgetTheme = "light" | "dark";
 

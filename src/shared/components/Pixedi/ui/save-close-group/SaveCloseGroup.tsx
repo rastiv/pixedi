@@ -1,5 +1,5 @@
 import { Check, Loader, X } from "../../assets/icons";
-import { Button } from "../../ui/button/Button";
+import { Button } from "../button/Button";
 import rootStyles from "../../index.module.css";
 import styles from "./save-close-group.module.css";
 

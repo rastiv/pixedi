@@ -138,7 +138,7 @@ export const useImageProcessor = (
       }
 
       bitmap.close();
-      return finalizeCanvas(canvas, mimeType);
+      return finalizeCanvas(canvas, mimeType, 0.85);
     },
     [getBitmap, getContext, finalizeCanvas],
   );
@@ -169,7 +169,7 @@ export const useImageProcessor = (
       }
 
       bitmap.close();
-      return finalizeCanvas(canvas, mimeType);
+      return finalizeCanvas(canvas, mimeType, 0.85);
     },
     [getBitmap, getContext, finalizeCanvas],
   );
@@ -227,7 +227,7 @@ export const useImageProcessor = (
       }
 
       bitmap.close();
-      return finalizeCanvas(canvas, mimeType);
+      return finalizeCanvas(canvas, mimeType, 0.85);
     },
     [getBitmap, getContext, finalizeCanvas],
   );

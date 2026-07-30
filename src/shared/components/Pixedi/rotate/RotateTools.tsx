@@ -12,7 +12,7 @@ type RotateToolsProps = {
 export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
   const { getLastHistoryItem, addToHistory, setSidebar, setCurrentAction } =
     useImageEditorContext();
-  const { width, height, base64 } = getLastHistoryItem();
+  const { width, height, base64, ext } = getLastHistoryItem();
   const { rotate } = useImageProcessor(false);
   const [angle, setAngle] = useState(0);
   const [transparency, setTransparency] = useState(false);
@@ -46,6 +46,7 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
         base64: processedBase64,
         width: isNewRatio ? height : width,
         height: isNewRatio ? width : height,
+        ext: ["jpg", "jpeg"].includes(ext) ? "webp" : ext,
       });
 
       setAngle(0);

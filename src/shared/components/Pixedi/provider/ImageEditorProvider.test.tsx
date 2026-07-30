@@ -9,6 +9,7 @@ const initialItem = {
   base64: "data:image/png;base64,initial",
   width: 800,
   height: 600,
+  ext: "png",
 };
 
 const editedItem = {
@@ -16,6 +17,7 @@ const editedItem = {
   base64: "data:image/png;base64,edited",
   width: 400,
   height: 300,
+  ext: "png",
 };
 
 const secondEditedItem = {
@@ -23,6 +25,7 @@ const secondEditedItem = {
   base64: "data:image/png;base64,cropped",
   width: 200,
   height: 200,
+  ext: "png",
 };
 
 const wrapper = ({ children }: PropsWithChildren) => (
@@ -31,6 +34,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
     width={initialItem.width}
     height={initialItem.height}
     ext="png"
+    settings={{}}
   >
     {children}
   </ImageEditorProvider>
@@ -40,7 +44,10 @@ describe("ImageEditorProvider", () => {
   it("initializes the image history and editor state", () => {
     const { result } = renderHook(() => useImageEditorContext(), { wrapper });
 
-    expect(result.current.history).toEqual({ items: [initialItem], pointer: 0 });
+    expect(result.current.history).toEqual({
+      items: [initialItem],
+      pointer: 0,
+    });
     expect(result.current.extension).toBe("png");
     expect(result.current.currentAction).toBeNull();
     expect(result.current.getSidebar()).toBe(false);
@@ -121,6 +128,9 @@ describe("ImageEditorProvider", () => {
     act(() => {
       result.current.resetHistory();
     });
-    expect(result.current.history).toEqual({ items: [initialItem], pointer: 0 });
+    expect(result.current.history).toEqual({
+      items: [initialItem],
+      pointer: 0,
+    });
   });
 });

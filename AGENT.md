@@ -8,7 +8,7 @@ Pixedi is a lightweight, embeddable React image editor component. It ships as:
 2. **Standalone UMD widget** — embeddable via CDN for non-React environments.
 3. **Demo SPA** — deployed to Cloudflare Pages and used for development.
 
-The core component lives in `src/shared/components/ImageEditor`.
+The core component lives in `src/shared/components/Pixedi`.
 
 ## Tech Stack
 
@@ -94,4 +94,4 @@ pnpm storybook        # Run Storybook dev server on port 6006
 
 - Do not add React or ReactDOM as hard dependencies in the published library.
 - Do not change the `outDir` of individual builds without updating `package.json#files` and `wrangler.json`.
-- Do not import from `src/app/` or `src/widget.tsx` inside `src/shared/components/ImageEditor` — it is the reusable core.
+- Do not import from `src/app/` or `src/widget.tsx` inside `src/shared/components/Pixedi` — it is the reusable core.

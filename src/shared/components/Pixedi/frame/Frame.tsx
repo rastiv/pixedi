@@ -29,12 +29,14 @@ export const Frame = () => {
       frameRef.current.style.aspectRatio = `${width} / ${height}`;
       frameRef.current.style.background = "var(--color-black)";
       frameRef.current.style.transform = "";
-      imageRef.current.style.transform = "";
     }
-    const supportAlpha = ["png", "webp", "gif"].includes(ext);
-    imageRef.current.style.background = supportAlpha
-      ? "transparent"
-      : "var(--color-white)";
+    if (imageRef.current) {
+      imageRef.current.style.transform = "";
+      const supportAlpha = ["png", "webp", "gif"].includes(ext);
+      imageRef.current.style.background = supportAlpha
+        ? "transparent"
+        : "var(--color-white)";
+    }
   }, [currentAction, height, width, ext]);
 
   return (

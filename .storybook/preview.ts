@@ -2,7 +2,7 @@
 import React from "react";
 import type { Preview } from "@storybook/react";
 import "@/app/styles/index.css";
-import rootStyles from "@/shared/components/ImageEditor/index.module.css";
+import rootStyles from "@/shared/components/Pixedi/index.module.css";
 
 const preview: Preview = {
   parameters: {
