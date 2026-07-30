@@ -54,6 +54,7 @@ export type Action =
 export type HistoryItem = Sizes & {
   name: string;
   base64: string;
+  ext: string;
 };
 
 export type History = {
@@ -62,3 +63,9 @@ export type History = {
 };
 
 export type FuncSaveArgs = (base64: string) => Promise<void> | void;
+
+export type Theme = "light" | "dark";
+
+export type Settings = {
+  quality?: number;
+};

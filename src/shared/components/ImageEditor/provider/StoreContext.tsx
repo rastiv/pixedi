@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { type ImageEditorContextType } from "./initialState";
-import type { Action, HistoryItem } from "../types";
+import type { Action, HistoryItem, Settings } from "../types";
 
 type StoreContextType = ImageEditorContextType & {
   getCurrentAction: () => Action | null;
@@ -13,6 +13,7 @@ type StoreContextType = ImageEditorContextType & {
   redo: () => void;
   getSidebar: () => boolean;
   setSidebar: (payload: boolean) => void;
+  getSettings: () => Settings;
 };
 
 export const StoreContext = createContext<StoreContextType | undefined>(

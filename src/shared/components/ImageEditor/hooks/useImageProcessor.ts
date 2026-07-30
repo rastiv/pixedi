@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 
-export interface ImageProcessor {
+export interface ImageProcessorReturn {
   resize: (base64Str: string, width: number, height: number) => Promise<string>;
   crop: (
     base64Str: string,
@@ -19,10 +19,14 @@ export interface ImageProcessor {
     base64Str: string,
     filters: Record<string, number>,
   ) => Promise<string>;
+  save: (base64Str: string, quality?: number) => Promise<string>;
 }
 
-export const useImageProcessor = (): ImageProcessor => {
+export const useImageProcessor = (
+  alpha: boolean = false,
+): ImageProcessorReturn => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const alphaRef = useRef(alpha);
 
   const parseBase64 = useCallback((base64Str: string) => {
     const match = base64Str.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.+)$/);
@@ -67,19 +71,24 @@ export const useImageProcessor = (): ImageProcessor => {
     const canvas = canvasRef.current;
 
     // Enable alpha channel for formats that support transparency
-    const requiresAlpha = mimeType === "image/png" || mimeType === "image/webp";
+    const requiresAlpha =
+      mimeType === "image/png" || mimeType === "image/webp" || alphaRef.current;
     const ctx = canvas.getContext("2d", { alpha: requiresAlpha });
 
     return { canvas, ctx };
   }, []);
 
   const finalizeCanvas = useCallback(
-    (canvas: HTMLCanvasElement, mimeType: string): string => {
-      // PNG format does not support quality parameter
+    (
+      canvas: HTMLCanvasElement,
+      mimeType: string,
+      quality: number = 1,
+    ): string => {
       if (mimeType === "image/jpeg" || mimeType === "image/webp") {
-        return canvas.toDataURL(mimeType, 0.85);
+        return canvas.toDataURL(mimeType, quality);
       }
-      return canvas.toDataURL(mimeType); // for PNG
+      // PNG format does not support quality parameter
+      return canvas.toDataURL("image/png"); // for PNG
     },
     [],
   );
@@ -103,7 +112,7 @@ export const useImageProcessor = (): ImageProcessor => {
       }
 
       bitmap.close();
-      return finalizeCanvas(canvas, mimeType);
+      return finalizeCanvas(canvas, mimeType, 0.85);
     },
     [getBitmap, getContext, finalizeCanvas],
   );
@@ -171,13 +180,11 @@ export const useImageProcessor = (): ImageProcessor => {
       const { bitmap, mimeType } = await getBitmap(base64Str);
       const { canvas, ctx } = getContext(mimeType);
 
-      if (angle === 90 || angle === 270) {
-        canvas.width = bitmap.height;
-        canvas.height = bitmap.width;
-      } else {
-        canvas.width = bitmap.width;
-        canvas.height = bitmap.height;
-      }
+      const isNewRatio =
+        (angle >= 90 && angle < 180) || (angle >= 270 && angle < 360);
+
+      canvas.width = isNewRatio ? bitmap.height : bitmap.width;
+      canvas.height = isNewRatio ? bitmap.width : bitmap.height;
 
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -189,7 +196,12 @@ export const useImageProcessor = (): ImageProcessor => {
       }
 
       bitmap.close();
-      return finalizeCanvas(canvas, mimeType);
+      const introducesTransparency = angle % 90 !== 0;
+      return finalizeCanvas(
+        canvas,
+        introducesTransparency ? "image/webp" : mimeType,
+        introducesTransparency ? 0.85 : undefined,
+      );
     },
     [getBitmap, getContext, finalizeCanvas],
   );
@@ -220,11 +232,31 @@ export const useImageProcessor = (): ImageProcessor => {
     [getBitmap, getContext, finalizeCanvas],
   );
 
+  // SAVE IMAGE
+  const save = useCallback(
+    async (base64Str: string, quality: number = 0.85): Promise<string> => {
+      const { bitmap, mimeType } = await getBitmap(base64Str);
+      const { canvas, ctx } = getContext(mimeType);
+      console.log(mimeType);
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+
+      if (ctx) {
+        ctx.drawImage(bitmap, 0, 0);
+      }
+
+      bitmap.close();
+      return finalizeCanvas(canvas, mimeType, quality);
+    },
+    [getBitmap, getContext, finalizeCanvas],
+  );
+
   return {
     resize,
     crop,
     flip,
     rotate,
     filter,
+    save,
   };
 };

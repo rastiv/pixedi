@@ -1,10 +1,13 @@
 import type { History, Action } from "../types";
 
+import type { Settings } from "../types";
+
 export type ImageEditorContextType = {
   history: History;
   currentAction: Action | null;
   extension: string | null;
   sidebar: boolean;
+  settings: Settings;
 };
 
 export const getInitialState = (
@@ -12,6 +15,7 @@ export const getInitialState = (
   width: number,
   height: number,
   base64: string,
+  settings: Settings,
 ): ImageEditorContextType => ({
   history: {
     pointer: 0,
@@ -21,10 +25,12 @@ export const getInitialState = (
         base64,
         width,
         height,
+        ext: extension,
       },
     ],
   },
   currentAction: null,
   extension,
   sidebar: false,
+  settings,
 });

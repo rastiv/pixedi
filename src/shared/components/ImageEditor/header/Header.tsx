@@ -5,6 +5,7 @@ import { Button } from "../ui";
 import type { FuncSaveArgs } from "../types";
 import styles from "./header.module.css";
 import buttonStyles from "../ui/button/button.module.css";
+import { useImageProcessor } from "../hooks";
 
 type HeaderProps = {
   onBack: () => void;
@@ -21,9 +22,13 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     resetHistoryAfterSave,
     getLastHistoryItem,
     setCurrentAction,
+    getSettings,
   } = useImageEditorContext();
+  const { save } = useImageProcessor(true);
 
   const { base64 } = getLastHistoryItem();
+  const { quality } = getSettings();
+
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
   const disabledRedo = history.pointer === history.items.length - 1;
@@ -38,13 +43,18 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     if (!base64) return;
     setIsSaving(true);
     try {
-      await onSave(base64);
+      const processedBase64 = await save(base64, quality);
+      await await onSave(processedBase64);
       setCurrentAction(null);
       resetHistoryAfterSave();
     } finally {
       setIsSaving(false);
     }
   };
+
+  if (base64) {
+    // console.log(base64);
+  }
 
   return (
     <div className={styles.header}>

@@ -4,16 +4,15 @@ import { useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
-import type { FuncSaveArgs } from "./types";
+import type { FuncSaveArgs, Theme, Settings } from "./types";
 import styles from "./index.module.css";
-
-export type PixediTheme = "light" | "dark";
 
 type PixediProps = {
   image: string;
   onSave: FuncSaveArgs;
   onBack: () => void;
-  theme?: PixediTheme;
+  theme?: Theme;
+  settings?: Settings;
 };
 
 export const Pixedi = ({
@@ -21,6 +20,7 @@ export const Pixedi = ({
   onSave,
   onBack,
   theme = "light",
+  settings = {},
 }: PixediProps) => {
   const { loading, error, width, height, base64, extension } =
     useImageLoader(image);
@@ -45,6 +45,7 @@ export const Pixedi = ({
       width={width}
       height={height}
       ext={extension}
+      settings={settings}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.main}>

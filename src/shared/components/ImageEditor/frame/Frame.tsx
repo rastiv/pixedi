@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useImageEditorContext } from "../provider/useImageEditorContext";
 import { ResizeTools } from "../resize";
-import { CropTools } from "../crop";
-import { CropInteractBox } from "../crop";
+import { CropTools, CropInteractBox } from "../crop";
 import { FlipTools } from "../flip";
+import { RotateTools } from "../rotate";
 import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
 
@@ -11,11 +11,12 @@ export const Frame = () => {
   const { getLastHistoryItem, currentAction } = useImageEditorContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const { width, height, base64 } = getLastHistoryItem();
+  const { width, height, base64, ext } = getLastHistoryItem();
 
   const isCrop = currentAction?.name === "crop";
   const isResize = currentAction?.name === "resize";
   const isFlip = currentAction?.name === "flip";
+  const isRotate = currentAction?.name === "rotate";
   const isFade = isCrop;
 
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
@@ -25,10 +26,16 @@ export const Frame = () => {
 
   useEffect(() => {
     if (frameRef.current) {
-      frameRef.current.style.transition = "";
+      frameRef.current.style.aspectRatio = `${width} / ${height}`;
+      frameRef.current.style.background = "var(--color-black)";
       frameRef.current.style.transform = "";
+      imageRef.current.style.transform = "";
     }
-  }, [currentAction]);
+    const supportAlpha = ["png", "webp", "gif"].includes(ext);
+    imageRef.current.style.background = supportAlpha
+      ? "transparent"
+      : "var(--color-white)";
+  }, [currentAction, height, width, ext]);
 
   return (
     <div className={frameClassName}>
@@ -50,6 +57,7 @@ export const Frame = () => {
       {isResize && <ResizeTools frameRef={frameRef} />}
       {isCrop && <CropTools />}
       {isFlip && <FlipTools frameRef={frameRef} />}
+      {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />}
     </div>
   );
 };

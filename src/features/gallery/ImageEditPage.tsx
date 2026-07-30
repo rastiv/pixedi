@@ -31,6 +31,7 @@ export const ImageEditPage = () => {
         image={image.original}
         onBack={handleCancel}
         onSave={handleSave}
+        settings={{ quality: 0.1 }}
       />
     </div>
   );

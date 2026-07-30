@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { ImageEditorContextType } from "./initialState";
-import type { Action, HistoryItem } from "../types";
+import type { Action, HistoryItem, Settings } from "../types";
 
 type ImageEditorProviderProps = {
   children: React.ReactNode;
@@ -10,6 +10,7 @@ type ImageEditorProviderProps = {
   width: number;
   height: number;
   ext: string;
+  settings: Settings;
 };
 
 export const ImageEditorProvider = ({
@@ -18,9 +19,10 @@ export const ImageEditorProvider = ({
   width,
   height,
   ext,
+  settings,
 }: ImageEditorProviderProps) => {
   const [state, setState] = useState<ImageEditorContextType>(
-    getInitialState(ext, width, height, base64),
+    getInitialState(ext, width, height, base64, settings),
   );
 
   const getCurrentAction = () => state.currentAction;
@@ -51,7 +53,7 @@ export const ImageEditorProvider = ({
   const resetHistory = () =>
     setState((store) => ({
       ...store,
-      history: getInitialState(ext, width, height, base64).history,
+      history: getInitialState(ext, width, height, base64, settings).history,
     }));
 
   const resetHistoryAfterSave = () =>
@@ -89,6 +91,8 @@ export const ImageEditorProvider = ({
   const setSidebar = (payload: boolean) =>
     setState((store) => ({ ...store, sidebar: payload }));
 
+  const getSettings = () => state.settings;
+
   const value = {
     ...state,
     getCurrentAction,
@@ -101,6 +105,7 @@ export const ImageEditorProvider = ({
     getLastHistoryItem,
     getSidebar,
     setSidebar,
+    getSettings,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

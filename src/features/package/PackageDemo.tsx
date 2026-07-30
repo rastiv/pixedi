@@ -27,6 +27,9 @@ export const PackageDemo = () => {
           image={image?.original || ""}
           onBack={handleCancel}
           onSave={handleSave}
+          settings={{
+            quality: 0.85,
+          }}
         />
       </div>
     </div>

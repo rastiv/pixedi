@@ -21,6 +21,8 @@
   flex-shrink: 1;
   display: block;
   user-select: none;
+  overflow: hidden;
+  background: var(--color-black);
 }
 .frameImage {
   width: 100%;

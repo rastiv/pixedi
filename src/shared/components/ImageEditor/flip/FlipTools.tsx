@@ -18,11 +18,11 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
   const [loading, setLoading] = useState(false);
   const [flipHorizontal, setFlipHorizontal] = useState(false);
   const [flipVertical, setFlipVertical] = useState(false);
-  const { base64, width, height } = getLastHistoryItem();
+  const { base64, width, height, ext } = getLastHistoryItem();
 
   const enableAnimation = () => {
     if (frameRef.current) {
-      frameRef.current.style.transition = "transform 0.2s ease";
+      frameRef.current.style.transition = "all 0.2s ease";
     }
   };
 
@@ -71,6 +71,7 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
           base64: processedBase64,
           width,
           height,
+          ext,
         });
       });
       handleFrameTransform(false, false);
