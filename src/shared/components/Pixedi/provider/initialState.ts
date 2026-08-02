@@ -2,7 +2,7 @@ import type { History, Action } from "../types";
 
 import type { Settings } from "../types";
 
-export type ImageEditorContextType = {
+export type PixediContextType = {
   history: History;
   currentAction: Action | null;
   extension: string | null;
@@ -16,7 +16,7 @@ export const getInitialState = (
   height: number,
   base64: string,
   settings: Settings,
-): ImageEditorContextType => ({
+): PixediContextType => ({
   history: {
     pointer: 0,
     items: [

@@ -1,4 +1,4 @@
-import { ImageEditorProvider } from "./provider/ImageEditorProvider";
+import { PixediProvider } from "./provider/PixediProvider";
 import { useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Frame } from "./frame";
@@ -40,7 +40,7 @@ export const Pixedi = ({
   }
 
   return (
-    <ImageEditorProvider
+    <PixediProvider
       base64={base64}
       width={width}
       height={height}
@@ -56,6 +56,6 @@ export const Pixedi = ({
           </div>
         </div>
       </div>
-    </ImageEditorProvider>
+    </PixediProvider>
   );
 };

@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import { type ImageEditorContextType } from "./initialState";
+import { type PixediContextType } from "./initialState";
 import type { Action, HistoryItem, Settings } from "../types";
 
-type StoreContextType = ImageEditorContextType & {
+type StoreContextType = PixediContextType & {
   getCurrentAction: () => Action | null;
   setCurrentAction: (payload: Action | null) => void;
   addToHistory: (payload: HistoryItem) => void;

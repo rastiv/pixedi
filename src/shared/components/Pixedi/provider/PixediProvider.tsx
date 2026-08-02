@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
-import type { ImageEditorContextType } from "./initialState";
+import type { PixediContextType } from "./initialState";
 import type { Action, HistoryItem, Settings } from "../types";
 
-type ImageEditorProviderProps = {
+type PixediProviderProps = {
   children: React.ReactNode;
   base64: string;
   width: number;
@@ -13,15 +13,15 @@ type ImageEditorProviderProps = {
   settings: Settings;
 };
 
-export const ImageEditorProvider = ({
+export const PixediProvider = ({
   children,
   base64,
   width,
   height,
   ext,
   settings,
-}: ImageEditorProviderProps) => {
-  const [state, setState] = useState<ImageEditorContextType>(
+}: PixediProviderProps) => {
+  const [state, setState] = useState<PixediContextType>(
     getInitialState(ext, width, height, base64, settings),
   );
 

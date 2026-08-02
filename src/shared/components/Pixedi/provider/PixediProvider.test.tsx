@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { describe, expect, it } from "vitest";
-import { ImageEditorProvider } from "./ImageEditorProvider";
+import { PixediProvider } from "./PixediProvider";
 import { usePixediContext } from "./usePixediContext";
 
 const initialItem = {
@@ -29,7 +29,7 @@ const secondEditedItem = {
 };
 
 const wrapper = ({ children }: PropsWithChildren) => (
-  <ImageEditorProvider
+  <PixediProvider
     base64={initialItem.base64}
     width={initialItem.width}
     height={initialItem.height}
@@ -37,10 +37,10 @@ const wrapper = ({ children }: PropsWithChildren) => (
     settings={{}}
   >
     {children}
-  </ImageEditorProvider>
+  </PixediProvider>
 );
 
-describe("ImageEditorProvider", () => {
+describe("PixediProvider", () => {
   it("initializes the image history and editor state", () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
