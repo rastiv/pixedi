@@ -8,6 +8,8 @@
   --accent-foreground: oklch(0.48 0.18 251.687);
   --accent: oklch(0.609 0.221 251.687);
   --accent-muted: oklch(0.78 0.1 251.687);
+  --electric: oklch(0.6 0.26 340);
+  --container: 840px;
 }
 
 body {
@@ -21,6 +23,60 @@ body {
 main {
   display: grid;
   grid-template-rows: auto 1fr;
-  min-height: 100vh;
+  height: 100vh;
   min-width: 100%;
+}
+
+main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background-color: var(--accent);
+  filter: blur(100px);
+  opacity: 0.2;
+  border-radius: 100%;
+  pointer-events: none;
+}
+
+section {
+  min-height: 0;
+  overflow-y: auto;
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--primary-foreground);
+}
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary-foreground);
+}
+h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-foreground);
+}
+h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary-foreground);
+}
+h5 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-foreground);
 }
