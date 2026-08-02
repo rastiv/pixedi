@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { ResizeTools } from "../resize";
 import { CropTools, CropInteractBox } from "../crop";
 import { FlipTools } from "../flip";
@@ -8,7 +8,7 @@ import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
 
 export const Frame = () => {
-  const { getLastHistoryItem, currentAction } = useImageEditorContext();
+  const { getLastHistoryItem, currentAction } = usePixediContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const { width, height, base64, ext } = getLastHistoryItem();

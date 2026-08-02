@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { describe, expect, it } from "vitest";
 import { ImageEditorProvider } from "./ImageEditorProvider";
-import { useImageEditorContext } from "./useImageEditorContext";
+import { usePixediContext } from "./usePixediContext";
 
 const initialItem = {
   name: "Initial",
@@ -42,7 +42,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
 
 describe("ImageEditorProvider", () => {
   it("initializes the image history and editor state", () => {
-    const { result } = renderHook(() => useImageEditorContext(), { wrapper });
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     expect(result.current.history).toEqual({
       items: [initialItem],
@@ -55,7 +55,7 @@ describe("ImageEditorProvider", () => {
   });
 
   it("updates the selected action and sidebar visibility", () => {
-    const { result } = renderHook(() => useImageEditorContext(), { wrapper });
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
     const action = {
       name: "resize" as const,
       args: { width: 400, height: 300 },
@@ -71,7 +71,7 @@ describe("ImageEditorProvider", () => {
   });
 
   it("adds edits, clears the action, and discards redo history", () => {
-    const { result } = renderHook(() => useImageEditorContext(), { wrapper });
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
       result.current.setCurrentAction({
@@ -94,7 +94,7 @@ describe("ImageEditorProvider", () => {
   });
 
   it("moves through history without exceeding its boundaries", () => {
-    const { result } = renderHook(() => useImageEditorContext(), { wrapper });
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
       result.current.undo();
@@ -117,7 +117,7 @@ describe("ImageEditorProvider", () => {
   });
 
   it("resets to the source image and resets history after saving", () => {
-    const { result } = renderHook(() => useImageEditorContext(), { wrapper });
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
       result.current.addToHistory(editedItem);

@@ -1,10 +1,10 @@
 import { Rotate } from "../assets/icons";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import styles from "./sidebar.module.css";
 
 const SidebarRotate = () => {
-  const { setCurrentAction, setSidebar } = useImageEditorContext();
+  const { setCurrentAction, setSidebar } = usePixediContext();
 
   const handleClick = () => {
     setCurrentAction({ name: "rotate", args: null });

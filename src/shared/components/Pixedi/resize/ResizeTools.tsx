@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { Lock } from "../assets/icons";
 import { useImageProcessor, useMobile } from "../hooks";
 import { SaveCloseGroup, Slider } from "../ui";
@@ -25,7 +25,7 @@ type ResizeToolsProps = {
 
 export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
-    useImageEditorContext();
+    usePixediContext();
   const {
     width: currentWidth,
     height: currentHeight,

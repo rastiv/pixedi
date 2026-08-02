@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import type { FuncSaveArgs } from "../types";
 import styles from "./header.module.css";
@@ -23,7 +23,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     getLastHistoryItem,
     setCurrentAction,
     getSettings,
-  } = useImageEditorContext();
+  } = usePixediContext();
   const { save } = useImageProcessor(true);
 
   const { base64 } = getLastHistoryItem();

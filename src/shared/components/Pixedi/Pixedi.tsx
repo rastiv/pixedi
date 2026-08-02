@@ -1,10 +1,10 @@
-import { Preloader } from "@/shared/components/ui";
 import { ImageEditorProvider } from "./provider/ImageEditorProvider";
 import { useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
 import type { FuncSaveArgs, Theme, Settings } from "./types";
+import { Loader } from "./assets/icons";
 import styles from "./index.module.css";
 
 type PixediProps = {
@@ -29,7 +29,7 @@ export const Pixedi = ({
     return (
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
-          {loading && <Preloader size={48} />}
+          {loading && <Loader style={{ width: 48, height: 48 }} />}
           {error && <div className={styles.textRed}>{error}</div>}
           {!loading && !error && (!base64 || !extension) && (
             <div className={styles.textRed}>Failed to load image.</div>

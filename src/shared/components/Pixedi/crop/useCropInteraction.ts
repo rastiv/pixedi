@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { getCropPoints } from "../utils";
 import type { CropRect, Direction } from "../types";
 import { emitCropUpdate } from "../eventBus";
@@ -45,7 +45,7 @@ export const useCropInteraction = ({
   imgRef,
   cropRef,
 }: UseCropInteractionArgs) => {
-  const { getCurrentAction, getLastHistoryItem } = useImageEditorContext();
+  const { getCurrentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
   const startPointRef = useRef<{ x: number; y: number } | null>(null);

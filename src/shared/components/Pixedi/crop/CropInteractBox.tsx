@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import {
   CropBorders,
   useCropInteraction,
@@ -12,7 +12,7 @@ import { useMobile } from "../hooks";
 import styles from "./crop.module.css";
 
 export const CropInteractBox = () => {
-  const { getCurrentAction, getLastHistoryItem } = useImageEditorContext();
+  const { getCurrentAction, getLastHistoryItem } = usePixediContext();
   const currentAction = getCurrentAction();
   const mobile = useMobile();
 

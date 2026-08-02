@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SaveCloseGroup } from "../ui";
 import type { CropRect } from "../types";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { eventBus } from "../eventBus";
 import { getInitalCrop } from "../utils";
 import { useImageProcessor } from "../hooks";
@@ -15,7 +15,7 @@ export const CropTools = () => {
     getLastHistoryItem,
     addToHistory,
     setSidebar,
-  } = useImageEditorContext();
+  } = usePixediContext();
   const { crop, resize } = useImageProcessor();
   const [loading, setLoading] = useState(false);
   const action = getCurrentAction();

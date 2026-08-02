@@ -1,12 +1,10 @@
 import { useContext } from "react";
 import { StoreContext } from "./StoreContext";
 
-export const useImageEditorContext = () => {
+export const usePixediContext = () => {
   const context = useContext(StoreContext);
   if (!context) {
-    throw new Error(
-      "useImageEditorContext must be used within an ImageEditorProvider"
-    );
+    throw new Error("usePixediContext must be used within an PixediProvider");
   }
   return context;
 };

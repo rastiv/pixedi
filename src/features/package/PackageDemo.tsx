@@ -18,11 +18,11 @@ export const PackageDemo = () => {
 
   const handleSave = async (base64: string) => {
     return new Promise<void>((resolve) => {
-      // setTimeout(() => {
-      //   // TODO: Save the image
-      //   console.log(base64);
-      //   resolve();
-      // }, 2000);
+      setTimeout(() => {
+        // TODO: Save the image
+        console.log(base64);
+        resolve();
+      }, 2000);
     });
   };
 

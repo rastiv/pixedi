@@ -1,12 +1,12 @@
 import { Crop, Image, Square } from "../assets/icons";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import type { ActionCrop } from "../types";
 import { ButtonCrop } from "../ui";
 import styles from "./sidebar.module.css";
 
 export const SidebarCrop = () => {
   const { currentAction, setCurrentAction, getLastHistoryItem, setSidebar } =
-    useImageEditorContext();
+    usePixediContext();
   const { name, args } = currentAction || {};
   const currentValue = name === "crop" ? (args?.id as string) : "";
   const { width, height } = getLastHistoryItem();

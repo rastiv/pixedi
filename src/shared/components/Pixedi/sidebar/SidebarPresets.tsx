@@ -1,4 +1,4 @@
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { presetsData } from "../constants";
 import type { ActionCrop } from "../types";
 import { Select } from "../ui";
@@ -7,8 +7,7 @@ import styles from "./sidebar.module.css";
 const presetOptions = presetsData.map((p) => p.options).flat();
 
 export const SidebarPresets = () => {
-  const { setCurrentAction, currentAction, setSidebar } =
-    useImageEditorContext();
+  const { setCurrentAction, currentAction, setSidebar } = usePixediContext();
   const currentValue =
     currentAction?.name === "crop" &&
     presetOptions.some((preset) => preset.value === currentAction.args.id)

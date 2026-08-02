@@ -6,12 +6,12 @@ import { SidebarCrop } from "./SidebarCrop";
 import { SidebarPresets } from "./SidebarPresets";
 import { SidebarFlip } from "./SidebarFlip";
 import SidebarRotate from "./SidebarRotate";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import styles from "./sidebar.module.css";
 import buttonStyles from "../ui/button/button.module.css";
 
 export const Sidebar = () => {
-  const { getSidebar, setSidebar } = useImageEditorContext();
+  const { getSidebar, setSidebar } = usePixediContext();
   const isSidebarOpen = getSidebar();
   const isBellowMd = useBellow("md");
 

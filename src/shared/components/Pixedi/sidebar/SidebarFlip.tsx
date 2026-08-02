@@ -1,10 +1,10 @@
 import { FlipH } from "../assets/icons";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import styles from "./sidebar.module.css";
 
 export const SidebarFlip = () => {
-  const { setCurrentAction, setSidebar } = useImageEditorContext();
+  const { setCurrentAction, setSidebar } = usePixediContext();
 
   const handleClick = () => {
     setCurrentAction({ name: "flip", args: null });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { useImageProcessor } from "../hooks";
 import { SaveCloseGroup, Slider } from "../ui";
 import styles from "./rotate.module.css";
@@ -11,7 +11,7 @@ type RotateToolsProps = {
 
 export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
   const { getLastHistoryItem, addToHistory, setSidebar, setCurrentAction } =
-    useImageEditorContext();
+    usePixediContext();
   const { width, height, base64, ext } = getLastHistoryItem();
   const { rotate } = useImageProcessor(false);
   const [angle, setAngle] = useState(0);

@@ -1,11 +1,11 @@
 import { Fullscreen } from "../assets/icons";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import styles from "./sidebar.module.css";
 
 export const SidebarResize = () => {
   const { getLastHistoryItem, setCurrentAction, setSidebar } =
-    useImageEditorContext();
+    usePixediContext();
   const { width, height } = getLastHistoryItem() ?? { width: 0, height: 0 };
 
   const handleClick = () => {

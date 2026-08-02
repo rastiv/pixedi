@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { flushSync } from "react-dom";
-import { useImageEditorContext } from "../provider/useImageEditorContext";
+import { usePixediContext } from "../provider/usePixediContext";
 import { useImageProcessor } from "../hooks";
 import { Button, SaveCloseGroup } from "../ui";
 import { FlipH, FlipV } from "../assets/icons";
@@ -13,7 +13,7 @@ type FlipToolsProps = {
 
 export const FlipTools = ({ frameRef }: FlipToolsProps) => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
-    useImageEditorContext();
+    usePixediContext();
   const { flip } = useImageProcessor();
   const [loading, setLoading] = useState(false);
   const [flipHorizontal, setFlipHorizontal] = useState(false);
