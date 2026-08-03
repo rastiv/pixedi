@@ -53,6 +53,11 @@ export type ActionWithVal = {
   val: boolean;
 };
 
+export type ActionRotate = {
+  degrees: number;
+  alpha: boolean;
+};
+
 export type Action =
   | { name: "resize"; args: Sizes }
   | { name: "crop"; args: ActionCrop }
@@ -66,7 +71,7 @@ export type HistoryItemAction =
   | { name: "crop"; args: CropSizes & CropPosition }
   | { name: "presetCrop"; args: Sizes & CropSizes & CropPosition }
   | { name: "flip"; args: Flip }
-  | { name: "rotate"; args: number }
+  | { name: "rotate"; args: ActionRotate }
   | { name: "filters"; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {

@@ -31,6 +31,7 @@ export const Pixedi = ({
     originalBase64,
     originalSize,
     reducedBase64,
+    isAlpha,
   } = useImageLoader(image);
 
   if (loading || error || !originalBase64 || !extension) {
@@ -56,6 +57,7 @@ export const Pixedi = ({
       originalSize={originalSize}
       reducedBase64={reducedBase64}
       settings={settings}
+      isAlpha={isAlpha}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.main}>

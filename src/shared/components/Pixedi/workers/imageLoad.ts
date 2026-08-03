@@ -37,11 +37,10 @@ self.onmessage = async (e: MessageEvent<string>) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Failed to get 2D context");
     ctx.drawImage(bitmap, 0, 0);
-    const q = getQuality(originalSize);
-    console.log("quality", q);
+
     const webpBlob = await canvas.convertToBlob({
       type: "image/webp",
-      quality: q,
+      quality: getQuality(originalSize),
     });
 
     const reducedBase64 = await new Promise<string>((resolve, reject) => {
@@ -52,8 +51,9 @@ self.onmessage = async (e: MessageEvent<string>) => {
     });
 
     const reducedSize = reducedBase64.length;
-    console.log("reducedSize", reducedSize);
-    console.log("originalSize", originalSize);
+
+    const isAlpha = hasAlphaChannel(bitmap);
+    console.log("isAlpha", isAlpha);
 
     self.postMessage({
       success: true,
@@ -64,6 +64,7 @@ self.onmessage = async (e: MessageEvent<string>) => {
       originalSize,
       reducedBase64,
       reducedSize,
+      isAlpha,
     });
   } catch (error) {
     self.postMessage({
@@ -86,3 +87,25 @@ const getQuality = (size: number) => {
   if (size < 5 * MB) return 0.2; // < 5MB
   return 0.1; // >= 5MB
 };
+
+function hasAlphaChannel(bitmap: ImageBitmap): boolean {
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Failed to create 2D context for canvas.");
+  }
+  ctx.drawImage(bitmap, 0, 0);
+
+  try {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] < 255) {
+        return true;
+      }
+    }
+    return false;
+  } catch (error) {
+    throw new Error(`Error reading pixels: ${error}`, { cause: error });
+  }
+}

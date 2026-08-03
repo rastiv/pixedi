@@ -34,6 +34,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
     width={initialItem.width}
     height={initialItem.height}
     settings={{}}
+    isAlpha={false}
   >
     {children}
   </PixediProvider>
@@ -82,7 +83,10 @@ describe("PixediProvider", () => {
       result.current.undo();
       result.current.addToHistory({
         ...editedItem,
-        action: { name: "rotate" as const, args: 90 },
+        action: {
+          name: "rotate" as const,
+          args: { degrees: 90, alpha: false },
+        },
       });
     });
 
@@ -93,7 +97,10 @@ describe("PixediProvider", () => {
       editedItem,
       {
         ...editedItem,
-        action: { name: "rotate" as const, args: 90 },
+        action: {
+          name: "rotate" as const,
+          args: { degrees: 90, alpha: false },
+        },
       },
     ]);
   });

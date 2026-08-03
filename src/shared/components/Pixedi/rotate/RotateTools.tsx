@@ -47,7 +47,10 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
         height: isNewRatio ? width : height,
         action: {
           name: "rotate",
-          args: angle,
+          args: {
+            degrees: angle,
+            alpha: transparency,
+          },
         },
       });
 

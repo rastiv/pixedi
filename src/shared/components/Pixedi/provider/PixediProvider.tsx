@@ -12,6 +12,7 @@ type PixediProviderProps = {
   originalBase64: string;
   originalSize: number;
   reducedBase64: string;
+  isAlpha: boolean;
   settings: Settings;
 };
 
@@ -23,6 +24,7 @@ export const PixediProvider = ({
   originalBase64,
   originalSize,
   reducedBase64,
+  isAlpha,
   settings,
 }: PixediProviderProps) => {
   const [state, setState] = useState<PixediContextType>(
@@ -34,6 +36,7 @@ export const PixediProvider = ({
       originalBase64,
       originalSize,
       settings,
+      isAlpha,
     ),
   );
 
@@ -73,6 +76,7 @@ export const PixediProvider = ({
         originalBase64,
         originalSize,
         settings,
+        isAlpha,
       ).history,
     }));
 
@@ -113,6 +117,16 @@ export const PixediProvider = ({
 
   const getSettings = () => state.settings;
 
+  const getAlpha = () => {
+    const foundAlpha = state.history.items.find(
+      (item, index) =>
+        index < state.history.pointer &&
+        item.action.name === "rotate" &&
+        item.action.args?.alpha,
+    );
+    return !!foundAlpha || state.isAlpha;
+  };
+
   const value = {
     ...state,
     getCurrentAction,
@@ -126,6 +140,7 @@ export const PixediProvider = ({
     getSidebar,
     setSidebar,
     getSettings,
+    getAlpha,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

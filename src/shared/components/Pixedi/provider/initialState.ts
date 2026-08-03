@@ -10,6 +10,7 @@ export type PixediContextType = {
   extension: string | null;
   sidebar: boolean;
   settings: Settings;
+  isAlpha: boolean;
 };
 
 export const getInitialState = (
@@ -20,6 +21,7 @@ export const getInitialState = (
   originalBase64: string,
   originalSize: number,
   settings: Settings,
+  isAlpha: boolean,
 ): PixediContextType => ({
   history: {
     pointer: 0,
@@ -41,4 +43,5 @@ export const getInitialState = (
   extension,
   sidebar: false,
   settings,
+  isAlpha,
 });

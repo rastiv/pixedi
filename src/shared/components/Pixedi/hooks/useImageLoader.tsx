@@ -10,6 +10,7 @@ export interface UseImageResult {
   originalSize: number;
   reducedBase64: string;
   reducedSize: number;
+  isAlpha: boolean;
 }
 
 export const useImageLoader = (src: string): UseImageResult => {
@@ -23,6 +24,7 @@ export const useImageLoader = (src: string): UseImageResult => {
     originalSize: 0,
     reducedBase64: "",
     reducedSize: 0,
+    isAlpha: false,
   });
 
   useEffect(() => {
@@ -50,6 +52,7 @@ export const useImageLoader = (src: string): UseImageResult => {
         originalMime: string;
         reducedBase64: string;
         reducedSize: number;
+        isAlpha: boolean;
       }>,
     ) => {
       const result = e.data;
@@ -65,6 +68,7 @@ export const useImageLoader = (src: string): UseImageResult => {
           originalSize: result.originalSize,
           reducedBase64: result.reducedBase64,
           reducedSize: result.reducedSize,
+          isAlpha: result.isAlpha,
         });
       } else {
         setState((prev) => ({
