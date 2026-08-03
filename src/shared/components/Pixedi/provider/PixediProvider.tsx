@@ -6,23 +6,35 @@ import type { Action, HistoryItem, Settings } from "../types";
 
 type PixediProviderProps = {
   children: React.ReactNode;
-  base64: string;
+  extension: string;
   width: number;
   height: number;
-  ext: string;
+  originalBase64: string;
+  originalSize: number;
+  reducedBase64: string;
   settings: Settings;
 };
 
 export const PixediProvider = ({
   children,
-  base64,
+  extension,
   width,
   height,
-  ext,
+  originalBase64,
+  originalSize,
+  reducedBase64,
   settings,
 }: PixediProviderProps) => {
   const [state, setState] = useState<PixediContextType>(
-    getInitialState(ext, width, height, base64, settings),
+    getInitialState(
+      extension,
+      width,
+      height,
+      reducedBase64,
+      originalBase64,
+      originalSize,
+      settings,
+    ),
   );
 
   const getCurrentAction = () => state.currentAction;
@@ -53,7 +65,15 @@ export const PixediProvider = ({
   const resetHistory = () =>
     setState((store) => ({
       ...store,
-      history: getInitialState(ext, width, height, base64, settings).history,
+      history: getInitialState(
+        extension,
+        width,
+        height,
+        reducedBase64,
+        originalBase64,
+        originalSize,
+        settings,
+      ).history,
     }));
 
   const resetHistoryAfterSave = () =>

@@ -22,16 +22,24 @@ export const Pixedi = ({
   theme = "light",
   settings = {},
 }: PixediProps) => {
-  const { loading, error, width, height, base64, extension } =
-    useImageLoader(image);
+  const {
+    loading,
+    error,
+    extension,
+    width,
+    height,
+    originalBase64,
+    originalSize,
+    reducedBase64,
+  } = useImageLoader(image);
 
-  if (loading || error || !base64 || !extension) {
+  if (loading || error || !originalBase64 || !extension) {
     return (
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
           {loading && <Loader style={{ width: 48, height: 48 }} />}
           {error && <div className={styles.textRed}>{error}</div>}
-          {!loading && !error && (!base64 || !extension) && (
+          {!loading && !error && (!originalSize || !extension) && (
             <div className={styles.textRed}>Failed to load image.</div>
           )}
         </div>
@@ -41,10 +49,12 @@ export const Pixedi = ({
 
   return (
     <PixediProvider
-      base64={base64}
+      extension={extension}
       width={width}
       height={height}
-      ext={extension}
+      originalBase64={originalBase64}
+      originalSize={originalSize}
+      reducedBase64={reducedBase64}
       settings={settings}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
