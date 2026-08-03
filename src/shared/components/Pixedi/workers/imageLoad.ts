@@ -71,22 +71,18 @@ self.onmessage = async (e: MessageEvent<string>) => {
       error:
         error instanceof Error
           ? error.message
-          : "An error occurred during worker execution.",
+          : "An error occurred during image loader worker execution.",
     });
   }
 };
 
 const getQuality = (size: number) => {
   const MB = 1024 * 1024;
-  if (size < 0.5 * MB) return 0.9; // < 0.5MB
-  if (size < 1 * MB) return 0.8; // < 1MB
-  if (size < 2 * MB) return 0.7; // < 2MB
-  if (size < 3 * MB) return 0.6; // < 3MB
-  if (size < 4 * MB) return 0.5; // < 4MB
-  if (size < 5 * MB) return 0.4; // < 5MB
-  if (size < 6 * MB) return 0.3; // < 6MB
-  if (size < 7 * MB) return 0.2; // < 7MB
-  if (size < 8 * MB) return 0.1; // < 8MB
-  if (size < 9 * MB) return 0.075; // < 9MB
-  return 0.05; // >= 9MB
+  if (size < 0.5 * MB) return 0.85; // < 0.5MB
+  if (size < 1 * MB) return 0.65; // < 1MB
+  if (size < 2 * MB) return 0.5; // < 2MB
+  if (size < 3 * MB) return 0.4; // < 3MB
+  if (size < 4 * MB) return 0.3; // < 4MB
+  if (size < 5 * MB) return 0.2; // < 5MB
+  return 0.1; // >= 5MB
 };

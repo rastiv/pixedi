@@ -5,35 +5,34 @@ import { PixediProvider } from "./PixediProvider";
 import { usePixediContext } from "./usePixediContext";
 
 const initialItem = {
-  name: "Initial",
   base64: "data:image/png;base64,initial",
   width: 800,
   height: 600,
-  ext: "png",
+  action: { name: "initial" as const, args: null },
 };
 
 const editedItem = {
-  name: "Resize",
   base64: "data:image/png;base64,edited",
   width: 400,
   height: 300,
-  ext: "png",
+  action: { name: "resize" as const, args: { width: 400, height: 300 } },
 };
 
 const secondEditedItem = {
-  name: "Crop",
   base64: "data:image/png;base64,cropped",
   width: 200,
   height: 200,
-  ext: "png",
+  action: { name: "crop" as const, args: { x: 0, y: 0, w: 200, h: 200 } },
 };
 
 const wrapper = ({ children }: PropsWithChildren) => (
   <PixediProvider
-    base64={initialItem.base64}
+    extension="png"
+    reducedBase64={initialItem.base64}
+    originalBase64={initialItem.base64}
+    originalSize={1234}
     width={initialItem.width}
     height={initialItem.height}
-    ext="png"
     settings={{}}
   >
     {children}
@@ -81,7 +80,10 @@ describe("PixediProvider", () => {
       result.current.addToHistory(editedItem);
       result.current.addToHistory(secondEditedItem);
       result.current.undo();
-      result.current.addToHistory({ ...editedItem, name: "Replacement" });
+      result.current.addToHistory({
+        ...editedItem,
+        action: { name: "rotate" as const, args: 90 },
+      });
     });
 
     expect(result.current.currentAction).toBeNull();
@@ -89,7 +91,10 @@ describe("PixediProvider", () => {
     expect(result.current.history.items).toEqual([
       initialItem,
       editedItem,
-      { ...editedItem, name: "Replacement" },
+      {
+        ...editedItem,
+        action: { name: "rotate" as const, args: 90 },
+      },
     ]);
   });
 

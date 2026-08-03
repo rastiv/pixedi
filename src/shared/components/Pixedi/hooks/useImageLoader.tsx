@@ -30,13 +30,15 @@ export const useImageLoader = (src: string): UseImageResult => {
       return;
     }
 
-    const worker = new Worker(new URL("./image.worker.ts", import.meta.url), {
-      type: "module",
-    });
+    const worker = new Worker(
+      new URL("../workers/imageLoad.ts", import.meta.url),
+      {
+        type: "module",
+      },
+    );
 
     worker.postMessage(src);
 
-    // Слушаме за резултат от задната нишка
     worker.onmessage = (
       e: MessageEvent<{
         success: boolean;

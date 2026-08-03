@@ -12,7 +12,7 @@ type RotateToolsProps = {
 export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
   const { getLastHistoryItem, addToHistory, setSidebar, setCurrentAction } =
     usePixediContext();
-  const { width, height, base64, ext } = getLastHistoryItem();
+  const { width, height, base64 } = getLastHistoryItem();
   const { rotate } = useImageProcessor(false);
   const [angle, setAngle] = useState(0);
   const [transparency, setTransparency] = useState(false);
@@ -42,11 +42,13 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
         (angle >= 90 && angle < 180) || (angle >= 270 && angle < 360);
 
       addToHistory({
-        name: "Rotate",
         base64: processedBase64,
         width: isNewRatio ? height : width,
         height: isNewRatio ? width : height,
-        ext: ["jpg", "jpeg"].includes(ext) ? "webp" : ext,
+        action: {
+          name: "rotate",
+          args: angle,
+        },
       });
 
       setAngle(0);

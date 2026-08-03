@@ -11,7 +11,7 @@ export const Frame = () => {
   const { getLastHistoryItem, currentAction } = usePixediContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const { width, height, base64, ext } = getLastHistoryItem();
+  const { width, height, base64 } = getLastHistoryItem();
 
   const isCrop = currentAction?.name === "crop";
   const isResize = currentAction?.name === "resize";
@@ -32,12 +32,9 @@ export const Frame = () => {
     }
     if (imageRef.current) {
       imageRef.current.style.transform = "";
-      const supportAlpha = ["png", "webp", "gif"].includes(ext);
-      imageRef.current.style.background = supportAlpha
-        ? "transparent"
-        : "var(--color-white)";
+      imageRef.current.style.background = "transparent";
     }
-  }, [currentAction, height, width, ext]);
+  }, [currentAction, height, width]);
 
   return (
     <div className={frameClassName}>

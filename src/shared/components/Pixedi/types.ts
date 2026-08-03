@@ -24,14 +24,23 @@ export type CropSizes = {
   h: number;
 };
 
-export type CropRect = CropSizes & {
+export type CropPosition = {
   x: number;
   y: number;
-  xPx?: number;
-  yPx?: number;
-  wPx?: number;
-  hPx?: number;
 };
+
+export type Flip = {
+  horizontal: boolean;
+  vertical: boolean;
+};
+
+export type CropRect = CropSizes &
+  CropPosition & {
+    xPx?: number;
+    yPx?: number;
+    wPx?: number;
+    hPx?: number;
+  };
 
 export type ActionCrop = {
   id: string;
@@ -51,10 +60,18 @@ export type Action =
   | { name: "rotate"; args: null }
   | { name: "filters"; args: Record<string, number> };
 
+export type HistoryItemAction =
+  | { name: "initial"; args: null }
+  | { name: "resize"; args: Sizes }
+  | { name: "crop"; args: CropSizes & CropPosition }
+  | { name: "presetCrop"; args: Sizes & CropSizes & CropPosition }
+  | { name: "flip"; args: Flip }
+  | { name: "rotate"; args: number }
+  | { name: "filters"; args: Record<string, number> };
+
 export type HistoryItem = Sizes & {
-  name: string;
   base64: string;
-  ext: string;
+  action: HistoryItemAction;
 };
 
 export type History = {

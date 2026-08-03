@@ -18,7 +18,7 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
   const [loading, setLoading] = useState(false);
   const [flipHorizontal, setFlipHorizontal] = useState(false);
   const [flipVertical, setFlipVertical] = useState(false);
-  const { base64, width, height, ext } = getLastHistoryItem();
+  const { base64, width, height } = getLastHistoryItem();
 
   const enableAnimation = () => {
     if (frameRef.current) {
@@ -67,11 +67,13 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
       disableAnimation();
       flushSync(() => {
         addToHistory({
-          name: "Flip",
           base64: processedBase64,
           width,
           height,
-          ext,
+          action: {
+            name: "flip",
+            args: { horizontal: flipHorizontal, vertical: flipVertical },
+          },
         });
       });
       handleFrameTransform(false, false);

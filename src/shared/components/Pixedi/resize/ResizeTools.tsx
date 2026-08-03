@@ -30,7 +30,6 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     width: currentWidth,
     height: currentHeight,
     base64,
-    ext,
   } = getLastHistoryItem();
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(currentWidth);
@@ -97,11 +96,16 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
       setLoading(true);
       const processedBase64 = await resize(base64, width, height);
       addToHistory({
-        name: "Resize",
         base64: processedBase64,
         width,
         height,
-        ext,
+        action: {
+          name: "resize",
+          args: {
+            width,
+            height,
+          },
+        },
       });
       handleFrameTransform(100);
       setSidebar(true);

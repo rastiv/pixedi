@@ -19,7 +19,7 @@ export const CropTools = () => {
   const { crop, resize } = useImageProcessor();
   const [loading, setLoading] = useState(false);
   const action = getCurrentAction();
-  const { base64, width, height, ext } = getLastHistoryItem();
+  const { base64, width, height } = getLastHistoryItem();
 
   const leftRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -84,11 +84,15 @@ export const CropTools = () => {
       }
 
       addToHistory({
-        name: "Crop",
         base64: processedBase64,
         width: preset ? preset.w : cropRectRef.current!.w,
         height: preset ? preset.h : cropRectRef.current!.h,
-        ext,
+        action: preset
+          ? {
+              name: "presetCrop",
+              args: { x, y, w, h, width: preset.w, height: preset.h },
+            }
+          : { name: "crop", args: { x, y, w, h } },
       });
       setSidebar(true);
     } catch (error) {

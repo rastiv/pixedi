@@ -25,11 +25,13 @@ export const getInitialState = (
     pointer: 0,
     items: [
       {
-        name: "Initial",
         base64: reducedBase64,
         width,
         height,
-        ext: extension,
+        action: {
+          name: "initial",
+          args: null,
+        },
       },
     ],
   },
