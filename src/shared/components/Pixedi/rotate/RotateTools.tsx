@@ -15,7 +15,6 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
   const { width, height, base64 } = getLastHistoryItem();
   const { rotate } = useImageProcessor(false);
   const [angle, setAngle] = useState(0);
-  const [transparency, setTransparency] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleRotate = (value: number) => {
@@ -49,7 +48,6 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
           name: "rotate",
           args: {
             degrees: angle,
-            alpha: transparency,
           },
         },
       });
@@ -69,15 +67,6 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
     setSidebar(true);
   };
 
-  const handleTransparancy = () => {
-    setTransparency((prev) => !prev);
-    if (frameRef.current) {
-      frameRef.current.style.background = transparency
-        ? "var(--color-black)"
-        : "transparent";
-    }
-  };
-
   return (
     <div
       className={styles.rotate}
@@ -95,11 +84,6 @@ export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
         disabled={loading || angle === 0 || angle === 360}
         onSave={handleSave}
         onClose={handleClose}
-      />
-      <input
-        type="checkbox"
-        checked={transparency}
-        onChange={handleTransparancy}
       />
     </div>
   );

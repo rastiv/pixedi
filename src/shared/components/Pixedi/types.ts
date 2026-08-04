@@ -55,7 +55,6 @@ export type ActionWithVal = {
 
 export type ActionRotate = {
   degrees: number;
-  alpha: boolean;
 };
 
 export type Action =

@@ -117,15 +117,7 @@ export const PixediProvider = ({
 
   const getSettings = () => state.settings;
 
-  const getAlpha = () => {
-    const foundAlpha = state.history.items.find(
-      (item, index) =>
-        index < state.history.pointer &&
-        item.action.name === "rotate" &&
-        item.action.args?.alpha,
-    );
-    return !!foundAlpha || state.isAlpha;
-  };
+  const hasAlpha = () => state.isAlpha;
 
   const value = {
     ...state,
@@ -140,7 +132,7 @@ export const PixediProvider = ({
     getSidebar,
     setSidebar,
     getSettings,
-    getAlpha,
+    hasAlpha,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

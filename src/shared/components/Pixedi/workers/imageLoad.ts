@@ -53,7 +53,6 @@ self.onmessage = async (e: MessageEvent<string>) => {
     const reducedSize = reducedBase64.length;
 
     const isAlpha = hasAlphaChannel(bitmap);
-    console.log("isAlpha", isAlpha);
 
     self.postMessage({
       success: true,

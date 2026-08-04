@@ -14,7 +14,7 @@ type StoreContextType = PixediContextType & {
   getSidebar: () => boolean;
   setSidebar: (payload: boolean) => void;
   getSettings: () => Settings;
-  getAlpha: () => boolean;
+  hasAlpha: () => boolean;
 };
 
 export const StoreContext = createContext<StoreContextType | undefined>(

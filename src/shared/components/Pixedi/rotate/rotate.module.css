@@ -11,3 +11,9 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 200px;
 }
+
+.rotateBox {
+  position: absolute;
+  inset: 0;
+  border: dashed 2px var(--accent-blue);
+}

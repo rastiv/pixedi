@@ -34,9 +34,7 @@ export const useImageLoader = (src: string): UseImageResult => {
 
     const worker = new Worker(
       new URL("../workers/imageLoad.ts", import.meta.url),
-      {
-        type: "module",
-      },
+      { type: "module" },
     );
 
     worker.postMessage(src);

@@ -6,9 +6,10 @@ import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
 import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
+import { RotateBox } from "../rotate/RotateBox";
 
 export const Frame = () => {
-  const { getLastHistoryItem, currentAction } = usePixediContext();
+  const { getLastHistoryItem, currentAction, hasAlpha } = usePixediContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const { width, height, base64 } = getLastHistoryItem();
@@ -27,24 +28,20 @@ export const Frame = () => {
   useEffect(() => {
     if (frameRef.current) {
       frameRef.current.style.aspectRatio = `${width} / ${height}`;
-      frameRef.current.style.background = "var(--color-black)";
+      frameRef.current.style.background = hasAlpha()
+        ? "transparent"
+        : "var(--color-black)";
       frameRef.current.style.transform = "";
     }
     if (imageRef.current) {
       imageRef.current.style.transform = "";
       imageRef.current.style.background = "transparent";
     }
-  }, [currentAction, height, width]);
+  }, [currentAction, hasAlpha, height, width]);
 
   return (
     <div className={frameClassName}>
-      <div
-        ref={frameRef}
-        style={{
-          aspectRatio: `${width} / ${height}`,
-        }}
-        className={styles.framePreview}
-      >
+      <div ref={frameRef} className={styles.framePreview}>
         <img
           ref={imageRef}
           src={base64}
@@ -52,6 +49,7 @@ export const Frame = () => {
           className={imageClassName}
         />
         {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
+        {isRotate && hasAlpha() && <RotateBox />}
       </div>
       {isResize && <ResizeTools frameRef={frameRef} />}
       {isCrop && <CropTools />}
