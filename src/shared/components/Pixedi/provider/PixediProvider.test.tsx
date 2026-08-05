@@ -85,7 +85,7 @@ describe("PixediProvider", () => {
         ...editedItem,
         action: {
           name: "rotate" as const,
-          args: { degrees: 90, alpha: false },
+          args: { degrees: 90 },
         },
       });
     });
@@ -99,7 +99,7 @@ describe("PixediProvider", () => {
         ...editedItem,
         action: {
           name: "rotate" as const,
-          args: { degrees: 90, alpha: false },
+          args: { degrees: 90 },
         },
       },
     ]);
