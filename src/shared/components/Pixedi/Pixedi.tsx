@@ -53,9 +53,9 @@ export const Pixedi = ({
       extension={extension}
       width={width}
       height={height}
+      reducedBase64={reducedBase64}
       originalBase64={originalBase64}
       originalSize={originalSize}
-      reducedBase64={reducedBase64}
       settings={settings}
       isAlpha={isAlpha}
     >

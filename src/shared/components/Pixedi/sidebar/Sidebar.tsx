@@ -11,8 +11,7 @@ import styles from "./sidebar.module.css";
 import buttonStyles from "../ui/button/button.module.css";
 
 export const Sidebar = () => {
-  const { getSidebar, setSidebar } = usePixediContext();
-  const isSidebarOpen = getSidebar();
+  const { sidebar: isSidebarOpen, setSidebar } = usePixediContext();
   const isBellowMd = useBellow("md");
 
   return (

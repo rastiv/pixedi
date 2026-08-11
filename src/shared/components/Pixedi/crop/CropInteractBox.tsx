@@ -12,8 +12,7 @@ import { useMobile } from "../hooks";
 import styles from "./crop.module.css";
 
 export const CropInteractBox = () => {
-  const { getCurrentAction, getLastHistoryItem } = usePixediContext();
-  const currentAction = getCurrentAction();
+  const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
   const imgRef = useRef<HTMLImageElement>(null);

@@ -5,6 +5,7 @@ import type { Settings } from "../types";
 export type PixediContextType = {
   history: History;
   currentAction: Action | null;
+  reducedBase64: string;
   originalBase64: string;
   originalSize: number;
   extension: string | null;
@@ -27,7 +28,6 @@ export const getInitialState = (
     pointer: 0,
     items: [
       {
-        base64: reducedBase64,
         width,
         height,
         action: {
@@ -38,6 +38,7 @@ export const getInitialState = (
     ],
   },
   currentAction: null,
+  reducedBase64,
   originalBase64,
   originalSize,
   extension,

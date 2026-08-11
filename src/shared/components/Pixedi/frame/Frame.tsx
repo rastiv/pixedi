@@ -7,9 +7,10 @@ import { RotateTools } from "../rotate";
 import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
 import { RotateBox } from "../rotate/RotateBox";
+import { Preview } from "../preview";
 
 export const Frame = () => {
-  const { getLastHistoryItem, currentAction, hasAlpha } = usePixediContext();
+  const { getLastHistoryItem, currentAction, isAlpha } = usePixediContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const { width, height, base64 } = getLastHistoryItem();
@@ -28,7 +29,7 @@ export const Frame = () => {
   useEffect(() => {
     if (frameRef.current) {
       frameRef.current.style.aspectRatio = `${width} / ${height}`;
-      frameRef.current.style.background = hasAlpha()
+      frameRef.current.style.background = isAlpha
         ? "transparent"
         : "var(--color-black)";
       frameRef.current.style.transform = "";
@@ -37,11 +38,12 @@ export const Frame = () => {
       imageRef.current.style.transform = "";
       imageRef.current.style.background = "transparent";
     }
-  }, [currentAction, hasAlpha, height, width]);
+  }, [currentAction, isAlpha, height, width]);
 
   return (
     <div className={frameClassName}>
-      <div ref={frameRef} className={styles.framePreview}>
+      <Preview />
+      {/* <div ref={frameRef} className={styles.framePreview}>
         <img
           ref={imageRef}
           src={base64}
@@ -49,12 +51,13 @@ export const Frame = () => {
           className={imageClassName}
         />
         {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
-        {isRotate && hasAlpha() && <RotateBox />}
+        {isRotate && isAlpha() && <RotateBox />}
       </div>
-      {isResize && <ResizeTools frameRef={frameRef} />}
+      }
       {isCrop && <CropTools />}
       {isFlip && <FlipTools frameRef={frameRef} />}
-      {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />}
+      {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />} */}
+      {isResize && <ResizeTools />}
     </div>
   );
 };

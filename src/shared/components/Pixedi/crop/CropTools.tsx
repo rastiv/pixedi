@@ -11,14 +11,13 @@ import rootStyles from "../index.module.css";
 export const CropTools = () => {
   const {
     setCurrentAction,
-    getCurrentAction,
+    currentAction,
     getLastHistoryItem,
     addToHistory,
     setSidebar,
   } = usePixediContext();
   const { crop, resize } = useImageProcessor();
   const [loading, setLoading] = useState(false);
-  const action = getCurrentAction();
   const { base64, width, height } = getLastHistoryItem();
 
   const leftRef = useRef<HTMLDivElement>(null);
@@ -33,10 +32,14 @@ export const CropTools = () => {
   };
 
   useEffect(() => {
-    if (action?.name !== "crop") {
+    if (currentAction?.name !== "crop") {
       return;
     }
-    const { x, y, w, h } = getInitalCrop(action.args.ratio, width, height);
+    const { x, y, w, h } = getInitalCrop(
+      currentAction.args.ratio,
+      width,
+      height,
+    );
     const xPx = Math.round((x / 100) * width);
     const yPx = Math.round((y / 100) * height);
     const wPx = Math.round((w / 100) * width);
@@ -63,10 +66,10 @@ export const CropTools = () => {
     return () => {
       eventBus.removeEventListener("crop-update", onCropUpdate);
     };
-  }, [action, width, height]);
+  }, [currentAction, width, height]);
 
   const handleSave = async () => {
-    if (!action || action.name !== "crop") {
+    if (!currentAction || currentAction.name !== "crop") {
       return;
     }
     try {
@@ -75,7 +78,7 @@ export const CropTools = () => {
         return;
       }
       const { x, y, w, h } = cropRectRef.current;
-      const { preset } = action.args;
+      const { preset } = currentAction.args;
       let processedBase64 = await crop(base64, x, y, w, h);
 
       if (preset) {

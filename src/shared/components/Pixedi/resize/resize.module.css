@@ -2,6 +2,7 @@
   position: absolute;
   display: flex;
   flex-direction: column;
+  gap: 2px;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
@@ -10,39 +11,24 @@
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.resizeSlider {
+.slider {
   width: 80%;
   margin: 0 auto -4px auto;
 }
-.resizeBorder {
+.border {
   margin: 12px auto 4px;
   display: inline-block;
   width: 60px;
   border-bottom: 1px solid var(--border);
 }
-.resizeTools {
+.tools {
   display: flex;
   gap: 6px;
   align-items: center;
   margin-top: 16px;
 }
-.resizeToolsLock {
+.toolsLock {
   width: 12px;
   height: 12px;
   color: var(--muted-foreground);
-}
-.resizeToolsButtons {
-  display: flex;
-  margin-left: 4px;
-}
-.resizeToolsSave {
-  width: 36px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-}
-.resizeToolsClose {
-  width: 36px;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  margin-left: -1px;
 }

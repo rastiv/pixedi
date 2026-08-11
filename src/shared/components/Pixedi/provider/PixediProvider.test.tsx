@@ -5,21 +5,18 @@ import { PixediProvider } from "./PixediProvider";
 import { usePixediContext } from "./usePixediContext";
 
 const initialItem = {
-  base64: "data:image/png;base64,initial",
   width: 800,
   height: 600,
   action: { name: "initial" as const, args: null },
 };
 
 const editedItem = {
-  base64: "data:image/png;base64,edited",
   width: 400,
   height: 300,
   action: { name: "resize" as const, args: { width: 400, height: 300 } },
 };
 
 const secondEditedItem = {
-  base64: "data:image/png;base64,cropped",
   width: 200,
   height: 200,
   action: { name: "crop" as const, args: { x: 0, y: 0, w: 200, h: 200 } },
@@ -28,8 +25,8 @@ const secondEditedItem = {
 const wrapper = ({ children }: PropsWithChildren) => (
   <PixediProvider
     extension="png"
-    reducedBase64={initialItem.base64}
-    originalBase64={initialItem.base64}
+    reducedBase64="data:image/png;base64,initial"
+    originalBase64="data:image/png;base64,initial"
     originalSize={1234}
     width={initialItem.width}
     height={initialItem.height}
@@ -50,7 +47,6 @@ describe("PixediProvider", () => {
     });
     expect(result.current.extension).toBe("png");
     expect(result.current.currentAction).toBeNull();
-    expect(result.current.getSidebar()).toBe(false);
     expect(result.current.getLastHistoryItem()).toEqual(initialItem);
   });
 
@@ -66,8 +62,7 @@ describe("PixediProvider", () => {
       result.current.setSidebar(true);
     });
 
-    expect(result.current.getCurrentAction()).toEqual(action);
-    expect(result.current.getSidebar()).toBe(true);
+    expect(result.current.currentAction).toEqual(action);
   });
 
   it("adds edits, clears the action, and discards redo history", () => {

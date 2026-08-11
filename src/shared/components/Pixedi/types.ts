@@ -53,29 +53,21 @@ export type ActionWithVal = {
   val: boolean;
 };
 
-export type ActionRotate = {
+export type Rotate = {
   degrees: number;
 };
 
 export type Action =
-  | { name: "resize"; args: Sizes }
-  | { name: "crop"; args: ActionCrop }
-  | { name: "flip"; args: null }
-  | { name: "rotate"; args: null }
-  | { name: "filters"; args: Record<string, number> };
-
-export type HistoryItemAction =
   | { name: "initial"; args: null }
   | { name: "resize"; args: Sizes }
   | { name: "crop"; args: CropSizes & CropPosition }
   | { name: "presetCrop"; args: Sizes & CropSizes & CropPosition }
   | { name: "flip"; args: Flip }
-  | { name: "rotate"; args: ActionRotate }
+  | { name: "rotate"; args: Rotate }
   | { name: "filters"; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {
-  base64: string;
-  action: HistoryItemAction;
+  action: Action;
 };
 
 export type History = {

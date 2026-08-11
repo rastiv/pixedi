@@ -40,7 +40,11 @@ export const PixediProvider = ({
     ),
   );
 
-  const getCurrentAction = () => state.currentAction;
+  const setOriginalBase64 = (payload: string) =>
+    setState((store) => ({ ...store, originalBase64: payload }));
+
+  const setReducedBase64 = (payload: string) =>
+    setState((store) => ({ ...store, reducedBase64: payload }));
 
   const setCurrentAction = (payload: Action | null) =>
     setState((store) => ({ ...store, currentAction: payload }));
@@ -110,29 +114,21 @@ export const PixediProvider = ({
       };
     });
 
-  const getSidebar = () => state.sidebar;
-
   const setSidebar = (payload: boolean) =>
     setState((store) => ({ ...store, sidebar: payload }));
 
-  const getSettings = () => state.settings;
-
-  const hasAlpha = () => state.isAlpha;
-
   const value = {
     ...state,
-    getCurrentAction,
+    setOriginalBase64,
+    setReducedBase64,
     setCurrentAction,
+    getLastHistoryItem,
     addToHistory,
     resetHistory,
     resetHistoryAfterSave,
     undo,
     redo,
-    getLastHistoryItem,
-    getSidebar,
     setSidebar,
-    getSettings,
-    hasAlpha,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

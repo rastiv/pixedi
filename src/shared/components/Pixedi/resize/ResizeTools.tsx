@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Lock } from "../assets/icons";
-import { useImageProcessor, useMobile } from "../hooks";
-import { SaveCloseGroup, Slider } from "../ui";
-import { InputPixel } from "../ui";
+import { useMobile } from "../hooks";
+import { emitResizeUpdate } from "../eventBus";
+import { SaveCloseGroup, Slider, InputPixel } from "../ui";
 import styles from "./resize.module.css";
 
 const minScale = 10;
@@ -19,35 +19,15 @@ const sizeCalculator = (scale: number, width: number, height: number) => {
   };
 };
 
-type ResizeToolsProps = {
-  frameRef: React.RefObject<HTMLDivElement | null>;
-};
-
-export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
+export const ResizeTools = () => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
     usePixediContext();
-  const {
-    width: currentWidth,
-    height: currentHeight,
-    base64,
-  } = getLastHistoryItem();
-  const [loading, setLoading] = useState(false);
+  const { width: currentWidth, height: currentHeight } = getLastHistoryItem();
   const [width, setWidth] = useState(currentWidth);
   const [height, setHeight] = useState(currentHeight);
   const [scale, setScale] = useState(100);
   const startVerticalSlideRef = useRef<number>(0);
-  const { resize } = useImageProcessor();
   const mobile = useMobile();
-
-  const handleFrameTransform = useCallback(
-    (scale: number) => {
-      if (frameRef.current) {
-        frameRef.current.style.transition = "transform 0.2s ease";
-        frameRef.current.style.transform = `scale(${scale / 100})`;
-      }
-    },
-    [frameRef],
-  );
 
   const handleChangeScale = (scale: number) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
@@ -58,7 +38,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     setWidth(updatedWidth);
     setHeight(updatedHeight);
     setScale(updatedScale);
-    handleFrameTransform(updatedScale);
+    emitResizeUpdate(updatedScale);
   };
 
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +50,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     setWidth(updatedWidth);
     setHeight(updatedHeight);
     setScale(updatedScale);
-    handleFrameTransform(updatedScale);
+    emitResizeUpdate(updatedScale);
   };
 
   const handleChangeHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,38 +62,29 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     setHeight(updatedHeight);
     setWidth(updatedWidth);
     setScale(updatedScale);
-    handleFrameTransform(updatedScale);
+    emitResizeUpdate(updatedScale);
   };
 
   const handleClose = () => {
-    handleFrameTransform(100);
+    emitResizeUpdate(100);
     setCurrentAction(null);
     setSidebar(true);
   };
 
-  const handleSave = async () => {
-    try {
-      setLoading(true);
-      const processedBase64 = await resize(base64, width, height);
-      addToHistory({
-        base64: processedBase64,
-        width,
-        height,
-        action: {
-          name: "resize",
-          args: {
-            width,
-            height,
-          },
+  const handleSave = () => {
+    addToHistory({
+      width,
+      height,
+      action: {
+        name: "resize",
+        args: {
+          width,
+          height,
         },
-      });
-      handleFrameTransform(100);
-      setSidebar(true);
-    } catch (error) {
-      console.error("Failed to process image:", error);
-    } finally {
-      setLoading(false);
-    }
+      },
+    });
+    emitResizeUpdate(100);
+    setSidebar(true);
   };
 
   useEffect(() => {
@@ -128,11 +99,10 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
       setHeight(updatedHeight);
       setWidth(updatedWidth);
       setScale(scale);
-      handleFrameTransform(scale);
+      emitResizeUpdate(scale);
     };
 
     const handleWheel = (e: WheelEvent) => {
-      if (loading) return;
       const direction = Math.sign(e.deltaY);
       updatedScale -= direction * 2;
       if (updatedScale <= minScale) updatedScale = minScale;
@@ -145,7 +115,6 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (loading) return;
       const y = e.touches[0].clientY;
       const deltaY = startVerticalSlideRef.current - y;
       if (Math.abs(deltaY) < 10) return;
@@ -165,14 +134,7 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
     window.addEventListener("touchmove", handleTouchMove, { signal });
 
     return () => controller.abort();
-  }, [
-    currentHeight,
-    currentWidth,
-    handleFrameTransform,
-    loading,
-    mobile,
-    width,
-  ]);
+  }, [currentHeight, currentWidth, mobile, width]);
 
   return (
     <div className={styles.resize}>
@@ -180,32 +142,29 @@ export const ResizeTools = ({ frameRef }: ResizeToolsProps) => {
         min={minScale}
         max={maxScale}
         value={scale}
-        className={styles.resizeSlider}
+        className={styles.slider}
         onChange={handleChangeScale}
       />
-      <div className={styles.resizeTools}>
+      <div className={styles.tools}>
         <InputPixel
           value={width}
           name="width"
           label="Width"
-          disabled={loading}
           style={{ width: "88px" }}
           onChange={handleChangeWidth}
         />
-        <Lock className={styles.resizeToolsLock} />
+        <Lock className={styles.toolsLock} />
         <InputPixel
           value={height}
           name="height"
           label="Height"
-          disabled={loading}
           style={{ width: "88px" }}
           onChange={handleChangeHeight}
         />
         <SaveCloseGroup
           onSave={() => handleSave()}
           onClose={handleClose}
-          saving={loading}
-          disabled={width === currentWidth || loading}
+          disabled={width === currentWidth}
         />
       </div>
     </div>

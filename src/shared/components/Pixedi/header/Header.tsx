@@ -15,6 +15,7 @@ type HeaderProps = {
 export const Header = ({ onBack, onSave }: HeaderProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const {
+    settings,
     history,
     undo,
     redo,
@@ -22,12 +23,11 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     resetHistoryAfterSave,
     getLastHistoryItem,
     setCurrentAction,
-    getSettings,
   } = usePixediContext();
   const { save } = useImageProcessor(true);
 
   const { base64 } = getLastHistoryItem();
-  const { quality } = getSettings();
+  const { quality } = settings;
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;

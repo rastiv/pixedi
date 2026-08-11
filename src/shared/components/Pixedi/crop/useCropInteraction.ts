@@ -45,7 +45,7 @@ export const useCropInteraction = ({
   imgRef,
   cropRef,
 }: UseCropInteractionArgs) => {
-  const { getCurrentAction, getLastHistoryItem } = usePixediContext();
+  const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -123,10 +123,14 @@ export const useCropInteraction = ({
       parentW: number,
       parentH: number,
     ) => {
-      const action = getCurrentAction();
-      if (!action || action.name !== "crop" || !startPointRef.current) return;
+      if (
+        !currentAction ||
+        currentAction.name !== "crop" ||
+        !startPointRef.current
+      )
+        return;
 
-      const { isFree, ratio } = action.args;
+      const { isFree, ratio } = currentAction.args;
       const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
       const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
       const { x, y, w, h } = getCropPoints(
@@ -224,7 +228,7 @@ export const useCropInteraction = ({
     document.addEventListener("touchend", handleMoveEnd, { signal });
 
     return () => controller.abort();
-  }, [getCurrentAction, getLastHistoryItem, imgRef, cropRef]);
+  }, [currentAction, getLastHistoryItem, imgRef, cropRef]);
 
   return { handleCropStart };
 };

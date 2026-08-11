@@ -78,13 +78,13 @@ self.onmessage = async (e: MessageEvent<string>) => {
 
 const getQuality = (size: number) => {
   const MB = 1024 * 1024;
-  if (size < 0.5 * MB) return 0.85; // < 0.5MB
-  if (size < 1 * MB) return 0.65; // < 1MB
-  if (size < 2 * MB) return 0.5; // < 2MB
-  if (size < 3 * MB) return 0.4; // < 3MB
-  if (size < 4 * MB) return 0.3; // < 4MB
-  if (size < 5 * MB) return 0.2; // < 5MB
-  return 0.1; // >= 5MB
+  if (size < 1 * MB) return 0.85; // < 1MB
+  if (size < 2 * MB) return 0.75; // < 2MB
+  if (size < 3 * MB) return 0.65; // < 3MB
+  if (size < 4 * MB) return 0.55; // < 4MB
+  if (size < 5 * MB) return 0.45; // < 5MB
+  if (size < 6 * MB) return 0.35; // < 6MB
+  return 0.25; // >= 5MB
 };
 
 function hasAlphaChannel(bitmap: ImageBitmap): boolean {
