@@ -1,4 +1,4 @@
-import type { CropRect, Sizes } from "./types";
+import type { CropRect } from "./types";
 
 export const eventBus = new EventTarget();
 

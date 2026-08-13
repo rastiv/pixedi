@@ -37,14 +37,10 @@ function applyClipPath(
 }
 
 type UseCropInteractionArgs = {
-  imgRef: React.RefObject<HTMLImageElement | null>;
   cropRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const useCropInteraction = ({
-  imgRef,
-  cropRef,
-}: UseCropInteractionArgs) => {
+export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
   const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
@@ -98,10 +94,9 @@ export const useCropInteraction = ({
     };
 
     const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!imgRef.current || !cropRef.current || !startPointRef.current) return;
+      if (!cropRef.current || !startPointRef.current) return;
 
       const elCrop = cropRef.current;
-      const elImage = imgRef.current;
       const parent = elCrop.parentElement;
       if (!parent) return;
 
@@ -109,17 +104,16 @@ export const useCropInteraction = ({
       const parentH = parent.offsetHeight;
 
       if (directionRef.current) {
-        handleResize(e, elCrop, elImage, parentW, parentH);
+        handleResize(e, elCrop, parentW, parentH);
         return;
       }
 
-      handleDrag(e, elCrop, elImage, parentW, parentH);
+      handleDrag(e, elCrop, parentW, parentH);
     };
 
     const handleResize = (
       e: MouseEvent | TouchEvent,
       elCrop: HTMLDivElement,
-      elImage: HTMLImageElement,
       parentW: number,
       parentH: number,
     ) => {
@@ -153,7 +147,6 @@ export const useCropInteraction = ({
       const hPct = pct(h, parentH);
 
       applyRect(elCrop, xPct, yPct, wPct, hPct);
-      applyClipPath(elImage, xPct, yPct, wPct, hPct);
 
       const lastHistoryItem = getLastHistoryItem();
       if (!lastHistoryItem) return;
@@ -169,7 +162,6 @@ export const useCropInteraction = ({
     const handleDrag = (
       e: MouseEvent | TouchEvent,
       elCrop: HTMLDivElement,
-      elImage: HTMLImageElement,
       parentW: number,
       parentH: number,
     ) => {
@@ -195,7 +187,6 @@ export const useCropInteraction = ({
       posRef.current = { xPct: leftPct, yPct: topPct };
 
       applyRect(elCrop, leftPct, topPct, wPct, hPct);
-      applyClipPath(elImage, leftPct, topPct, wPct, hPct);
 
       const { width: imgW, height: imgH } = getLastHistoryItem();
       emitCropUpdate({
@@ -228,7 +219,7 @@ export const useCropInteraction = ({
     document.addEventListener("touchend", handleMoveEnd, { signal });
 
     return () => controller.abort();
-  }, [currentAction, getLastHistoryItem, imgRef, cropRef]);
+  }, [currentAction, getLastHistoryItem, cropRef]);
 
   return { handleCropStart };
 };

@@ -1,90 +1,47 @@
 import { useState } from "react";
-import { flushSync } from "react-dom";
 import { usePixediContext } from "../provider/usePixediContext";
-import { useImageProcessor } from "../hooks";
 import { Button, SaveCloseGroup } from "../ui";
 import { FlipH, FlipV } from "../assets/icons";
-
+import { ActionName } from "../types";
 import styles from "./flip.module.css";
 
-type FlipToolsProps = {
-  frameRef: React.RefObject<HTMLDivElement | null>;
-};
-
-export const FlipTools = ({ frameRef }: FlipToolsProps) => {
+export const FlipTools = () => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
     usePixediContext();
-  const { flip } = useImageProcessor();
-  const [loading, setLoading] = useState(false);
   const [flipHorizontal, setFlipHorizontal] = useState(false);
   const [flipVertical, setFlipVertical] = useState(false);
-  const { base64, width, height } = getLastHistoryItem();
-
-  const enableAnimation = () => {
-    if (frameRef.current) {
-      frameRef.current.style.transition = "all 0.2s ease";
-    }
-  };
-
-  const disableAnimation = () => {
-    if (frameRef.current) {
-      frameRef.current.style.transition = "none";
-    }
-  };
-
-  const handleFrameTransform = (
-    horizontal: boolean = false,
-    vertical: boolean = false,
-  ) => {
-    if (frameRef.current) {
-      frameRef.current.style.transform = `scale(${horizontal ? -1 : 1}, ${vertical ? -1 : 1})`;
-    }
-  };
+  const { width, height } = getLastHistoryItem();
 
   const handleFlipHorizontal = () => {
     setFlipHorizontal((prev) => !prev);
-    enableAnimation();
-    handleFrameTransform(!flipHorizontal, flipVertical);
+    setCurrentAction({
+      name: ActionName.FLIP,
+      args: { horizontal: !flipHorizontal, vertical: flipVertical },
+    });
   };
 
   const handleFlipVertical = () => {
     setFlipVertical((prev) => !prev);
-    enableAnimation();
-    handleFrameTransform(flipHorizontal, !flipVertical);
+    setCurrentAction({
+      name: "flip",
+      args: { horizontal: flipHorizontal, vertical: !flipVertical },
+    });
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    enableAnimation();
-    handleFrameTransform(false, false);
     setSidebar(true);
   };
 
-  const handleSave = async () => {
-    try {
-      setLoading(true);
-      const processedBase64 = await flip(base64, flipHorizontal, flipVertical);
-      disableAnimation();
-      flushSync(() => {
-        addToHistory({
-          base64: processedBase64,
-          width,
-          height,
-          action: {
-            name: "flip",
-            args: { horizontal: flipHorizontal, vertical: flipVertical },
-          },
-        });
-      });
-      handleFrameTransform(false, false);
-      setFlipHorizontal(false);
-      setFlipVertical(false);
-      setSidebar(true);
-    } catch (error) {
-      console.error("Failed to process image:", error);
-    } finally {
-      setLoading(false);
-    }
+  const handleSave = () => {
+    addToHistory({
+      width,
+      height,
+      action: {
+        name: "flip",
+        args: { horizontal: flipHorizontal, vertical: flipVertical },
+      },
+    });
   };
 
   return (
@@ -93,7 +50,6 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
         <Button
           variant="outline"
           className={`${styles.flipBtnH}`}
-          disabled={loading}
           onClick={handleFlipHorizontal}
         >
           <FlipH
@@ -107,7 +63,6 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
         <Button
           variant="outline"
           className={`${styles.flipBtnV} `}
-          disabled={loading}
           onClick={handleFlipVertical}
         >
           <FlipV
@@ -118,8 +73,7 @@ export const FlipTools = ({ frameRef }: FlipToolsProps) => {
         </Button>
       </div>
       <SaveCloseGroup
-        saving={loading}
-        disabled={loading || (!flipHorizontal && !flipVertical)}
+        disabled={!flipHorizontal && !flipVertical}
         onSave={handleSave}
         onClose={handleClose}
       />

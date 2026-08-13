@@ -8,17 +8,18 @@ import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
 import { RotateBox } from "../rotate/RotateBox";
 import { Preview } from "../preview";
+import { ActionName } from "@/shared/components/Pixedi/types";
 
 export const Frame = () => {
   const { getLastHistoryItem, currentAction, isAlpha } = usePixediContext();
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const { width, height, base64 } = getLastHistoryItem();
+  const { width, height } = getLastHistoryItem();
 
-  const isCrop = currentAction?.name === "crop";
-  const isResize = currentAction?.name === "resize";
-  const isFlip = currentAction?.name === "flip";
-  const isRotate = currentAction?.name === "rotate";
+  const isCrop = currentAction?.name === ActionName.CROP;
+  const isResize = currentAction?.name === ActionName.RESIZE;
+  const isFlip = currentAction?.name === ActionName.FLIP;
+  const isRotate = currentAction?.name === ActionName.ROTATE;
   const isFade = isCrop;
 
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
@@ -42,7 +43,8 @@ export const Frame = () => {
 
   return (
     <div className={frameClassName}>
-      <Preview />
+      <Preview style={isCrop ? { opacity: 0.4 } : {}} />
+      {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
       {/* <div ref={frameRef} className={styles.framePreview}>
         <img
           ref={imageRef}
@@ -54,9 +56,9 @@ export const Frame = () => {
         {isRotate && isAlpha() && <RotateBox />}
       </div>
       }
-      {isCrop && <CropTools />}
-      {isFlip && <FlipTools frameRef={frameRef} />}
       {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />} */}
+      {isCrop && <CropTools />}
+      {isFlip && <FlipTools />}
       {isResize && <ResizeTools />}
     </div>
   );

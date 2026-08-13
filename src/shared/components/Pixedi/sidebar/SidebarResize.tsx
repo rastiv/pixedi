@@ -1,6 +1,7 @@
 import { Fullscreen } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
+import { ActionName } from "../types";
 import styles from "./sidebar.module.css";
 
 export const SidebarResize = () => {
@@ -9,7 +10,7 @@ export const SidebarResize = () => {
   const { width, height } = getLastHistoryItem() ?? { width: 0, height: 0 };
 
   const handleClick = () => {
-    setCurrentAction({ name: "resize", args: { width, height } });
+    setCurrentAction({ name: ActionName.RESIZE, args: { width, height } });
     setSidebar(false);
   };
 

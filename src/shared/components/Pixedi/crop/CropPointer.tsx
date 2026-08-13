@@ -12,9 +12,9 @@ type CropPointerProps = {
 
 export const CropPointer = ({ onMouseDown }: CropPointerProps) => {
   return (
-    <div className={styles.cropMobileBorder}>
+    <div className={styles.mobileBorder}>
       <div
-        className={styles.cropMobilePointer}
+        className={styles.mobilePointer}
         onTouchStart={(e) => onMouseDown(e, "br", "nwse")}
       />
     </div>

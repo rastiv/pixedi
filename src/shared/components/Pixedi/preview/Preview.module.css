@@ -1,9 +1,6 @@
 .preview {
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  inset: 0;
   margin: auto;
   overflow: hidden;
   max-width: calc(100% - 32px);

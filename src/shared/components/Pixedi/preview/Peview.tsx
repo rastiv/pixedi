@@ -5,10 +5,10 @@ import { usePixediContext } from "../provider/usePixediContext";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
-  clipPath?: string;
+  style?: React.CSSProperties;
 };
 
-export const Preview = ({ clipPath = "" }: PreviewType) => {
+export const Preview = ({ style = {} }: PreviewType) => {
   const { history, reducedBase64, getLastHistoryItem, currentAction } =
     usePixediContext();
   const { width, height } = getLastHistoryItem();
@@ -53,6 +53,7 @@ export const Preview = ({ clipPath = "" }: PreviewType) => {
       className={styles.preview}
       style={{
         aspectRatio: `${width} / ${height}`,
+        ...style,
       }}
     >
       <div
@@ -61,7 +62,6 @@ export const Preview = ({ clipPath = "" }: PreviewType) => {
           width: `${(boxWidth / viewWidth) * 100}%`,
           height: `${(boxHeight / viewHeight) * 100}%`,
           transform: `rotate(${rotation}deg)`,
-          opacity: clipPath ? 0.5 : 1,
         }}
       >
         <div
@@ -79,7 +79,6 @@ export const Preview = ({ clipPath = "" }: PreviewType) => {
               height: `${(1 / box.h) * 100}%`,
               left: `${-(box.x / box.w) * 100}%`,
               top: `${-(box.y / box.h) * 100}%`,
-              clipPath,
             }}
           />
         </div>

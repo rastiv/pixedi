@@ -1,14 +1,18 @@
-.cropImage {
+.wrapper {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  margin: auto;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
+  overflow: hidden;
+  box-sizing: border-box;
 }
-.cropBox {
+.box {
   position: absolute;
   cursor: move;
+  border: 1px solid var(--accent-blue-fade);
 }
-.cropTools {
+.tools {
   position: absolute;
   bottom: 24px;
   left: 50%;
@@ -24,66 +28,32 @@
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
-.cropToolsInfo {
+.toolsInfo {
   display: inline-block;
   min-width: 54px;
   margin-top: -2px;
 }
-.cropToolsInfoLabel {
+.toolsInfoLabel {
   font-size: 12px;
   line-height: 12px;
   color: var(--muted-foreground);
 }
-.cropToolsInfoValue {
+.toolsInfoValue {
   font-size: 14px;
   line-height: 14px;
   color: var(--foreground);
 }
-.cropBorder {
-  position: absolute;
-  background-color: var(--accent-blue);
-}
-.cropBorderTop {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  cursor: ns-resize;
-}
-.cropBorderRight {
-  top: 0;
-  right: 0;
-  width: 2px;
-  height: 100%;
-  cursor: ew-resize;
-}
-.cropBorderBottom {
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  cursor: ns-resize;
-  transform: translateY(1px);
-}
-.cropBorderLeft {
-  top: 0;
-  left: -1px;
-  width: 2px;
-  height: 100%;
-  cursor: ew-resize;
-  transform: translateX(1px);
-}
-.cropLinesBox {
+.linesBox {
   position: absolute;
   inset: 2px;
   pointer-events: none;
 }
-.cropLine {
+.line {
   position: absolute;
-  border: 1px dashed var(--color-white);
+  border: 1px dashed var(--color-white-fade);
   opacity: 0.5;
 }
-.cropLineVertical {
+.lineV {
   width: 33%;
   height: 100%;
   top: 0;
@@ -91,7 +61,7 @@
   border-top: 0;
   border-bottom: 0;
 }
-.cropLineHorizontal {
+.lineH {
   width: 100%;
   height: 33%;
   top: 33%;
@@ -99,66 +69,47 @@
   border-right: 0;
   border-left: 0;
 }
-.cropPointer {
+.pointer {
   position: absolute;
   box-sizing: border-box;
-  width: 12px;
-  height: 12px;
-  border: 1px solid var(--accent-blue);
-  background-color: var(--overlay-bg-white);
-  border-radius: 50%;
+  width: 14px;
+  height: 14px;
 }
-.cropPointerTopLeft {
-  top: -5px;
-  left: -5px;
+.pointerTopLeft {
+  top: -6px;
+  left: -6px;
+  border-top: 3px solid var(--accent-blue);
+  border-left: 3px solid var(--accent-blue);
   cursor: nwse-resize;
 }
-.cropPointerTop {
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: ns-resize;
-}
-.cropPointerTopRight {
-  top: -5px;
-  right: -5px;
+.pointerTopRight {
+  top: -6px;
+  right: -6px;
+  border-top: 3px solid var(--accent-blue);
+  border-right: 3px solid var(--accent-blue);
   cursor: nesw-resize;
 }
-.cropPointerRight {
-  top: 50%;
-  right: -5px;
-  transform: translateY(-50%);
-  cursor: ew-resize;
-}
-.cropPointerBottomRight {
-  bottom: -5px;
-  right: -5px;
+.pointerBottomRight {
+  bottom: -6px;
+  right: -6px;
+  border-bottom: 3px solid var(--accent-blue);
+  border-right: 3px solid var(--accent-blue);
   cursor: nwse-resize;
 }
-.cropPointerBottom {
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: ns-resize;
-}
-.cropPointerBottomLeft {
-  bottom: -5px;
-  left: -5px;
+.pointerBottomLeft {
+  bottom: -6px;
+  left: -6px;
+  border-bottom: 3px solid var(--accent-blue);
+  border-left: 3px solid var(--accent-blue);
   cursor: nesw-resize;
 }
-.cropPointerLeft {
-  top: 50%;
-  left: -5px;
-  transform: translateY(-50%);
-  cursor: ew-resize;
-}
-.cropMobileBorder {
+.mobileBorder {
   position: absolute;
   inset: 0;
   box-sizing: border-box;
   border: 2px solid var(--accent-blue);
 }
-.cropMobilePointer {
+.mobilePointer {
   position: absolute;
   width: 32px;
   height: 32px;

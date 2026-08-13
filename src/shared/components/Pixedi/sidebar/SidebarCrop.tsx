@@ -17,16 +17,14 @@ export const SidebarCrop = () => {
       return;
     }
 
-    const ratio = value === "1:1" ? 1 : originRatio;
-
-    const args: ActionCrop = {
-      id: value,
-      ratio,
-      isFree: value === "freeform",
-      preset: null,
-    };
-
-    setCurrentAction({ name: "crop", args });
+    setCurrentAction({
+      name: "crop",
+      args: {
+        id: value,
+        ratio: value === "1:1" ? 1 : originRatio,
+        isFree: value === "freeform",
+      },
+    });
     setSidebar(false);
   };
 

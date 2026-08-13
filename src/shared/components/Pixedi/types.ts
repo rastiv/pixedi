@@ -7,64 +7,60 @@ export const breakpoints = {
 
 export type Breakpoint = keyof typeof breakpoints;
 
-export type Sizes = {
-  width: number;
-  height: number;
-};
-
-export type Direction = "r" | "l" | "t" | "b" | "tl" | "tr" | "bl" | "br";
-
-export type FlipDirection = {
-  horizontal: boolean;
-  vertical: boolean;
-};
-
-export type CropSizes = {
-  w: number;
-  h: number;
-};
-
-export type CropPosition = {
-  x: number;
-  y: number;
-};
-
-export type Flip = {
-  horizontal: boolean;
-  vertical: boolean;
-};
-
-export type CropRect = CropSizes &
-  CropPosition & {
-    xPx?: number;
-    yPx?: number;
-    wPx?: number;
-    hPx?: number;
-  };
-
-export type ActionCrop = {
-  id: string;
-  ratio: number;
-  isFree: boolean;
-  preset: CropSizes | null;
-};
+export type Direction = "tl" | "tr" | "bl" | "br";
 
 export type ActionWithVal = {
   val: boolean;
 };
 
-export type Rotate = {
+export const ActionName = {
+  INITIAL: "initial",
+  RESIZE: "resize",
+  CROP: "crop",
+  PRESET_CROP: "presetCrop",
+  FLIP: "flip",
+  ROTATE: "rotate",
+  FILTERS: "filters",
+} as const;
+
+export type Sizes = {
+  width: number;
+  height: number;
+};
+
+export type ActionFlip = {
+  horizontal: boolean;
+  vertical: boolean;
+};
+
+export type ActionCrop = {
+  id: string;
+  ratio: number;
+  isFree: boolean;
+};
+
+export type CropRect = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
+
+export type ActionRotate = {
   degrees: number;
 };
 
 export type Action =
-  | { name: "initial"; args: null }
-  | { name: "resize"; args: Sizes }
-  | { name: "crop"; args: CropSizes & CropPosition }
-  | { name: "presetCrop"; args: Sizes & CropSizes & CropPosition }
-  | { name: "flip"; args: Flip }
-  | { name: "rotate"; args: Rotate }
-  | { name: "filters"; args: Record<string, number> };
+  | { name: typeof ActionName.INITIAL; args: null }
+  | { name: typeof ActionName.RESIZE; args: Sizes }
+  | { name: typeof ActionName.CROP; args: ActionCrop }
+  // | {
+  //     name: typeof ActionName.PRESET_CROP;
+  //     args: Sizes & CropSizes & CropPosition;
+  //   }
+  | { name: typeof ActionName.FLIP; args: ActionFlip }
+  | { name: typeof ActionName.ROTATE; args: ActionRotate }
+  | { name: typeof ActionName.FILTERS; args: Record<string, number> };
 
 export type HistoryItem = Sizes & {
   action: Action;

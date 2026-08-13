@@ -18,7 +18,7 @@ export const CropTools = () => {
   } = usePixediContext();
   const { crop, resize } = useImageProcessor();
   const [loading, setLoading] = useState(false);
-  const { base64, width, height } = getLastHistoryItem();
+  const { width, height } = getLastHistoryItem();
 
   const leftRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -106,32 +106,32 @@ export const CropTools = () => {
   };
 
   return (
-    <div className={styles.cropTools}>
-      <div className={styles.cropToolsInfo}>
-        <div className={styles.cropToolsInfoLabel}>left</div>
+    <div className={styles.tools}>
+      <div className={styles.toolsInfo}>
+        <div className={styles.toolsInfoLabel}>left</div>
         <div
-          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
           ref={leftRef}
         />
       </div>
-      <div className={styles.cropToolsInfo}>
-        <div className={styles.cropToolsInfoLabel}>top</div>
+      <div className={styles.toolsInfo}>
+        <div className={styles.toolsInfoLabel}>top</div>
         <div
-          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
           ref={topRef}
         />
       </div>
-      <div className={styles.cropToolsInfo}>
-        <div className={styles.cropToolsInfoLabel}>width</div>
+      <div className={styles.toolsInfo}>
+        <div className={styles.toolsInfoLabel}>width</div>
         <div
-          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
           ref={widthRef}
         />
       </div>
-      <div className={styles.cropToolsInfo}>
-        <div className={styles.cropToolsInfoLabel}>height</div>
+      <div className={styles.toolsInfo}>
+        <div className={styles.toolsInfoLabel}>height</div>
         <div
-          className={`${styles.cropToolsInfoValue} ${rootStyles.semibold}`}
+          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
           ref={heightRef}
         />
       </div>
