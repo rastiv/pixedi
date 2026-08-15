@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { SaveCloseGroup } from "../ui";
-import type { CropRect } from "../types";
+import { ActionName, type CropRect } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
 import { eventBus } from "../eventBus";
 import { getInitalCrop } from "../utils";
-import { useImageProcessor } from "../hooks";
 import styles from "./crop.module.css";
 import rootStyles from "../index.module.css";
 
@@ -22,7 +21,7 @@ export const CropTools = () => {
   const topRef = useRef<HTMLDivElement>(null);
   const widthRef = useRef<HTMLDivElement>(null);
   const heightRef = useRef<HTMLDivElement>(null);
-  const cropRectRef = useRef<CropRect | null>(null);
+  const clipPathRef = useRef<CropRect | null>(null);
 
   const handleClose = () => {
     setCurrentAction(null);
@@ -47,29 +46,37 @@ export const CropTools = () => {
     if (topRef.current) topRef.current.textContent = yPx.toString();
     if (widthRef.current) widthRef.current.textContent = wPx.toString();
     if (heightRef.current) heightRef.current.textContent = hPx.toString();
-    cropRectRef.current = { x: xPx, y: yPx, w: wPx, h: hPx };
 
     const onCropUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<CropRect>;
       const { x, y, w, h } = customEvent.detail;
-      cropRectRef.current = customEvent.detail;
+      clipPathRef.current = customEvent.detail;
       if (leftRef.current) leftRef.current.textContent = x.toString();
       if (topRef.current) topRef.current.textContent = y.toString();
       if (widthRef.current) widthRef.current.textContent = w.toString();
       if (heightRef.current) heightRef.current.textContent = h.toString();
     };
 
+    const onClipPathUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent<CropRect>;
+      clipPathRef.current = customEvent.detail;
+    };
+
     eventBus.addEventListener("crop-update", onCropUpdate);
+    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
 
     return () => {
       eventBus.removeEventListener("crop-update", onCropUpdate);
+      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
     };
   }, [currentAction, width, height]);
 
   const handleSave = async () => {
-    if (!currentAction || currentAction.name !== "crop") {
+    if (!currentAction || currentAction.name !== ActionName.CROP) {
       return;
     }
+
+    console.log(clipPathRef.current);
 
     // if (!cropRectRef.current) {
     //   return;

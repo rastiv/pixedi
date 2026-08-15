@@ -6,11 +6,11 @@ import type { CropRect } from "../types";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
-  isClipped: boolean;
+  isClipped?: unknown;
   style?: React.CSSProperties;
 };
 
-export const Preview = ({ isClipped = false, style = {} }: PreviewType) => {
+export const Preview = ({ isClipped, style = {} }: PreviewType) => {
   const { history, reducedBase64, getLastHistoryItem, currentAction } =
     usePixediContext();
   const { width, height } = getLastHistoryItem();

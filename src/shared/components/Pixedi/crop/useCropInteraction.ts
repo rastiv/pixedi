@@ -28,13 +28,9 @@ function applyRect(
 
 type UseCropInteractionArgs = {
   boxRef: React.RefObject<HTMLDivElement | null>;
-  onCropUpdate: (crop: CropRect) => void;
 };
 
-export const useCropInteraction = ({
-  boxRef,
-  onCropUpdate,
-}: UseCropInteractionArgs) => {
+export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
   const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
@@ -208,9 +204,6 @@ export const useCropInteraction = ({
 
     const handleMoveEnd = () => {
       if (!boxRef.current) return;
-
-      onCropUpdate(clipPathRef.current);
-
       startPointRef.current = null;
       directionRef.current = "";
       boxRef.current.style.cursor = "move";

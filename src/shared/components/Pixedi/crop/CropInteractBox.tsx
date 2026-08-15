@@ -1,34 +1,20 @@
 import { useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
 import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
+import { usePixediContext } from "../provider/usePixediContext";
 import { getInitalCrop } from "../utils";
 import { Preview } from "../preview";
 import { useMobile } from "../hooks";
-import { ActionName, type CropRect } from "../types";
+import { ActionName } from "../types";
+import { emitClipPathUpdate } from "../eventBus";
 import styles from "./crop.module.css";
 
 export const CropInteractBox = () => {
-  const { currentAction, setCurrentAction, getLastHistoryItem } =
-    usePixediContext();
+  const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
   const boxRef = useRef<HTMLDivElement>(null);
 
-  const onCropUpdate = (crop: CropRect) => {
-    if (!currentAction || currentAction.name !== ActionName.CROP) {
-      return;
-    }
-    setCurrentAction({
-      ...currentAction,
-      args: {
-        ...currentAction.args,
-        crop,
-      },
-    });
-  };
-
   const { handleCropStart } = useCropInteraction({
     boxRef,
-    onCropUpdate,
   });
 
   if (!currentAction || currentAction.name !== ActionName.CROP) {
@@ -36,12 +22,13 @@ export const CropInteractBox = () => {
   }
 
   const { width, height } = getLastHistoryItem();
-  const { x, y, w, h } = getInitalCrop(currentAction.args.ratio, width, height);
+  const initialCrop = getInitalCrop(currentAction.args.ratio, width, height);
+  const { x, y, w, h } = initialCrop;
 
   return (
     <>
       <Preview
-        isClipped={true}
+        isClipped
         style={{ clipPath: `xywh(${x}% ${y}% ${w}% ${h}%)` }}
       />
       <div
