@@ -37,7 +37,8 @@ export type ActionCrop = {
   id: string;
   ratio: number;
   isFree: boolean;
-};
+  preset?: Sizes;
+} & Partial<CropRect>;
 
 export type CropRect = {
   x: number;

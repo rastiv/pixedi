@@ -6,7 +6,6 @@ import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
 import styles from "./frame.module.css";
 import rootStyles from "../index.module.css";
-import { RotateBox } from "../rotate/RotateBox";
 import { Preview } from "../preview";
 import { ActionName } from "@/shared/components/Pixedi/types";
 
@@ -23,9 +22,6 @@ export const Frame = () => {
   const isFade = isCrop;
 
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
-  const imageClassName = `${styles.frameImage} ${
-    isFade ? styles.frameImageFaded : ""
-  }`;
 
   useEffect(() => {
     if (frameRef.current) {
@@ -45,21 +41,10 @@ export const Frame = () => {
     <div className={frameClassName}>
       <Preview style={isCrop ? { opacity: 0.4 } : {}} />
       {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
-      {/* <div ref={frameRef} className={styles.framePreview}>
-        <img
-          ref={imageRef}
-          src={base64}
-          alt="Image"
-          className={imageClassName}
-        />
-        {isCrop && <CropInteractBox key={currentAction?.args?.id} />}
-        {isRotate && isAlpha() && <RotateBox />}
-      </div>
-      }
-      {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />} */}
+      {isResize && <ResizeTools />}
       {isCrop && <CropTools />}
       {isFlip && <FlipTools />}
-      {isResize && <ResizeTools />}
+      {/* {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />} */}
     </div>
   );
 };

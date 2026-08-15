@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
 import { usePixediContext } from "../provider/usePixediContext";
 import { getInitalCrop } from "../utils";
@@ -13,17 +13,18 @@ export const CropInteractBox = () => {
   const mobile = useMobile();
   const boxRef = useRef<HTMLDivElement>(null);
 
-  const { handleCropStart } = useCropInteraction({
-    boxRef,
-  });
-
-  if (!currentAction || currentAction.name !== ActionName.CROP) {
-    return null;
-  }
+  const { handleCropStart } = useCropInteraction({ boxRef });
 
   const { width, height } = getLastHistoryItem();
-  const initialCrop = getInitalCrop(currentAction.args.ratio, width, height);
+  const ratio =
+    currentAction?.name === ActionName.CROP ? currentAction.args.ratio : 1;
+
+  const initialCrop = getInitalCrop(ratio, width, height);
   const { x, y, w, h } = initialCrop;
+
+  useEffect(() => {
+    emitClipPathUpdate(initialCrop);
+  }, [initialCrop]);
 
   return (
     <>

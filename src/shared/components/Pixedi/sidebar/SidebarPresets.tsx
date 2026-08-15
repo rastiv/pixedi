@@ -31,7 +31,7 @@ export const SidebarPresets = () => {
       id: value,
       ratio,
       isFree: false,
-      preset: { w: option.w, h: option.h },
+      preset: { width: option.w, height: option.h },
     };
 
     setCurrentAction({ name: "crop", args });

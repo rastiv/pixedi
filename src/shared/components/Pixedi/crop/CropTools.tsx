@@ -21,7 +21,7 @@ export const CropTools = () => {
   const topRef = useRef<HTMLDivElement>(null);
   const widthRef = useRef<HTMLDivElement>(null);
   const heightRef = useRef<HTMLDivElement>(null);
-  const clipPathRef = useRef<CropRect | null>(null);
+  const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
 
   const handleClose = () => {
     setCurrentAction(null);
@@ -33,7 +33,7 @@ export const CropTools = () => {
       return;
     }
     const { x, y, w, h } = getInitalCrop(
-      currentAction.args.ratio,
+      currentAction.args.ratio || 1,
       width,
       height,
     );
@@ -76,31 +76,25 @@ export const CropTools = () => {
       return;
     }
 
-    console.log(clipPathRef.current);
+    const updatedWidth =
+      currentAction.args?.preset?.width ||
+      Math.round((width * clipPathRef.current.w) / 100);
+    const updatedHeight =
+      currentAction.args?.preset?.height ||
+      Math.round((height * clipPathRef.current.h) / 100);
 
-    // if (!cropRectRef.current) {
-    //   return;
-    // }
-    // const { x, y, w, h } = cropRectRef.current;
-    // const { preset } = currentAction.args;
-    // let processedBase64 = await crop(base64, x, y, w, h);
+    console.log(currentAction.args, updatedWidth);
 
-    // if (preset) {
-    //   const { w, h } = preset;
-    //   processedBase64 = await resize(processedBase64, w, h);
-    // }
+    addToHistory({
+      width: updatedWidth,
+      height: updatedHeight,
+      action: {
+        name: "crop",
+        args: { ...currentAction.args, ...clipPathRef.current },
+      },
+    });
 
-    // addToHistory({
-    //   width: preset ? preset.w : cropRectRef.current!.w,
-    //   height: preset ? preset.h : cropRectRef.current!.h,
-    //   action: preset
-    //     ? {
-    //         name: "presetCrop",
-    //         args: { x, y, w, h, width: preset.w, height: preset.h },
-    //       }
-    //     : { name: "crop", args: { x, y, w, h } },
-    // });
-    // setSidebar(true);
+    setSidebar(true);
   };
 
   return (
