@@ -7,6 +7,11 @@ export const emitCropUpdate = (detail: CropRect) => {
   eventBus.dispatchEvent(event);
 };
 
+export const emitClipPathUpdate = (detail: CropRect) => {
+  const event = new CustomEvent<CropRect>("clip-path-update", { detail });
+  eventBus.dispatchEvent(event);
+};
+
 export const emitResizeUpdate = (detail: number) => {
   const event = new CustomEvent<number>("resize-update", { detail });
   eventBus.dispatchEvent(event);

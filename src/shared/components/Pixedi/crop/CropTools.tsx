@@ -16,8 +16,6 @@ export const CropTools = () => {
     addToHistory,
     setSidebar,
   } = usePixediContext();
-  const { crop, resize } = useImageProcessor();
-  const [loading, setLoading] = useState(false);
   const { width, height } = getLastHistoryItem();
 
   const leftRef = useRef<HTMLDivElement>(null);
@@ -72,37 +70,30 @@ export const CropTools = () => {
     if (!currentAction || currentAction.name !== "crop") {
       return;
     }
-    try {
-      setLoading(true);
-      if (!cropRectRef.current) {
-        return;
-      }
-      const { x, y, w, h } = cropRectRef.current;
-      const { preset } = currentAction.args;
-      let processedBase64 = await crop(base64, x, y, w, h);
 
-      if (preset) {
-        const { w, h } = preset;
-        processedBase64 = await resize(processedBase64, w, h);
-      }
+    // if (!cropRectRef.current) {
+    //   return;
+    // }
+    // const { x, y, w, h } = cropRectRef.current;
+    // const { preset } = currentAction.args;
+    // let processedBase64 = await crop(base64, x, y, w, h);
 
-      addToHistory({
-        base64: processedBase64,
-        width: preset ? preset.w : cropRectRef.current!.w,
-        height: preset ? preset.h : cropRectRef.current!.h,
-        action: preset
-          ? {
-              name: "presetCrop",
-              args: { x, y, w, h, width: preset.w, height: preset.h },
-            }
-          : { name: "crop", args: { x, y, w, h } },
-      });
-      setSidebar(true);
-    } catch (error) {
-      console.error("Failed to process image:", error);
-    } finally {
-      setLoading(false);
-    }
+    // if (preset) {
+    //   const { w, h } = preset;
+    //   processedBase64 = await resize(processedBase64, w, h);
+    // }
+
+    // addToHistory({
+    //   width: preset ? preset.w : cropRectRef.current!.w,
+    //   height: preset ? preset.h : cropRectRef.current!.h,
+    //   action: preset
+    //     ? {
+    //         name: "presetCrop",
+    //         args: { x, y, w, h, width: preset.w, height: preset.h },
+    //       }
+    //     : { name: "crop", args: { x, y, w, h } },
+    // });
+    // setSidebar(true);
   };
 
   return (
@@ -135,11 +126,7 @@ export const CropTools = () => {
           ref={heightRef}
         />
       </div>
-      <SaveCloseGroup
-        saving={loading}
-        onSave={handleSave}
-        onClose={handleClose}
-      />
+      <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
     </div>
   );
 };

@@ -2,13 +2,15 @@ import { useEffect, useRef } from "react";
 import { usePreview } from "./usePreview";
 import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
+import type { CropRect } from "../types";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
+  isClipped: boolean;
   style?: React.CSSProperties;
 };
 
-export const Preview = ({ style = {} }: PreviewType) => {
+export const Preview = ({ isClipped = false, style = {} }: PreviewType) => {
   const { history, reducedBase64, getLastHistoryItem, currentAction } =
     usePixediContext();
   const { width, height } = getLastHistoryItem();
@@ -33,6 +35,10 @@ export const Preview = ({ style = {} }: PreviewType) => {
   } = usePreview(updatedHistory);
 
   useEffect(() => {
+    if (isClipped && previewRef.current) {
+      previewRef.current.style.transition = "none";
+    }
+
     const onResizeUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<number>;
       const scale = customEvent.detail;
@@ -40,12 +46,24 @@ export const Preview = ({ style = {} }: PreviewType) => {
         previewRef.current.style.transform = `scale(${scale / 100})`;
       }
     };
+
+    const onClipPathUpdate = (event: Event) => {
+      if (!isClipped) return;
+      const customEvent = event as CustomEvent<CropRect>;
+      const { x, y, w, h } = customEvent.detail;
+      if (previewRef.current) {
+        previewRef.current.style.clipPath = `xywh(${x}% ${y}% ${w}% ${h}%)`;
+      }
+    };
+
     eventBus.addEventListener("resize-update", onResizeUpdate);
+    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
 
     return () => {
       eventBus.removeEventListener("resize-update", onResizeUpdate);
+      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
     };
-  }, []);
+  }, [isClipped]);
 
   return (
     <div

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { getCropPoints } from "../utils";
 import type { CropRect, Direction } from "../types";
-import { emitCropUpdate } from "../eventBus";
+import { emitCropUpdate, emitClipPathUpdate } from "../eventBus";
 import { useMobile } from "../hooks";
 
 function clamp(value: number, min: number, max: number): number {
@@ -26,43 +26,40 @@ function applyRect(
   el.style.height = `${hPct}%`;
 }
 
-function applyClipPath(
-  img: HTMLImageElement,
-  xPct: number,
-  yPct: number,
-  wPct: number,
-  hPct: number,
-): void {
-  img.style.clipPath = `xywh(${xPct}% ${yPct}% ${wPct}% ${hPct}%)`;
-}
-
 type UseCropInteractionArgs = {
-  cropRef: React.RefObject<HTMLDivElement | null>;
+  boxRef: React.RefObject<HTMLDivElement | null>;
+  onCropUpdate: (crop: CropRect) => void;
 };
 
-export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
+export const useCropInteraction = ({
+  boxRef,
+  onCropUpdate,
+}: UseCropInteractionArgs) => {
   const { currentAction, getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
 
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
   const directionRef = useRef<Direction | "">("");
   const posRef = useRef<{ xPct: number; yPct: number }>({ xPct: 0, yPct: 0 });
+  const sizeRef = useRef<{ wPct: number; hPct: number }>({ wPct: 0, hPct: 0 });
   const cropRectRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
+  const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
 
   const handleCropStart = (
     e: React.MouseEvent | React.TouchEvent,
     type: Direction,
     cursor?: string,
   ) => {
-    if (!cropRef.current) return;
+    if (!boxRef.current) return;
 
     e.stopPropagation();
+    e.preventDefault();
 
     cropRectRef.current = {
-      x: cropRef.current.offsetLeft,
-      y: cropRef.current.offsetTop,
-      w: cropRef.current.offsetWidth,
-      h: cropRef.current.offsetHeight,
+      x: boxRef.current.offsetLeft,
+      y: boxRef.current.offsetTop,
+      w: boxRef.current.offsetWidth,
+      h: boxRef.current.offsetHeight,
     };
 
     const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
@@ -71,19 +68,24 @@ export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
     directionRef.current = type;
 
     if (!mobile) {
-      cropRef.current.style.cursor = `${cursor}-resize`;
+      boxRef.current.style.cursor = `${cursor}-resize`;
       document.body.style.cursor = `${cursor}-resize`;
     }
   };
 
   useEffect(() => {
     const handleDragStart = (e: MouseEvent | TouchEvent) => {
-      if (cropRef.current) {
-        const parent = cropRef.current.parentElement;
+      e.preventDefault();
+      if (boxRef.current) {
+        const parent = boxRef.current.parentElement;
         if (parent) {
           posRef.current = {
-            xPct: pct(cropRef.current.offsetLeft, parent.offsetWidth),
-            yPct: pct(cropRef.current.offsetTop, parent.offsetHeight),
+            xPct: pct(boxRef.current.offsetLeft, parent.offsetWidth),
+            yPct: pct(boxRef.current.offsetTop, parent.offsetHeight),
+          };
+          sizeRef.current = {
+            wPct: pct(boxRef.current.offsetWidth, parent.offsetWidth),
+            hPct: pct(boxRef.current.offsetHeight, parent.offsetHeight),
           };
         }
       }
@@ -94,9 +96,11 @@ export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
     };
 
     const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!cropRef.current || !startPointRef.current) return;
+      if (!boxRef.current || !startPointRef.current) return;
 
-      const elCrop = cropRef.current;
+      e.preventDefault();
+
+      const elCrop = boxRef.current;
       const parent = elCrop.parentElement;
       if (!parent) return;
 
@@ -151,12 +155,16 @@ export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
       const lastHistoryItem = getLastHistoryItem();
       if (!lastHistoryItem) return;
       const { width: imgW, height: imgH } = lastHistoryItem;
+
       emitCropUpdate({
         x: Math.round((xPct / 100) * imgW),
         y: Math.round((yPct / 100) * imgH),
         w: Math.round((wPct / 100) * imgW),
         h: Math.round((hPct / 100) * imgH),
       });
+
+      clipPathRef.current = { x: xPct, y: yPct, w: wPct, h: hPct };
+      emitClipPathUpdate(clipPathRef.current);
     };
 
     const handleDrag = (
@@ -167,8 +175,7 @@ export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
     ) => {
       if (!startPointRef.current) return;
 
-      const frmWidth = elCrop.offsetWidth;
-      const frmHeight = elCrop.offsetHeight;
+      const { wPct, hPct } = sizeRef.current;
 
       const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
       const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
@@ -176,50 +183,60 @@ export const useCropInteraction = ({ cropRef }: UseCropInteractionArgs) => {
       const dyPct = pct(clientY - startPointRef.current.y, parentH);
       startPointRef.current = { x: clientX, y: clientY };
 
-      const maxXPct = pct(parentW - frmWidth, parentW);
-      const maxYPct = pct(parentH - frmHeight, parentH);
+      const maxXPct = Math.max(0, 100 - wPct);
+      const maxYPct = Math.max(0, 100 - hPct);
 
       const leftPct = clamp(posRef.current.xPct + dxPct, 0, maxXPct);
       const topPct = clamp(posRef.current.yPct + dyPct, 0, maxYPct);
-      const wPct = pct(frmWidth, parentW);
-      const hPct = pct(frmHeight, parentH);
 
       posRef.current = { xPct: leftPct, yPct: topPct };
 
       applyRect(elCrop, leftPct, topPct, wPct, hPct);
 
       const { width: imgW, height: imgH } = getLastHistoryItem();
+
       emitCropUpdate({
         x: Math.round((leftPct / 100) * imgW),
         y: Math.round((topPct / 100) * imgH),
         w: Math.round((wPct / 100) * imgW),
         h: Math.round((hPct / 100) * imgH),
       });
+
+      clipPathRef.current = { x: leftPct, y: topPct, w: wPct, h: hPct };
+      emitClipPathUpdate(clipPathRef.current);
     };
 
     const handleMoveEnd = () => {
-      if (!cropRef.current) return;
+      if (!boxRef.current) return;
+
+      onCropUpdate(clipPathRef.current);
 
       startPointRef.current = null;
       directionRef.current = "";
-      cropRef.current.style.cursor = "move";
+      boxRef.current.style.cursor = "move";
       document.body.style.cursor = "auto";
     };
 
-    if (!cropRef.current) return;
+    if (!boxRef.current) return;
 
     const controller = new AbortController();
     const { signal } = controller;
 
-    cropRef.current.addEventListener("mousedown", handleDragStart, { signal });
-    cropRef.current.addEventListener("touchstart", handleDragStart, { signal });
+    boxRef.current.addEventListener("mousedown", handleDragStart, { signal });
+    boxRef.current.addEventListener("touchstart", handleDragStart, {
+      signal,
+      passive: false,
+    });
     document.addEventListener("mousemove", handleMove, { signal });
-    document.addEventListener("touchmove", handleMove, { signal });
+    document.addEventListener("touchmove", handleMove, {
+      signal,
+      passive: false,
+    });
     document.addEventListener("mouseup", handleMoveEnd, { signal });
     document.addEventListener("touchend", handleMoveEnd, { signal });
 
     return () => controller.abort();
-  }, [currentAction, getLastHistoryItem, cropRef]);
+  }, [currentAction, getLastHistoryItem, boxRef]);
 
   return { handleCropStart };
 };

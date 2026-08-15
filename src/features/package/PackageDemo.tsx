@@ -1,7 +1,7 @@
-import { Pixedi } from "@/shared/components/Pixedi";
-import styles from "./PackageDemo.module.css";
 import { useState } from "react";
+import { Pixedi } from "@/shared/components/Pixedi";
 import { Modal } from "@/shared/components/Modal";
+import styles from "./PackageDemo.module.css";
 
 const imagesData = [
   { id: "1", original: "/bird.jpg" },
