@@ -1,87 +1,83 @@
-import { useState } from "react";
+import { useMemo, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
-import { useImageProcessor } from "../hooks";
-import { SaveCloseGroup, Slider } from "../ui";
-import styles from "./rotate.module.css";
+import { Button, SaveCloseGroup } from "../ui";
+import { Rotate, RotateCCW } from "../assets/icons";
+import styles from "./Rotate.module.css";
 
-type RotateToolsProps = {
-  frameRef: React.RefObject<HTMLDivElement | null>;
-  imageRef: React.RefObject<HTMLImageElement | null>;
-};
+export const RotateTools = () => {
+  const {
+    history,
+    getLastHistoryItem,
+    addToHistory,
+    setSidebar,
+    setCurrentAction,
+  } = usePixediContext();
+  const { width, height } = getLastHistoryItem();
+  const { pointer, items } = history;
 
-export const RotateTools = ({ frameRef, imageRef }: RotateToolsProps) => {
-  const { getLastHistoryItem, addToHistory, setSidebar, setCurrentAction } =
-    usePixediContext();
-  const { width, height, base64 } = getLastHistoryItem();
-  const { rotate } = useImageProcessor(false);
-  const [angle, setAngle] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const lastAngleInHistory = useMemo(() => {
+    if (!items) return 0;
+    const lastRotateItem = items
+      .slice(0, pointer + 1)
+      .findLast((item) => item.action.name === "rotate");
+    if (lastRotateItem?.action.name === "rotate") {
+      return lastRotateItem.action.args.degrees;
+    }
+    return 0;
+  }, [pointer, items]);
+
+  const angleRef = useRef(lastAngleInHistory);
 
   const handleRotate = (value: number) => {
-    if (!frameRef.current) return;
-    if (!imageRef.current) return;
-    setAngle(value);
-
-    let aspectRatio = `${width} / ${height}`;
-    let scale = 1;
-    if ((value >= 90 && value < 180) || (value >= 270 && value < 360)) {
-      aspectRatio = `${height} / ${width}`;
-      scale = Math.max(width / height, height / width);
-    }
-
-    frameRef.current.style.aspectRatio = aspectRatio;
-    imageRef.current.style.transform = `rotate(${value}deg) scale(${scale})`;
+    angleRef.current += value;
+    setCurrentAction({
+      name: "rotate",
+      args: {
+        degrees: angleRef.current,
+      },
+    });
   };
 
   const handleSave = async () => {
-    try {
-      setLoading(true);
-      const processedBase64 = await rotate(base64, angle);
-      const isNewRatio =
-        (angle >= 90 && angle < 180) || (angle >= 270 && angle < 360);
-
-      addToHistory({
-        base64: processedBase64,
-        width: isNewRatio ? height : width,
-        height: isNewRatio ? width : height,
-        action: {
-          name: "rotate",
-          args: {
-            degrees: angle,
-          },
-        },
-      });
-
-      setAngle(0);
-      setSidebar(true);
-    } catch (error) {
-      console.error("Failed to process image:", error);
-    } finally {
-      setLoading(false);
-    }
+    // addToHistory({
+    //   width: isNewRatio ? height : width,
+    //   height: isNewRatio ? width : height,
+    //   action: {
+    //     name: "rotate",
+    //     args: {
+    //       degrees: angle,
+    //     },
+    //   },
+    // });
+    // setAngle(0);
+    // setSidebar(true);
   };
 
   const handleClose = () => {
-    setAngle(0);
     setCurrentAction(null);
     setSidebar(true);
   };
 
   return (
-    <div
-      className={styles.rotate}
-      style={{ display: "flex", flexDirection: "row", gap: "1rem" }}
-    >
-      <Slider
-        min={0}
-        max={360}
-        value={angle}
-        className={styles.resizeSlider}
-        onChange={handleRotate}
-      />
+    <div className={styles.rotate}>
+      <div className={styles.scGroup}>
+        <Button
+          variant="outline"
+          className={`${styles.rotateBtnH}`}
+          onClick={() => handleRotate(90)}
+        >
+          <Rotate />
+        </Button>
+        <Button
+          variant="outline"
+          className={`${styles.rotateBtnV} `}
+          onClick={() => handleRotate(-90)}
+        >
+          <RotateCCW />
+        </Button>
+      </div>
       <SaveCloseGroup
-        saving={loading}
-        disabled={loading || angle === 0 || angle === 360}
+        disabled={angleRef?.current === lastAngleInHistory}
         onSave={handleSave}
         onClose={handleClose}
       />

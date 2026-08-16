@@ -1,19 +1,25 @@
 .rotate {
   position: absolute;
   display: flex;
-  flex-direction: column;
+  gap: 4px;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--background);
-  padding: 8px 24px;
+  padding: 4px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 200px;
 }
 
-.rotateBox {
-  position: absolute;
-  inset: 0;
-  border: dashed 2px var(--accent-blue);
+.rotateBtnH {
+  width: 36px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.rotateBtnV {
+  width: 36px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
 }

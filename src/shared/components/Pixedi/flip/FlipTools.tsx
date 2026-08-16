@@ -3,7 +3,7 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { Button, SaveCloseGroup } from "../ui";
 import { FlipH, FlipV } from "../assets/icons";
 import { ActionName } from "../types";
-import styles from "./flip.module.css";
+import styles from "./Flip.module.css";
 
 export const FlipTools = () => {
   const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =

@@ -7,7 +7,7 @@ const SidebarRotate = () => {
   const { setCurrentAction, setSidebar } = usePixediContext();
 
   const handleClick = () => {
-    setCurrentAction({ name: "rotate", args: null });
+    setCurrentAction({ name: "rotate", args: { degrees: 0 } });
     setSidebar(false);
   };
 

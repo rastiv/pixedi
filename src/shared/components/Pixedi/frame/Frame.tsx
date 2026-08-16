@@ -44,7 +44,7 @@ export const Frame = () => {
       {isResize && <ResizeTools />}
       {isCrop && <CropTools />}
       {isFlip && <FlipTools />}
-      {/* {isRotate && <RotateTools frameRef={frameRef} imageRef={imageRef} />} */}
+      {isRotate && <RotateTools />}
     </div>
   );
 };
