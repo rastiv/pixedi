@@ -14,8 +14,6 @@ export const RotateTools = () => {
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
 
-  console.log(getLastRotation());
-
   const angleRef = useRef(getLastRotation());
 
   const handleRotate = (value: number) => {
@@ -54,14 +52,14 @@ export const RotateTools = () => {
       <div className={styles.scGroup}>
         <Button
           variant="outline"
-          className={`${styles.rotateBtnH}`}
+          className={`${styles.btnH}`}
           onClick={() => handleRotate(90)}
         >
           <Rotate />
         </Button>
         <Button
           variant="outline"
-          className={`${styles.rotateBtnV} `}
+          className={`${styles.btnV} `}
           onClick={() => handleRotate(-90)}
         >
           <RotateCCW />

@@ -1,5 +1,5 @@
 import type { Direction } from "../types";
-import styles from "./crop.module.css";
+import styles from "./Crop.module.css";
 
 type CropPointersProps = {
   onMouseDown: (e: React.MouseEvent, type: Direction, cursor: string) => void;

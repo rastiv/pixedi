@@ -8,7 +8,7 @@
     transition: none;
   }
 }
-.sidebarSettings {
+.settings {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -22,13 +22,13 @@
     display: none;
   }
 }
-.sidebarContainer {
+.container {
   position: absolute;
   inset: 0;
   box-sizing: border-box;
   border-left: 1px solid var(--border);
 }
-.sidebarContent {
+.content {
   position: absolute;
   top: 0;
   left: 0;
@@ -44,35 +44,35 @@
     padding-top: 48px;
   }
 }
-.sidebarCloseBtn {
+.closeBtn {
   position: absolute;
   top: 8px;
   right: 8px;
 }
-.sidebarSeparator {
+.separator {
   margin-top: 20px;
   margin-bottom: 12px;
 }
-.sidebarResize {
+.resize {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.sidebarResizeIcon {
+.resizeIcon {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.sidebarResizeSize {
+.resizeSize {
   font-size: 14px;
   color: var(--muted-foreground);
 }
-.sidebarCrop {
+.crop {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.sidebarCropRatios {
+.ratio {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
@@ -82,7 +82,7 @@
   flex-direction: column;
   gap: 8px;
 }
-.sidebarFlipRotate {
+.flipRotate {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;

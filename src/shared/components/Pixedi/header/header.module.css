@@ -8,16 +8,16 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
 }
-.headerTools {
+.tools {
   display: flex;
   gap: 8px;
 }
-.headerHistory {
+.history {
   display: flex;
   gap: 8px;
   align-items: center;
 }
-.headerHistoryText {
+.historyText {
   color: var(--muted-foreground);
   font-size: 14px;
 }

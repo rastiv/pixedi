@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import styles from "./separator.module.css";
+import styles from "./Separator.module.css";
 
 interface SeparatorProps extends React.ComponentPropsWithoutRef<"hr"> {
   orientation?: "horizontal" | "vertical";

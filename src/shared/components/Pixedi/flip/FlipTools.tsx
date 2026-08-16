@@ -49,7 +49,7 @@ export const FlipTools = () => {
       <div className={styles.scGroup}>
         <Button
           variant="outline"
-          className={`${styles.flipBtnH}`}
+          className={`${styles.btnH}`}
           onClick={handleFlipHorizontal}
         >
           <FlipH
@@ -62,7 +62,7 @@ export const FlipTools = () => {
         </Button>
         <Button
           variant="outline"
-          className={`${styles.flipBtnV} `}
+          className={`${styles.btnV} `}
           onClick={handleFlipVertical}
         >
           <FlipV

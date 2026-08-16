@@ -4,10 +4,10 @@ import { ResizeTools } from "../resize";
 import { CropTools, CropInteractBox } from "../crop";
 import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
-import styles from "./frame.module.css";
-import rootStyles from "../index.module.css";
 import { Preview } from "../preview";
-import { ActionName } from "@/shared/components/Pixedi/types";
+import { ActionName } from "../types";
+import styles from "./Frame.module.css";
+import rootStyles from "../index.module.css";
 
 export const Frame = () => {
   const { getLastHistoryItem, currentAction, isAlpha } = usePixediContext();

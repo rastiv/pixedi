@@ -2,7 +2,7 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { presetsData } from "../constants";
 import type { ActionCrop } from "../types";
 import { Select } from "../ui";
-import styles from "./sidebar.module.css";
+import styles from "./Sidebar.module.css";
 
 const presetOptions = presetsData.map((p) => p.options).flat();
 

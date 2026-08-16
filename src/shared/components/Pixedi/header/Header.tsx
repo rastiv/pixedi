@@ -2,10 +2,10 @@ import { useState } from "react";
 import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
-import type { FuncSaveArgs } from "../types";
-import styles from "./header.module.css";
-import buttonStyles from "../ui/button/button.module.css";
 import { useImageProcessor } from "../hooks";
+import type { FuncSaveArgs } from "../types";
+import buttonStyles from "../ui/button/button.module.css";
+import styles from "./Header.module.css";
 
 type HeaderProps = {
   onBack: () => void;
@@ -15,19 +15,14 @@ type HeaderProps = {
 export const Header = ({ onBack, onSave }: HeaderProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const {
-    settings,
     history,
     undo,
     redo,
     resetHistory,
     resetHistoryAfterSave,
-    getLastHistoryItem,
     setCurrentAction,
   } = usePixediContext();
   const { save } = useImageProcessor(true);
-
-  const { base64 } = getLastHistoryItem();
-  const { quality } = settings;
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -40,21 +35,16 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   };
 
   const handleSave = async () => {
-    if (!base64) return;
-    setIsSaving(true);
-    try {
-      const processedBase64 = await save(base64, quality);
-      await await onSave(processedBase64);
-      setCurrentAction(null);
-      resetHistoryAfterSave();
-    } finally {
-      setIsSaving(false);
-    }
+    // setIsSaving(true);
+    // try {
+    //   const processedBase64 = await save(base64, quality);
+    //   await await onSave(processedBase64);
+    //   setCurrentAction(null);
+    //   resetHistoryAfterSave();
+    // } finally {
+    //   setIsSaving(false);
+    // }
   };
-
-  if (base64) {
-    // console.log(base64);
-  }
 
   return (
     <div className={styles.header}>
@@ -62,9 +52,9 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
         <ArrowLeft />
       </Button>
 
-      <div className={styles.headerTools}>
+      <div className={styles.tools}>
         {showHistory && (
-          <div className={styles.headerHistory}>
+          <div className={styles.history}>
             <Button
               variant="outline"
               disabled={disabledUndo}
@@ -73,7 +63,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
             >
               <Undo />
             </Button>
-            <div className={styles.headerHistoryText}>
+            <div className={styles.historyText}>
               {history.pointer + 1}/{history.items.length}
             </div>
             <Button

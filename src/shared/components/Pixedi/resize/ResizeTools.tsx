@@ -4,7 +4,7 @@ import { Lock } from "../assets/icons";
 import { useMobile } from "../hooks";
 import { emitResizeUpdate } from "../eventBus";
 import { SaveCloseGroup, Slider, InputPixel } from "../ui";
-import styles from "./resize.module.css";
+import styles from "./Resize.module.css";
 
 const minScale = 10;
 const maxScale = 200;

@@ -1,5 +1,5 @@
-import styles from "./button-crop.module.css";
 import rootStyles from "../../index.module.css";
+import styles from "./ButtonCrop.module.css";
 
 interface ButtonCropProps extends React.ComponentPropsWithRef<"button"> {
   active?: boolean;

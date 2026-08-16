@@ -7,8 +7,8 @@ import { SidebarPresets } from "./SidebarPresets";
 import { SidebarFlip } from "./SidebarFlip";
 import SidebarRotate from "./SidebarRotate";
 import { usePixediContext } from "../provider/usePixediContext";
-import styles from "./sidebar.module.css";
 import buttonStyles from "../ui/button/button.module.css";
+import styles from "./Sidebar.module.css";
 
 export const Sidebar = () => {
   const { sidebar: isSidebarOpen, setSidebar } = usePixediContext();
@@ -18,7 +18,7 @@ export const Sidebar = () => {
     <>
       <Button
         variant="outline"
-        className={styles.sidebarSettings}
+        className={styles.settings}
         onClick={() => setSidebar(true)}
       >
         <Settings />
@@ -32,24 +32,24 @@ export const Sidebar = () => {
               : "translateX(0%)",
         }}
       >
-        <div className={styles.sidebarContainer}>
-          <div className={styles.sidebarContent}>
+        <div className={styles.container}>
+          <div className={styles.content}>
             {isBellowMd && (
               <Button
                 variant="ghost"
-                className={`${styles.sidebarCloseBtn} ${buttonStyles.rect}`}
+                className={`${styles.closeBtn} ${buttonStyles.rect}`}
                 onClick={() => setSidebar(false)}
               >
                 <X />
               </Button>
             )}
             <SidebarResize />
-            <Separator className={styles.sidebarSeparator} />
+            <Separator className={styles.separator} />
             <SidebarCrop />
-            <Separator className={styles.sidebarSeparator} />
+            <Separator className={styles.separator} />
             <SidebarPresets />
-            <Separator className={styles.sidebarSeparator} />
-            <div className={styles.sidebarFlipRotate}>
+            <Separator className={styles.separator} />
+            <div className={styles.flipRotate}>
               <SidebarFlip />
               <SidebarRotate />
             </div>

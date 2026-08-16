@@ -9,152 +9,6 @@ const getDefaultCrop = (el: HTMLElement): CropRect => ({
   h: el.offsetHeight,
 });
 
-const getCropR = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  clientX: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  el: HTMLElement,
-): CropRect => {
-  const { x } = crop;
-  let { y, w, h } = crop;
-
-  if (isFree) {
-    w += clientX - startX;
-    if (w + x > width) w = width - x;
-    if (w < minSize) w = minSize;
-  } else {
-    const difW = clientX - startX;
-    const difH = Math.round(difW / ratio);
-    w += difW;
-    h += difH;
-    y -= difH / 2;
-    if (
-      y < 0 ||
-      h + y > height ||
-      w + x > width ||
-      w < minSize ||
-      h < minSize
-    ) {
-      return getDefaultCrop(el);
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropL = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  clientX: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  el: HTMLElement,
-): CropRect => {
-  let { x, y, w, h } = crop;
-
-  if (isFree) {
-    const right = width - crop.w - crop.x;
-    x += clientX - startX;
-    if (x < 0) x = 0;
-    w = width - x - right;
-    if (w < minSize) {
-      w = minSize;
-      x = width - right - minSize;
-    }
-  } else {
-    const difW = clientX - startX;
-    const difH = Math.round(difW / ratio);
-    w -= difW;
-    h -= difH;
-    x += difW;
-    y += difH / 2;
-    if (y < 0 || x < 0 || h + y > height || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropT = (
-  isFree: boolean,
-  ratio: number,
-  startY: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  el: HTMLElement,
-): CropRect => {
-  let { x, y, w, h } = crop;
-
-  const bottom = height - h - y;
-  if (isFree) {
-    y += clientY - startY;
-    if (y < 0) y = 0;
-    h = height - y - bottom;
-    if (h < minSize) {
-      h = minSize;
-      y = height - bottom - minSize;
-    }
-  } else {
-    const difH = clientY - startY;
-    const difW = Math.round(difH * ratio);
-    h -= difH;
-    w -= difW;
-    x += difW / 2;
-    y += difH;
-    if (y < 0 || x < 0 || w + x > width || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropB = (
-  isFree: boolean,
-  ratio: number,
-  startY: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  el: HTMLElement,
-): CropRect => {
-  const { y } = crop;
-  let { x, w, h } = crop;
-
-  if (isFree) {
-    h += clientY - startY;
-    if (h + y > height) h = height - y;
-    if (h < minSize) h = minSize;
-  } else {
-    const difH = clientY - startY;
-    const difW = Math.round(difH * ratio);
-    h += difH;
-    w += difW;
-    x -= difW / 2;
-    if (
-      h + y > height ||
-      x < 0 ||
-      w + x > width ||
-      w < minSize ||
-      h < minSize
-    ) {
-      return getDefaultCrop(el);
-    }
-  }
-
-  return { x, y, w, h };
-};
-
 const getCropTL = (
   isFree: boolean,
   ratio: number,
@@ -367,14 +221,6 @@ export const getCropPoints = (
   crop: CropRect,
   el: HTMLElement,
 ): CropRect => {
-  if (dir === "r")
-    return getCropR(isFree, ratio, startX, clientX, width, height, crop, el);
-  if (dir === "l")
-    return getCropL(isFree, ratio, startX, clientX, width, height, crop, el);
-  if (dir === "t")
-    return getCropT(isFree, ratio, startY, clientY, width, height, crop, el);
-  if (dir === "b")
-    return getCropB(isFree, ratio, startY, clientY, width, height, crop, el);
   if (dir === "tl")
     return getCropTL(
       isFree,
@@ -469,10 +315,8 @@ export const getInitalCrop = (
   const h = (hPx / height) * 100;
   const x = ((width - wPx) / 2 / width) * 100;
   const y = ((height - hPx) / 2 / height) * 100;
-  const xPx = Math.round((width - wPx) / 2);
-  const yPx = Math.round((height - hPx) / 2);
 
-  return { x, y, w, h, xPx, yPx, wPx, hPx };
+  return { x, y, w, h };
 };
 
 export const getCropByNewSizes = (

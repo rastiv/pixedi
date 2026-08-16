@@ -1,4 +1,4 @@
-import styles from "./button.module.css";
+import styles from "./Button.module.css";
 
 interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
   variant?: "default" | "outline" | "ghost";

@@ -19,7 +19,10 @@ const editedItem = {
 const secondEditedItem = {
   width: 200,
   height: 200,
-  action: { name: "crop" as const, args: { x: 0, y: 0, w: 200, h: 200 } },
+  action: {
+    name: "crop" as const,
+    args: { id: "crop-1", ratio: 1, isFree: true, x: 0, y: 0, w: 200, h: 200 },
+  },
 };
 
 const wrapper = ({ children }: PropsWithChildren) => (

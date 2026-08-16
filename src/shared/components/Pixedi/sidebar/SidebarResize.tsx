@@ -2,7 +2,7 @@ import { Fullscreen } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import { ActionName } from "../types";
-import styles from "./sidebar.module.css";
+import styles from "./Sidebar.module.css";
 
 export const SidebarResize = () => {
   const { getLastHistoryItem, setCurrentAction, setSidebar } =
@@ -15,16 +15,12 @@ export const SidebarResize = () => {
   };
 
   return (
-    <Button
-      variant="outline"
-      className={styles.sidebarResize}
-      onClick={handleClick}
-    >
-      <div className={styles.sidebarResizeIcon}>
+    <Button variant="outline" className={styles.resize} onClick={handleClick}>
+      <div className={styles.resizeIcon}>
         <Fullscreen />
         Resize
       </div>
-      <div className={styles.sidebarResizeSize}>
+      <div className={styles.resizeSize}>
         {width} x {height}
       </div>
     </Button>

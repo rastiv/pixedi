@@ -6,7 +6,7 @@ import { Preview } from "../preview";
 import { useMobile } from "../hooks";
 import { ActionName } from "../types";
 import { emitClipPathUpdate } from "../eventBus";
-import styles from "./crop.module.css";
+import styles from "./Crop.module.css";
 
 export const CropInteractBox = () => {
   const { currentAction, getLastHistoryItem } = usePixediContext();

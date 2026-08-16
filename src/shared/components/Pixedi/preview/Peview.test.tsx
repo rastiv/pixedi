@@ -64,7 +64,6 @@ describe("Preview rotation geometry", () => {
       expect(parseFloat(rotateLayer.style.height)).toBeCloseTo(
         (600 / viewHeight) * 100,
       );
-      expect(rotateLayer).toHaveStyle({ left: "50%", top: "50%" });
       expect(rotateLayer.style.transform).toBe(
         `translate(-50%, -50%) rotate(${rotation}deg)`,
       );

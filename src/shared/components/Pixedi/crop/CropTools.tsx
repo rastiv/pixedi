@@ -4,8 +4,8 @@ import { ActionName, type CropRect } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
 import { eventBus } from "../eventBus";
 import { getInitalCrop } from "../utils";
-import styles from "./crop.module.css";
 import rootStyles from "../index.module.css";
+import styles from "./Crop.module.css";
 
 export const CropTools = () => {
   const {
@@ -82,8 +82,6 @@ export const CropTools = () => {
     const updatedHeight =
       currentAction.args?.preset?.height ||
       Math.round((height * clipPathRef.current.h) / 100);
-
-    console.log(currentAction.args, updatedWidth);
 
     addToHistory({
       width: updatedWidth,

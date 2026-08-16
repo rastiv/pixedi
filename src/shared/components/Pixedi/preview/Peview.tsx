@@ -3,6 +3,7 @@ import { usePreview } from "./usePreview";
 import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
+import { ActionName } from "../types";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
@@ -14,12 +15,28 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
   const { history, reducedBase64, currentAction } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
 
-  const updatedHistory = {
-    pointer: currentAction ? history.pointer + 1 : history.pointer,
-    items: currentAction
-      ? [...history.items, { ...history.items.at(-1)!, action: currentAction }]
-      : history.items,
-  };
+  const newHistoryItem = [];
+  if (currentAction) {
+    const { width, height } = history.items.at(history.pointer)!;
+    newHistoryItem.push({
+      width:
+        currentAction.name === ActionName.ROTATE &&
+        currentAction.args.degrees % 180 === 90
+          ? height
+          : width,
+      height:
+        currentAction.name === ActionName.ROTATE &&
+        currentAction.args.degrees % 180 === 90
+          ? width
+          : height,
+      action: currentAction,
+    });
+  }
+
+  const historyItems = [
+    ...history.items.slice(0, history.pointer + 1),
+    ...newHistoryItem,
+  ];
 
   const {
     box,
@@ -30,7 +47,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     rotation,
     flipH,
     flipV,
-  } = usePreview(updatedHistory);
+  } = usePreview(historyItems);
 
   useEffect(() => {
     if (isClipped && previewRef.current) {

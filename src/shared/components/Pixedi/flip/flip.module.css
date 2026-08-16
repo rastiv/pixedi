@@ -11,13 +11,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.flipBtnH {
+.btnH {
   width: 36px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
 
-.flipBtnV {
+.btnV {
   width: 36px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useLayoutEffect } from "react";
 import { ChevronDown, Check } from "../../assets/icons";
-import styles from "./select.module.css";
+import styles from "./Select.module.css";
 import rootStyles from "../../index.module.css";
 
 export interface SelectOption {

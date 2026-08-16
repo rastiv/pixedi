@@ -1,7 +1,7 @@
 import { Rotate } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
-import styles from "./sidebar.module.css";
+import styles from "./Sidebar.module.css";
 
 const SidebarRotate = () => {
   const { getLastRotation, setCurrentAction, setSidebar } = usePixediContext();
@@ -12,12 +12,8 @@ const SidebarRotate = () => {
   };
 
   return (
-    <Button
-      variant="outline"
-      className={styles.sidebarResize}
-      onClick={handleClick}
-    >
-      <div className={styles.sidebarResizeIcon}>
+    <Button variant="outline" className={styles.resize} onClick={handleClick}>
+      <div className={styles.resizeIcon}>
         <Rotate />
         Rotate
       </div>

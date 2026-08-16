@@ -1,8 +1,7 @@
 import { Crop, Image, Square } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
-import type { ActionCrop } from "../types";
 import { ButtonCrop } from "../ui";
-import styles from "./sidebar.module.css";
+import styles from "./Sidebar.module.css";
 
 export const SidebarCrop = () => {
   const { currentAction, setCurrentAction, getLastHistoryItem, setSidebar } =
@@ -29,9 +28,9 @@ export const SidebarCrop = () => {
   };
 
   return (
-    <div className={styles.sidebarCrop}>
+    <div className={styles.crop}>
       <h4>Crop</h4>
-      <div className={styles.sidebarCropRatios}>
+      <div className={styles.ratio}>
         <ButtonCrop
           label="Freeform"
           icon={<Crop />}

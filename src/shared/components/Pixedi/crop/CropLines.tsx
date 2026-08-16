@@ -1,4 +1,4 @@
-import styles from "./crop.module.css";
+import styles from "./Crop.module.css";
 
 export const CropLines = () => {
   return (

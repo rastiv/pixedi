@@ -42,7 +42,7 @@ describe("getInitalCrop", () => {
 describe("getCropPoints", () => {
   it("keeps free-form edge resizing within the frame and minimum width", () => {
     const crop = getCropPoints(
-      "r",
+      "br",
       true,
       1,
       100,
@@ -78,7 +78,7 @@ describe("getCropPoints", () => {
 
   it("preserves fixed ratios when the requested resize remains valid", () => {
     const crop = getCropPoints(
-      "r",
+      "br",
       false,
       2,
       100,
@@ -91,13 +91,13 @@ describe("getCropPoints", () => {
       element,
     );
 
-    expect(crop).toEqual({ x: 50, y: 45, w: 100, h: 50 });
+    expect(crop).toEqual({ x: 50, y: 50, w: 100, h: 50 });
     expect(crop.w / crop.h).toBe(2);
   });
 
   it("restores the element rectangle for invalid fixed-ratio resizes", () => {
     const crop = getCropPoints(
-      "r",
+      "br",
       false,
       2,
       100,

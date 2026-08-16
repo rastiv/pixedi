@@ -1,4 +1,4 @@
-import styles from "./input-pixel.module.css";
+import styles from "./InputPixel.module.css";
 import { Input } from "..";
 
 interface InputPixelProps extends React.ComponentPropsWithRef<"input"> {

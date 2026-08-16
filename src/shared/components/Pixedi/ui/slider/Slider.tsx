@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import styles from "./slider.module.css";
+import styles from "./Slider.module.css";
 
 interface CustomSliderProps {
   min: number;
