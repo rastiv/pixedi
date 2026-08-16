@@ -7,6 +7,7 @@ type StoreContextType = PixediContextType & {
   setReducedBase64: (payload: string) => void;
   setCurrentAction: (payload: Action | null) => void;
   getLastHistoryItem: () => HistoryItem;
+  getLastRotation: () => number;
   addToHistory: (payload: HistoryItem) => void;
   resetHistory: () => void;
   resetHistoryAfterSave: () => void;

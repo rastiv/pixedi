@@ -11,9 +11,7 @@ type PreviewType = {
 };
 
 export const Preview = ({ isClipped, style = {} }: PreviewType) => {
-  const { history, reducedBase64, getLastHistoryItem, currentAction } =
-    usePixediContext();
-  const { width, height } = getLastHistoryItem();
+  const { history, reducedBase64, currentAction } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
 
   const updatedHistory = {
@@ -70,7 +68,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
       ref={previewRef}
       className={styles.preview}
       style={{
-        aspectRatio: `${width} / ${height}`,
+        aspectRatio: `${viewWidth} / ${viewHeight}`,
         ...style,
       }}
     >
@@ -79,7 +77,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
         style={{
           width: `${(boxWidth / viewWidth) * 100}%`,
           height: `${(boxHeight / viewHeight) * 100}%`,
-          transform: `rotate(${rotation}deg)`,
+          transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
         }}
       >
         <div

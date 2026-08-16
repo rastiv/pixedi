@@ -63,6 +63,18 @@ const applyOrientation = (m: Mat, u: number, v: number) => {
   return [m[0][0] * u + m[0][1] * v + c[0], m[1][0] * u + m[1][1] * v + c[1]];
 };
 
+const getLastRotation = (history: History) => {
+  const { items, pointer } = history;
+  if (!items) return 0;
+  const lastRotateItem = items
+    .slice(0, pointer + 1)
+    .findLast((item) => item.action.name === "rotate");
+  if (lastRotateItem?.action.name === "rotate") {
+    return lastRotateItem.action.args.degrees;
+  }
+  return 0;
+};
+
 export const usePreview = (history: History) => {
   const { items, pointer } = history;
   let initWidth = 1;
@@ -124,6 +136,8 @@ export const usePreview = (history: History) => {
       rotation = normalizeDegrees(item.action.args.degrees ?? 0);
     }
   }
+
+  console.log("rotation", rotation);
 
   // crop dimensions in original image pixels (axis-aligned in image space)
   const boxWidth = box.w * initWidth;

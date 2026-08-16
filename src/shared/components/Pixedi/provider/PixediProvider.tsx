@@ -69,6 +69,18 @@ export const PixediProvider = ({
   const getLastHistoryItem = () =>
     state.history.items.at(state.history.pointer)!;
 
+  const getLastRotation = () => {
+    const { items, pointer } = state.history;
+    if (!items) return 0;
+    const lastRotateItem = items
+      .slice(0, pointer + 1)
+      .findLast((item) => item.action.name === "rotate");
+    if (lastRotateItem?.action.name === "rotate") {
+      return lastRotateItem.action.args.degrees;
+    }
+    return 0;
+  };
+
   const resetHistory = () =>
     setState((store) => ({
       ...store,
@@ -123,6 +135,7 @@ export const PixediProvider = ({
     setReducedBase64,
     setCurrentAction,
     getLastHistoryItem,
+    getLastRotation,
     addToHistory,
     resetHistory,
     resetHistoryAfterSave,
