@@ -51,7 +51,9 @@ describe("Preview rotation geometry", () => {
     { degrees: 0, rotation: 0, viewWidth: 800, viewHeight: 600 },
     { degrees: 90, rotation: 90, viewWidth: 600, viewHeight: 800 },
     { degrees: 180, rotation: 180, viewWidth: 800, viewHeight: 600 },
-    { degrees: -90, rotation: 270, viewWidth: 600, viewHeight: 800 },
+    // degrees are passed through unnormalized so CSS rotates the short way
+    { degrees: -90, rotation: -90, viewWidth: 600, viewHeight: 800 },
+    { degrees: 360, rotation: 360, viewWidth: 800, viewHeight: 600 },
   ])(
     "uses orientation-aware dimensions at $degrees degrees",
     ({ degrees, rotation, viewWidth, viewHeight }) => {

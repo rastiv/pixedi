@@ -1,6 +1,5 @@
 import { Check, Loader, X } from "../../assets/icons";
 import { Button } from "../button/Button";
-import rootStyles from "../../index.module.css";
 import styles from "./SaveCloseGroup.module.css";
 
 type SaveCloseGroupProps = {
@@ -17,10 +16,10 @@ export const SaveCloseGroup = ({
   disabled = false,
 }: SaveCloseGroupProps) => {
   return (
-    <div className={styles.scGroup}>
+    <div className={styles.group}>
       <Button
         variant="outline"
-        className={`${styles.scGroupSave} ${rootStyles.textGreen}`}
+        className={styles.save}
         disabled={disabled || saving}
         onClick={onSave}
       >
@@ -28,7 +27,7 @@ export const SaveCloseGroup = ({
       </Button>
       <Button
         variant="outline"
-        className={`${styles.scGroupClose} ${rootStyles.textRed}`}
+        className={styles.close}
         disabled={saving}
         onClick={onClose}
       >

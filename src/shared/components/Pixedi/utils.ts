@@ -1,4 +1,4 @@
-import type { CropRect, Direction } from "./types";
+import type { CropRect, Direction, Sizes } from "./types";
 
 const minSize = 32;
 
@@ -341,3 +341,19 @@ export const getCropByNewSizes = (
 };
 
 export const degree2Rad = (degree: number): number => (degree * Math.PI) / 180;
+
+// true when the absolute rotation swaps the visible axes (90 / 270)
+export const isQuarterTurn = (degrees: number): boolean =>
+  Math.abs(Math.round(degrees / 90)) % 2 === 1;
+
+// rotate.args.degrees is absolute, so visible sizes have to be re-derived from
+// the rotation the stored sizes were produced with, not from the new delta
+export const getOrientedSizes = (
+  width: number,
+  height: number,
+  fromDegrees: number,
+  toDegrees: number,
+): Sizes =>
+  isQuarterTurn(fromDegrees) === isQuarterTurn(toDegrees)
+    ? { width, height }
+    : { width: height, height: width };

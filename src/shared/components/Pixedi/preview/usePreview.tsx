@@ -1,4 +1,5 @@
 import type { HistoryItem } from "../types";
+import { isQuarterTurn } from "../utils";
 
 type Mat = [[number, number], [number, number]];
 
@@ -109,7 +110,7 @@ export const usePreview = (items: HistoryItem[]) => {
     } else if (item.action.name === "flip") {
       // the history item names the axes as the user sees them, but the flip
       // layer lives under the rotate layer - at 90/270 the axes are swapped
-      const swapped = rotation === 90 || rotation === 270;
+      const swapped = isQuarterTurn(rotation);
       const horizontal = swapped
         ? item.action.args.vertical
         : item.action.args.horizontal;
@@ -119,8 +120,9 @@ export const usePreview = (items: HistoryItem[]) => {
       if (horizontal) flipH = !flipH;
       if (vertical) flipV = !flipV;
     } else if (item.action.name === "rotate") {
-      // degrees are absolute: the last rotate up to the pointer wins
-      rotation = normalizeDegrees(item.action.args.degrees ?? 0);
+      // degrees are absolute (and kept unnormalized so CSS animates the short
+      // way round): the last rotate up to the pointer wins
+      rotation = item.action.args.degrees;
     }
   }
 
@@ -129,7 +131,7 @@ export const usePreview = (items: HistoryItem[]) => {
   const boxHeight = box.h * initHeight;
 
   // 90/270 rotations swap the visible axes, so the view ratio flips
-  const swapped = rotation === 90 || rotation === 270;
+  const swapped = isQuarterTurn(rotation);
   const viewWidth = swapped ? boxHeight : boxWidth;
   const viewHeight = swapped ? boxWidth : boxHeight;
 

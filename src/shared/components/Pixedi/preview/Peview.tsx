@@ -4,6 +4,7 @@ import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
 import { ActionName } from "../types";
+import { getOrientedSizes } from "../utils";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
@@ -12,23 +13,22 @@ type PreviewType = {
 };
 
 export const Preview = ({ isClipped, style = {} }: PreviewType) => {
-  const { history, reducedBase64, currentAction } = usePixediContext();
+  const { history, reducedBase64, currentAction, getLastRotation } =
+    usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
 
   const newHistoryItem = [];
   if (currentAction) {
     const { width, height } = history.items.at(history.pointer)!;
     newHistoryItem.push({
-      width:
-        currentAction.name === ActionName.ROTATE &&
-        currentAction.args.degrees % 180 === 90
-          ? height
-          : width,
-      height:
-        currentAction.name === ActionName.ROTATE &&
-        currentAction.args.degrees % 180 === 90
-          ? width
-          : height,
+      ...(currentAction.name === ActionName.ROTATE
+        ? getOrientedSizes(
+            width,
+            height,
+            getLastRotation(),
+            currentAction.args.degrees,
+          )
+        : { width, height }),
       action: currentAction,
     });
   }
@@ -37,7 +37,6 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     ...history.items.slice(0, history.pointer + 1),
     ...newHistoryItem,
   ];
-
   const {
     box,
     boxWidth,

@@ -1,16 +1,18 @@
-.scGroup {
+.group {
   display: flex;
   margin-left: 4px;
 }
 
-.scGroupSave {
+.group .save {
   width: 36px;
+  color: var(--color-green);
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
 
-.scGroupClose {
+.group .close {
   width: 36px;
+  color: var(--color-red);
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
   margin-left: -1px;

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button, SaveCloseGroup } from "../ui";
 import { Rotate, RotateCCW } from "../assets/icons";
+import { getOrientedSizes } from "../utils";
 import styles from "./Rotate.module.css";
 
 export const RotateTools = () => {
@@ -14,7 +15,10 @@ export const RotateTools = () => {
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
 
-  const angleRef = useRef(getLastRotation());
+  const lastRotation = getLastRotation();
+  // the rotation the stored sizes of the last history item were produced with
+  const baseAngleRef = useRef(lastRotation);
+  const angleRef = useRef(lastRotation);
 
   const handleRotate = (value: number) => {
     angleRef.current += value;
@@ -28,10 +32,12 @@ export const RotateTools = () => {
 
   const handleSave = async () => {
     addToHistory({
-      width:
-        angleRef.current === 90 || angleRef.current === 270 ? height : width,
-      height:
-        angleRef.current === 90 || angleRef.current === 270 ? width : height,
+      ...getOrientedSizes(
+        width,
+        height,
+        baseAngleRef.current,
+        angleRef.current,
+      ),
       action: {
         name: "rotate",
         args: {
