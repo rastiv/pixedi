@@ -6,6 +6,7 @@ import { useImageProcessor } from "../hooks";
 import type { FuncSaveArgs } from "../types";
 import buttonStyles from "../ui/button/button.module.css";
 import styles from "./Header.module.css";
+import { getPreview } from "@/shared/components/Pixedi/utils/preview";
 
 type HeaderProps = {
   onBack: () => void;
@@ -35,6 +36,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   };
 
   const handleSave = async () => {
+    const p = getPreview(history.items);
     // setIsSaving(true);
     // try {
     //   const processedBase64 = await save(base64, quality);

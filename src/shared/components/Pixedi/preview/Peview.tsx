@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { usePreview } from "./usePreview";
+import { getPreview } from "../utils/preview";
 import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
@@ -46,7 +46,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     rotation,
     flipH,
     flipV,
-  } = usePreview(historyItems);
+  } = getPreview(historyItems);
 
   useEffect(() => {
     if (isClipped && previewRef.current) {

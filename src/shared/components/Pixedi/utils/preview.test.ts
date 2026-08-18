@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { HistoryItem } from "../types";
-import { usePreview } from "./usePreview";
+import { getPreview } from "./preview";
 import { getOrientedSizes } from "../utils";
 
 const initial: HistoryItem = {
@@ -9,7 +9,7 @@ const initial: HistoryItem = {
   action: { name: "initial", args: null },
 };
 
-describe("usePreview", () => {
+describe("getPreview", () => {
   it("keeps the view sizes in sync with the stored history sizes", () => {
     // rotate degrees are absolute, so the second rotate lands on 270 in total
     const rotated = {
@@ -27,7 +27,7 @@ describe("usePreview", () => {
     } as HistoryItem;
 
     const items = [initial, rotated, flipped, rotatedAgain];
-    const { viewWidth, viewHeight, rotation, flipH, flipV } = usePreview(items);
+    const { viewWidth, viewHeight, rotation, flipH, flipV } = getPreview(items);
 
     expect(rotatedAgain.width).toBe(4014);
     expect(rotatedAgain.height).toBe(6099);
@@ -65,7 +65,7 @@ describe("usePreview", () => {
     ];
 
     const { box, boxWidth, boxHeight, viewWidth, viewHeight } =
-      usePreview(items);
+      getPreview(items);
 
     // the top-left quarter of a 90deg view is the bottom-left quarter of the image
     expect(box).toEqual({ x: 0, y: 0.5, w: 0.5, h: 0.5 });

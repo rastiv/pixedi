@@ -64,7 +64,7 @@ const applyOrientation = (m: Mat, u: number, v: number) => {
   return [m[0][0] * u + m[0][1] * v + c[0], m[1][0] * u + m[1][1] * v + c[1]];
 };
 
-export const usePreview = (items: HistoryItem[]) => {
+export const getPreview = (items: HistoryItem[]) => {
   let initWidth = 1;
   let initHeight = 1;
   let box = { x: 0, y: 0, w: 1, h: 1 };
