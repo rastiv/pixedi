@@ -1,6 +1,5 @@
-import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useImageProcessor } from "./useImageProcessor";
+import { imageProcessor } from "./imageProcessor";
 
 const bitmap = {
   width: 120,
@@ -22,7 +21,7 @@ const context = {
 const validPng = "data:image/png;base64,aGVsbG8=";
 const validJpeg = "data:image/jpeg;base64,aGVsbG8=";
 
-describe("useImageProcessor", () => {
+describe("imageProcessor", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.stubGlobal("createImageBitmap", vi.fn().mockResolvedValue(bitmap));
@@ -40,18 +39,14 @@ describe("useImageProcessor", () => {
   });
 
   it("rejects malformed Base64 before attempting to decode an image", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await expect(result.current.resize("invalid", 10, 10)).rejects.toThrow(
+    await expect(imageProcessor.resize("invalid", 10, 10)).rejects.toThrow(
       "Invalid Base64 image format",
     );
     expect(createImageBitmap).not.toHaveBeenCalled();
   });
 
   it("resizes an image and serializes PNG output without a quality argument", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await expect(result.current.resize(validPng, 60, 40)).resolves.toBe(
+    await expect(imageProcessor.resize(validPng, 60, 40)).resolves.toBe(
       "data:image/png;base64,processed",
     );
 
@@ -65,9 +60,7 @@ describe("useImageProcessor", () => {
   });
 
   it("crops an image with source and destination rectangles", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await result.current.crop(validPng, 5, 6, 50, 40);
+    await imageProcessor.crop(validPng, 5, 6, 50, 40);
 
     expect(context.drawImage).toHaveBeenCalledWith(
       bitmap,
@@ -84,9 +77,7 @@ describe("useImageProcessor", () => {
   });
 
   it("flips an image using the expected canvas transforms", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await result.current.flip(validPng, true, false);
+    await imageProcessor.flip(validPng, true, false);
 
     expect(context.translate).toHaveBeenCalledWith(120, 0);
     expect(context.scale).toHaveBeenCalledWith(-1, 1);
@@ -96,9 +87,7 @@ describe("useImageProcessor", () => {
   });
 
   it("rotates an image around its center", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await result.current.rotate(validPng, 90);
+    await imageProcessor.rotate(validPng, 90);
 
     expect(context.translate).toHaveBeenCalledWith(40, 60);
     expect(context.rotate).toHaveBeenCalledWith(Math.PI / 2);
@@ -107,9 +96,7 @@ describe("useImageProcessor", () => {
   });
 
   it("applies filters and uses quality for JPEG output", async () => {
-    const { result } = renderHook(() => useImageProcessor());
-
-    await result.current.filter(validJpeg, { brightness: 120, contrast: 90 });
+    await imageProcessor.filter(validJpeg, { brightness: 120, contrast: 90 });
 
     expect(context.filter).toBe("brightness(120%) contrast(90%)");
     expect(context.drawImage).toHaveBeenCalledWith(bitmap, 0, 0);
@@ -120,10 +107,9 @@ describe("useImageProcessor", () => {
   });
 
   it("uses quality for WebP output", async () => {
-    const { result } = renderHook(() => useImageProcessor());
     const webp = "data:image/webp;base64,aGVsbG8=";
 
-    await result.current.resize(webp, 60, 40);
+    await imageProcessor.resize(webp, 60, 40);
 
     expect(HTMLCanvasElement.prototype.toDataURL).toHaveBeenCalledWith(
       "image/webp",
@@ -132,10 +118,9 @@ describe("useImageProcessor", () => {
   });
 
   it("processes GIF input as PNG", async () => {
-    const { result } = renderHook(() => useImageProcessor());
     const gif = "data:image/gif;base64,aGVsbG8=";
 
-    await result.current.resize(gif, 60, 40);
+    await imageProcessor.resize(gif, 60, 40);
 
     expect(createImageBitmap).toHaveBeenCalledWith(
       expect.objectContaining({ type: "image/png" }),

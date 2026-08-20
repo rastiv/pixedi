@@ -64,7 +64,22 @@ const applyOrientation = (m: Mat, u: number, v: number) => {
   return [m[0][0] * u + m[0][1] * v + c[0], m[1][0] * u + m[1][1] * v + c[1]];
 };
 
-export const getPreview = (items: HistoryItem[]) => {
+export type Preview = {
+  box: { x: number; y: number; w: number; h: number };
+  boxWidth: number;
+  boxHeight: number;
+  newWidth: number;
+  newHeight: number;
+  initWidth: number;
+  initHeight: number;
+  viewWidth: number;
+  viewHeight: number;
+  rotation: number;
+  flipH: boolean;
+  flipV: boolean;
+};
+
+export const getPreview = (items: HistoryItem[]): Preview => {
   let initWidth = 1;
   let initHeight = 1;
   let box = { x: 0, y: 0, w: 1, h: 1 };
@@ -135,10 +150,15 @@ export const getPreview = (items: HistoryItem[]) => {
   const viewWidth = swapped ? boxHeight : boxWidth;
   const viewHeight = swapped ? boxWidth : boxHeight;
 
+  const newWidth = items.at(-1)?.width || 0;
+  const newHeight = items.at(-1)?.height || 0;
+
   return {
     box,
     boxWidth,
     boxHeight,
+    newWidth,
+    newHeight,
     initWidth,
     initHeight,
     viewWidth,
