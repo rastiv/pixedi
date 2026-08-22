@@ -22,13 +22,6 @@ self.onmessage = async (e: MessageEvent<string>) => {
     const originalSize = blob.size;
     const originalMime = blob.type || fallbackMime || "image/unknown";
 
-    const originalBase64 = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = () => reject(new Error("Original FileReader failed"));
-      reader.readAsDataURL(blob);
-    });
-
     const bitmap = await createImageBitmap(blob);
     const originalWidth = bitmap.width;
     const originalHeight = bitmap.height;
@@ -59,7 +52,7 @@ self.onmessage = async (e: MessageEvent<string>) => {
       originalMime,
       originalWidth,
       originalHeight,
-      originalBase64,
+      originalBlob: blob,
       originalSize,
       reducedBase64,
       reducedSize,

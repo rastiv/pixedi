@@ -72,7 +72,7 @@ export type History = {
   items: Array<HistoryItem>;
 };
 
-export type FuncSaveArgs = (base64: string) => Promise<void> | void;
+export type FuncSaveArgs = (blob: Blob) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 

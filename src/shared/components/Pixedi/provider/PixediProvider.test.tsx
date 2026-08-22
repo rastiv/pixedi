@@ -29,7 +29,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
   <PixediProvider
     extension="png"
     reducedBase64="data:image/png;base64,initial"
-    originalBase64="data:image/png;base64,initial"
+    originalBlob={new Blob([], { type: "image/png" })}
     originalSize={1234}
     width={initialItem.width}
     height={initialItem.height}

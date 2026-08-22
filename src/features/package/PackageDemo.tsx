@@ -16,11 +16,11 @@ export const PackageDemo = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
 
-  const handleSave = async (base64: string) => {
+  const handleSave = async (blob: Blob) => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         // TODO: Save the image
-        console.log(base64);
+        console.log(blob);
         resolve();
       }, 2000);
     });

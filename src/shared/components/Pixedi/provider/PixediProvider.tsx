@@ -9,7 +9,7 @@ type PixediProviderProps = {
   extension: string;
   width: number;
   height: number;
-  originalBase64: string;
+  originalBlob: Blob | null;
   originalSize: number;
   reducedBase64: string;
   isAlpha: boolean;
@@ -21,7 +21,7 @@ export const PixediProvider = ({
   extension,
   width,
   height,
-  originalBase64,
+  originalBlob,
   originalSize,
   reducedBase64,
   isAlpha,
@@ -33,15 +33,15 @@ export const PixediProvider = ({
       width,
       height,
       reducedBase64,
-      originalBase64,
+      originalBlob,
       originalSize,
       settings,
       isAlpha,
     ),
   );
 
-  const setOriginalBase64 = (payload: string) =>
-    setState((store) => ({ ...store, originalBase64: payload }));
+  const setOriginalBlob = (payload: Blob | null) =>
+    setState((store) => ({ ...store, originalBlob: payload }));
 
   const setReducedBase64 = (payload: string) =>
     setState((store) => ({ ...store, reducedBase64: payload }));
@@ -89,7 +89,7 @@ export const PixediProvider = ({
         width,
         height,
         reducedBase64,
-        originalBase64,
+        originalBlob,
         originalSize,
         settings,
         isAlpha,
@@ -131,7 +131,7 @@ export const PixediProvider = ({
 
   const value = {
     ...state,
-    setOriginalBase64,
+    setOriginalBlob,
     setReducedBase64,
     setCurrentAction,
     getLastHistoryItem,

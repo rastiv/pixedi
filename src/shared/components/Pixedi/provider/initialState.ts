@@ -6,7 +6,7 @@ export type PixediContextType = {
   history: History;
   currentAction: Action | null;
   reducedBase64: string;
-  originalBase64: string;
+  originalBlob: Blob | null;
   originalSize: number;
   extension: string | null;
   sidebar: boolean;
@@ -19,7 +19,7 @@ export const getInitialState = (
   width: number,
   height: number,
   reducedBase64: string,
-  originalBase64: string,
+  originalBlob: Blob | null,
   originalSize: number,
   settings: Settings,
   isAlpha: boolean,
@@ -39,7 +39,7 @@ export const getInitialState = (
   },
   currentAction: null,
   reducedBase64,
-  originalBase64,
+  originalBlob,
   originalSize,
   extension,
   sidebar: false,

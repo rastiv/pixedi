@@ -6,7 +6,7 @@ export interface UseImageResult {
   extension: string;
   width: number;
   height: number;
-  originalBase64: string;
+  originalBlob: Blob | null;
   originalSize: number;
   reducedBase64: string;
   reducedSize: number;
@@ -20,7 +20,7 @@ export const useImageLoader = (src: string): UseImageResult => {
     width: 0,
     height: 0,
     extension: "",
-    originalBase64: "",
+    originalBlob: null,
     originalSize: 0,
     reducedBase64: "",
     reducedSize: 0,
@@ -43,7 +43,7 @@ export const useImageLoader = (src: string): UseImageResult => {
       e: MessageEvent<{
         success: boolean;
         error?: string;
-        originalBase64: string;
+        originalBlob: Blob;
         originalWidth: number;
         originalHeight: number;
         originalSize: number;
@@ -62,7 +62,7 @@ export const useImageLoader = (src: string): UseImageResult => {
           extension: result.originalMime,
           width: result.originalWidth,
           height: result.originalHeight,
-          originalBase64: result.originalBase64,
+          originalBlob: result.originalBlob,
           originalSize: result.originalSize,
           reducedBase64: result.reducedBase64,
           reducedSize: result.reducedSize,

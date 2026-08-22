@@ -1,30 +1,8 @@
-export async function imageProcessor(base64: string) {
-  const parseBase64 = (base64Str: string) => {
-    const match = base64Str.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.+)$/);
-    if (!match) {
-      throw new Error("Invalid Base64 image format");
-    }
-    let mimeType = match[1];
-    const rawData = match[2];
-    if (mimeType === "image/gif") {
-      mimeType = "image/png";
-    }
-    return { mimeType, rawData };
-  };
-
-  const getBitmap = async (base64Str: string) => {
-    const { mimeType, rawData } = parseBase64(base64Str);
-    const binaryStr = atob(rawData);
-    const bytes = new Uint8Array(binaryStr.length);
-    for (let i = 0; i < binaryStr.length; i++) {
-      bytes[i] = binaryStr.charCodeAt(i);
-    }
-    const blob = new Blob([bytes], { type: mimeType });
-    const bitmap = await createImageBitmap(blob);
-    return { bitmap, mimeType };
-  };
-
-  const { bitmap, mimeType } = await getBitmap(base64);
+export async function imageProcessor(blob: Blob) {
+  const bitmap = await createImageBitmap(blob);
+  const inputMimeType = blob.type || "image/png";
+  // Canvas cannot encode GIF, so fall back to PNG for the output format.
+  const mimeType = inputMimeType === "image/gif" ? "image/png" : inputMimeType;
   const canvas = document.createElement("canvas");
   const requiresAlpha = mimeType === "image/png" || mimeType === "image/webp";
   const ctx = canvas.getContext("2d", { alpha: requiresAlpha });
@@ -108,12 +86,25 @@ export async function imageProcessor(base64: string) {
     ctx.drawImage(tempCanvas, 0, 0, width, height);
   };
 
-  const get = (quality: number = 0.85): string => {
-    if (mimeType === "image/jpeg" || mimeType === "image/webp") {
-      return canvas.toDataURL(mimeType, quality);
-    }
-    // PNG format does not support quality parameter
-    return canvas.toDataURL("image/png");
+  const get = (quality: number = 0.85): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      if (mimeType === "image/jpeg" || mimeType === "image/webp") {
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error(`Failed to encode image as ${mimeType}`));
+          },
+          mimeType,
+          quality,
+        );
+      } else {
+        // PNG format does not support quality parameter
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error("Failed to encode image as image/png"));
+        }, "image/png");
+      }
+    });
   };
 
   return {

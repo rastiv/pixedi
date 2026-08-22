@@ -3,7 +3,7 @@ import { type PixediContextType } from "./initialState";
 import type { Action, HistoryItem } from "../types";
 
 type StoreContextType = PixediContextType & {
-  setOriginalBase64: (payload: string) => void;
+  setOriginalBlob: (payload: Blob | null) => void;
   setReducedBase64: (payload: string) => void;
   setCurrentAction: (payload: Action | null) => void;
   getLastHistoryItem: () => HistoryItem;
