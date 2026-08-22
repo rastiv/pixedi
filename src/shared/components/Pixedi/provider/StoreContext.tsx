@@ -4,7 +4,7 @@ import type { Action, HistoryItem } from "../types";
 
 type StoreContextType = PixediContextType & {
   setOriginalBlob: (payload: Blob | null) => void;
-  setReducedBase64: (payload: string) => void;
+  setPreviewUrl: (payload: string) => void;
   setCurrentAction: (payload: Action | null) => void;
   getLastHistoryItem: () => HistoryItem;
   getLastRotation: () => number;

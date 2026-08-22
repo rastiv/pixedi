@@ -26,26 +26,10 @@ self.onmessage = async (e: MessageEvent<string>) => {
     const originalWidth = bitmap.width;
     const originalHeight = bitmap.height;
 
-    const canvas = new OffscreenCanvas(originalWidth, originalHeight);
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Failed to get 2D context");
-    ctx.drawImage(bitmap, 0, 0);
-
-    const webpBlob = await canvas.convertToBlob({
-      type: "image/webp",
-      quality: getQuality(originalSize),
-    });
-
-    const reducedBase64 = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = () => reject(new Error("Reduced FileReader failed"));
-      reader.readAsDataURL(webpBlob);
-    });
-
-    const reducedSize = reducedBase64.length;
+    const previewBlob = await createPreviewBlob(bitmap);
 
     const isAlpha = hasAlphaChannel(bitmap);
+    bitmap.close();
 
     self.postMessage({
       success: true,
@@ -54,8 +38,7 @@ self.onmessage = async (e: MessageEvent<string>) => {
       originalHeight,
       originalBlob: blob,
       originalSize,
-      reducedBase64,
-      reducedSize,
+      previewBlob,
       isAlpha,
     });
   } catch (error) {
@@ -69,15 +52,24 @@ self.onmessage = async (e: MessageEvent<string>) => {
   }
 };
 
-const getQuality = (size: number) => {
-  const MB = 1024 * 1024;
-  if (size < 1 * MB) return 0.85; // < 1MB
-  if (size < 2 * MB) return 0.75; // < 2MB
-  if (size < 3 * MB) return 0.65; // < 3MB
-  if (size < 4 * MB) return 0.55; // < 4MB
-  if (size < 5 * MB) return 0.45; // < 5MB
-  if (size < 6 * MB) return 0.35; // < 6MB
-  return 0.25; // >= 5MB
+const PREVIEW_MAX_DIMENSION = 1920;
+const PREVIEW_QUALITY = 0.85;
+
+const createPreviewBlob = async (bitmap: ImageBitmap): Promise<Blob> => {
+  const { width, height } = bitmap;
+  const scale = Math.min(1, PREVIEW_MAX_DIMENSION / Math.max(width, height));
+  const previewWidth = Math.round(width * scale);
+  const previewHeight = Math.round(height * scale);
+
+  const canvas = new OffscreenCanvas(previewWidth, previewHeight);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Failed to get 2D context for preview canvas");
+  ctx.drawImage(bitmap, 0, 0, previewWidth, previewHeight);
+
+  return canvas.convertToBlob({
+    type: "image/webp",
+    quality: PREVIEW_QUALITY,
+  });
 };
 
 function hasAlphaChannel(bitmap: ImageBitmap): boolean {

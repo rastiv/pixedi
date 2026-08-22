@@ -30,7 +30,7 @@ export const Pixedi = ({
     height,
     originalBlob,
     originalSize,
-    reducedBase64,
+    previewUrl,
     isAlpha,
   } = useImageLoader(image);
 
@@ -53,7 +53,7 @@ export const Pixedi = ({
       extension={extension}
       width={width}
       height={height}
-      reducedBase64={reducedBase64}
+      previewUrl={previewUrl}
       originalBlob={originalBlob}
       originalSize={originalSize}
       settings={settings}

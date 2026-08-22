@@ -13,7 +13,7 @@ type PreviewType = {
 };
 
 export const Preview = ({ isClipped, style = {} }: PreviewType) => {
-  const { history, reducedBase64, currentAction, getLastRotation } =
+  const { history, previewUrl, currentAction, getLastRotation } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +104,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
         >
           <img
             className={styles.image}
-            src={reducedBase64}
+            src={previewUrl}
             alt="Preview Image"
             style={{
               width: `${(1 / box.w) * 100}%`,

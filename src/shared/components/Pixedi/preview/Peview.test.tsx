@@ -21,7 +21,7 @@ const renderPreview = (degrees: number) => {
   const { container } = render(
     <PixediProvider
       extension="png"
-      reducedBase64="data:image/png;base64,initial"
+      previewUrl="data:image/png;base64,initial"
       originalBlob={new Blob([], { type: "image/png" })}
       originalSize={1234}
       width={800}

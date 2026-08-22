@@ -5,7 +5,7 @@ import type { Settings } from "../types";
 export type PixediContextType = {
   history: History;
   currentAction: Action | null;
-  reducedBase64: string;
+  previewUrl: string;
   originalBlob: Blob | null;
   originalSize: number;
   extension: string | null;
@@ -23,7 +23,7 @@ export const getInitialState = (
   extension: string,
   width: number,
   height: number,
-  reducedBase64: string,
+  previewUrl: string,
   originalBlob: Blob | null,
   originalSize: number,
   settings: Settings = initialSettings,
@@ -43,7 +43,7 @@ export const getInitialState = (
     ],
   },
   currentAction: null,
-  reducedBase64,
+  previewUrl,
   originalBlob,
   originalSize,
   extension,

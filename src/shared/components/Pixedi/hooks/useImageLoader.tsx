@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export interface UseImageResult {
   loading: boolean;
@@ -8,8 +8,7 @@ export interface UseImageResult {
   height: number;
   originalBlob: Blob | null;
   originalSize: number;
-  reducedBase64: string;
-  reducedSize: number;
+  previewUrl: string;
   isAlpha: boolean;
 }
 
@@ -22,10 +21,11 @@ export const useImageLoader = (src: string): UseImageResult => {
     extension: "",
     originalBlob: null,
     originalSize: 0,
-    reducedBase64: "",
-    reducedSize: 0,
+    previewUrl: "",
     isAlpha: false,
   });
+
+  const previewUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!src) {
@@ -48,14 +48,17 @@ export const useImageLoader = (src: string): UseImageResult => {
         originalHeight: number;
         originalSize: number;
         originalMime: string;
-        reducedBase64: string;
-        reducedSize: number;
+        previewBlob: Blob;
         isAlpha: boolean;
       }>,
     ) => {
       const result = e.data;
 
       if (result.success) {
+        if (previewUrlRef.current) {
+          URL.revokeObjectURL(previewUrlRef.current);
+        }
+        previewUrlRef.current = URL.createObjectURL(result.previewBlob);
         setState({
           loading: false,
           error: "",
@@ -64,8 +67,7 @@ export const useImageLoader = (src: string): UseImageResult => {
           height: result.originalHeight,
           originalBlob: result.originalBlob,
           originalSize: result.originalSize,
-          reducedBase64: result.reducedBase64,
-          reducedSize: result.reducedSize,
+          previewUrl: previewUrlRef.current,
           isAlpha: result.isAlpha,
         });
       } else {
@@ -77,9 +79,13 @@ export const useImageLoader = (src: string): UseImageResult => {
       }
     };
 
-    // clean up the web worker
+    // clean up the web worker and object URL
     return () => {
       worker.terminate();
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+        previewUrlRef.current = null;
+      }
     };
   }, [src]);
 
