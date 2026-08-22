@@ -14,6 +14,11 @@ export type PixediContextType = {
   isAlpha: boolean;
 };
 
+const initialSettings: Settings = {
+  quality: 0.85,
+  saveAsWEBP: false,
+};
+
 export const getInitialState = (
   extension: string,
   width: number,
@@ -21,7 +26,7 @@ export const getInitialState = (
   reducedBase64: string,
   originalBlob: Blob | null,
   originalSize: number,
-  settings: Settings,
+  settings: Settings = initialSettings,
   isAlpha: boolean,
 ): PixediContextType => ({
   history: {

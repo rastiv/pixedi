@@ -1,3 +1,5 @@
+import type { Settings } from "@/shared/components/Pixedi/types";
+
 export async function imageProcessor(blob: Blob) {
   const bitmap = await createImageBitmap(blob);
   const inputMimeType = blob.type || "image/png";
@@ -86,15 +88,20 @@ export async function imageProcessor(blob: Blob) {
     ctx.drawImage(tempCanvas, 0, 0, width, height);
   };
 
-  const get = (quality: number = 0.85): Promise<Blob> => {
+  const get = (settings: Settings): Promise<Blob> => {
+    const { quality = 0.85, saveAsWEBP = false } = settings;
     return new Promise((resolve, reject) => {
-      if (mimeType === "image/jpeg" || mimeType === "image/webp") {
+      if (
+        mimeType === "image/jpeg" ||
+        mimeType === "image/webp" ||
+        saveAsWEBP
+      ) {
         canvas.toBlob(
           (blob) => {
             if (blob) resolve(blob);
             else reject(new Error(`Failed to encode image as ${mimeType}`));
           },
-          mimeType,
+          saveAsWEBP ? "image/webp" : mimeType,
           quality,
         );
       } else {

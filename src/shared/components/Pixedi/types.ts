@@ -78,4 +78,5 @@ export type Theme = "light" | "dark";
 
 export type Settings = {
   quality?: number;
+  saveAsWEBP?: boolean;
 };

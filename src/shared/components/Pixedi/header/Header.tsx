@@ -44,18 +44,6 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     const actions = getActions(historyItems);
 
     try {
-      // No edits were applied, return the original binary data unchanged.
-      const hasEdits =
-        actions.crop || actions.flip || actions.rotate || actions.resize;
-      if (!hasEdits) {
-        if (originalBlob) {
-          await onSave(originalBlob);
-        }
-        setCurrentAction(null);
-        resetHistoryAfterSave();
-        return;
-      }
-
       if (!originalBlob) return;
 
       const processor = await imageProcessor(originalBlob);
@@ -81,7 +69,7 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
         processor.resize(actions.resize.width, actions.resize.height);
       }
 
-      const newImage = await processor.get(settings.quality);
+      const newImage = await processor.get(settings);
 
       await onSave(newImage);
 
