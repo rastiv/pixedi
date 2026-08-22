@@ -168,3 +168,61 @@ export const getPreview = (items: HistoryItem[]): Preview => {
     flipV,
   };
 };
+
+export const getActions = (items: HistoryItem[]) => {
+  const {
+    box,
+    flipH,
+    flipV,
+    rotation,
+    newWidth,
+    newHeight,
+    initWidth,
+    initHeight,
+    viewWidth,
+    viewHeight,
+  } = getPreview(items);
+
+  // the stored degrees are absolute and unnormalized, so 360 has to collapse
+  // to a no-op instead of being handed to the processor
+  const degrees = normalizeDegrees(rotation);
+
+  return {
+    ...(box.x === 0 && box.y === 0 && box.w === 1 && box.h === 1
+      ? {}
+      : {
+          crop: {
+            x: Math.round(initWidth * box.x),
+            y: Math.round(initHeight * box.y),
+            w: Math.round(initWidth * box.w),
+            h: Math.round(initHeight * box.h),
+          },
+        }),
+    ...(degrees !== 0
+      ? {
+          rotate: {
+            degrees,
+          },
+        }
+      : {}),
+    ...(flipH || flipV
+      ? {
+          flip: {
+            horizontal: flipH,
+            vertical: flipV,
+          },
+        }
+      : {}),
+    // the view sizes already account for the crop and the axis swap, so only a
+    // deliberate resize makes the stored sizes differ from them
+    ...(Math.round(viewWidth) !== newWidth ||
+    Math.round(viewHeight) !== newHeight
+      ? {
+          resize: {
+            width: newWidth,
+            height: newHeight,
+          },
+        }
+      : {}),
+  };
+};

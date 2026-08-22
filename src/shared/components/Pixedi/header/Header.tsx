@@ -3,9 +3,9 @@ import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import type { FuncSaveArgs } from "../types";
-import buttonStyles from "../ui/button/button.module.css";
-import { getPreview } from "../utils/preview";
+import { getActions } from "../utils/preview";
 import { imageProcessor } from "../utils/imageProcessor";
+import buttonStyles from "../ui/button/button.module.css";
 import styles from "./Header.module.css";
 
 type HeaderProps = {
@@ -16,6 +16,7 @@ type HeaderProps = {
 export const Header = ({ onBack, onSave }: HeaderProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const {
+    settings,
     history,
     originalBase64,
     undo,
@@ -24,7 +25,6 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     resetHistoryAfterSave,
     setCurrentAction,
   } = usePixediContext();
-  const { save } = imageProcessor;
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -41,15 +41,36 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
     setIsSaving(true);
 
     const historyItems = history.items.slice(0, history.pointer + 1);
-    const preview = getPreview(historyItems);
+    const actions = getActions(historyItems);
 
-    console.log(preview);
-
-    // setIsSaving(true);
     try {
-      const newBase64 = await save(originalBase64);
-      //   const processedBase64 = await save(base64, quality);
+      const processor = await imageProcessor(originalBase64);
+
+      if (actions.crop) {
+        processor.crop(
+          actions.crop.x,
+          actions.crop.y,
+          actions.crop.w,
+          actions.crop.h,
+        );
+      }
+
+      if (actions.flip) {
+        processor.flip(actions.flip.horizontal, actions.flip.vertical);
+      }
+
+      if (actions.rotate) {
+        processor.rotate(actions.rotate.degrees);
+      }
+
+      if (actions.resize) {
+        processor.resize(actions.resize.width, actions.resize.height);
+      }
+
+      const newBase64 = processor.get(settings.quality);
+
       await onSave(newBase64);
+
       setCurrentAction(null);
       resetHistoryAfterSave();
     } finally {

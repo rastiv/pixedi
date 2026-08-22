@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { HistoryItem } from "../types";
-import { getPreview } from "./preview";
+import { getActions, getPreview } from "./preview";
 import { getOrientedSizes } from "../utils";
 
 const initial: HistoryItem = {
@@ -73,5 +73,74 @@ describe("getPreview", () => {
     expect(boxHeight).toBeCloseTo(initial.height / 2);
     expect(viewWidth).toBeCloseTo(initial.height / 2);
     expect(viewHeight).toBeCloseTo(initial.width / 2);
+  });
+});
+
+const rotatedTo = (degrees: number, from = 0): HistoryItem =>
+  ({
+    ...getOrientedSizes(initial.width, initial.height, from, degrees),
+    action: { name: "rotate", args: { degrees } },
+  }) as HistoryItem;
+
+describe("getActions", () => {
+  it("does not emit a resize for a rotation that only swaps the axes", () => {
+    expect(getActions([initial, rotatedTo(90)])).toEqual({
+      rotate: { degrees: 90 },
+    });
+  });
+
+  it("collapses a full turn to no actions at all", () => {
+    expect(getActions([initial, rotatedTo(360)])).toEqual({});
+  });
+
+  it("normalizes negative degrees before handing them over", () => {
+    expect(getActions([initial, rotatedTo(-90)])).toEqual({
+      rotate: { degrees: 270 },
+    });
+  });
+
+  it("emits a deliberate resize in view space alongside the rotation", () => {
+    const rotated = rotatedTo(90);
+    const items: HistoryItem[] = [
+      initial,
+      rotated,
+      {
+        width: 2007,
+        height: 3050,
+        action: { name: "resize", args: { width: 2007, height: 3050 } },
+      },
+    ];
+
+    expect(getActions(items)).toEqual({
+      rotate: { degrees: 90 },
+      resize: { width: 2007, height: 3050 },
+    });
+  });
+
+  it("emits the crop rect in original image pixels", () => {
+    const items: HistoryItem[] = [
+      initial,
+      {
+        width: 3050,
+        height: 2007,
+        action: {
+          name: "crop",
+          args: {
+            id: "free",
+            ratio: 1,
+            isFree: true,
+            x: 0,
+            y: 0,
+            w: 50,
+            h: 50,
+          },
+        },
+      },
+    ];
+
+    // the crop sizes match the view, so no resize rides along with it
+    expect(getActions(items)).toEqual({
+      crop: { x: 0, y: 0, w: 3050, h: 2007 },
+    });
   });
 });

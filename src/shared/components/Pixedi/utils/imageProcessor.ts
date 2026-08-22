@@ -1,219 +1,126 @@
-export interface ImageProcessor {
-  resize: (base64Str: string, width: number, height: number) => Promise<string>;
-  crop: (
-    base64Str: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-  ) => Promise<string>;
-  flip: (
-    base64Str: string,
-    horizontal: boolean,
-    vertical: boolean,
-  ) => Promise<string>;
-  rotate: (base64Str: string, angle: number) => Promise<string>;
-  filter: (
-    base64Str: string,
-    filters: Record<string, number>,
-  ) => Promise<string>;
-  save: (base64Str: string, quality?: number) => Promise<string>;
-}
+export async function imageProcessor(base64: string) {
+  const parseBase64 = (base64Str: string) => {
+    const match = base64Str.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.+)$/);
+    if (!match) {
+      throw new Error("Invalid Base64 image format");
+    }
+    let mimeType = match[1];
+    const rawData = match[2];
+    if (mimeType === "image/gif") {
+      mimeType = "image/png";
+    }
+    return { mimeType, rawData };
+  };
 
-const parseBase64 = (base64Str: string) => {
-  const match = base64Str.match(/^data:(image\/[a-zA-Z+.-]+);base64,(.+)$/);
-  if (!match) {
-    throw new Error("Invalid Base64 image format");
-  }
+  const getBitmap = async (base64Str: string) => {
+    const { mimeType, rawData } = parseBase64(base64Str);
+    const binaryStr = atob(rawData);
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) {
+      bytes[i] = binaryStr.charCodeAt(i);
+    }
+    const blob = new Blob([bytes], { type: mimeType });
+    const bitmap = await createImageBitmap(blob);
+    return { bitmap, mimeType };
+  };
 
-  let mimeType = match[1];
-  const rawData = match[2];
-
-  if (mimeType === "image/gif") {
-    mimeType = "image/png";
-  }
-
-  return { mimeType, rawData };
-};
-
-const getBitmap = async (
-  base64Str: string,
-): Promise<{ bitmap: ImageBitmap; mimeType: string }> => {
-  const { mimeType, rawData } = parseBase64(base64Str);
-
-  const binaryStr = atob(rawData);
-  const bytes = new Uint8Array(binaryStr.length);
-  for (let i = 0; i < binaryStr.length; i++) {
-    bytes[i] = binaryStr.charCodeAt(i);
-  }
-
-  const blob = new Blob([bytes], { type: mimeType });
-  const bitmap = await createImageBitmap(blob);
-
-  return { bitmap, mimeType };
-};
-
-const getContext = (mimeType: string) => {
+  const { bitmap, mimeType } = await getBitmap(base64);
   const canvas = document.createElement("canvas");
-
-  // Enable alpha channel for formats that support transparency
-  const requiresAlpha =
-    mimeType === "image/png" || mimeType === "image/webp";
+  const requiresAlpha = mimeType === "image/png" || mimeType === "image/webp";
   const ctx = canvas.getContext("2d", { alpha: requiresAlpha });
 
-  return { canvas, ctx };
-};
+  // Start from the full image so every operation is optional and composable
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  ctx?.drawImage(bitmap, 0, 0);
+  // the canvas is the only source from here on, so the bitmap can be released
+  bitmap.close();
 
-const finalizeCanvas = (
-  canvas: HTMLCanvasElement,
-  mimeType: string,
-  quality: number = 1,
-): string => {
-  if (mimeType === "image/jpeg" || mimeType === "image/webp") {
-    return canvas.toDataURL(mimeType, quality);
-  }
-  // PNG format does not support quality parameter
-  return canvas.toDataURL("image/png");
-};
+  // Copy of the current canvas, so it can be redrawn transformed into itself
+  const snapshot = () => {
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+    tempCanvas.getContext("2d")?.drawImage(canvas, 0, 0);
+    return tempCanvas;
+  };
 
-export const imageProcessor: ImageProcessor = {
-  // 1. RESIZE
-  resize: async (
-    base64Str: string,
-    width: number,
-    height: number,
-  ): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
+  const crop = (x: number, y: number, w: number, h: number) => {
+    if (!ctx) return;
 
-    canvas.width = width;
-    canvas.height = height;
+    const tempCanvas = snapshot();
 
-    if (ctx) {
-      ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(bitmap, 0, 0, width, height);
-    }
+    canvas.width = w;
+    canvas.height = h;
 
-    bitmap.close();
-    return finalizeCanvas(canvas, mimeType, 0.85);
-  },
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(tempCanvas, x, y, w, h, 0, 0, w, h);
+  };
 
-  // 2. CROP
-  crop: async (
-    base64Str: string,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-  ): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
+  const flip = (horizontal: boolean, vertical: boolean) => {
+    if (!ctx) return;
 
-    canvas.width = width;
-    canvas.height = height;
+    const tempCanvas = snapshot();
 
-    if (ctx) {
-      ctx.clearRect(0, 0, width, height);
-      ctx.drawImage(bitmap, x, y, width, height, 0, 0, width, height);
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
 
-    bitmap.close();
-    return finalizeCanvas(canvas, mimeType, 0.85);
-  },
+    ctx.translate(horizontal ? canvas.width : 0, vertical ? canvas.height : 0);
 
-  // 3. FLIP
-  flip: async (
-    base64Str: string,
-    horizontal: boolean,
-    vertical: boolean,
-  ): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
+    ctx.scale(horizontal ? -1 : 1, vertical ? -1 : 1);
 
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
+    ctx.drawImage(tempCanvas, 0, 0);
+    ctx.restore();
+  };
 
-    if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(
-        horizontal ? bitmap.width : 0,
-        vertical ? bitmap.height : 0,
-      );
-      ctx.scale(horizontal ? -1 : 1, vertical ? -1 : 1);
-      ctx.drawImage(bitmap, 0, 0);
-      ctx.restore();
-    }
+  const rotate = (angle: number) => {
+    if (!ctx) return;
 
-    bitmap.close();
-    return finalizeCanvas(canvas, mimeType, 0.85);
-  },
+    const tempCanvas = snapshot();
 
-  // 4. ROTATE
-  rotate: async (base64Str: string, angle: number): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
+    const rad = (angle * Math.PI) / 180;
+    const sin = Math.abs(Math.sin(rad));
+    const cos = Math.abs(Math.cos(rad));
 
-    const isNewRatio =
-      (angle >= 90 && angle < 180) || (angle >= 270 && angle < 360);
-
-    canvas.width = isNewRatio ? bitmap.height : bitmap.width;
-    canvas.height = isNewRatio ? bitmap.width : bitmap.height;
-
-    if (ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate((angle * Math.PI) / 180);
-      ctx.drawImage(bitmap, -bitmap.width / 2, -bitmap.height / 2);
-      ctx.restore();
-    }
-
-    bitmap.close();
-    const introducesTransparency = angle % 90 !== 0;
-    return finalizeCanvas(
-      canvas,
-      introducesTransparency ? "image/webp" : mimeType,
-      introducesTransparency ? 0.85 : undefined,
+    // Bounding box of the rotated source
+    canvas.width = Math.round(tempCanvas.width * cos + tempCanvas.height * sin);
+    canvas.height = Math.round(
+      tempCanvas.width * sin + tempCanvas.height * cos,
     );
-  },
 
-  // 5. FILTER
-  filter: async (
-    base64Str: string,
-    filters: Record<string, number>,
-  ): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(rad);
+    ctx.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2);
+    ctx.restore();
+  };
 
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
+  const resize = (width: number, height: number) => {
+    if (!ctx) return;
 
-    if (ctx) {
-      const filterString = Object.entries(filters)
-        .map(([name, value]) => `${name}(${value}%)`)
-        .join(" ");
-      ctx.filter = filterString;
-      ctx.drawImage(bitmap, 0, 0);
+    const tempCanvas = snapshot();
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(tempCanvas, 0, 0, width, height);
+  };
+
+  const get = (quality: number = 0.85): string => {
+    if (mimeType === "image/jpeg" || mimeType === "image/webp") {
+      return canvas.toDataURL(mimeType, quality);
     }
+    // PNG format does not support quality parameter
+    return canvas.toDataURL("image/png");
+  };
 
-    bitmap.close();
-    return finalizeCanvas(canvas, mimeType, 0.85);
-  },
-
-  // SAVE IMAGE
-  save: async (base64Str: string, quality: number = 0.85): Promise<string> => {
-    const { bitmap, mimeType } = await getBitmap(base64Str);
-    const { canvas, ctx } = getContext(mimeType);
-
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-
-    if (ctx) {
-      ctx.drawImage(bitmap, 0, 0);
-    }
-
-    bitmap.close();
-    return finalizeCanvas(canvas, mimeType, quality);
-  },
-};
+  return {
+    crop,
+    flip,
+    rotate,
+    resize,
+    get,
+  };
+}
