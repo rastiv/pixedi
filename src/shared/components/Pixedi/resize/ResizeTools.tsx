@@ -151,7 +151,8 @@ export const ResizeTools = () => {
           name="width"
           label="Width"
           style={{ width: "88px" }}
-          onChange={handleChangeWidth}
+          onChange={(e) => setWidth(Number(e.target.value))}
+          onBlur={handleChangeWidth}
         />
         <Lock className={styles.toolsLock} />
         <InputPixel
@@ -159,7 +160,8 @@ export const ResizeTools = () => {
           name="height"
           label="Height"
           style={{ width: "88px" }}
-          onChange={handleChangeHeight}
+          onChange={(e) => setHeight(Number(e.target.value))}
+          onBlur={handleChangeHeight}
         />
         <SaveCloseGroup
           onSave={() => handleSave()}
