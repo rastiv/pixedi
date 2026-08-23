@@ -42,8 +42,8 @@ export const useImageLoader = (src: string | Blob): UseImageResult => {
         success: boolean;
         error?: string;
         originalBlob: Blob;
-        originalWidth: number;
-        originalHeight: number;
+        width: number;
+        height: number;
         originalMime: string;
         previewBlob: Blob;
         isAlpha: boolean;
@@ -60,8 +60,8 @@ export const useImageLoader = (src: string | Blob): UseImageResult => {
           loading: false,
           error: "",
           extension: result.originalMime,
-          width: result.originalWidth,
-          height: result.originalHeight,
+          width: result.width,
+          height: result.height,
           originalBlob: result.originalBlob,
           previewUrl: previewUrlRef.current,
           isAlpha: result.isAlpha,

@@ -30,8 +30,7 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
     const originalMime = blob.type || fallbackMime || "image/unknown";
 
     const bitmap = await createImageBitmap(blob);
-    const originalWidth = bitmap.width;
-    const originalHeight = bitmap.height;
+    const { width, height } = bitmap;
 
     const previewBlob = await createPreviewBlob(bitmap);
 
@@ -41,8 +40,8 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
     self.postMessage({
       success: true,
       originalMime,
-      originalWidth,
-      originalHeight,
+      width,
+      height,
       originalBlob: blob,
       previewBlob,
       isAlpha,
