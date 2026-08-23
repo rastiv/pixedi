@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
+import { useImageSaving } from "../hooks/useImageSaving";
 import type { FuncSaveArgs } from "../types";
-import { getActions } from "../utils/preview";
-import { imageProcessor } from "../utils/imageProcessor";
 import buttonStyles from "../ui/button/button.module.css";
 import styles from "./Header.module.css";
 
@@ -14,71 +12,14 @@ type HeaderProps = {
 };
 
 export const Header = ({ onBack, onSave }: HeaderProps) => {
-  const [isSaving, setIsSaving] = useState(false);
-  const {
-    settings,
-    history,
-    originalBlob,
-    undo,
-    redo,
-    resetHistory,
-    resetHistoryAfterSave,
-    setCurrentAction,
-  } = usePixediContext();
+  const { save, reset, isSaving } = useImageSaving(onSave);
+  const { history, undo, redo } = usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
   const disabledRedo = history.pointer === history.items.length - 1;
   const disableReset = history.items.length < 2 || isSaving;
   const disableSave = disableReset || history.pointer === 0;
-
-  const handleReset = () => {
-    setCurrentAction(null);
-    resetHistory();
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-
-    const historyItems = history.items.slice(0, history.pointer + 1);
-    const actions = getActions(historyItems);
-
-    try {
-      if (!originalBlob) return;
-
-      const processor = await imageProcessor(originalBlob);
-
-      if (actions.crop) {
-        processor.crop(
-          actions.crop.x,
-          actions.crop.y,
-          actions.crop.w,
-          actions.crop.h,
-        );
-      }
-
-      if (actions.flip) {
-        processor.flip(actions.flip.horizontal, actions.flip.vertical);
-      }
-
-      if (actions.rotate) {
-        processor.rotate(actions.rotate.degrees);
-      }
-
-      if (actions.resize) {
-        processor.resize(actions.resize.width, actions.resize.height);
-      }
-
-      const newImage = await processor.get(settings);
-
-      await onSave(newImage);
-
-      setCurrentAction(null);
-      resetHistoryAfterSave();
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   return (
     <div className={styles.header}>
@@ -110,10 +51,10 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
             </Button>
           </div>
         )}
-        <Button variant="outline" disabled={disableReset} onClick={handleReset}>
+        <Button variant="outline" disabled={disableReset} onClick={reset}>
           Reset
         </Button>
-        <Button disabled={disableSave} onClick={handleSave}>
+        <Button disabled={disableSave} onClick={save}>
           {isSaving ? <Loader /> : <Check />}
           Save
         </Button>

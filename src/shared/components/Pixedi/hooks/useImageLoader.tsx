@@ -7,12 +7,11 @@ export interface UseImageResult {
   width: number;
   height: number;
   originalBlob: Blob | null;
-  originalSize: number;
   previewUrl: string;
   isAlpha: boolean;
 }
 
-export const useImageLoader = (src: string): UseImageResult => {
+export const useImageLoader = (src: string | Blob): UseImageResult => {
   const [state, setState] = useState<UseImageResult>({
     loading: true,
     error: "",
@@ -20,7 +19,6 @@ export const useImageLoader = (src: string): UseImageResult => {
     height: 0,
     extension: "",
     originalBlob: null,
-    originalSize: 0,
     previewUrl: "",
     isAlpha: false,
   });
@@ -46,7 +44,6 @@ export const useImageLoader = (src: string): UseImageResult => {
         originalBlob: Blob;
         originalWidth: number;
         originalHeight: number;
-        originalSize: number;
         originalMime: string;
         previewBlob: Blob;
         isAlpha: boolean;
@@ -66,7 +63,6 @@ export const useImageLoader = (src: string): UseImageResult => {
           width: result.originalWidth,
           height: result.originalHeight,
           originalBlob: result.originalBlob,
-          originalSize: result.originalSize,
           previewUrl: previewUrlRef.current,
           isAlpha: result.isAlpha,
         });

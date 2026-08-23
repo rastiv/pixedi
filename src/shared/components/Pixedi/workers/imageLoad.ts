@@ -1,25 +1,32 @@
-self.onmessage = async (e: MessageEvent<string>) => {
-  let src = e.data.trim();
+self.onmessage = async (e: MessageEvent<string | Blob>) => {
   let fallbackMime = "";
 
   try {
-    if (
-      !src.startsWith("http://") &&
-      !src.startsWith("https://") &&
-      !src.startsWith("data:")
-    ) {
-      fallbackMime = "image/png";
-      src = `data:${fallbackMime};base64,${src}`;
+    let blob: Blob;
+
+    if (e.data instanceof Blob) {
+      blob = e.data;
+    } else {
+      let src = e.data.trim();
+
+      if (
+        !src.startsWith("http://") &&
+        !src.startsWith("https://") &&
+        !src.startsWith("blob:") &&
+        !src.startsWith("data:")
+      ) {
+        fallbackMime = "image/png";
+        src = `data:${fallbackMime};base64,${src}`;
+      }
+
+      const response = await fetch(src);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      blob = await response.blob();
     }
 
-    const response = await fetch(src);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const blob = await response.blob();
-
-    const originalSize = blob.size;
     const originalMime = blob.type || fallbackMime || "image/unknown";
 
     const bitmap = await createImageBitmap(blob);
@@ -37,7 +44,6 @@ self.onmessage = async (e: MessageEvent<string>) => {
       originalWidth,
       originalHeight,
       originalBlob: blob,
-      originalSize,
       previewBlob,
       isAlpha,
     });

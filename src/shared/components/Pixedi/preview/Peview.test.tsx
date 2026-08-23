@@ -23,7 +23,6 @@ const renderPreview = (degrees: number) => {
       extension="png"
       previewUrl="data:image/png;base64,initial"
       originalBlob={new Blob([], { type: "image/png" })}
-      originalSize={1234}
       width={800}
       height={600}
       settings={{}}

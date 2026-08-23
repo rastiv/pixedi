@@ -30,7 +30,6 @@ const wrapper = ({ children }: PropsWithChildren) => (
     extension="png"
     previewUrl="data:image/png;base64,initial"
     originalBlob={new Blob([], { type: "image/png" })}
-    originalSize={1234}
     width={initialItem.width}
     height={initialItem.height}
     settings={{}}

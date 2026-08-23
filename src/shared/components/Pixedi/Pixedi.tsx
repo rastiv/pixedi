@@ -8,7 +8,7 @@ import { Loader } from "./assets/icons";
 import styles from "./index.module.css";
 
 type PixediProps = {
-  image: string;
+  image: string | Blob;
   onSave: FuncSaveArgs;
   onBack: () => void;
   theme?: Theme;
@@ -29,7 +29,6 @@ export const Pixedi = ({
     width,
     height,
     originalBlob,
-    originalSize,
     previewUrl,
     isAlpha,
   } = useImageLoader(image);
@@ -40,7 +39,7 @@ export const Pixedi = ({
         <div className={styles.system}>
           {loading && <Loader style={{ width: 48, height: 48 }} />}
           {error && <div className={styles.textRed}>{error}</div>}
-          {!loading && !error && (!originalSize || !extension) && (
+          {!loading && !error && (!originalBlob || !extension) && (
             <div className={styles.textRed}>Failed to load image.</div>
           )}
         </div>
@@ -55,7 +54,6 @@ export const Pixedi = ({
       height={height}
       previewUrl={previewUrl}
       originalBlob={originalBlob}
-      originalSize={originalSize}
       settings={settings}
       isAlpha={isAlpha}
     >

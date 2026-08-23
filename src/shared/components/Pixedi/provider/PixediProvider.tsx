@@ -10,7 +10,6 @@ type PixediProviderProps = {
   width: number;
   height: number;
   originalBlob: Blob | null;
-  originalSize: number;
   previewUrl: string;
   isAlpha: boolean;
   settings: Settings;
@@ -22,7 +21,6 @@ export const PixediProvider = ({
   width,
   height,
   originalBlob,
-  originalSize,
   previewUrl,
   isAlpha,
   settings,
@@ -34,7 +32,6 @@ export const PixediProvider = ({
       height,
       previewUrl,
       originalBlob,
-      originalSize,
       settings,
       isAlpha,
     ),
@@ -90,7 +87,6 @@ export const PixediProvider = ({
         height,
         previewUrl,
         originalBlob,
-        originalSize,
         settings,
         isAlpha,
       ).history,

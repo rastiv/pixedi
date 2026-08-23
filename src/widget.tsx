@@ -8,7 +8,7 @@ type WidgetTheme = "light" | "dark";
 
 interface WidgetOptions {
   containerId: string;
-  image: string;
+  image: string | Blob;
   onSave: FuncSaveArgs;
   onBack: () => void;
   theme?: WidgetTheme;
