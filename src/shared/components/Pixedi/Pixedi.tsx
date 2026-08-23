@@ -1,4 +1,5 @@
 import { PixediProvider } from "./provider/PixediProvider";
+import { initialSettings } from "./provider/initialState";
 import { useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Frame } from "./frame";
@@ -20,7 +21,7 @@ export const Pixedi = ({
   onSave,
   onBack,
   theme = "light",
-  settings = {},
+  settings = initialSettings,
 }: PixediProps) => {
   const {
     loading,
@@ -55,7 +56,7 @@ export const Pixedi = ({
       originalBlob={originalBlob}
       previewUrl={previewUrl}
       isAlpha={isAlpha}
-      settings={settings}
+      settings={{ ...initialSettings, ...settings }}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.main}>

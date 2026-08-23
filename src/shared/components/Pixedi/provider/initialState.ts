@@ -13,8 +13,8 @@ export type PixediContextType = {
   isAlpha: boolean;
 };
 
-const initialSettings: Settings = {
-  quality: 0.85,
+export const initialSettings: Settings = {
+  quality: 0.65,
   saveAsWEBP: false,
 };
 
@@ -25,7 +25,7 @@ export const getInitialState = (
   originalBlob: Blob | null,
   previewUrl: string,
   isAlpha: boolean,
-  settings: Settings = initialSettings,
+  settings: Settings,
 ): PixediContextType => ({
   history: {
     pointer: 0,
