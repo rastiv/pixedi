@@ -1,3 +1,5 @@
+import { createPreviewBlob, hasAlphaChannel } from "../utils/crop";
+
 self.onmessage = async (e: MessageEvent<string | Blob>) => {
   let fallbackMime = "";
 
@@ -56,45 +58,3 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
     });
   }
 };
-
-const PREVIEW_MAX_DIMENSION = 1920;
-const PREVIEW_QUALITY = 0.85;
-
-const createPreviewBlob = async (bitmap: ImageBitmap): Promise<Blob> => {
-  const { width, height } = bitmap;
-  const scale = Math.min(1, PREVIEW_MAX_DIMENSION / Math.max(width, height));
-  const previewWidth = Math.round(width * scale);
-  const previewHeight = Math.round(height * scale);
-
-  const canvas = new OffscreenCanvas(previewWidth, previewHeight);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Failed to get 2D context for preview canvas");
-  ctx.drawImage(bitmap, 0, 0, previewWidth, previewHeight);
-
-  return canvas.convertToBlob({
-    type: "image/webp",
-    quality: PREVIEW_QUALITY,
-  });
-};
-
-function hasAlphaChannel(bitmap: ImageBitmap): boolean {
-  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    throw new Error("Failed to create 2D context for canvas.");
-  }
-  ctx.drawImage(bitmap, 0, 0);
-
-  try {
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imgData.data;
-    for (let i = 3; i < data.length; i += 4) {
-      if (data[i] < 255) {
-        return true;
-      }
-    }
-    return false;
-  } catch (error) {
-    throw new Error(`Error reading pixels: ${error}`, { cause: error });
-  }
-}

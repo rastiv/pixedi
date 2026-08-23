@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button, SaveCloseGroup } from "../ui";
 import { Rotate, RotateCCW } from "../assets/icons";
-import { getOrientedSizes } from "../utils";
+import { getOrientedSizes } from "../utils/crop";
 import styles from "./Rotate.module.css";
 
 export const RotateTools = () => {

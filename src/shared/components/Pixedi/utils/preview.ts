@@ -1,5 +1,5 @@
 import type { HistoryItem } from "../types";
-import { isQuarterTurn } from "../utils";
+import { isQuarterTurn } from "../utils/crop";
 
 type Mat = [[number, number], [number, number]];
 

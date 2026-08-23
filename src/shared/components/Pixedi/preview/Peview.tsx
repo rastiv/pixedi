@@ -4,7 +4,7 @@ import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
 import { ActionName } from "../types";
-import { getOrientedSizes } from "../utils";
+import { getOrientedSizes } from "../utils/crop";
 import styles from "./Preview.module.css";
 
 type PreviewType = {

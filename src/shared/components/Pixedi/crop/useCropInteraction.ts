@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
-import { getCropPoints } from "../utils";
+import { getCropPoints } from "../utils/crop";
 import type { CropRect, Direction } from "../types";
 import { emitCropUpdate, emitClipPathUpdate } from "../eventBus";
 import { useMobile } from "../hooks";

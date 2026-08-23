@@ -1,16 +1,7 @@
-export type PresetOptions = {
-  value: string;
-  label: string;
-  w: number;
-  h: number;
-  rightLabel?: string;
-};
+import type { Preset } from "./types";
 
-export type Preset = {
-  value: string;
-  label: string;
-  options: Array<PresetOptions>;
-};
+export const PREVIEW_MAX_DIMENSION = 1920;
+export const PREVIEW_QUALITY = 0.85;
 
 export const presetsData: Array<Preset> = [
   {

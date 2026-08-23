@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { HistoryItem } from "../types";
 import { getActions, getPreview } from "./preview";
-import { getOrientedSizes } from "../utils";
+import { getOrientedSizes } from "../utils/crop";
 
 const initial: HistoryItem = {
   width: 6099,

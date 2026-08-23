@@ -3,7 +3,7 @@ import { SaveCloseGroup } from "../ui";
 import { ActionName, type CropRect } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
 import { eventBus } from "../eventBus";
-import { getInitalCrop } from "../utils";
+import { getInitalCrop } from "../utils/crop";
 import rootStyles from "../index.module.css";
 import styles from "./Crop.module.css";
 

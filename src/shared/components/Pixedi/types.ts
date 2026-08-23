@@ -76,6 +76,20 @@ export type FuncSaveArgs = (blob: Blob) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 
+export type PresetOptions = {
+  value: string;
+  label: string;
+  w: number;
+  h: number;
+  rightLabel?: string;
+};
+
+export type Preset = {
+  value: string;
+  label: string;
+  options: Array<PresetOptions>;
+};
+
 export type Settings = {
   quality?: number;
   saveAsWEBP?: boolean;

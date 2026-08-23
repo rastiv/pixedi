@@ -1,4 +1,5 @@
-import type { CropRect, Direction } from "../types";
+import { PREVIEW_MAX_DIMENSION, PREVIEW_QUALITY } from "../constants";
+import type { CropRect, Direction, Sizes } from "../types";
 
 const minSize = 32;
 
@@ -281,7 +282,7 @@ export const getInitalCrop = (
   width: number,
   height: number,
 ): CropRect => {
-  const offsetPercent = 0.1;
+  const offsetPercent = 0.12;
   const frameRatio = width / height;
   let wPx = 0;
   let hPx = 0;
@@ -315,6 +316,8 @@ export const getInitalCrop = (
   const h = (hPx / height) * 100;
   const x = ((width - wPx) / 2 / width) * 100;
   const y = ((height - hPx) / 2 / height) * 100;
+  // const xPx = Math.round((width - wPx) / 2);
+  // const yPx = Math.round((height - hPx) / 2);
 
   return { x, y, w, h };
 };
@@ -339,3 +342,58 @@ export const getCropByNewSizes = (
 };
 
 export const degree2Rad = (degree: number): number => (degree * Math.PI) / 180;
+
+// true when the absolute rotation swaps the visible axes (90 / 270)
+export const isQuarterTurn = (degrees: number): boolean =>
+  Math.abs(Math.round(degrees / 90)) % 2 === 1;
+
+// rotate.args.degrees is absolute, so visible sizes have to be re-derived from
+// the rotation the stored sizes were produced with, not from the new delta
+export const getOrientedSizes = (
+  width: number,
+  height: number,
+  fromDegrees: number,
+  toDegrees: number,
+): Sizes =>
+  isQuarterTurn(fromDegrees) === isQuarterTurn(toDegrees)
+    ? { width, height }
+    : { width: height, height: width };
+
+export const createPreviewBlob = async (bitmap: ImageBitmap): Promise<Blob> => {
+  const { width, height } = bitmap;
+  const scale = Math.min(1, PREVIEW_MAX_DIMENSION / Math.max(width, height));
+  const previewWidth = Math.round(width * scale);
+  const previewHeight = Math.round(height * scale);
+
+  const canvas = new OffscreenCanvas(previewWidth, previewHeight);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Failed to get 2D context for preview canvas");
+  ctx.drawImage(bitmap, 0, 0, previewWidth, previewHeight);
+
+  return canvas.convertToBlob({
+    type: "image/webp",
+    quality: PREVIEW_QUALITY,
+  });
+};
+
+export function hasAlphaChannel(bitmap: ImageBitmap): boolean {
+  const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Failed to create 2D context for canvas.");
+  }
+  ctx.drawImage(bitmap, 0, 0);
+
+  try {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] < 255) {
+        return true;
+      }
+    }
+    return false;
+  } catch (error) {
+    throw new Error(`Error reading pixels: ${error}`, { cause: error });
+  }
+}

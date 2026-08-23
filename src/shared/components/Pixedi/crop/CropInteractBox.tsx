@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
 import { usePixediContext } from "../provider/usePixediContext";
-import { getInitalCrop } from "../utils";
+import { getInitalCrop } from "../utils/crop";
 import { Preview } from "../preview";
 import { useMobile } from "../hooks";
 import { ActionName } from "../types";
