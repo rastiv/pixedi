@@ -13,6 +13,7 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
     resetHistoryAfterSave,
     setCurrentAction,
     resetHistory,
+    setImageData,
   } = usePixediContext();
 
   const save = async () => {
@@ -39,11 +40,22 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       if (actions.resize)
         processor.resize(actions.resize.width, actions.resize.height);
 
-      const newImage = await processor.get(settings);
-      await onSave(newImage);
+      const { newBlob, previewBlob, extension, width, height, isAlpha } =
+        await processor.get(settings);
+
+      setImageData({
+        originalBlob: newBlob,
+        previewUrl: URL.createObjectURL(previewBlob),
+        extension,
+        width,
+        height,
+        isAlpha,
+      });
 
       setCurrentAction(null);
       resetHistoryAfterSave();
+
+      await onSave(newBlob);
     } finally {
       setIsSaving(false);
     }

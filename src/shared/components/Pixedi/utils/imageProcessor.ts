@@ -1,4 +1,8 @@
-import type { Settings } from "@/shared/components/Pixedi/types";
+import type {
+  ProcessedImage,
+  Settings,
+} from "@/shared/components/Pixedi/types";
+import { createPreviewBlob, hasAlphaChannel } from "./crop";
 
 export async function imageProcessor(blob: Blob) {
   const bitmap = await createImageBitmap(blob);
@@ -88,9 +92,11 @@ export async function imageProcessor(blob: Blob) {
     ctx.drawImage(tempCanvas, 0, 0, width, height);
   };
 
-  const get = (settings: Settings): Promise<Blob> => {
+  const get = async (settings: Settings): Promise<ProcessedImage> => {
     const { quality = 0.85, saveAsWEBP = false } = settings;
-    return new Promise((resolve, reject) => {
+    const outputMimeType = saveAsWEBP ? "image/webp" : mimeType;
+
+    const newBlob = await new Promise<Blob>((resolve, reject) => {
       if (
         mimeType === "image/jpeg" ||
         mimeType === "image/webp" ||
@@ -99,9 +105,10 @@ export async function imageProcessor(blob: Blob) {
         canvas.toBlob(
           (blob) => {
             if (blob) resolve(blob);
-            else reject(new Error(`Failed to encode image as ${mimeType}`));
+            else
+              reject(new Error(`Failed to encode image as ${outputMimeType}`));
           },
-          saveAsWEBP ? "image/webp" : mimeType,
+          outputMimeType,
           quality,
         );
       } else {
@@ -112,6 +119,21 @@ export async function imageProcessor(blob: Blob) {
         }, "image/png");
       }
     });
+
+    const newBitmap = await createImageBitmap(newBlob);
+    const previewBlob = await createPreviewBlob(newBitmap);
+    const { width, height } = newBitmap;
+    const isAlpha = hasAlphaChannel(newBitmap);
+    newBitmap.close();
+
+    return {
+      newBlob,
+      previewBlob,
+      extension: outputMimeType,
+      width,
+      height,
+      isAlpha,
+    };
   };
 
   return {

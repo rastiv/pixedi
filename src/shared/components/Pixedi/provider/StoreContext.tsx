@@ -3,8 +3,14 @@ import { type PixediContextType } from "./initialState";
 import type { Action, HistoryItem } from "../types";
 
 type StoreContextType = PixediContextType & {
-  setOriginalBlob: (payload: Blob | null) => void;
-  setPreviewUrl: (payload: string) => void;
+  setImageData: (payload: {
+    originalBlob: Blob | null;
+    previewUrl: string;
+    extension: string;
+    width: number;
+    height: number;
+    isAlpha: boolean;
+  }) => void;
   setCurrentAction: (payload: Action | null) => void;
   getLastHistoryItem: () => HistoryItem;
   getLastRotation: () => number;

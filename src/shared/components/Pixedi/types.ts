@@ -94,3 +94,12 @@ export type Settings = {
   quality?: number;
   saveAsWEBP?: boolean;
 };
+
+export type ProcessedImage = {
+  newBlob: Blob;
+  previewBlob: Blob;
+  extension: string;
+  width: number;
+  height: number;
+  isAlpha: boolean;
+};

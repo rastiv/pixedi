@@ -37,11 +37,23 @@ export const PixediProvider = ({
     ),
   );
 
-  const setOriginalBlob = (payload: Blob | null) =>
-    setState((store) => ({ ...store, originalBlob: payload }));
-
-  const setPreviewUrl = (payload: string) =>
-    setState((store) => ({ ...store, previewUrl: payload }));
+  const setImageData = (payload: {
+    originalBlob: Blob | null;
+    previewUrl: string;
+    extension: string;
+    width: number;
+    height: number;
+    isAlpha: boolean;
+  }) =>
+    setState((store) => ({
+      ...store,
+      originalBlob: payload.originalBlob,
+      previewUrl: payload.previewUrl,
+      extension: payload.extension,
+      width: payload.width,
+      height: payload.height,
+      isAlpha: payload.isAlpha,
+    }));
 
   const setCurrentAction = (payload: Action | null) =>
     setState((store) => ({ ...store, currentAction: payload }));
@@ -127,8 +139,7 @@ export const PixediProvider = ({
 
   const value = {
     ...state,
-    setOriginalBlob,
-    setPreviewUrl,
+    setImageData,
     setCurrentAction,
     getLastHistoryItem,
     getLastRotation,
