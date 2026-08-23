@@ -75,15 +75,10 @@ export const PixediProvider = ({
   const resetHistory = () =>
     setState((store) => ({
       ...store,
-      history: getInitialState(
-        extension,
-        width,
-        height,
-        originalBlob,
-        previewUrl,
-        isAlpha,
-        settings,
-      ).history,
+      history: {
+        items: [store.history.items[0]],
+        pointer: 0,
+      },
     }));
 
   const undo = () =>

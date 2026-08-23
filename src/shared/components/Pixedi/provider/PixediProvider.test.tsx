@@ -125,19 +125,30 @@ describe("PixediProvider", () => {
     expect(result.current.getLastHistoryItem()).toEqual(editedItem);
   });
 
-  it("resets to the source image and resets history after saving", () => {
+  it("resets to the last saved image after saving", () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
-      result.current.addToHistory(editedItem);
+      result.current.setState({
+        ...result.current,
+        history: { items: [editedItem], pointer: 0 },
+      });
     });
     expect(result.current.history).toEqual({ items: [editedItem], pointer: 0 });
+
+    act(() => {
+      result.current.addToHistory(secondEditedItem);
+    });
+    expect(result.current.history).toEqual({
+      items: [editedItem, secondEditedItem],
+      pointer: 1,
+    });
 
     act(() => {
       result.current.resetHistory();
     });
     expect(result.current.history).toEqual({
-      items: [initialItem],
+      items: [editedItem],
       pointer: 0,
     });
   });
