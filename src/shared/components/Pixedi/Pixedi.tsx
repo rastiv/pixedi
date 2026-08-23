@@ -52,10 +52,10 @@ export const Pixedi = ({
       extension={extension}
       width={width}
       height={height}
-      previewUrl={previewUrl}
       originalBlob={originalBlob}
-      settings={settings}
+      previewUrl={previewUrl}
       isAlpha={isAlpha}
+      settings={settings}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.main}>

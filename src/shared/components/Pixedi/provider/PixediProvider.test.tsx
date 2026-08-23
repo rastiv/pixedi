@@ -130,7 +130,6 @@ describe("PixediProvider", () => {
 
     act(() => {
       result.current.addToHistory(editedItem);
-      result.current.resetHistoryAfterSave();
     });
     expect(result.current.history).toEqual({ items: [editedItem], pointer: 0 });
 

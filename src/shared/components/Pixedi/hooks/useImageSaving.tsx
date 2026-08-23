@@ -3,17 +3,17 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { imageProcessor } from "../utils/imageProcessor";
 import { getActions } from "../utils/preview";
 import type { FuncSaveArgs } from "../types";
+import { getInitialState } from "@/shared/components/Pixedi/provider/initialState";
 
 export const useImageSaving = (onSave: FuncSaveArgs) => {
   const [isSaving, setIsSaving] = useState(false);
   const {
+    setState,
     settings,
     history,
     originalBlob,
-    resetHistoryAfterSave,
     setCurrentAction,
     resetHistory,
-    setImageData,
   } = usePixediContext();
 
   const save = async () => {
@@ -43,19 +43,19 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       const { newBlob, previewBlob, extension, width, height, isAlpha } =
         await processor.get(settings);
 
-      setImageData({
-        originalBlob: newBlob,
-        previewUrl: URL.createObjectURL(previewBlob),
-        extension,
-        width,
-        height,
-        isAlpha,
-      });
-
-      setCurrentAction(null);
-      resetHistoryAfterSave();
-
       await onSave(newBlob);
+
+      setState(
+        getInitialState(
+          extension,
+          width,
+          height,
+          newBlob,
+          URL.createObjectURL(previewBlob),
+          isAlpha,
+          settings,
+        ),
+      );
     } finally {
       setIsSaving(false);
     }

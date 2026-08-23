@@ -30,30 +30,12 @@ export const PixediProvider = ({
       extension,
       width,
       height,
-      previewUrl,
       originalBlob,
-      settings,
+      previewUrl,
       isAlpha,
+      settings,
     ),
   );
-
-  const setImageData = (payload: {
-    originalBlob: Blob | null;
-    previewUrl: string;
-    extension: string;
-    width: number;
-    height: number;
-    isAlpha: boolean;
-  }) =>
-    setState((store) => ({
-      ...store,
-      originalBlob: payload.originalBlob,
-      previewUrl: payload.previewUrl,
-      extension: payload.extension,
-      width: payload.width,
-      height: payload.height,
-      isAlpha: payload.isAlpha,
-    }));
 
   const setCurrentAction = (payload: Action | null) =>
     setState((store) => ({ ...store, currentAction: payload }));
@@ -97,24 +79,12 @@ export const PixediProvider = ({
         extension,
         width,
         height,
-        previewUrl,
         originalBlob,
-        settings,
+        previewUrl,
         isAlpha,
+        settings,
       ).history,
     }));
-
-  const resetHistoryAfterSave = () =>
-    setState((store) => {
-      const savedHistoryItem = store.history.items.at(store.history.pointer)!;
-      return {
-        ...store,
-        history: {
-          items: [savedHistoryItem],
-          pointer: 0,
-        },
-      };
-    });
 
   const undo = () =>
     setState((store) => {
@@ -139,13 +109,12 @@ export const PixediProvider = ({
 
   const value = {
     ...state,
-    setImageData,
+    setState,
     setCurrentAction,
     getLastHistoryItem,
     getLastRotation,
     addToHistory,
     resetHistory,
-    resetHistoryAfterSave,
     undo,
     redo,
     setSidebar,

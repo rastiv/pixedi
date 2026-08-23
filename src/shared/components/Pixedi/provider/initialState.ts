@@ -22,10 +22,10 @@ export const getInitialState = (
   extension: string,
   width: number,
   height: number,
-  previewUrl: string,
   originalBlob: Blob | null,
-  settings: Settings = initialSettings,
+  previewUrl: string,
   isAlpha: boolean,
+  settings: Settings = initialSettings,
 ): PixediContextType => ({
   history: {
     pointer: 0,
