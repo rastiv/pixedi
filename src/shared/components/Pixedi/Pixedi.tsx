@@ -3,8 +3,8 @@ import { useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
-import type { FuncSaveArgs, Theme, Settings } from "./types";
 import { Loader } from "./assets/icons";
+import type { FuncSaveArgs, Theme, Settings } from "./types";
 import styles from "./index.module.css";
 
 type PixediProps = {

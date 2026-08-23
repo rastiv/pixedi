@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export interface UseImageResult {
+type UseImageLoader = {
   loading: boolean;
   error: string;
   extension: string;
@@ -9,10 +9,10 @@ export interface UseImageResult {
   originalBlob: Blob | null;
   previewUrl: string;
   isAlpha: boolean;
-}
+};
 
-export const useImageLoader = (src: string | Blob): UseImageResult => {
-  const [state, setState] = useState<UseImageResult>({
+export const useImageLoader = (src: string | Blob): UseImageLoader => {
+  const [state, setState] = useState<UseImageLoader>({
     loading: true,
     error: "",
     width: 0,
@@ -42,10 +42,10 @@ export const useImageLoader = (src: string | Blob): UseImageResult => {
         success: boolean;
         error?: string;
         originalBlob: Blob;
+        previewBlob: Blob;
+        extension: string;
         width: number;
         height: number;
-        originalMime: string;
-        previewBlob: Blob;
         isAlpha: boolean;
       }>,
     ) => {
@@ -59,7 +59,7 @@ export const useImageLoader = (src: string | Blob): UseImageResult => {
         setState({
           loading: false,
           error: "",
-          extension: result.originalMime,
+          extension: result.extension,
           width: result.width,
           height: result.height,
           originalBlob: result.originalBlob,
