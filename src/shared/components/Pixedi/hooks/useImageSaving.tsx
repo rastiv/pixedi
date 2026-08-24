@@ -45,6 +45,8 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       await onSave(newBlob);
 
       setImage({ newBlob, previewBlob, mimeType, width, height, isAlpha });
+    } catch (error) {
+      throw new Error(`Error saving image: ${error}`, { cause: error });
     } finally {
       setIsSaving(false);
     }

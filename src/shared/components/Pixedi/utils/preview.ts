@@ -3,6 +3,9 @@ import { isQuarterTurn } from "../utils/crop";
 
 type Mat = [[number, number], [number, number]];
 
+const clamp = (v: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, v));
+
 const mul = (a: Mat, b: Mat): Mat => [
   [
     a[0][0] * b[0][0] + a[0][1] * b[1][0],
@@ -183,12 +186,24 @@ export const getActions = (items: HistoryItem[]) => {
     viewHeight,
   } = getPreview(items);
 
+  const clampedX = clamp(box.x, 0, 1);
+  const clampedY = clamp(box.y, 0, 1);
+  const clampedBox = {
+    x: clampedX,
+    y: clampedY,
+    w: clamp(box.w, 0, 1 - clampedX),
+    h: clamp(box.h, 0, 1 - clampedY),
+  };
+
   // the stored degrees are absolute and unnormalized, so 360 has to collapse
   // to a no-op instead of being handed to the processor
   const degrees = normalizeDegrees(rotation);
 
   return {
-    ...(box.x === 0 && box.y === 0 && box.w === 1 && box.h === 1
+    ...(clampedBox.x === 0 &&
+    clampedBox.y === 0 &&
+    clampedBox.w === 1 &&
+    clampedBox.h === 1
       ? {}
       : {
           crop: {

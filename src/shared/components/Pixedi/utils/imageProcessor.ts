@@ -10,8 +10,7 @@ export async function imageProcessor(blob: Blob) {
   // Canvas cannot encode GIF, so fall back to PNG for the output format.
   const mimeType = inputMimeType === "image/gif" ? "image/png" : inputMimeType;
   const canvas = document.createElement("canvas");
-  const requiresAlpha = mimeType === "image/png" || mimeType === "image/webp";
-  const ctx = canvas.getContext("2d", { alpha: requiresAlpha });
+  const ctx = canvas.getContext("2d", { alpha: true });
 
   // Start from the full image so every operation is optional and composable
   canvas.width = bitmap.width;
@@ -25,7 +24,7 @@ export async function imageProcessor(blob: Blob) {
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
-    tempCanvas.getContext("2d")?.drawImage(canvas, 0, 0);
+    tempCanvas.getContext("2d", { alpha: true })?.drawImage(canvas, 0, 0);
     return tempCanvas;
   };
 
