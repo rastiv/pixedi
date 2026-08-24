@@ -7,7 +7,7 @@ import { getOrientedSizes } from "../utils/crop";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
-  isClipped?: unknown;
+  isClipped?: boolean;
   style?: React.CSSProperties;
 };
 

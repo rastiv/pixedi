@@ -20,7 +20,7 @@ const SetRotation = ({ degrees }: { degrees: number }) => {
 const renderPreview = (degrees: number) => {
   const { container } = render(
     <PixediProvider
-      extension="png"
+      mimeType="png"
       previewUrl="data:image/png;base64,initial"
       originalBlob={new Blob([], { type: "image/png" })}
       width={800}

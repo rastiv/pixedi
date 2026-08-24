@@ -6,7 +6,7 @@ import type { Action, HistoryItem, Settings } from "../types";
 
 type PixediProviderProps = {
   children: React.ReactNode;
-  extension: string;
+  mimeType: string;
   width: number;
   height: number;
   originalBlob: Blob | null;
@@ -17,7 +17,7 @@ type PixediProviderProps = {
 
 export const PixediProvider = ({
   children,
-  extension,
+  mimeType,
   width,
   height,
   originalBlob,
@@ -27,7 +27,7 @@ export const PixediProvider = ({
 }: PixediProviderProps) => {
   const [state, setState] = useState<PixediContextType>(
     getInitialState(
-      extension,
+      mimeType,
       width,
       height,
       originalBlob,

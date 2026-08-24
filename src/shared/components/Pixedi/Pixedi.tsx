@@ -26,7 +26,7 @@ export const Pixedi = ({
   const {
     loading,
     error,
-    extension,
+    mimeType,
     width,
     height,
     originalBlob,
@@ -34,13 +34,13 @@ export const Pixedi = ({
     isAlpha,
   } = useImageLoader(image);
 
-  if (loading || error || !originalBlob || !extension) {
+  if (loading || error || !originalBlob || !mimeType) {
     return (
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
           {loading && <Loader style={{ width: 48, height: 48 }} />}
           {error && <div className={styles.textRed}>{error}</div>}
-          {!loading && !error && (!originalBlob || !extension) && (
+          {!loading && !error && (!originalBlob || !mimeType) && (
             <div className={styles.textRed}>Failed to load image.</div>
           )}
         </div>
@@ -50,7 +50,7 @@ export const Pixedi = ({
 
   return (
     <PixediProvider
-      extension={extension}
+      mimeType={mimeType}
       width={width}
       height={height}
       originalBlob={originalBlob}

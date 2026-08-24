@@ -129,7 +129,7 @@ export async function imageProcessor(blob: Blob) {
     return {
       newBlob,
       previewBlob,
-      extension: outputMimeType,
+      mimeType: outputMimeType,
       width,
       height,
       isAlpha,

@@ -29,7 +29,7 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
       blob = await response.blob();
     }
 
-    const extension = blob.type || fallbackMime || "image/unknown";
+    const mimeType = blob.type || fallbackMime || "image/unknown";
 
     const bitmap = await createImageBitmap(blob);
     const { width, height } = bitmap;
@@ -43,7 +43,7 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
       success: true,
       originalBlob: blob,
       previewBlob,
-      extension,
+      mimeType,
       width,
       height,
       isAlpha,

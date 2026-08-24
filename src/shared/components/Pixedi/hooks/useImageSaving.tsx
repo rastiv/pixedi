@@ -40,14 +40,14 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       if (actions.resize)
         processor.resize(actions.resize.width, actions.resize.height);
 
-      const { newBlob, previewBlob, extension, width, height, isAlpha } =
+      const { newBlob, previewBlob, mimeType, width, height, isAlpha } =
         await processor.get(settings);
 
       await onSave(newBlob);
 
       setState(
         getInitialState(
-          extension,
+          mimeType,
           width,
           height,
           newBlob,

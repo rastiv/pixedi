@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 type UseImageLoader = {
   loading: boolean;
   error: string;
-  extension: string;
+  mimeType: string;
   width: number;
   height: number;
   originalBlob: Blob | null;
@@ -17,7 +17,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
     error: "",
     width: 0,
     height: 0,
-    extension: "",
+    mimeType: "",
     originalBlob: null,
     previewUrl: "",
     isAlpha: false,
@@ -43,7 +43,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
         error?: string;
         originalBlob: Blob;
         previewBlob: Blob;
-        extension: string;
+        mimeType: string;
         width: number;
         height: number;
         isAlpha: boolean;
@@ -59,7 +59,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
         setState({
           loading: false,
           error: "",
-          extension: result.extension,
+          mimeType: result.mimeType,
           width: result.width,
           height: result.height,
           originalBlob: result.originalBlob,

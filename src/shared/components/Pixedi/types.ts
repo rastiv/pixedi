@@ -98,7 +98,7 @@ export type Settings = {
 export type ProcessedImage = {
   newBlob: Blob;
   previewBlob: Blob;
-  extension: string;
+  mimeType: string;
   width: number;
   height: number;
   isAlpha: boolean;

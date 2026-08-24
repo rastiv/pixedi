@@ -27,7 +27,7 @@ const secondEditedItem = {
 
 const wrapper = ({ children }: PropsWithChildren) => (
   <PixediProvider
-    extension="png"
+    mimeType="png"
     previewUrl="data:image/png;base64,initial"
     originalBlob={new Blob([], { type: "image/png" })}
     width={initialItem.width}
@@ -47,7 +47,7 @@ describe("PixediProvider", () => {
       items: [initialItem],
       pointer: 0,
     });
-    expect(result.current.extension).toBe("png");
+    expect(result.current.mimeType).toBe("png");
     expect(result.current.currentAction).toBeNull();
     expect(result.current.getLastHistoryItem()).toEqual(initialItem);
   });
