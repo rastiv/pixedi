@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
 import { usePixediContext } from "../provider/usePixediContext";
 import { getInitalCrop } from "../utils/crop";
@@ -19,7 +19,10 @@ export const CropInteractBox = () => {
   const ratio =
     currentAction?.name === ActionName.CROP ? currentAction.args.ratio : 1;
 
-  const initialCrop = getInitalCrop(ratio, width, height);
+  const initialCrop = useMemo(
+    () => getInitalCrop(ratio, width, height),
+    [ratio, width, height],
+  );
   const { x, y, w, h } = initialCrop;
 
   useEffect(() => {

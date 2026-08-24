@@ -43,7 +43,7 @@ export const ResizeTools = () => {
 
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
-      (parseInt(e.target.value) / currentWidth) * 100,
+      (parseInt(e.target?.value ?? "1") / currentWidth) * 100,
       currentWidth,
       currentHeight,
     );

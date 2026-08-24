@@ -23,7 +23,7 @@ export const FlipTools = () => {
   const handleFlipVertical = () => {
     setFlipVertical((prev) => !prev);
     setCurrentAction({
-      name: "flip",
+      name: ActionName.FLIP,
       args: { horizontal: flipHorizontal, vertical: !flipVertical },
     });
   };
@@ -38,10 +38,11 @@ export const FlipTools = () => {
       width,
       height,
       action: {
-        name: "flip",
+        name: ActionName.FLIP,
         args: { horizontal: flipHorizontal, vertical: flipVertical },
       },
     });
+    setSidebar(true);
   };
 
   return (

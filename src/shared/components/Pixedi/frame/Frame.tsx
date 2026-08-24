@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ResizeTools } from "../resize";
 import { CropTools, CropInteractBox } from "../crop";
@@ -10,10 +9,7 @@ import styles from "./Frame.module.css";
 import rootStyles from "../index.module.css";
 
 export const Frame = () => {
-  const { getLastHistoryItem, currentAction, isAlpha } = usePixediContext();
-  const frameRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-  const { width, height } = getLastHistoryItem();
+  const { currentAction } = usePixediContext();
 
   const isCrop = currentAction?.name === ActionName.CROP;
   const isResize = currentAction?.name === ActionName.RESIZE;
@@ -22,20 +18,6 @@ export const Frame = () => {
   const isFade = isCrop;
 
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
-
-  useEffect(() => {
-    if (frameRef.current) {
-      frameRef.current.style.aspectRatio = `${width} / ${height}`;
-      frameRef.current.style.background = isAlpha
-        ? "transparent"
-        : "var(--color-black)";
-      frameRef.current.style.transform = "";
-    }
-    if (imageRef.current) {
-      imageRef.current.style.transform = "";
-      imageRef.current.style.background = "transparent";
-    }
-  }, [currentAction, isAlpha, height, width]);
 
   return (
     <div className={frameClassName}>

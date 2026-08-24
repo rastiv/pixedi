@@ -1,1 +1,1 @@
-export { Preview } from "./Peview";
+export { Preview } from "./Preview";

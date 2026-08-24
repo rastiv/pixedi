@@ -2,7 +2,7 @@ import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PixediProvider } from "../provider/PixediProvider";
 import { usePixediContext } from "../provider/usePixediContext";
-import { Preview } from "./Peview";
+import { Preview } from "./Preview";
 
 const SetRotation = ({ degrees }: { degrees: number }) => {
   const { setCurrentAction } = usePixediContext();
