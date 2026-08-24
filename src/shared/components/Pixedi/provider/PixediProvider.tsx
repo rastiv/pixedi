@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { PixediContextType } from "./initialState";
-import type { Action, HistoryItem, Settings } from "../types";
+import type { Action, HistoryItem, ProcessedImage, Settings } from "../types";
 
 type PixediProviderProps = {
   children: React.ReactNode;
@@ -57,12 +57,21 @@ export const PixediProvider = ({
       };
     });
 
-  const getLastHistoryItem = () =>
-    state.history.items.at(state.history.pointer)!;
-
-  const getLastRotation = () => {
+  const getLastHistoryItem = (): HistoryItem => {
     const { items, pointer } = state.history;
-    if (!items) return 0;
+    return (
+      items.at(pointer) ??
+      items.at(0) ?? {
+        width: 0,
+        height: 0,
+        action: { name: "initial", args: null },
+      }
+    );
+  };
+
+  const getLastRotation = (): number => {
+    const { items, pointer } = state.history;
+    if (items.length === 0 || pointer < 0) return 0;
     const lastRotateItem = items
       .slice(0, pointer + 1)
       .findLast((item) => item.action.name === "rotate");
@@ -104,9 +113,22 @@ export const PixediProvider = ({
 
   const eventBus = useMemo(() => new EventTarget(), []);
 
+  const setImage = (payload: ProcessedImage) =>
+    setState(
+      getInitialState(
+        payload.mimeType,
+        payload.width,
+        payload.height,
+        payload.newBlob,
+        URL.createObjectURL(payload.previewBlob),
+        payload.isAlpha,
+        settings,
+      ),
+    );
+
   const value = {
     ...state,
-    setState,
+    setImage,
     setCurrentAction,
     getLastHistoryItem,
     getLastRotation,

@@ -1,9 +1,9 @@
 import { createContext } from "react";
 import { type PixediContextType } from "./initialState";
-import type { Action, HistoryItem } from "../types";
+import type { Action, HistoryItem, ProcessedImage } from "../types";
 
 type StoreContextType = PixediContextType & {
-  setState: (payload: PixediContextType) => void;
+  setImage: (payload: ProcessedImage) => void;
   setCurrentAction: (payload: Action | null) => void;
   getLastHistoryItem: () => HistoryItem;
   getLastRotation: () => number;
