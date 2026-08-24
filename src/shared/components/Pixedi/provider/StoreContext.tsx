@@ -12,6 +12,7 @@ type StoreContextType = PixediContextType & {
   undo: () => void;
   redo: () => void;
   setSidebar: (payload: boolean) => void;
+  eventBus: EventTarget;
 };
 
 export const StoreContext = createContext<StoreContextType | undefined>(

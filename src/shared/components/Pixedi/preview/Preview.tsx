@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { getPreview } from "../utils/preview";
-import { eventBus } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
 import { ActionName } from "../types";
@@ -13,7 +12,7 @@ type PreviewType = {
 };
 
 export const Preview = ({ isClipped, style = {} }: PreviewType) => {
-  const { history, previewUrl, currentAction, getLastRotation } =
+  const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -77,7 +76,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
       eventBus.removeEventListener("resize-update", onResizeUpdate);
       eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
     };
-  }, [isClipped]);
+  }, [isClipped, eventBus]);
 
   return (
     <div

@@ -20,8 +20,13 @@ const sizeCalculator = (scale: number, width: number, height: number) => {
 };
 
 export const ResizeTools = () => {
-  const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
-    usePixediContext();
+  const {
+    getLastHistoryItem,
+    setCurrentAction,
+    addToHistory,
+    setSidebar,
+    eventBus,
+  } = usePixediContext();
   const { width: currentWidth, height: currentHeight } = getLastHistoryItem();
   const [width, setWidth] = useState(currentWidth);
   const [height, setHeight] = useState(currentHeight);
@@ -38,7 +43,7 @@ export const ResizeTools = () => {
     setWidth(updatedWidth);
     setHeight(updatedHeight);
     setScale(updatedScale);
-    emitResizeUpdate(updatedScale);
+    emitResizeUpdate(eventBus, updatedScale);
   };
 
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +55,7 @@ export const ResizeTools = () => {
     setWidth(updatedWidth);
     setHeight(updatedHeight);
     setScale(updatedScale);
-    emitResizeUpdate(updatedScale);
+    emitResizeUpdate(eventBus, updatedScale);
   };
 
   const handleChangeHeight = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,11 +67,11 @@ export const ResizeTools = () => {
     setHeight(updatedHeight);
     setWidth(updatedWidth);
     setScale(updatedScale);
-    emitResizeUpdate(updatedScale);
+    emitResizeUpdate(eventBus, updatedScale);
   };
 
   const handleClose = () => {
-    emitResizeUpdate(100);
+    emitResizeUpdate(eventBus, 100);
     setCurrentAction(null);
     setSidebar(true);
   };
@@ -83,7 +88,7 @@ export const ResizeTools = () => {
         },
       },
     });
-    emitResizeUpdate(100);
+    emitResizeUpdate(eventBus, 100);
     setSidebar(true);
   };
 
@@ -99,7 +104,7 @@ export const ResizeTools = () => {
       setHeight(updatedHeight);
       setWidth(updatedWidth);
       setScale(scale);
-      emitResizeUpdate(scale);
+      emitResizeUpdate(eventBus, scale);
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -134,7 +139,7 @@ export const ResizeTools = () => {
     window.addEventListener("touchmove", handleTouchMove, { signal });
 
     return () => controller.abort();
-  }, [currentHeight, currentWidth, mobile, width]);
+  }, [currentHeight, currentWidth, mobile, width, eventBus]);
 
   return (
     <div className={styles.resize}>

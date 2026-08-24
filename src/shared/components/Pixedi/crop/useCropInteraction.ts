@@ -31,7 +31,7 @@ type UseCropInteractionArgs = {
 };
 
 export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
-  const { currentAction, getLastHistoryItem } = usePixediContext();
+  const { currentAction, getLastHistoryItem, eventBus } = usePixediContext();
   const mobile = useMobile();
 
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -152,7 +152,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
       if (!lastHistoryItem) return;
       const { width: imgW, height: imgH } = lastHistoryItem;
 
-      emitCropUpdate({
+      emitCropUpdate(eventBus, {
         x: Math.round((xPct / 100) * imgW),
         y: Math.round((yPct / 100) * imgH),
         w: Math.round((wPct / 100) * imgW),
@@ -160,7 +160,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
       });
 
       clipPathRef.current = { x: xPct, y: yPct, w: wPct, h: hPct };
-      emitClipPathUpdate(clipPathRef.current);
+      emitClipPathUpdate(eventBus, clipPathRef.current);
     };
 
     const handleDrag = (
@@ -191,7 +191,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
 
       const { width: imgW, height: imgH } = getLastHistoryItem();
 
-      emitCropUpdate({
+      emitCropUpdate(eventBus, {
         x: Math.round((leftPct / 100) * imgW),
         y: Math.round((topPct / 100) * imgH),
         w: Math.round((wPct / 100) * imgW),
@@ -199,7 +199,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
       });
 
       clipPathRef.current = { x: leftPct, y: topPct, w: wPct, h: hPct };
-      emitClipPathUpdate(clipPathRef.current);
+      emitClipPathUpdate(eventBus, clipPathRef.current);
     };
 
     const handleMoveEnd = () => {
@@ -229,7 +229,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     document.addEventListener("touchend", handleMoveEnd, { signal });
 
     return () => controller.abort();
-  }, [currentAction, getLastHistoryItem, boxRef]);
+  }, [currentAction, getLastHistoryItem, boxRef, eventBus]);
 
   return { handleCropStart };
 };

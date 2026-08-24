@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { PixediContextType } from "./initialState";
@@ -102,6 +102,8 @@ export const PixediProvider = ({
   const setSidebar = (payload: boolean) =>
     setState((store) => ({ ...store, sidebar: payload }));
 
+  const eventBus = useMemo(() => new EventTarget(), []);
+
   const value = {
     ...state,
     setState,
@@ -113,6 +115,7 @@ export const PixediProvider = ({
     undo,
     redo,
     setSidebar,
+    eventBus,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

@@ -9,7 +9,7 @@ import { emitClipPathUpdate } from "../eventBus";
 import styles from "./Crop.module.css";
 
 export const CropInteractBox = () => {
-  const { currentAction, getLastHistoryItem } = usePixediContext();
+  const { currentAction, getLastHistoryItem, eventBus } = usePixediContext();
   const mobile = useMobile();
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -26,8 +26,8 @@ export const CropInteractBox = () => {
   const { x, y, w, h } = initialCrop;
 
   useEffect(() => {
-    emitClipPathUpdate(initialCrop);
-  }, [initialCrop]);
+    emitClipPathUpdate(eventBus, initialCrop);
+  }, [initialCrop, eventBus]);
 
   return (
     <>
