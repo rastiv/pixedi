@@ -1,33 +1,19 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useRef } from "react";
 import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
 import { usePixediContext } from "../provider/usePixediContext";
-import { getInitalCrop } from "../utils/crop";
 import { Preview } from "../preview";
 import { useMobile } from "../hooks";
-import { ActionName } from "../types";
-import { emitClipPathUpdate } from "../eventBus";
 import styles from "./Crop.module.css";
 
 export const CropInteractBox = () => {
-  const { currentAction, getLastHistoryItem, eventBus } = usePixediContext();
+  const { getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
   const boxRef = useRef<HTMLDivElement>(null);
 
-  const { handleCropStart } = useCropInteraction({ boxRef });
+  const { handleCropStart, initialCrop } = useCropInteraction({ boxRef });
 
   const { width, height } = getLastHistoryItem();
-  const ratio =
-    currentAction?.name === ActionName.CROP ? currentAction.args.ratio : 1;
-
-  const initialCrop = useMemo(
-    () => getInitalCrop(ratio, width, height),
-    [ratio, width, height],
-  );
   const { x, y, w, h } = initialCrop;
-
-  useEffect(() => {
-    emitClipPathUpdate(eventBus, initialCrop);
-  }, [initialCrop, eventBus]);
 
   return (
     <>

@@ -3,13 +3,6 @@ import type { CropRect, Direction, Sizes } from "../types";
 
 const minSize = 32;
 
-const getDefaultCrop = (el: HTMLElement): CropRect => ({
-  x: el.offsetLeft,
-  y: el.offsetTop,
-  w: el.offsetWidth,
-  h: el.offsetHeight,
-});
-
 const getCropTL = (
   isFree: boolean,
   ratio: number,
@@ -20,7 +13,7 @@ const getCropTL = (
   width: number,
   height: number,
   crop: CropRect,
-  el: HTMLElement,
+  fallback: CropRect,
 ): CropRect => {
   let { x, y, w, h } = crop;
 
@@ -59,7 +52,7 @@ const getCropTL = (
       y += difH;
     }
     if (x < 0 || y < 0 || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
+      return fallback;
     }
   }
 
@@ -76,7 +69,7 @@ const getCropTR = (
   width: number,
   height: number,
   crop: CropRect,
-  el: HTMLElement,
+  fallback: CropRect,
 ): CropRect => {
   const { x } = crop;
   let { y, w, h } = crop;
@@ -109,7 +102,7 @@ const getCropTR = (
       y += difH;
     }
     if (w + x > width || y < 0 || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
+      return fallback;
     }
   }
 
@@ -126,7 +119,7 @@ const getCropBL = (
   width: number,
   height: number,
   crop: CropRect,
-  el: HTMLElement,
+  fallback: CropRect,
 ): CropRect => {
   const { y } = crop;
   let { x, w, h } = crop;
@@ -159,7 +152,7 @@ const getCropBL = (
       x -= difW;
     }
     if (h + y > height || x < 0 || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
+      return fallback;
     }
   }
 
@@ -176,7 +169,7 @@ const getCropBR = (
   width: number,
   height: number,
   crop: CropRect,
-  el: HTMLElement,
+  fallback: CropRect,
 ): CropRect => {
   const { x, y } = crop;
   let { w, h } = crop;
@@ -202,7 +195,7 @@ const getCropBR = (
       h += difH;
     }
     if (h + y > height || w + x > width || w < minSize || h < minSize) {
-      return getDefaultCrop(el);
+      return fallback;
     }
   }
 
@@ -220,7 +213,7 @@ export const getCropPoints = (
   width: number,
   height: number,
   crop: CropRect,
-  el: HTMLElement,
+  fallback: CropRect,
 ): CropRect => {
   if (dir === "tl")
     return getCropTL(
@@ -233,7 +226,7 @@ export const getCropPoints = (
       width,
       height,
       crop,
-      el,
+      fallback,
     );
   if (dir === "tr")
     return getCropTR(
@@ -246,7 +239,7 @@ export const getCropPoints = (
       width,
       height,
       crop,
-      el,
+      fallback,
     );
   if (dir === "bl")
     return getCropBL(
@@ -259,7 +252,7 @@ export const getCropPoints = (
       width,
       height,
       crop,
-      el,
+      fallback,
     );
   if (dir === "br")
     return getCropBR(
@@ -272,7 +265,7 @@ export const getCropPoints = (
       width,
       height,
       crop,
-      el,
+      fallback,
     );
   return { x: 0, y: 0, w: 0, h: 0 };
 };
@@ -320,6 +313,35 @@ export const getInitalCrop = (
   // const yPx = Math.round((height - hPx) / 2);
 
   return { x, y, w, h };
+};
+
+// a crop rect stores w/h as percentages of two different axes, so a rect that
+// holds the ratio in frame space drifts off it in image space; re-derive the
+// driven axis from the other one so the saved crop matches the ratio exactly
+export const snapRectToRatio = (
+  crop: CropRect,
+  ratio: number,
+  width: number,
+  height: number,
+): CropRect => {
+  let wPx = (crop.w / 100) * width;
+  let hPx = (crop.h / 100) * height;
+
+  if (ratio >= 1) {
+    hPx = wPx / ratio;
+  } else {
+    wPx = hPx * ratio;
+  }
+
+  let w = (wPx / width) * 100;
+  let h = (hPx / height) * 100;
+
+  // scale both axes together when the snap overflows, to keep the ratio
+  const overflow = Math.max(w / (100 - crop.x), h / (100 - crop.y), 1);
+  w /= overflow;
+  h /= overflow;
+
+  return { ...crop, w, h };
 };
 
 export const getCropByNewSizes = (

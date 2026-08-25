@@ -4,14 +4,10 @@ import {
   getCropByNewSizes,
   getCropPoints,
   getInitalCrop,
+  snapRectToRatio,
 } from "./crop";
 
-const element = {
-  offsetLeft: 10,
-  offsetTop: 20,
-  offsetWidth: 80,
-  offsetHeight: 60,
-} as HTMLElement;
+const fallback = { x: 10, y: 20, w: 80, h: 60 };
 
 describe("getInitalCrop", () => {
   it.each([
@@ -52,7 +48,7 @@ describe("getCropPoints", () => {
       100,
       100,
       { x: 10, y: 20, w: 40, h: 50 },
-      element,
+      fallback,
     );
 
     expect(crop).toEqual({ x: 10, y: 20, w: 32, h: 50 });
@@ -70,7 +66,7 @@ describe("getCropPoints", () => {
       100,
       100,
       { x: 20, y: 30, w: 40, h: 40 },
-      element,
+      fallback,
     );
 
     expect(crop).toEqual({ x: 20, y: 30, w: 80, h: 70 });
@@ -88,14 +84,14 @@ describe("getCropPoints", () => {
       200,
       200,
       { x: 50, y: 50, w: 80, h: 40 },
-      element,
+      fallback,
     );
 
     expect(crop).toEqual({ x: 50, y: 50, w: 100, h: 50 });
     expect(crop.w / crop.h).toBe(2);
   });
 
-  it("restores the element rectangle for invalid fixed-ratio resizes", () => {
+  it("restores the current rectangle for invalid fixed-ratio resizes", () => {
     const crop = getCropPoints(
       "br",
       false,
@@ -107,10 +103,46 @@ describe("getCropPoints", () => {
       100,
       100,
       { x: 10, y: 20, w: 80, h: 40 },
-      element,
+      fallback,
     );
 
     expect(crop).toEqual({ x: 10, y: 20, w: 80, h: 60 });
+  });
+});
+
+describe("snapRectToRatio", () => {
+  it.each([
+    [1, 6099, 4014],
+    [16 / 9, 6099, 4014],
+    [9 / 16, 4014, 6099],
+  ])(
+    "keeps a %s crop exactly on ratio in image space",
+    (ratio, width, height) => {
+      // a rect the frame rounded off ratio: w/h percentages of different axes
+      const drifted = snapRectToRatio(
+        { x: 12.5, y: 8.5, w: 50.4, h: 75.9 },
+        ratio,
+        width,
+        height,
+      );
+
+      const wPx = (drifted.w / 100) * width;
+      const hPx = (drifted.h / 100) * height;
+
+      expect(Math.round(wPx) / Math.round(hPx)).toBeCloseTo(ratio, 3);
+    },
+  );
+
+  it("scales both axes together when the snapped crop leaves the frame", () => {
+    const snapped = snapRectToRatio(
+      { x: 40, y: 10, w: 60, h: 90 },
+      1,
+      100,
+      100,
+    );
+
+    expect(snapped.x + snapped.w).toBeCloseTo(100);
+    expect(snapped.w).toBeCloseTo(snapped.h);
   });
 });
 
