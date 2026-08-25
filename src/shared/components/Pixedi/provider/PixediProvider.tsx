@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { PixediContextType } from "./initialState";
@@ -37,11 +37,18 @@ export const PixediProvider = ({
     ),
   );
 
+  // the previewUrl prop is owned by the caller (useImageLoader); only urls
+  // created by setImage below belong to this provider and may be revoked here
+  const ownedPreviewUrlRef = useRef<string | null>(null);
+
   useEffect(() => {
     return () => {
-      URL.revokeObjectURL(previewUrl);
+      if (ownedPreviewUrlRef.current) {
+        URL.revokeObjectURL(ownedPreviewUrlRef.current);
+        ownedPreviewUrlRef.current = null;
+      }
     };
-  }, [previewUrl]);
+  }, []);
 
   const setCurrentAction = (payload: Action | null) =>
     setState((store) => ({ ...store, currentAction: payload }));
@@ -119,18 +126,23 @@ export const PixediProvider = ({
 
   const eventBus = useMemo(() => new EventTarget(), []);
 
-  const setImage = (payload: ProcessedImage) =>
+  const setImage = (payload: ProcessedImage) => {
+    if (ownedPreviewUrlRef.current) {
+      URL.revokeObjectURL(ownedPreviewUrlRef.current);
+    }
+    ownedPreviewUrlRef.current = URL.createObjectURL(payload.previewBlob);
     setState(
       getInitialState(
         payload.mimeType,
         payload.width,
         payload.height,
         payload.newBlob,
-        URL.createObjectURL(payload.previewBlob),
+        ownedPreviewUrlRef.current,
         payload.isAlpha,
         settings,
       ),
     );
+  };
 
   const value = {
     ...state,

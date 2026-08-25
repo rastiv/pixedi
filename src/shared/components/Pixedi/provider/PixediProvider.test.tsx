@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { PixediProvider } from "./PixediProvider";
 import { usePixediContext } from "./usePixediContext";
 
@@ -40,6 +40,59 @@ const wrapper = ({ children }: PropsWithChildren) => (
 );
 
 describe("PixediProvider", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("never revokes the previewUrl it does not own", () => {
+    const revokeObjectURL = vi.fn();
+    vi.stubGlobal("URL", { ...URL, revokeObjectURL });
+
+    const { unmount } = renderHook(() => usePixediContext(), { wrapper });
+    unmount();
+
+    expect(revokeObjectURL).not.toHaveBeenCalledWith(
+      "data:image/png;base64,initial",
+    );
+  });
+
+  it("revokes only the preview urls it created through setImage", () => {
+    const revokeObjectURL = vi.fn();
+    const createObjectURL = vi
+      .fn()
+      .mockReturnValueOnce("blob:first")
+      .mockReturnValueOnce("blob:second");
+    vi.stubGlobal("URL", { ...URL, createObjectURL, revokeObjectURL });
+
+    const { result, unmount } = renderHook(() => usePixediContext(), {
+      wrapper,
+    });
+
+    const processed = {
+      mimeType: "png",
+      width: 400,
+      height: 300,
+      newBlob: new Blob([], { type: "image/png" }),
+      previewBlob: new Blob([], { type: "image/webp" }),
+      isAlpha: false,
+    };
+
+    act(() => {
+      result.current.setImage(processed);
+    });
+    expect(result.current.previewUrl).toBe("blob:first");
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+
+    act(() => {
+      result.current.setImage(processed);
+    });
+    expect(result.current.previewUrl).toBe("blob:second");
+    expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith("blob:first");
+
+    unmount();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:second");
+  });
+
   it("initializes the image history and editor state", () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
