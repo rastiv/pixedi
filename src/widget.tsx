@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { injectCSS, removeCSS } from "virtual:css-injected-by-js";
-import type { FuncSaveArgs } from "@/shared/components/Pixedi/types";
+import type { FuncSaveArgs, Settings } from "@/shared/components/Pixedi/types";
 import { Pixedi } from "@/shared/components/Pixedi";
 
 type WidgetTheme = "light" | "dark";
@@ -12,6 +12,7 @@ interface WidgetOptions {
   onSave: FuncSaveArgs;
   onBack: () => void;
   theme?: WidgetTheme;
+  settings?: Settings;
 }
 
 interface PixediWidgetInstance {
@@ -77,6 +78,7 @@ const PixediWidget: PixediWidget = {
           onSave={options.onSave}
           onBack={options.onBack}
           theme={options.theme}
+          settings={options.settings}
         />
       </React.StrictMode>,
     );
