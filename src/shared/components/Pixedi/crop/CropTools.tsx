@@ -32,25 +32,27 @@ export const CropTools = () => {
     if (currentAction?.name !== "crop") {
       return;
     }
-    const { x, y, w, h } = getInitalCrop(
-      currentAction.args.ratio || 1,
-      width,
-      height,
-    );
+    const initialCrop = getInitalCrop(currentAction.args.ratio, width, height);
+    const { x, y, w, h } = initialCrop;
     const xPx = Math.round((x / 100) * width);
     const yPx = Math.round((y / 100) * height);
     const wPx = Math.round((w / 100) * width);
     const hPx = Math.round((h / 100) * height);
+
+    // seed the rect that gets saved: the crop box emits its initial rect while
+    // mounting, which happens before this listener exists
+    clipPathRef.current = initialCrop;
 
     if (leftRef.current) leftRef.current.textContent = xPx.toString();
     if (topRef.current) topRef.current.textContent = yPx.toString();
     if (widthRef.current) widthRef.current.textContent = wPx.toString();
     if (heightRef.current) heightRef.current.textContent = hPx.toString();
 
+    // crop-update carries image pixels for display only; clip-path-update is
+    // the one in frame percentages that clipPathRef stores
     const onCropUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<CropRect>;
       const { x, y, w, h } = customEvent.detail;
-      clipPathRef.current = customEvent.detail;
       if (leftRef.current) leftRef.current.textContent = x.toString();
       if (topRef.current) topRef.current.textContent = y.toString();
       if (widthRef.current) widthRef.current.textContent = w.toString();
