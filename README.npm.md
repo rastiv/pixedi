@@ -49,9 +49,10 @@ function App() {
     <div style={{ width: "100vw", height: "100vh" }}>
       <Pixedi
         image="https://example.com/photo.jpg"
-        onSave={async (base64) => {
-          // Upload or persist the edited image
-          console.log(base64);
+        onSave={async (image) => {
+          // image is a Blob by default, or a base64 data URI when
+          // settings.exportAs is "base64"
+          console.log(image);
         }}
         onBack={() => {
           // Handle back/cancel action
@@ -61,15 +62,44 @@ function App() {
     </div>
   );
 }
+
+function AppBase64() {
+  return (
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <Pixedi
+        image="https://example.com/photo.jpg"
+        onSave={async (base64) => {
+          // Receives a base64 data URI: data:image/webp;base64,...
+          console.log(base64);
+        }}
+        onBack={() => {
+          console.log("User cancelled editing");
+        }}
+        settings={{
+          exportAs: "base64",
+        }}
+      />
+    </div>
+  );
+}
 ```
 
 ### Props
 
-| Prop     | Type                                        | Description                                                            |
-| -------- | ------------------------------------------- | ---------------------------------------------------------------------- |
-| `image`  | `string`                                    | URL or base64 data URI of the image to edit.                           |
-| `onSave` | `(base64: string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as base64. |
-| `onBack` | `() => void`                                | Called when the user clicks Back/Cancel.                               |
+| Prop       | Type                                               | Description                                                                                   |
+| ---------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `image`    | `string`                                           | URL or base64 data URI of the image to edit.                                                  |
+| `onSave`   | `(image: Blob \| string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as a `Blob` or a base64 data URI. |
+| `onBack`   | `() => void`                                       | Called when the user clicks Back/Cancel.                                                      |
+| `settings` | `Settings`                                         | Optional editor settings (see below).                                                         |
+
+### Settings
+
+| Setting      | Type                 | Default  | Description                                                                                     |
+| ------------ | -------------------- | -------- | ----------------------------------------------------------------------------------------------- |
+| `quality`    | `number`             | `0.85`   | Output compression quality (`0`–`1`) for JPEG/WebP.                                             |
+| `saveAsWEBP` | `boolean`            | `false`  | Encode the final image as WebP.                                                                 |
+| `exportAs`   | `"blob" \| "base64"` | `"blob"` | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`). |
 
 ## Widget CDN
 

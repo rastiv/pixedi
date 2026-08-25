@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
-import { imageProcessor } from "../utils/imageProcessor";
+import { imageProcessor, blobToBase64 } from "../utils/imageProcessor";
 import { getActions } from "../utils/preview";
 import type { FuncSaveArgs } from "../types";
 
@@ -42,7 +42,12 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       const { newBlob, previewBlob, mimeType, width, height, isAlpha } =
         await processor.get(settings);
 
-      await onSave(newBlob);
+      let base64 = "";
+      if (settings.exportAs === "base64") {
+        base64 = await blobToBase64(newBlob);
+      }
+
+      await onSave(base64 || newBlob);
 
       setImage({ newBlob, previewBlob, mimeType, width, height, isAlpha });
     } catch (error) {

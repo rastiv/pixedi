@@ -72,7 +72,7 @@ export type History = {
   items: Array<HistoryItem>;
 };
 
-export type FuncSaveArgs = (blob: Blob) => Promise<void> | void;
+export type FuncSaveArgs = (payload: Blob | string) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 
@@ -93,6 +93,7 @@ export type Preset = {
 export type Settings = {
   quality?: number;
   saveAsWEBP?: boolean;
+  exportAs?: "blob" | "base64";
 };
 
 export type ProcessedImage = {

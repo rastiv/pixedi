@@ -4,6 +4,22 @@ import type {
 } from "@/shared/components/Pixedi/types";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
 
+export const blobToBase64 = (blob: Blob): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        resolve(result);
+      } else {
+        reject(new Error("Failed to read blob as base64"));
+      }
+    };
+    reader.onerror = () =>
+      reject(reader.error ?? new Error("FileReader error"));
+    reader.readAsDataURL(blob);
+  });
+
 export async function imageProcessor(blob: Blob) {
   const bitmap = await createImageBitmap(blob);
   const inputMimeType = blob.type || "image/png";
