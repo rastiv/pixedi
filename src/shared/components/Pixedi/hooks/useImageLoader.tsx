@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import ImageLoadWorker from "../workers/imageLoad.ts?worker&inline";
 
 type UseImageLoader = {
   loading: boolean;
@@ -30,10 +31,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
       return;
     }
 
-    const worker = new Worker(
-      new URL("../workers/imageLoad.ts", import.meta.url),
-      { type: "module" },
-    );
+    const worker = new ImageLoadWorker();
 
     worker.postMessage(src);
 

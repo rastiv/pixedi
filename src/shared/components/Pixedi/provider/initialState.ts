@@ -14,8 +14,8 @@ export type PixediContextType = {
 };
 
 export const initialSettings: Settings = {
-  quality: 0.65,
-  saveAsWEBP: false,
+  quality: 0.85,
+  saveAsWEBP: true,
 };
 
 export const getInitialState = (
