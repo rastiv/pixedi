@@ -7,7 +7,7 @@ import { SidebarPresets } from "./SidebarPresets";
 import { SidebarFlip } from "./SidebarFlip";
 import SidebarRotate from "./SidebarRotate";
 import { usePixediContext } from "../provider/usePixediContext";
-import buttonStyles from "../ui/button/button.module.css";
+import buttonStyles from "../ui/button/Button.module.css";
 import styles from "./Sidebar.module.css";
 
 export const Sidebar = () => {
