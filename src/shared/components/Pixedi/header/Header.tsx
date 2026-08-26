@@ -3,7 +3,7 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import { useImageSaving } from "../hooks/useImageSaving";
 import type { FuncSaveArgs } from "../types";
-import buttonStyles from "../ui/button/button.module.css";
+import buttonStyles from "../ui/button/Button.module.css";
 import styles from "./Header.module.css";
 
 type HeaderProps = {
