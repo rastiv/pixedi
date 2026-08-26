@@ -1,0 +1,125 @@
+:global(:host) {
+  display: block;
+  height: 100%;
+}
+:global(:host) * {
+  box-sizing: border-box;
+}
+.root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  font-family: var(--font-sans);
+
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma,
+    Helvetica, Arial, sans-serif;
+  --color-white: #fff;
+  --color-white-fade: color-mix(in srgb, var(--color-white) 30%, transparent);
+  --color-black: #000;
+  --color-transparent: transparent;
+  --color-red: oklch(0.637 0.237 25.331);
+  --color-green: oklch(0.768 0.188 151.716);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.756 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --accent-blue: oklch(0.609 0.221 251.687);
+  --accent-blue-light: oklch(0.96 0.02 250);
+  --accent-blue-fade: color-mix(in srgb, var(--accent-blue) 60%, transparent);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --overlay-bg: color-mix(in srgb, var(--color-black) 50%, transparent);
+  --overlay-bg-white: color-mix(in srgb, var(--color-white) 80%, transparent);
+}
+
+.root[data-theme="dark"] {
+  --background: oklch(0.245 0 0);
+  --foreground: oklch(0.785 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.245 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --accent-blue-light: oklch(0.25 0.06 250);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --overlay-bg: color-mix(in srgb, var(--color-black) 75%, transparent);
+}
+
+.root h1,
+.root h2,
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.textRed {
+  color: var(--color-red);
+}
+.bgRed {
+  background-color: var(--color-red);
+}
+.bgGreen {
+  background-color: var(--color-green);
+}
+.textGreen {
+  color: var(--color-green);
+}
+.mask {
+  background-color: var(--overlay-bg);
+}
+.semibold {
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+.bold {
+  font-weight: bold;
+  letter-spacing: 0.4px;
+}
+.system {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--muted-foreground);
+  background-color: var(--background);
+}
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+}
+.main {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  background-color: var(--background);
+}
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  min-height: 0;
+  overflow: hidden;
+}

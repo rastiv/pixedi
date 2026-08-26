@@ -5,7 +5,9 @@ export const AppLayout = () => {
   return (
     <main>
       <Header />
-      <Outlet />
+      <section>
+        <Outlet />
+      </section>
     </main>
   );
 };

@@ -6,13 +6,13 @@
     "outDir": "./dist/lib",
     "rootDir": "."
   },
-  "include": ["src/shared/components/ImageEditor/**/*"],
+  "include": ["src/shared/components/Pixedi/**/*"],
   "exclude": [
-    "src/shared/components/ImageEditor/**/*.stories.tsx",
-    "src/shared/components/ImageEditor/**/*.stories.ts",
-    "src/shared/components/ImageEditor/**/*.test.tsx",
-    "src/shared/components/ImageEditor/**/*.test.ts",
-    "src/shared/components/ImageEditor/**/*.spec.tsx",
-    "src/shared/components/ImageEditor/**/*.spec.ts"
+    "src/shared/components/Pixedi/**/*.stories.tsx",
+    "src/shared/components/Pixedi/**/*.stories.ts",
+    "src/shared/components/Pixedi/**/*.test.tsx",
+    "src/shared/components/Pixedi/**/*.test.ts",
+    "src/shared/components/Pixedi/**/*.spec.tsx",
+    "src/shared/components/Pixedi/**/*.spec.ts"
   ]
 }

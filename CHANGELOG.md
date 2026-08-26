@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.0
+
+- Added a rotate tool with 90°, 180°, and 270° rotation options.
+- Improved history management by relying on blob URLs.
+- Added preview animations.
+- Redesigned the crop rectangle.
+- Expanded the settings with two new options: `saveAsWEBP` and `exportAs`.
+
 ## 1.1.0
 
 - Added a flip tool with horizontal and vertical mirroring and live preview.

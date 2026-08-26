@@ -1,0 +1,38 @@
+.preview {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  overflow: hidden;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
+  box-sizing: border-box;
+  transition: all 0.2s linear;
+}
+
+.rotate {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s linear;
+}
+
+.flip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: all 0.2s linear;
+}
+
+.image {
+  display: block;
+  position: absolute;
+  max-width: none;
+  max-height: none;
+  transition: all 0.2s linear;
+}

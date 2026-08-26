@@ -1,29 +1,9 @@
 .homePage {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
-  overflow: hidden;
-}
-
-.homePage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: var(--accent);
-  filter: blur(100px);
-  opacity: 0.2;
-  border-radius: 100%;
-  pointer-events: none;
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .commingsoon {
