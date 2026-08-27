@@ -91,7 +91,27 @@ describe("getCropPoints", () => {
     expect(crop.w / crop.h).toBe(2);
   });
 
-  it("restores the current rectangle for invalid fixed-ratio resizes", () => {
+  it("reaches the top boundary when a fixed-ratio crop is expanded past it", () => {
+    const crop = getCropPoints(
+      "tl",
+      false,
+      1,
+      100,
+      100,
+      98,
+      98,
+      600,
+      400,
+      { x: 80.6, y: 0.6, w: 399.4, h: 399.4 },
+      { x: 80.6, y: 0.6, w: 399.4, h: 399.4 },
+    );
+
+    expect(crop.y).toBe(0);
+    expect(crop.h).toBe(400);
+    expect(crop.w / crop.h).toBe(1);
+  });
+
+  it("constrains fixed-ratio resizes to the frame boundary", () => {
     const crop = getCropPoints(
       "br",
       false,
@@ -106,7 +126,7 @@ describe("getCropPoints", () => {
       fallback,
     );
 
-    expect(crop).toEqual({ x: 10, y: 20, w: 80, h: 60 });
+    expect(crop).toEqual({ x: 10, y: 20, w: 90, h: 45 });
   });
 });
 
