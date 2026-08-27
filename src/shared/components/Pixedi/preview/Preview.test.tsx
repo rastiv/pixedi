@@ -17,6 +17,40 @@ const SetRotation = ({ degrees }: { degrees: number }) => {
   );
 };
 
+const PreviewControls = () => {
+  const { setCurrentAction, eventBus } = usePixediContext();
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          setCurrentAction({
+            name: "resize",
+            args: { width: 1200, height: 900 },
+          });
+          eventBus.dispatchEvent(
+            new CustomEvent<number>("resize-update", { detail: 150 }),
+          );
+        }}
+      >
+        Resize
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          setCurrentAction({
+            name: "crop",
+            args: { id: "1:1", ratio: 1, isFree: false },
+          })
+        }
+      >
+        Crop
+      </button>
+    </>
+  );
+};
+
 const renderPreview = (degrees: number) => {
   const { container } = render(
     <PixediProvider
@@ -44,6 +78,40 @@ const renderPreview = (degrees: number) => {
 
   return { preview: preview!, rotateLayer: rotateLayer! };
 };
+
+describe("Preview resize geometry", () => {
+  it("resets an unsaved resize scale when another action is selected", () => {
+    const { container, getByText } = render(
+      <PixediProvider
+        mimeType="png"
+        previewUrl="data:image/png;base64,initial"
+        originalBlob={new Blob([], { type: "image/png" })}
+        width={800}
+        height={600}
+        settings={{}}
+        isAlpha={false}
+      >
+        <Preview />
+        <PreviewControls />
+      </PixediProvider>,
+    );
+    const preview =
+      container.querySelector("img")!.parentElement!.parentElement!
+        .parentElement!;
+
+    fireEvent.click(getByText("Resize"));
+    expect(preview.style.transform).toBe("scale(1.5)");
+
+    fireEvent.click(getByText("Crop"));
+    expect(preview.style.transform).toBe("scale(1)");
+    expect(preview.style.transition).toBe("none");
+    expect(
+      Array.from(preview.querySelectorAll<HTMLElement>("*")).every(
+        (element) => element.style.transition === "none",
+      ),
+    ).toBe(true);
+  });
+});
 
 describe("Preview rotation geometry", () => {
   it.each([

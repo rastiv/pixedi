@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { getPreview } from "../utils/preview";
 import { usePixediContext } from "../provider/usePixediContext";
 import type { CropRect } from "../types";
@@ -15,6 +15,36 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
   const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
+  const previousActionRef = useRef(currentAction?.name);
+
+  useLayoutEffect(() => {
+    const previousAction = previousActionRef.current;
+    const nextAction = currentAction?.name;
+    previousActionRef.current = nextAction;
+
+    if (!previousAction || !nextAction || previousAction === nextAction) return;
+
+    const preview = previewRef.current;
+    if (!preview) return;
+
+    const elements = [preview, ...preview.querySelectorAll<HTMLElement>("*")];
+    elements.forEach((element) => {
+      element.style.transition = "none";
+    });
+    preview.getBoundingClientRect();
+
+    const restoreTransitions = () => {
+      elements.forEach((element) => {
+        element.style.removeProperty("transition");
+      });
+    };
+    const frame = requestAnimationFrame(restoreTransitions);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      restoreTransitions();
+    };
+  }, [currentAction?.name]);
 
   const newHistoryItem = [];
   if (currentAction) {
@@ -52,6 +82,10 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
       previewRef.current.style.transition = "none";
     }
 
+    if (currentAction?.name !== ActionName.RESIZE && previewRef.current) {
+      previewRef.current.style.transform = "scale(1)";
+    }
+
     const onResizeUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<number>;
       const scale = customEvent.detail;
@@ -76,7 +110,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
       eventBus.removeEventListener("resize-update", onResizeUpdate);
       eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
     };
-  }, [isClipped, eventBus]);
+  }, [isClipped, currentAction?.name, eventBus]);
 
   return (
     <div
