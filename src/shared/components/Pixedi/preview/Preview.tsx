@@ -16,13 +16,18 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
   const previousActionRef = useRef(currentAction?.name);
+  const previousPreviewUrlRef = useRef(previewUrl);
 
   useLayoutEffect(() => {
     const previousAction = previousActionRef.current;
     const nextAction = currentAction?.name;
+    const previewChanged = previousPreviewUrlRef.current !== previewUrl;
     previousActionRef.current = nextAction;
+    previousPreviewUrlRef.current = previewUrl;
 
-    if (!previousAction || !nextAction || previousAction === nextAction) return;
+    const actionChanged =
+      previousAction && nextAction && previousAction !== nextAction;
+    if (!actionChanged && !previewChanged) return;
 
     const preview = previewRef.current;
     if (!preview) return;
@@ -44,7 +49,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
       cancelAnimationFrame(frame);
       restoreTransitions();
     };
-  }, [currentAction?.name]);
+  }, [currentAction?.name, previewUrl]);
 
   const newHistoryItem = [];
   if (currentAction) {

@@ -1,8 +1,10 @@
-import { fireEvent, render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { PixediProvider } from "../provider/PixediProvider";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Preview } from "./Preview";
+
+afterEach(cleanup);
 
 const SetRotation = ({ degrees }: { degrees: number }) => {
   const { setCurrentAction } = usePixediContext();
@@ -18,7 +20,8 @@ const SetRotation = ({ degrees }: { degrees: number }) => {
 };
 
 const PreviewControls = () => {
-  const { setCurrentAction, eventBus } = usePixediContext();
+  const { setCurrentAction, addToHistory, setImage, eventBus } =
+    usePixediContext();
 
   return (
     <>
@@ -46,6 +49,36 @@ const PreviewControls = () => {
         }
       >
         Crop
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          addToHistory({
+            width: 800,
+            height: 600,
+            action: {
+              name: "flip",
+              args: { horizontal: true, vertical: false },
+            },
+          })
+        }
+      >
+        Commit flip
+      </button>
+      <button
+        type="button"
+        onClick={() =>
+          setImage({
+            newBlob: new Blob([], { type: "image/png" }),
+            previewBlob: new Blob([], { type: "image/webp" }),
+            mimeType: "image/png",
+            width: 800,
+            height: 600,
+            isAlpha: false,
+          })
+        }
+      >
+        Replace image
       </button>
     </>
   );
@@ -110,6 +143,47 @@ describe("Preview resize geometry", () => {
         (element) => element.style.transition === "none",
       ),
     ).toBe(true);
+  });
+});
+
+describe("Preview image replacement", () => {
+  it("disables animation when a processed image replaces saved transforms", () => {
+    vi.stubGlobal("URL", {
+      ...URL,
+      createObjectURL: vi.fn(() => "blob:saved-preview"),
+      revokeObjectURL: vi.fn(),
+    });
+    const { container, getByText, unmount } = render(
+      <PixediProvider
+        mimeType="png"
+        previewUrl="data:image/png;base64,initial"
+        originalBlob={new Blob([], { type: "image/png" })}
+        width={800}
+        height={600}
+        settings={{}}
+        isAlpha={false}
+      >
+        <Preview />
+        <PreviewControls />
+      </PixediProvider>,
+    );
+    const image = container.querySelector("img")!;
+    const preview = image.parentElement!.parentElement!.parentElement!;
+
+    fireEvent.click(getByText("Commit flip"));
+    expect(image.parentElement!.style.transform).toBe("scale(-1, 1)");
+
+    fireEvent.click(getByText("Replace image"));
+    expect(image.getAttribute("src")).toBe("blob:saved-preview");
+    expect(preview.style.transition).toBe("none");
+    expect(
+      Array.from(preview.querySelectorAll<HTMLElement>("*")).every(
+        (element) => element.style.transition === "none",
+      ),
+    ).toBe(true);
+
+    unmount();
+    vi.unstubAllGlobals();
   });
 });
 
