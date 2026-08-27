@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.1
+
+- Fix resize reset when switch to other action.
+
 ## 1.2.0
 
 - Added a rotate tool with 90°, 180°, and 270° rotation options.
