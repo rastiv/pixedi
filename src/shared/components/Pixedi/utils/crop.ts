@@ -202,6 +202,42 @@ const getCropBR = (
   return { x, y, w, h };
 };
 
+const getFixedCrop = (
+  dir: Direction,
+  ratio: number,
+  startX: number,
+  startY: number,
+  clientX: number,
+  clientY: number,
+  width: number,
+  height: number,
+  crop: CropRect,
+): CropRect => {
+  const movesLeft = dir === "tl" || dir === "bl";
+  const movesTop = dir === "tl" || dir === "tr";
+  const right = crop.x + crop.w;
+  const bottom = crop.y + crop.h;
+  const deltaX = clientX - startX;
+  const deltaY = clientY - startY;
+  const desiredWidth =
+    ratio >= 1
+      ? crop.w + (movesLeft ? -deltaX : deltaX)
+      : (crop.h + (movesTop ? -deltaY : deltaY)) * ratio;
+  const availableWidth = movesLeft ? right : width - crop.x;
+  const availableHeight = movesTop ? bottom : height - crop.y;
+  const maxWidth = Math.min(availableWidth, availableHeight * ratio);
+  const minimumWidth = Math.max(minSize, minSize * ratio);
+  const w = Math.min(Math.max(desiredWidth, minimumWidth), maxWidth);
+  const h = w / ratio;
+
+  return {
+    x: movesLeft ? right - w : crop.x,
+    y: movesTop ? bottom - h : crop.y,
+    w,
+    h,
+  };
+};
+
 export const getCropPoints = (
   dir: Direction,
   isFree: boolean,
@@ -215,6 +251,20 @@ export const getCropPoints = (
   crop: CropRect,
   fallback: CropRect,
 ): CropRect => {
+  if (!isFree) {
+    return getFixedCrop(
+      dir,
+      ratio,
+      startX,
+      startY,
+      clientX,
+      clientY,
+      width,
+      height,
+      crop,
+    );
+  }
+
   if (dir === "tl")
     return getCropTL(
       isFree,
