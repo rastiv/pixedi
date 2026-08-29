@@ -23,6 +23,7 @@ export const Pixedi = ({
   theme = "light",
   settings = initialSettings,
 }: PixediProps) => {
+  const defaultSettings = { ...initialSettings, ...settings };
   const {
     loading,
     error,
@@ -32,7 +33,20 @@ export const Pixedi = ({
     originalBlob,
     previewUrl,
     isAlpha,
-  } = useImageLoader(image);
+  } = useImageLoader({
+    src: image,
+    skip: defaultSettings?.tools?.length === 0,
+  });
+
+  if (defaultSettings?.tools?.length === 0) {
+    return (
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.system}>
+          <div className={styles.textRed}>No tools selected.</div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading || error || !originalBlob || !mimeType) {
     return (
@@ -56,14 +70,14 @@ export const Pixedi = ({
       originalBlob={originalBlob}
       previewUrl={previewUrl}
       isAlpha={isAlpha}
-      settings={{ ...initialSettings, ...settings }}
+      settings={defaultSettings}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.main}>
           <Header onSave={onSave} onBack={onBack} />
           <div className={styles.grid}>
-            <Frame />
             <Sidebar />
+            <Frame />
           </div>
         </div>
       </div>

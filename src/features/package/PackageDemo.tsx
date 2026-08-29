@@ -53,16 +53,6 @@ export const PackageDemo = () => {
             </div>
           ))}
         </div>
-        {/* <div className={styles.packageDemoContainer}>
-          <Pixedi
-            image={image?.original || ""}
-            onBack={handleCancel}
-            onSave={handleSave}
-            settings={{
-              quality: 0.85,
-            }}
-          />
-        </div> */}
       </div>
       <Modal
         open={openModal}

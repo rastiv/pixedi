@@ -23,6 +23,11 @@ export const ActionName = {
   FILTERS: "filters",
 } as const;
 
+export type Tools = Exclude<
+  (typeof ActionName)[keyof typeof ActionName],
+  "initial"
+>;
+
 export type Sizes = {
   width: number;
   height: number;
@@ -90,12 +95,6 @@ export type Preset = {
   options: Array<PresetOptions>;
 };
 
-export type Settings = {
-  quality?: number;
-  saveAsWEBP?: boolean;
-  exportAs?: "blob" | "base64";
-};
-
 export type ProcessedImage = {
   newBlob: Blob;
   previewBlob: Blob;
@@ -103,4 +102,11 @@ export type ProcessedImage = {
   width: number;
   height: number;
   isAlpha: boolean;
+};
+
+export type Settings = {
+  tools?: Tools[];
+  quality?: number;
+  saveAsWEBP?: boolean;
+  exportAs?: "blob" | "base64";
 };

@@ -15,47 +15,48 @@ export const Sidebar = () => {
   const isBellowMd = useBellow("md");
 
   return (
-    <>
-      <Button
-        variant="outline"
-        className={styles.settings}
-        onClick={() => setSidebar(true)}
-      >
-        <Settings />
-      </Button>
-      <div
-        className={styles.sidebar}
-        style={{
-          transform:
-            isBellowMd && isSidebarOpen
-              ? "translateX(-320px)"
-              : "translateX(0%)",
-        }}
-      >
-        <div className={styles.container}>
-          <div className={styles.content}>
-            {isBellowMd && (
-              <Button
-                variant="ghost"
-                className={`${styles.closeBtn} ${buttonStyles.rect}`}
-                onClick={() => setSidebar(false)}
-              >
-                <X />
-              </Button>
-            )}
-            <SidebarResize />
-            <Separator className={styles.separator} />
-            <SidebarCrop />
-            <Separator className={styles.separator} />
-            <SidebarPresets />
-            <Separator className={styles.separator} />
-            <div className={styles.flipRotate}>
-              <SidebarFlip />
-              <SidebarRotate />
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <nav style={{ width: "48px", background: "yellow" }}></nav>
+    // <>
+    //   <Button
+    //     variant="outline"
+    //     className={styles.settings}
+    //     onClick={() => setSidebar(true)}
+    //   >
+    //     <Settings />
+    //   </Button>
+    //   <div
+    //     className={styles.sidebar}
+    //     style={{
+    //       transform:
+    //         isBellowMd && isSidebarOpen
+    //           ? "translateX(-320px)"
+    //           : "translateX(0%)",
+    //     }}
+    //   >
+    //     <div className={styles.container}>
+    //       <div className={styles.content}>
+    //         {isBellowMd && (
+    //           <Button
+    //             variant="ghost"
+    //             className={`${styles.closeBtn} ${buttonStyles.rect}`}
+    //             onClick={() => setSidebar(false)}
+    //           >
+    //             <X />
+    //           </Button>
+    //         )}
+    //         <SidebarResize />
+    //         <Separator className={styles.separator} />
+    //         <SidebarCrop />
+    //         <Separator className={styles.separator} />
+    //         <SidebarPresets />
+    //         <Separator className={styles.separator} />
+    //         <div className={styles.flipRotate}>
+    //           <SidebarFlip />
+    //           <SidebarRotate />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </>
   );
 };
