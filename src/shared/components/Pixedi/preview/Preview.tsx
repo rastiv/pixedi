@@ -1,9 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { getPreview } from "../utils/preview";
-import { usePixediContext } from "../provider/usePixediContext";
-import type { CropRect } from "../types";
-import { ActionName } from "../types";
-import { getOrientedSizes } from "../utils/crop";
+import { usePreview } from "./usePreview";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
@@ -12,66 +7,9 @@ type PreviewType = {
 };
 
 export const Preview = ({ isClipped, style = {} }: PreviewType) => {
-  const { history, previewUrl, currentAction, getLastRotation, eventBus } =
-    usePixediContext();
-  const previewRef = useRef<HTMLDivElement>(null);
-  const previousActionRef = useRef(currentAction?.name);
-  const previousPreviewUrlRef = useRef(previewUrl);
-
-  useLayoutEffect(() => {
-    const previousAction = previousActionRef.current;
-    const nextAction = currentAction?.name;
-    const previewChanged = previousPreviewUrlRef.current !== previewUrl;
-    previousActionRef.current = nextAction;
-    previousPreviewUrlRef.current = previewUrl;
-
-    const actionChanged =
-      previousAction && nextAction && previousAction !== nextAction;
-    if (!actionChanged && !previewChanged) return;
-
-    const preview = previewRef.current;
-    if (!preview) return;
-
-    const elements = [preview, ...preview.querySelectorAll<HTMLElement>("*")];
-    elements.forEach((element) => {
-      element.style.transition = "none";
-    });
-    preview.getBoundingClientRect();
-
-    const restoreTransitions = () => {
-      elements.forEach((element) => {
-        element.style.removeProperty("transition");
-      });
-    };
-    const frame = requestAnimationFrame(restoreTransitions);
-
-    return () => {
-      cancelAnimationFrame(frame);
-      restoreTransitions();
-    };
-  }, [currentAction?.name, previewUrl]);
-
-  const newHistoryItem = [];
-  if (currentAction) {
-    const { width, height } = history.items.at(history.pointer)!;
-    newHistoryItem.push({
-      ...(currentAction.name === ActionName.ROTATE
-        ? getOrientedSizes(
-            width,
-            height,
-            getLastRotation(),
-            currentAction.args.degrees,
-          )
-        : { width, height }),
-      action: currentAction,
-    });
-  }
-
-  const historyItems = [
-    ...history.items.slice(0, history.pointer + 1),
-    ...newHistoryItem,
-  ];
   const {
+    previewRef,
+    previewUrl,
     box,
     boxWidth,
     boxHeight,
@@ -80,42 +18,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     rotation,
     flipH,
     flipV,
-  } = getPreview(historyItems);
-
-  useEffect(() => {
-    if (isClipped && previewRef.current) {
-      previewRef.current.style.transition = "none";
-    }
-
-    if (currentAction?.name !== ActionName.RESIZE && previewRef.current) {
-      previewRef.current.style.transform = "scale(1)";
-    }
-
-    const onResizeUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent<number>;
-      const scale = customEvent.detail;
-      if (previewRef.current) {
-        previewRef.current.style.transform = `scale(${scale / 100})`;
-      }
-    };
-
-    const onClipPathUpdate = (event: Event) => {
-      if (!isClipped) return;
-      const customEvent = event as CustomEvent<CropRect>;
-      const { x, y, w, h } = customEvent.detail;
-      if (previewRef.current) {
-        previewRef.current.style.clipPath = `xywh(${x}% ${y}% ${w}% ${h}%)`;
-      }
-    };
-
-    eventBus.addEventListener("resize-update", onResizeUpdate);
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
-
-    return () => {
-      eventBus.removeEventListener("resize-update", onResizeUpdate);
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
-    };
-  }, [isClipped, currentAction?.name, eventBus]);
+  } = usePreview({ isClipped });
 
   return (
     <div

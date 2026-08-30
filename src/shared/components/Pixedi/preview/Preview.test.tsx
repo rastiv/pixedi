@@ -187,6 +187,56 @@ describe("Preview image replacement", () => {
   });
 });
 
+describe("Preview clipping", () => {
+  it.each([
+    { isClipped: true, expected: "xywh(10% 20% 30% 40%)" },
+    { isClipped: false, expected: "" },
+  ])(
+    "applies clip-path updates only when isClipped is $isClipped",
+    ({ isClipped, expected }) => {
+      const ClipPathUpdate = () => {
+        const { eventBus } = usePixediContext();
+
+        return (
+          <button
+            type="button"
+            onClick={() =>
+              eventBus.dispatchEvent(
+                new CustomEvent("clip-path-update", {
+                  detail: { x: 10, y: 20, w: 30, h: 40 },
+                }),
+              )
+            }
+          >
+            Update clip path
+          </button>
+        );
+      };
+      const { container, getByText } = render(
+        <PixediProvider
+          mimeType="png"
+          previewUrl="data:image/png;base64,initial"
+          originalBlob={new Blob([], { type: "image/png" })}
+          width={800}
+          height={600}
+          settings={{}}
+          isAlpha={false}
+        >
+          <Preview isClipped={isClipped} />
+          <ClipPathUpdate />
+        </PixediProvider>,
+      );
+      const preview =
+        container.querySelector("img")!.parentElement!.parentElement!
+          .parentElement!;
+
+      fireEvent.click(getByText("Update clip path"));
+
+      expect(preview.style.clipPath).toBe(expected);
+    },
+  );
+});
+
 describe("Preview rotation geometry", () => {
   it.each([
     { degrees: 0, rotation: 0, viewWidth: 800, viewHeight: 600 },
