@@ -15,6 +15,7 @@ export type PixediContextType = {
 
 export const initialSettings: Settings = {
   tools: ["resize", "crop", "presetCrop", "flip", "rotate", "filters"],
+  infobar: true,
   quality: 0.85,
   saveAsWEBP: false,
   exportAs: "blob",

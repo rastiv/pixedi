@@ -1,4 +1,5 @@
 .header {
+  grid-area: header;
   height: 48px;
   display: flex;
   justify-content: space-between;

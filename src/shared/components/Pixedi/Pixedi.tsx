@@ -2,8 +2,9 @@ import { PixediProvider } from "./provider/PixediProvider";
 import { initialSettings } from "./provider/initialState";
 import { useImageLoader } from "./hooks";
 import { Header } from "./header";
-import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
+import { Infobar } from "./infobar";
+import { Frame } from "./frame";
 import { Loader } from "./assets/icons";
 import type { FuncSaveArgs, Theme, Settings } from "./types";
 import styles from "./index.module.css";
@@ -73,12 +74,15 @@ export const Pixedi = ({
       settings={defaultSettings}
     >
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
-        <div className={styles.main}>
+        <div
+          className={
+            defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
+          }
+        >
           <Header onSave={onSave} onBack={onBack} />
-          <div className={styles.grid}>
-            <Sidebar />
-            <Frame />
-          </div>
+          <Sidebar />
+          {defaultSettings?.infobar && <Infobar />}
+          <Frame />
         </div>
       </div>
     </PixediProvider>

@@ -113,6 +113,7 @@ export type ProcessedImage = {
 
 export type Settings = {
   tools?: Tools[];
+  infobar?: boolean;
   quality?: number;
   saveAsWEBP?: boolean;
   exportAs?: "blob" | "base64";

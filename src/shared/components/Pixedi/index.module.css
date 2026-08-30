@@ -19,7 +19,6 @@
   --color-white: #fff;
   --color-white-fade: color-mix(in srgb, var(--color-white) 40%, transparent);
   --color-black: #000;
-  --color-transparent: transparent;
   --color-red: oklch(0.637 0.237 25.331);
   --color-green: oklch(0.768 0.188 151.716);
   --background: oklch(1 0 0);
@@ -110,18 +109,24 @@
   height: 100%;
   min-height: 480px;
 }
-.main {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  overflow: hidden;
-  background-color: var(--background);
-}
 .grid {
   position: relative;
+  height: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
-  min-height: 0;
-  overflow: hidden;
+  grid-template-rows: 48px 32px 1fr;
+  grid-template-columns: 48px 1fr;
+  grid-template-areas:
+    "header  header"
+    "sidebar infobar"
+    "sidebar frame";
+}
+.gridNoInfobar {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 48px 1fr;
+  grid-template-columns: 48px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar frame";
 }
