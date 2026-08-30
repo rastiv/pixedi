@@ -3,7 +3,6 @@ import { SaveCloseGroup } from "../ui";
 import { ActionName, type CropRect } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
 import { getInitalCrop } from "../utils/crop";
-import rootStyles from "../index.module.css";
 import styles from "./Crop.module.css";
 
 export const CropTools = () => {
@@ -17,54 +16,24 @@ export const CropTools = () => {
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
 
-  const leftRef = useRef<HTMLDivElement>(null);
-  const topRef = useRef<HTMLDivElement>(null);
-  const widthRef = useRef<HTMLDivElement>(null);
-  const heightRef = useRef<HTMLDivElement>(null);
   const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
-
-  const handleClose = () => {
-    setCurrentAction(null);
-    setSidebar(true);
-  };
 
   useEffect(() => {
     if (currentAction?.name !== "crop") {
       return;
     }
+
     const initialCrop = getInitalCrop(currentAction.args.ratio, width, height);
-    const { xP, yP, wP, hP } = initialCrop;
-
-    // seed the rect that gets saved: the crop box emits its initial rect while
-    // mounting, which happens before this listener exists
     clipPathRef.current = initialCrop;
-
-    if (leftRef.current) leftRef.current.textContent = xP.toString();
-    if (topRef.current) topRef.current.textContent = yP.toString();
-    if (widthRef.current) widthRef.current.textContent = wP.toString();
-    if (heightRef.current) heightRef.current.textContent = hP.toString();
-
-    // crop-update carries image pixels for display only; clip-path-update is
-    // the one in frame percentages that clipPathRef stores
-    const onCropUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent<CropRect>;
-      const { x, y, w, h } = customEvent.detail;
-      if (leftRef.current) leftRef.current.textContent = x.toString();
-      if (topRef.current) topRef.current.textContent = y.toString();
-      if (widthRef.current) widthRef.current.textContent = w.toString();
-      if (heightRef.current) heightRef.current.textContent = h.toString();
-    };
 
     const onClipPathUpdate = (event: Event) => {
       const customEvent = event as CustomEvent<CropRect>;
       clipPathRef.current = customEvent.detail;
     };
 
-    eventBus.addEventListener("crop-update", onCropUpdate);
     eventBus.addEventListener("clip-path-update", onClipPathUpdate);
 
     return () => {
-      eventBus.removeEventListener("crop-update", onCropUpdate);
       eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
     };
   }, [currentAction, width, height, eventBus]);
@@ -93,36 +62,13 @@ export const CropTools = () => {
     setSidebar(true);
   };
 
+  const handleClose = () => {
+    setCurrentAction(null);
+    setSidebar(true);
+  };
+
   return (
     <div className={styles.tools}>
-      <div className={styles.toolsInfo}>
-        <div className={styles.toolsInfoLabel}>left</div>
-        <div
-          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
-          ref={leftRef}
-        />
-      </div>
-      <div className={styles.toolsInfo}>
-        <div className={styles.toolsInfoLabel}>top</div>
-        <div
-          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
-          ref={topRef}
-        />
-      </div>
-      <div className={styles.toolsInfo}>
-        <div className={styles.toolsInfoLabel}>width</div>
-        <div
-          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
-          ref={widthRef}
-        />
-      </div>
-      <div className={styles.toolsInfo}>
-        <div className={styles.toolsInfoLabel}>height</div>
-        <div
-          className={`${styles.toolsInfoValue} ${rootStyles.semibold}`}
-          ref={heightRef}
-        />
-      </div>
       <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
     </div>
   );

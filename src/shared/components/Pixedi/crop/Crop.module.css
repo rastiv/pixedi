@@ -135,28 +135,33 @@
   align-items: center;
   padding: 0 6px;
   background-color: var(--color-white-fade);
+  box-sizing: border-box;
 }
 .info b {
   font-weight: 600;
   transform: translateY(1px);
 }
 .infoX {
-  top: -8px;
+  top: -12px;
   left: 16px;
+  border-left: solid 2px var(--accent-blue);
 }
 .infoY {
   top: 8px;
-  right: 100%;
+  right: calc(100% + 4px);
   transform-origin: 100% 50%;
   transform: rotate(-90deg);
+  border-right: solid 2px var(--accent-blue);
 }
 .infoW {
-  bottom: -8px;
+  bottom: -12px;
   right: 16px;
+  border-right: solid 2px var(--accent-blue);
 }
 .infoH {
   bottom: 8px;
-  left: 100%;
+  left: calc(100% + 4px);
   transform-origin: 0% 50%;
   transform: rotate(-90deg);
+  border-left: solid 2px var(--accent-blue);
 }

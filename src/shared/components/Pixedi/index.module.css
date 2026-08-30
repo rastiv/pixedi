@@ -17,7 +17,7 @@
     Helvetica, Arial, sans-serif;
   --font-mono: "Courier New", Courier, monospace;
   --color-white: #fff;
-  --color-white-fade: color-mix(in srgb, var(--color-white) 30%, transparent);
+  --color-white-fade: color-mix(in srgb, var(--color-white) 40%, transparent);
   --color-black: #000;
   --color-transparent: transparent;
   --color-red: oklch(0.637 0.237 25.331);
@@ -103,6 +103,7 @@
   color: var(--muted-foreground);
   background-color: var(--background);
 }
+
 .wrapper {
   position: relative;
   width: 100%;
