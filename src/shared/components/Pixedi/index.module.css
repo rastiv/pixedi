@@ -113,20 +113,26 @@
   position: relative;
   height: 100%;
   display: grid;
-  grid-template-rows: 48px 32px 1fr;
-  grid-template-columns: 48px 1fr;
+  grid-template-rows: 48px 32px minmax(0, 1fr);
+  grid-template-columns: 0 1fr;
   grid-template-areas:
-    "header  header"
+    "header header"
     "sidebar infobar"
     "sidebar frame";
+  @media (min-width: 480px) {
+    grid-template-columns: 48px 1fr;
+  }
 }
 .gridNoInfobar {
   position: relative;
   height: 100%;
   display: grid;
   grid-template-rows: 48px 1fr;
-  grid-template-columns: 48px 1fr;
+  grid-template-columns: 0 1fr;
   grid-template-areas:
     "header header"
     "sidebar frame";
+  @media (min-width: 480px) {
+    grid-template-columns: 48px 1fr;
+  }
 }

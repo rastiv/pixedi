@@ -9,6 +9,31 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
 }
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+.sidebarToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  position: relative;
+  left: -8px;
+  border-right: solid 1px var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  @media (min-width: 480px) {
+    display: none;
+  }
+}
+.sidebarIcon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.6;
+}
 .tools {
   display: flex;
   gap: 8px;

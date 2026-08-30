@@ -158,6 +158,22 @@ export const Filters = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
+export const SidebarOpen = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <rect width="18" height="18" x="3" y="3" rx="2" />
+    <path d="M9 3v18" />
+    <path d="m14 9 3 3-3 3" />
+  </svg>
+);
+
+export const SidebarClose = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <rect width="18" height="18" x="3" y="3" rx="2" />
+    <path d="M9 3v18" />
+    <path d="m16 15-3-3 3-3" />
+  </svg>
+);
+
 export const Loader = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56">

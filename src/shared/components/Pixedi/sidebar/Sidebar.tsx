@@ -1,21 +1,6 @@
 import { useBellow } from "../hooks";
-import {
-  Crop,
-  FlipH,
-  Fullscreen,
-  Presets,
-  Rotate,
-  Settings,
-  X,
-} from "../assets/icons";
-import { Button, Separator } from "../ui";
-import { SidebarResize } from "./SidebarResize";
-import { SidebarCrop } from "./SidebarCrop";
-import { SidebarPresets } from "./SidebarPresets";
-import { SidebarFlip } from "./SidebarFlip";
-import SidebarRotate from "./SidebarRotate";
+import { Crop, FlipH, Fullscreen, Presets, Rotate } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
-import buttonStyles from "../ui/button/Button.module.css";
 import { ActionName, type Tools } from "../types";
 import styles from "./Sidebar.module.css";
 
@@ -64,14 +49,18 @@ export const Sidebar = () => {
     getLastRotation,
     getLastHistoryItem,
     setCurrentAction,
-    setSidebar,
   } = usePixediContext();
-  const isBellowMd = useBellow("md");
+  const isBellowSm = useBellow("sm");
   const tools = settings?.tools || [];
   const actionName = currentAction?.name;
   const { width, height } = getLastHistoryItem() ?? { width: 0, height: 0 };
 
   const handleClick = (tool: Tools) => {
+    if (tools.includes(tool) && actionName === tool) {
+      setCurrentAction(null);
+      return;
+    }
+
     switch (tool) {
       case ActionName.RESIZE:
         setCurrentAction({ name: "resize", args: { width, height } });
@@ -108,7 +97,7 @@ export const Sidebar = () => {
       className={styles.sidebar}
       style={{
         transform:
-          isBellowMd && isSidebarOpen ? "translateX(-110%)" : "translateX(0%)",
+          isBellowSm && isSidebarOpen ? "translateX(-100%)" : "translateX(0%)",
       }}
     >
       {tools.map((tool) => {
@@ -126,47 +115,5 @@ export const Sidebar = () => {
         );
       })}
     </nav>
-    // <>
-    //   <Button
-    //     variant="outline"
-    //     className={styles.settings}
-    //     onClick={() => setSidebar(true)}
-    //   >
-    //     <Settings />
-    //   </Button>
-    //   <div
-    //     className={styles.sidebar}
-    //     style={{
-    //       transform:
-    //         isBellowMd && isSidebarOpen
-    //           ? "translateX(-100%)"
-    //           : "translateX(0%)",
-    //     }}
-    //   >
-    //     <div className={styles.container}>
-    //       <div className={styles.content}>
-    //         {isBellowMd && (
-    //           <Button
-    //             variant="ghost"
-    //             className={`${styles.closeBtn} ${buttonStyles.rect}`}
-    //             onClick={() => setSidebar(false)}
-    //           >
-    //             <X />
-    //           </Button>
-    //         )}
-    //         <SidebarResize />
-    //         <Separator className={styles.separator} />
-    //         <SidebarCrop />
-    //         <Separator className={styles.separator} />
-    //         <SidebarPresets />
-    //         <Separator className={styles.separator} />
-    //         <div className={styles.flipRotate}>
-    //           <SidebarFlip />
-    //           <SidebarRotate />
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </>
   );
 };
