@@ -1,5 +1,5 @@
 import { PREVIEW_MAX_DIMENSION, PREVIEW_QUALITY } from "../constants";
-import type { CropRect, Direction, Sizes } from "../types";
+import type { CropRect, CropRectExtended, Direction, Sizes } from "../types";
 
 const minSize = 32;
 
@@ -324,7 +324,7 @@ export const getInitalCrop = (
   cropRatio: number,
   width: number,
   height: number,
-): CropRect => {
+): CropRectExtended => {
   const offsetPercent = 0.12;
   const frameRatio = width / height;
   let wPx = 0;
@@ -359,10 +359,12 @@ export const getInitalCrop = (
   const h = (hPx / height) * 100;
   const x = ((width - wPx) / 2 / width) * 100;
   const y = ((height - hPx) / 2 / height) * 100;
-  // const xPx = Math.round((width - wPx) / 2);
-  // const yPx = Math.round((height - hPx) / 2);
+  const xP = Math.round((x / 100) * width);
+  const yP = Math.round((y / 100) * height);
+  const wP = Math.round((w / 100) * width);
+  const hP = Math.round((h / 100) * height);
 
-  return { x, y, w, h };
+  return { x, y, w, h, xP, yP, wP, hP };
 };
 
 // a crop rect stores w/h as percentages of two different axes, so a rect that

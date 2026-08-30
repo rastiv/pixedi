@@ -1,13 +1,46 @@
 .sidebar {
   position: relative;
-  width: 0;
   z-index: 10;
-  transition: transform 0.15s ease-out;
+  width: 0;
+  overflow: hidden;
+  transition: transform 0.2s ease-out;
+  background: var(--background);
+  border-right: 1px solid var(--border);
   @media (min-width: 768px) {
-    width: 320px;
+    width: 48px;
     transition: none;
   }
 }
+.item {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.item svg {
+  width: 16px;
+  height: 16px;
+}
+.item.selected {
+  color: var(--accent-blue);
+}
+.item.selected::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  width: 2px;
+  background-color: var(--accent-blue);
+}
+.item.selected,
+.item:hover {
+  background-color: var(--accent);
+}
+
 .settings {
   position: absolute;
   top: 8px;

@@ -1,5 +1,11 @@
 import { useRef } from "react";
-import { useCropInteraction, CropPointers, CropLines, CropPointer } from ".";
+import {
+  useCropInteraction,
+  CropPointers,
+  CropLines,
+  CropPointer,
+  CropInfo,
+} from ".";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Preview } from "../preview";
 import { useMobile } from "../hooks";
@@ -41,7 +47,10 @@ export const CropInteractBox = () => {
           {mobile ? (
             <CropPointer onMouseDown={handleCropStart} />
           ) : (
-            <CropPointers onMouseDown={handleCropStart} />
+            <>
+              <CropPointers onMouseDown={handleCropStart} />
+              <CropInfo />
+            </>
           )}
         </div>
       </div>

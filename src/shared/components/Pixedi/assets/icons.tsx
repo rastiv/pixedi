@@ -135,10 +135,26 @@ export const RotateCCW = (props: React.ComponentPropsWithoutRef<"svg">) => (
 
 export const Presets = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
-    <path d="M14 17H5" />
-    <path d="M19 7h-9" />
-    <circle cx="17" cy="17" r="3" />
-    <circle cx="7" cy="7" r="3" />
+    <rect width="7" height="7" x="3" y="3" rx="1" />
+    <rect width="7" height="7" x="3" y="14" rx="1" />
+    <path d="M14 4h7" />
+    <path d="M14 9h7" />
+    <path d="M14 15h7" />
+    <path d="M14 20h7" />
+  </svg>
+);
+
+export const Filters = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M10 5H3" />
+    <path d="M12 19H3" />
+    <path d="M14 3v4" />
+    <path d="M16 17v4" />
+    <path d="M21 12h-9" />
+    <path d="M21 19h-5" />
+    <path d="M21 5h-7" />
+    <path d="M8 10v4" />
+    <path d="M8 12H3" />
   </svg>
 );
 

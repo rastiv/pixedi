@@ -50,7 +50,7 @@
 }
 .linesBox {
   position: absolute;
-  inset: 2px;
+  inset: 1px;
   pointer-events: none;
 }
 .line {
@@ -124,4 +124,39 @@
   border-radius: 50%;
   border: 3px solid var(--accent-blue);
   box-sizing: border-box;
+}
+.info {
+  position: absolute;
+  height: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  background-color: var(--color-white-fade);
+}
+.info b {
+  font-weight: 600;
+  transform: translateY(1px);
+}
+.infoX {
+  top: -8px;
+  left: 16px;
+}
+.infoY {
+  top: 8px;
+  right: 100%;
+  transform-origin: 100% 50%;
+  transform: rotate(-90deg);
+}
+.infoW {
+  bottom: -8px;
+  right: 16px;
+}
+.infoH {
+  bottom: 8px;
+  left: 100%;
+  transform-origin: 0% 50%;
+  transform: rotate(-90deg);
 }

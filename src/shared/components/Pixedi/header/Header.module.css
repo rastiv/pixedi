@@ -14,10 +14,11 @@
 }
 .history {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
 }
 .historyText {
   color: var(--muted-foreground);
   font-size: 14px;
+  font-family: var(--font-mono);
 }
