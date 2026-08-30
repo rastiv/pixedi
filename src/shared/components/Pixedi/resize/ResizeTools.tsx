@@ -3,10 +3,10 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { Lock } from "../assets/icons";
 import { useMobile } from "../hooks";
 import { emitResizeUpdate } from "../eventBus";
-import { SaveCloseGroup, Slider, InputPixel } from "../ui";
+import { SaveCloseGroup, InputPixel } from "../ui";
 import styles from "./Resize.module.css";
 
-const minScale = 10;
+const minScale = 15;
 const maxScale = 200;
 
 const sizeCalculator = (scale: number, width: number, height: number) => {
@@ -33,18 +33,6 @@ export const ResizeTools = () => {
   const [scale, setScale] = useState(100);
   const startVerticalSlideRef = useRef<number>(0);
   const mobile = useMobile();
-
-  const handleChangeScale = (scale: number) => {
-    const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
-      scale,
-      currentWidth,
-      currentHeight,
-    );
-    setWidth(updatedWidth);
-    setHeight(updatedHeight);
-    setScale(updatedScale);
-    emitResizeUpdate(eventBus, updatedScale);
-  };
 
   const handleChangeWidth = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { updatedScale, updatedWidth, updatedHeight } = sizeCalculator(
@@ -127,7 +115,8 @@ export const ResizeTools = () => {
       updatedScale += direction * 2;
       if (updatedScale <= minScale) updatedScale = minScale;
       if (updatedScale >= maxScale) updatedScale = maxScale;
-      updateScale(updatedScale);
+
+      console.log("updatedScale", updatedScale);
       startVerticalSlideRef.current = y;
     };
 
@@ -143,37 +132,31 @@ export const ResizeTools = () => {
 
   return (
     <div className={styles.resize}>
-      <Slider
-        min={minScale}
-        max={maxScale}
-        value={scale}
-        className={styles.slider}
-        onChange={handleChangeScale}
-      />
-      <div className={styles.tools}>
-        <InputPixel
-          value={width}
-          name="width"
-          label="Width"
-          style={{ width: "88px" }}
-          onChange={(e) => setWidth(Number(e.target.value))}
-          onBlur={handleChangeWidth}
-        />
-        <Lock className={styles.toolsLock} />
-        <InputPixel
-          value={height}
-          name="height"
-          label="Height"
-          style={{ width: "88px" }}
-          onChange={(e) => setHeight(Number(e.target.value))}
-          onBlur={handleChangeHeight}
-        />
-        <SaveCloseGroup
-          onSave={() => handleSave()}
-          onClose={handleClose}
-          disabled={width === currentWidth}
-        />
+      <div className={styles.indicatorWrapper}>
+        <div className={styles.indicator} style={{ width: `${scale / 2}%` }} />
       </div>
+      <InputPixel
+        value={width}
+        name="width"
+        label="Width"
+        style={{ width: "88px" }}
+        onChange={(e) => setWidth(Number(e.target.value))}
+        onBlur={handleChangeWidth}
+      />
+      <Lock className={styles.toolsLock} />
+      <InputPixel
+        value={height}
+        name="height"
+        label="Height"
+        style={{ width: "88px" }}
+        onChange={(e) => setHeight(Number(e.target.value))}
+        onBlur={handleChangeHeight}
+      />
+      <SaveCloseGroup
+        onSave={() => handleSave()}
+        onClose={handleClose}
+        disabled={width === currentWidth}
+      />
     </div>
   );
 };

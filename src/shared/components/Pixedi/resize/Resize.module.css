@@ -1,34 +1,35 @@
 .resize {
   position: absolute;
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 6px;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--background);
-  padding: 8px;
+  padding: 15px 8px 8px 8px;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-.slider {
-  width: 80%;
-  margin: 0 auto -4px auto;
-}
-.border {
-  margin: 12px auto 4px;
-  display: inline-block;
-  width: 60px;
-  border-bottom: 1px solid var(--border);
-}
-.tools {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin-top: 16px;
+  overflow: hidden;
 }
 .toolsLock {
   width: 12px;
   height: 12px;
   color: var(--muted-foreground);
+}
+.indicatorWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  display: flex;
+  justify-content: center;
+}
+.indicator {
+  height: 100%;
+  width: 30%;
+  border-radius: 2px;
+  background: var(--accent-blue);
+  transition: width 0.2s ease;
 }
