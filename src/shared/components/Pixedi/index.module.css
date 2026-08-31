@@ -113,12 +113,12 @@
   position: relative;
   height: 100%;
   display: grid;
-  grid-template-rows: 48px 32px minmax(0, 1fr);
+  grid-template-rows: 48px minmax(0, 1fr) 32px;
   grid-template-columns: 0 1fr;
   grid-template-areas:
     "header header"
-    "sidebar infobar"
-    "sidebar frame";
+    "sidebar frame"
+    "sidebar infobar";
   @media (min-width: 480px) {
     grid-template-columns: 48px 1fr;
   }
