@@ -87,6 +87,18 @@ export const Square = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
+export const Rectangle16x9 = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <rect width="20" height="12" x="2" y="6" rx="2" />
+  </svg>
+);
+
+export const Rectangle4x3 = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <rect width="20" height="15" x="2" y="4.5" rx="2" />
+  </svg>
+);
+
 export const Fullscreen = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M3 7V5a2 2 0 0 1 2-2h2" />

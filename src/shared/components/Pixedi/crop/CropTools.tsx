@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { CropButtonGroup } from "./CropButtonGroup";
 import { SaveCloseGroup } from "../ui";
 import { ActionName, type CropRect } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
@@ -15,6 +16,9 @@ export const CropTools = () => {
     eventBus,
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
+  const { name, args } = currentAction || {};
+  const currentValue = name === ActionName.CROP ? (args?.id as string) : "";
+  const originRatio = width / height;
 
   const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
 
@@ -67,8 +71,30 @@ export const CropTools = () => {
     setSidebar(true);
   };
 
+  const handleChange = (value: string) => {
+    if (value === currentValue) {
+      return;
+    }
+
+    setCurrentAction({
+      name: "crop",
+      args: {
+        id: value,
+        ratio: /^\d+:\d+$/.test(value)
+          ? value
+              .split(":")
+              .map(Number)
+              .reduce((a, b) => a / b)
+          : originRatio,
+        isFree: value === "freeform",
+      },
+    });
+    setSidebar(false);
+  };
+
   return (
     <div className={styles.tools}>
+      <CropButtonGroup value={currentValue} onChange={handleChange} />
       <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
     </div>
   );

@@ -109,6 +109,7 @@ export const Sidebar = () => {
             key={tool}
             className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
             onClick={() => handleClick(tool)}
+            title={label}
           >
             {icon}
           </div>
