@@ -20,6 +20,7 @@ export const SaveCloseGroup = ({
       <Button
         variant="outline"
         className={styles.save}
+        aria-label="Save"
         disabled={disabled || saving}
         onClick={onSave}
       >
@@ -28,6 +29,7 @@ export const SaveCloseGroup = ({
       <Button
         variant="outline"
         className={styles.close}
+        aria-label="Close"
         disabled={saving}
         onClick={onClose}
       >
