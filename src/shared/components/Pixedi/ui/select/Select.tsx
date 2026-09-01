@@ -3,6 +3,27 @@ import { ChevronDown, Check } from "../../assets/icons";
 import styles from "./Select.module.css";
 import rootStyles from "../../index.module.css";
 
+// the dropdown is rendered inside the editor, so it can only grow inside the
+// closest clipping ancestors (the frame has overflow hidden)
+const getClipBounds = (element: HTMLElement) => {
+  let top = 0;
+  let bottom = window.innerHeight;
+
+  for (
+    let parent = element.parentElement;
+    parent;
+    parent = parent.parentElement
+  ) {
+    const { overflow, overflowY } = getComputedStyle(parent);
+    if (overflow === "visible" && overflowY === "visible") continue;
+    const rect = parent.getBoundingClientRect();
+    top = Math.max(top, rect.top);
+    bottom = Math.min(bottom, rect.bottom);
+  }
+
+  return { top, bottom };
+};
+
 export interface SelectOption {
   value: string;
   label: string;
@@ -70,23 +91,39 @@ export const Select = ({
   }, []);
 
   useLayoutEffect(() => {
-    if (!isOpen || !triggerRef.current || !contentRef.current) return;
+    const wrapper = containerRef.current;
+    const trigger = triggerRef.current;
+    const content = contentRef.current;
+    if (!isOpen || !wrapper || !trigger || !content) return;
 
-    const editorRect = containerRef.current
-      ?.closest<HTMLElement>(`.${rootStyles.main}`)
-      ?.getBoundingClientRect();
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const contentRect = contentRef.current.getBoundingClientRect();
-    const availableBottom = (editorRect?.bottom ?? window.innerHeight) - 16;
-    const contentBottom = triggerRect.bottom + contentRect.height + 4;
+    content.style.removeProperty("top");
+    content.style.removeProperty("max-height");
 
-    let contentTop = "calc(100% + 4px)";
-    if (contentBottom > availableBottom) {
-      const diff = contentBottom - availableBottom;
-      contentTop = `calc(100% + 4px - ${diff}px)`;
+    const gap = 4;
+    const inset = 8;
+    const { top: clipTop, bottom: clipBottom } = getClipBounds(wrapper);
+    const wrapperTop = wrapper.getBoundingClientRect().top;
+    const triggerRect = trigger.getBoundingClientRect();
+    const contentHeight = content.offsetHeight;
+    const spaceBelow = clipBottom - inset - triggerRect.bottom - gap;
+    const spaceAbove = triggerRect.top - gap - clipTop - inset;
+
+    let top = triggerRect.bottom + gap;
+    let maxHeight = 0;
+
+    if (contentHeight > spaceBelow) {
+      if (contentHeight <= spaceAbove) {
+        top = triggerRect.top - gap - contentHeight;
+      } else if (spaceAbove > spaceBelow) {
+        maxHeight = Math.max(spaceAbove, 0);
+        top = triggerRect.top - gap - maxHeight;
+      } else {
+        maxHeight = Math.max(spaceBelow, 0);
+      }
     }
 
-    contentRef.current.style.top = contentTop;
+    if (maxHeight) content.style.maxHeight = `${maxHeight}px`;
+    content.style.top = `${top - wrapperTop}px`;
   }, [isOpen, items]);
 
   const handleSelectItem = (val: string) => {

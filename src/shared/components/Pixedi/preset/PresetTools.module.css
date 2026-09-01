@@ -2,7 +2,7 @@
   position: absolute;
   display: flex;
   gap: 4px;
-  bottom: 24px;
+  top: 24px;
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--background);
