@@ -63,12 +63,12 @@ export const CropTools = () => {
       },
     });
 
-    setSidebar(true);
+    setSidebar(false);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(true);
+    setSidebar(false);
   };
 
   const handleChange = (value: string) => {
@@ -89,7 +89,7 @@ export const CropTools = () => {
         isFree: value === "freeform",
       },
     });
-    setSidebar(false);
+    setSidebar(true);
   };
 
   return (

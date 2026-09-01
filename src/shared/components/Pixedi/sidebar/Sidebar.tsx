@@ -49,6 +49,7 @@ export const Sidebar = () => {
     getLastRotation,
     getLastHistoryItem,
     setCurrentAction,
+    setSidebar,
   } = usePixediContext();
   const isBellowSm = useBellow("sm");
   const tools = settings?.tools || [];
@@ -68,7 +69,7 @@ export const Sidebar = () => {
       case ActionName.CROP:
         setCurrentAction({
           name: "crop",
-          args: { id: "", ratio: 1, isFree: true },
+          args: { id: "freeform", ratio: width / height, isFree: true },
         });
         break;
       case ActionName.PRESET_CROP:
@@ -90,6 +91,8 @@ export const Sidebar = () => {
         });
         break;
     }
+
+    setSidebar(true);
   };
 
   return (

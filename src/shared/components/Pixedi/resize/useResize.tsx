@@ -64,7 +64,7 @@ export const useResize = () => {
   const close = () => {
     emitResizeUpdate(eventBus, 100);
     setCurrentAction(null);
-    setSidebar(true);
+    setSidebar(false);
   };
 
   const save = () => {
@@ -77,7 +77,7 @@ export const useResize = () => {
       },
     });
     emitResizeUpdate(eventBus, 100);
-    setSidebar(true);
+    setSidebar(false);
   };
 
   useEffect(() => {

@@ -45,12 +45,12 @@ export const RotateTools = () => {
         },
       },
     });
-    setSidebar(true);
+    setSidebar(false);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(true);
+    setSidebar(false);
   };
 
   return (

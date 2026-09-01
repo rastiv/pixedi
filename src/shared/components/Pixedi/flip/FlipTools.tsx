@@ -30,7 +30,7 @@ export const FlipTools = () => {
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(true);
+    setSidebar(false);
   };
 
   const handleSave = () => {
@@ -42,7 +42,7 @@ export const FlipTools = () => {
         args: { horizontal: flipHorizontal, vertical: flipVertical },
       },
     });
-    setSidebar(true);
+    setSidebar(false);
   };
 
   return (
