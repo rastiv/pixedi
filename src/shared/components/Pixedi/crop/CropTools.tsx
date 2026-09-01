@@ -23,7 +23,7 @@ export const CropTools = () => {
   const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
 
   useEffect(() => {
-    if (currentAction?.name !== "crop") {
+    if (currentAction?.name !== ActionName.CROP) {
       return;
     }
 
@@ -58,7 +58,7 @@ export const CropTools = () => {
       width: updatedWidth,
       height: updatedHeight,
       action: {
-        name: "crop",
+        name: ActionName.CROP,
         args: { ...currentAction.args, ...clipPathRef.current },
       },
     });
@@ -77,7 +77,7 @@ export const CropTools = () => {
     }
 
     setCurrentAction({
-      name: "crop",
+      name: ActionName.CROP,
       args: {
         id: value,
         ratio: /^\d+:\d+$/.test(value)

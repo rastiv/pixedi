@@ -1,0 +1,16 @@
+.preset {
+  position: absolute;
+  display: flex;
+  gap: 4px;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--background);
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select {
+  width: 210px;
+}

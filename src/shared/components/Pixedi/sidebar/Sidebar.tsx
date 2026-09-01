@@ -64,29 +64,34 @@ export const Sidebar = () => {
 
     switch (tool) {
       case ActionName.RESIZE:
-        setCurrentAction({ name: "resize", args: { width, height } });
+        setCurrentAction({ name: ActionName.RESIZE, args: { width, height } });
         break;
       case ActionName.CROP:
         setCurrentAction({
-          name: "crop",
+          name: ActionName.CROP,
           args: { id: "freeform", ratio: width / height, isFree: true },
         });
         break;
       case ActionName.PRESET_CROP:
         setCurrentAction({
-          name: "presetCrop",
-          args: { id: "", ratio: 1, isFree: true },
+          name: ActionName.PRESET_CROP,
+          args: {
+            id: "facebook-post",
+            ratio: 1200 / 630,
+            isFree: false,
+            preset: { width: 1200, height: 630 },
+          },
         });
         break;
       case ActionName.FLIP:
         setCurrentAction({
-          name: "flip",
+          name: ActionName.FLIP,
           args: { horizontal: false, vertical: false },
         });
         break;
       case ActionName.ROTATE:
         setCurrentAction({
-          name: "rotate",
+          name: ActionName.ROTATE,
           args: { degrees: getLastRotation() },
         });
         break;

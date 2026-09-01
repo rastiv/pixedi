@@ -59,7 +59,9 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
   const mobile = useMobile();
 
   const { width, height } = getLastHistoryItem();
-  const isCrop = currentAction?.name === ActionName.CROP;
+  const isCrop =
+    currentAction?.name === ActionName.CROP ||
+    currentAction?.name === ActionName.PRESET_CROP;
   const ratio = isCrop ? currentAction.args.ratio : 1;
   const isFree = isCrop ? currentAction.args.isFree : true;
 

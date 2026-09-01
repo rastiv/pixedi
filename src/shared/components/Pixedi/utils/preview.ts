@@ -1,4 +1,4 @@
-import type { HistoryItem } from "../types";
+import { ActionName, type HistoryItem } from "../types";
 import { isQuarterTurn } from "../utils/crop";
 
 type Mat = [[number, number], [number, number]];
@@ -92,14 +92,14 @@ export const getPreview = (items: HistoryItem[]): Preview => {
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    if (item.action.name === "initial") {
+    if (item.action.name === ActionName.INITIAL) {
       initWidth = item.width;
       initHeight = item.height;
       box = { x: 0, y: 0, w: 1, h: 1 };
       rotation = 0;
       flipH = false;
       flipV = false;
-    } else if (item.action.name === "crop") {
+    } else if (item.action.name === ActionName.CROP) {
       const l = (item.action.args.x ?? 0) / 100;
       const t = (item.action.args.y ?? 0) / 100;
       const cw = (item.action.args.w ?? 100) / 100;
