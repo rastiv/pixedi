@@ -38,9 +38,9 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
       <div className={styles.left}>
         <div className={styles.sidebarToggle} onClick={handleToggleSidebar}>
           {!sidebar ? (
-            <SidebarClose className={styles.sidebarIcon} />
-          ) : (
             <SidebarOpen className={styles.sidebarIcon} />
+          ) : (
+            <SidebarClose className={styles.sidebarIcon} />
           )}
         </div>
         <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>

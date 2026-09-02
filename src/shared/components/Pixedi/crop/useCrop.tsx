@@ -60,12 +60,12 @@ export const useCrop = () => {
       },
     });
 
-    setSidebar(false);
+    setSidebar(true);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(false);
+    setSidebar(true);
   };
 
   const handleChange = (value: string) => {

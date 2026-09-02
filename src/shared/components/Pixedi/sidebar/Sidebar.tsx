@@ -97,7 +97,7 @@ export const Sidebar = () => {
         break;
     }
 
-    setSidebar(true);
+    setSidebar(false);
   };
 
   return (
@@ -105,7 +105,7 @@ export const Sidebar = () => {
       className={styles.sidebar}
       style={{
         transform:
-          isBellowSm && isSidebarOpen ? "translateX(-100%)" : "translateX(0%)",
+          isBellowSm && isSidebarOpen ? "translateX(0%)" : "translateX(-101%)",
       }}
     >
       {tools.map((tool) => {

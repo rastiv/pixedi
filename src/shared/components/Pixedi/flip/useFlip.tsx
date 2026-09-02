@@ -37,12 +37,12 @@ export const useFlip = () => {
         args: { horizontal: flipHorizontal, vertical: flipVertical },
       },
     });
-    setSidebar(false);
+    setSidebar(true);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(false);
+    setSidebar(true);
   };
 
   return {

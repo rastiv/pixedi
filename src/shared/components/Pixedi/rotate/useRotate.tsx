@@ -38,12 +38,12 @@ export const useRotate = () => {
         args: { degrees: angleRef.current },
       },
     });
-    setSidebar(false);
+    setSidebar(true);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(false);
+    setSidebar(true);
   };
 
   return {

@@ -63,7 +63,6 @@ export const usePreset = () => {
     };
 
     setCurrentAction({ name: ActionName.PRESET_CROP, args });
-    setSidebar(false);
   };
 
   const handleSave = () => {
@@ -80,12 +79,12 @@ export const usePreset = () => {
       },
     });
 
-    setSidebar(false);
+    setSidebar(true);
   };
 
   const handleClose = () => {
     setCurrentAction(null);
-    setSidebar(false);
+    setSidebar(true);
   };
 
   return {
