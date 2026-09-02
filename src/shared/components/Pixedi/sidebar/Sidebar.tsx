@@ -54,7 +54,7 @@ export const Sidebar = () => {
   const isBellowSm = useBellow("sm");
   const tools = settings?.tools || [];
   const actionName = currentAction?.name;
-  const { width, height } = getLastHistoryItem() ?? { width: 0, height: 0 };
+  const { width, height } = getLastHistoryItem();
 
   const handleClick = (tool: Tools) => {
     if (tools.includes(tool) && actionName === tool) {
