@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.3.0
+
+- Refactor sidebar.
+- Add info panel.
+- Improve mobile experience.
+
 ## 1.2.1
 
 - Fix resize reset when switch to other action.
