@@ -143,7 +143,6 @@
     transform: translateY(1px);
   }
 }
-
 .infoX {
   top: -12px;
   left: 16px;
@@ -181,13 +180,16 @@
       color: var(--accent-blue);
       background: var(--muted);
     }
+
     &:not(:first-child) {
       margin-left: -1px;
     }
+
     &:first-child {
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
     }
+
     &:last-child {
       border-top-right-radius: 4px;
       border-bottom-right-radius: 4px;

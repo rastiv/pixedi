@@ -7,12 +7,16 @@
   cursor: pointer;
   touch-action: none;
   --slider-progress: 0%;
-}
 
-.sliderContainer.disabled {
-  pointer-events: none;
-  cursor: not-allowed;
-  opacity: 0.5;
+  &.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &:not(.disabled):hover .sliderThumb {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
 
 .sliderTrack {
@@ -60,8 +64,4 @@
   cursor: pointer;
   margin: 0;
   z-index: 1;
-}
-
-.sliderContainer:not(.disabled):hover .sliderThumb {
-  transform: translate(-50%, -50%) scale(1.1);
 }

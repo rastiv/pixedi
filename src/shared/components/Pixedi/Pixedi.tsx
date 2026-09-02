@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { PixediProvider } from "./provider/PixediProvider";
 import { initialSettings } from "./provider/initialState";
-import { useImageLoader } from "./hooks";
+import { useBellow, useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 import { Infobar } from "./infobar";
@@ -24,6 +25,8 @@ export const Pixedi = ({
   theme = "light",
   settings = initialSettings,
 }: PixediProps) => {
+  const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
+  const isBellowSm = useBellow("sm", wrapper);
   const defaultSettings = { ...initialSettings, ...settings };
   const {
     loading,
@@ -73,14 +76,18 @@ export const Pixedi = ({
       isAlpha={isAlpha}
       settings={defaultSettings}
     >
-      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+      <div
+        ref={setWrapper}
+        className={`${styles.root} ${styles.wrapper}`}
+        data-theme={theme}
+      >
         <div
-          className={
+          className={`${
             defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
-          }
+          } ${isBellowSm ? styles.mobile : ""}`}
         >
-          <Header onSave={onSave} onBack={onBack} />
-          <Sidebar />
+          <Header onSave={onSave} onBack={onBack} isMobile={isBellowSm} />
+          <Sidebar isMobile={isBellowSm} />
           {defaultSettings?.infobar && <Infobar />}
           <Frame />
         </div>

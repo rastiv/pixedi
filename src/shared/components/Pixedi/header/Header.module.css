@@ -15,7 +15,7 @@
   gap: 0px;
 }
 .sidebarToggle {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 48px;
@@ -25,8 +25,9 @@
   border-right: solid 1px var(--border);
   cursor: pointer;
   transition: all 0.2s ease;
-  @media (min-width: 480px) {
-    display: none;
+
+  &.mobile {
+    display: flex;
   }
 }
 .sidebarIcon {

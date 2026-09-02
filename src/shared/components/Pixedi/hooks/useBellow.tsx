@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
 import { breakpoints, type Breakpoint } from "../types";
 
-export function useBellow(breakpoint: Breakpoint): boolean {
-  const [isBellow, setIsBellow] = useState(
-    () => window.innerWidth < breakpoints[breakpoint],
-  );
+export function useBellow(
+  breakpoint: Breakpoint,
+  element: HTMLElement | null,
+): boolean {
+  const [isBellow, setIsBellow] = useState(true);
 
   useEffect(() => {
-    function handleResize() {
-      setIsBellow(window.innerWidth < breakpoints[breakpoint]);
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [breakpoint]);
+    if (!element) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) {
+        setIsBellow(entry.contentRect.width < breakpoints[breakpoint]);
+      }
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [breakpoint, element]);
 
   return isBellow;
 }

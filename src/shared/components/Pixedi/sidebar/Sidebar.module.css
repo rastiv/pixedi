@@ -6,11 +6,15 @@
   border-right: 1px solid var(--border);
   z-index: 10;
   overflow: hidden;
-  transition: transform 0.2s ease-out;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  @media (min-width: 480px) {
-    transition: none;
-    box-shadow: none;
+
+  &.mobile {
+    transform: translateX(-110%);
+    transition: transform 0.2s ease-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &.open {
+      transform: translateX(0%);
+    }
   }
 }
 .item {
@@ -21,24 +25,28 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-.item svg {
-  width: 16px;
-  height: 16px;
-}
-.item.selected {
-  color: var(--accent-blue);
-}
-.item.selected::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  width: 2px;
-  background-color: var(--accent-blue);
-}
-.item.selected,
-.item:hover {
-  background-color: var(--accent);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background-color: var(--accent);
+  }
+
+  &.selected {
+    color: var(--accent-blue);
+    background-color: var(--accent);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: 0px;
+      width: 2px;
+      background-color: var(--accent-blue);
+    }
+  }
 }

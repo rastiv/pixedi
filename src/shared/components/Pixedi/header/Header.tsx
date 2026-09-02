@@ -17,9 +17,10 @@ import styles from "./Header.module.css";
 type HeaderProps = {
   onBack: () => void;
   onSave: FuncSaveArgs;
+  isMobile: boolean;
 };
 
-export const Header = ({ onBack, onSave }: HeaderProps) => {
+export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
   const { save, reset, isSaving } = useImageSaving(onSave);
   const { sidebar, history, undo, redo, setSidebar } = usePixediContext();
 
@@ -36,7 +37,10 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <div className={styles.sidebarToggle} onClick={handleToggleSidebar}>
+        <div
+          className={`${styles.sidebarToggle} ${isMobile ? styles.mobile : ""}`}
+          onClick={handleToggleSidebar}
+        >
           {!sidebar ? (
             <SidebarOpen className={styles.sidebarIcon} />
           ) : (

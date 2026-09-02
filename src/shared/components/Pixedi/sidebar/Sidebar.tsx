@@ -1,4 +1,3 @@
-import { useBellow } from "../hooks";
 import { Crop, FlipH, Fullscreen, Presets, Rotate } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ActionName, type Tools } from "../types";
@@ -41,7 +40,11 @@ const mapTools = (tool: Tools): MappedTool | null => {
   }
 };
 
-export const Sidebar = () => {
+type SidebarProps = {
+  isMobile: boolean;
+};
+
+export const Sidebar = ({ isMobile }: SidebarProps) => {
   const {
     settings,
     sidebar: isSidebarOpen,
@@ -51,7 +54,6 @@ export const Sidebar = () => {
     setCurrentAction,
     setSidebar,
   } = usePixediContext();
-  const isBellowSm = useBellow("sm");
   const tools = settings?.tools || [];
   const actionName = currentAction?.name;
   const { width, height } = getLastHistoryItem();
@@ -102,14 +104,9 @@ export const Sidebar = () => {
 
   return (
     <nav
-      className={styles.sidebar}
-      style={{
-        transform: isBellowSm
-          ? isSidebarOpen
-            ? "translateX(0%)"
-            : "translateX(-110%)"
-          : undefined,
-      }}
+      className={`${styles.sidebar} ${isMobile ? styles.mobile : ""} ${
+        isMobile && isSidebarOpen ? styles.open : ""
+      }`}
     >
       {tools.map((tool) => {
         const mappedTool = mapTools(tool);

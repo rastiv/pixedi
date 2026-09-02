@@ -24,19 +24,19 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1;
   margin: 16px;
-}
 
-.modalContent.sm {
-  width: 100%;
-  max-width: 480px;
-}
+  &.sm {
+    width: 100%;
+    max-width: 480px;
+  }
 
-.modalContent.md {
-  width: 100%;
-  max-width: 640px;
-}
+  &.md {
+    width: 100%;
+    max-width: 640px;
+  }
 
-.modalContent.lg {
-  width: 100%;
-  max-width: 840px;
+  &.lg {
+    width: 100%;
+    max-width: 840px;
+  }
 }
