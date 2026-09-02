@@ -104,8 +104,11 @@ export const Sidebar = () => {
     <nav
       className={styles.sidebar}
       style={{
-        transform:
-          isBellowSm && isSidebarOpen ? "translateX(0%)" : "translateX(-101%)",
+        transform: isBellowSm
+          ? isSidebarOpen
+            ? "translateX(0%)"
+            : "translateX(-110%)"
+          : undefined,
       }}
     >
       {tools.map((tool) => {
