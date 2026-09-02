@@ -21,11 +21,13 @@
   outline: none;
   user-select: none;
   transition: border-color 0.2s;
+
+  &:hover,
+  &:focus {
+    border-color: var(--muted-foreground);
+  }
 }
-.trigger:hover,
-.trigger:focus {
-  border-color: var(--muted-foreground);
-}
+
 .triggerArrow {
   width: 16px;
   height: 16px;
@@ -51,17 +53,21 @@
   z-index: 50;
   box-sizing: border-box;
   padding: 4px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 10px;
+  }
 }
-.content::-webkit-scrollbar {
-  width: 4px;
-}
-.content::-webkit-scrollbar-track {
-  background: transparent;
-}
-.content::-webkit-scrollbar-thumb {
-  background-color: var(--border);
-  border-radius: 10px;
-}
+
 .wrapper[data-state="closed"] .content {
   display: none;
 }
@@ -84,9 +90,10 @@
   user-select: none;
   box-sizing: border-box;
   background: transparent;
-}
-.item:hover {
-  background-color: var(--secondary);
+
+  &:hover {
+    background-color: var(--secondary);
+  }
 }
 .itemLeft {
   font-size: 14px;
@@ -96,18 +103,21 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.itemAddon > span {
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.itemAddon > svg {
-  font-size: 14px;
-}
-.itemAddon > b {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
+
+  span {
+    font-size: 12px;
+    color: var(--muted-foreground);
+  }
+
+  svg {
+    font-size: 14px;
+  }
+
+  b {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
 }
 .itemRightContainer {
   display: flex;

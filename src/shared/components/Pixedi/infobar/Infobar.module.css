@@ -1,0 +1,10 @@
+.infobar {
+  grid-area: infobar;
+  background: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}

@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { PixediProvider } from "./provider/PixediProvider";
 import { initialSettings } from "./provider/initialState";
-import { useImageLoader } from "./hooks";
+import { useBellow, useImageLoader } from "./hooks";
 import { Header } from "./header";
-import { Frame } from "./frame";
 import { Sidebar } from "./sidebar";
+import { Infobar } from "./infobar";
+import { Frame } from "./frame";
 import { Loader } from "./assets/icons";
 import type { FuncSaveArgs, Theme, Settings } from "./types";
 import styles from "./index.module.css";
@@ -23,6 +25,9 @@ export const Pixedi = ({
   theme = "light",
   settings = initialSettings,
 }: PixediProps) => {
+  const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
+  const isBellowSm = useBellow("sm", wrapper);
+  const defaultSettings = { ...initialSettings, ...settings };
   const {
     loading,
     error,
@@ -32,7 +37,20 @@ export const Pixedi = ({
     originalBlob,
     previewUrl,
     isAlpha,
-  } = useImageLoader(image);
+  } = useImageLoader({
+    src: image,
+    skip: defaultSettings?.tools?.length === 0,
+  });
+
+  if (defaultSettings?.tools?.length === 0) {
+    return (
+      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
+        <div className={styles.system}>
+          <div className={styles.textRed}>No tools selected.</div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading || error || !originalBlob || !mimeType) {
     return (
@@ -56,15 +74,22 @@ export const Pixedi = ({
       originalBlob={originalBlob}
       previewUrl={previewUrl}
       isAlpha={isAlpha}
-      settings={{ ...initialSettings, ...settings }}
+      settings={defaultSettings}
     >
-      <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
-        <div className={styles.main}>
-          <Header onSave={onSave} onBack={onBack} />
-          <div className={styles.grid}>
-            <Frame />
-            <Sidebar />
-          </div>
+      <div
+        ref={setWrapper}
+        className={`${styles.root} ${styles.wrapper}`}
+        data-theme={theme}
+      >
+        <div
+          className={`${
+            defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
+          } ${isBellowSm ? styles.mobile : ""}`}
+        >
+          <Header onSave={onSave} onBack={onBack} isMobile={isBellowSm} />
+          <Sidebar isMobile={isBellowSm} />
+          {defaultSettings?.infobar && <Infobar />}
+          <Frame />
         </div>
       </div>
     </PixediProvider>

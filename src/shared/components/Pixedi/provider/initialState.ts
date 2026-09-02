@@ -1,4 +1,4 @@
-import type { History, Action } from "../types";
+import { type History, type Action, ActionName } from "../types";
 
 import type { Settings } from "../types";
 
@@ -14,6 +14,8 @@ export type PixediContextType = {
 };
 
 export const initialSettings: Settings = {
+  tools: ["resize", "crop", "presetCrop", "flip", "rotate", "filters"],
+  infobar: true,
   quality: 0.85,
   saveAsWEBP: false,
   exportAs: "blob",
@@ -35,7 +37,7 @@ export const getInitialState = (
         width,
         height,
         action: {
-          name: "initial",
+          name: ActionName.INITIAL,
           args: null,
         },
       },

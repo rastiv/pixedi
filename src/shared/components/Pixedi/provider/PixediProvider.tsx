@@ -2,7 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { PixediContextType } from "./initialState";
-import type { Action, HistoryItem, ProcessedImage, Settings } from "../types";
+import {
+  ActionName,
+  type Action,
+  type HistoryItem,
+  type ProcessedImage,
+  type Settings,
+} from "../types";
 
 type PixediProviderProps = {
   children: React.ReactNode;
@@ -77,7 +83,7 @@ export const PixediProvider = ({
       items.at(0) ?? {
         width: 0,
         height: 0,
-        action: { name: "initial", args: null },
+        action: { name: ActionName.INITIAL, args: null },
       }
     );
   };
@@ -87,8 +93,8 @@ export const PixediProvider = ({
     if (items.length === 0 || pointer < 0) return 0;
     const lastRotateItem = items
       .slice(0, pointer + 1)
-      .findLast((item) => item.action.name === "rotate");
-    if (lastRotateItem?.action.name === "rotate") {
+      .findLast((item) => item.action.name === ActionName.ROTATE);
+    if (lastRotateItem?.action.name === ActionName.ROTATE) {
       return lastRotateItem.action.args.degrees;
     }
     return 0;

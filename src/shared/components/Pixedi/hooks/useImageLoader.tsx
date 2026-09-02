@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import ImageLoadWorker from "../workers/imageLoad.ts?worker&inline";
 
+type UseImageLoaderProps = {
+  src: string | Blob;
+  skip?: boolean;
+};
+
 type UseImageLoader = {
   loading: boolean;
   error: string;
@@ -12,9 +17,12 @@ type UseImageLoader = {
   isAlpha: boolean;
 };
 
-export const useImageLoader = (src: string | Blob): UseImageLoader => {
+export const useImageLoader = ({
+  src,
+  skip = false,
+}: UseImageLoaderProps): UseImageLoader => {
   const [state, setState] = useState<UseImageLoader>({
-    loading: true,
+    loading: skip ? false : true,
     error: "",
     width: 0,
     height: 0,
@@ -27,7 +35,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
   const previewUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!src) {
+    if (!src || skip) {
       return;
     }
 
@@ -81,7 +89,7 @@ export const useImageLoader = (src: string | Blob): UseImageLoader => {
         previewUrlRef.current = null;
       }
     };
-  }, [src]);
+  }, [skip, src]);
 
   return state;
 };

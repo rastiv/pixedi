@@ -1,4 +1,12 @@
-import { ArrowLeft, Check, Undo, Redo, Loader } from "../assets/icons";
+import {
+  ArrowLeft,
+  Check,
+  Undo,
+  Redo,
+  Loader,
+  SidebarOpen,
+  SidebarClose,
+} from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import { useImageSaving } from "../hooks/useImageSaving";
@@ -9,11 +17,12 @@ import styles from "./Header.module.css";
 type HeaderProps = {
   onBack: () => void;
   onSave: FuncSaveArgs;
+  isMobile: boolean;
 };
 
-export const Header = ({ onBack, onSave }: HeaderProps) => {
+export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
   const { save, reset, isSaving } = useImageSaving(onSave);
-  const { history, undo, redo } = usePixediContext();
+  const { sidebar, history, undo, redo, setSidebar } = usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -21,11 +30,27 @@ export const Header = ({ onBack, onSave }: HeaderProps) => {
   const disableReset = history.items.length < 2 || isSaving;
   const disableSave = disableReset || history.pointer === 0;
 
+  const handleToggleSidebar = () => {
+    setSidebar(!sidebar);
+  };
+
   return (
     <div className={styles.header}>
-      <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>
-        <ArrowLeft />
-      </Button>
+      <div className={styles.left}>
+        <div
+          className={`${styles.sidebarToggle} ${isMobile ? styles.mobile : ""}`}
+          onClick={handleToggleSidebar}
+        >
+          {!sidebar ? (
+            <SidebarOpen className={styles.sidebarIcon} />
+          ) : (
+            <SidebarClose className={styles.sidebarIcon} />
+          )}
+        </div>
+        <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>
+          <ArrowLeft />
+        </Button>
+      </div>
 
       <div className={styles.tools}>
         {showHistory && (

@@ -15,22 +15,27 @@
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
+
+  &:hover:not(:disabled):not(:focus) {
+    border-color: var(--muted-foreground);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 1px var(--ring);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: var(--secondary);
+  }
+
+  &::placeholder {
+    color: var(--muted-foreground);
+    opacity: 1;
+  }
 }
-.input:hover:not(:disabled):not(:focus) {
-  border-color: var(--muted-foreground);
-}
-.input:focus {
-  box-shadow: 0 0 0 1px var(--ring);
-}
-.input:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-  background-color: var(--secondary);
-}
-.input::placeholder {
-  color: var(--muted-foreground);
-  opacity: 1;
-}
+
 .numberClean::-webkit-outer-spin-button,
 .numberClean::-webkit-inner-spin-button {
   -webkit-appearance: none;

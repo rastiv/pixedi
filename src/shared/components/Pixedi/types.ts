@@ -1,5 +1,5 @@
 export const breakpoints = {
-  sm: 640,
+  sm: 480,
   md: 768,
   lg: 1024,
   xl: 1280,
@@ -22,6 +22,11 @@ export const ActionName = {
   ROTATE: "rotate",
   FILTERS: "filters",
 } as const;
+
+export type Tools = Exclude<
+  (typeof ActionName)[keyof typeof ActionName],
+  "initial"
+>;
 
 export type Sizes = {
   width: number;
@@ -47,6 +52,13 @@ export type CropRect = {
   h: number;
 };
 
+export type CropRectExtended = CropRect & {
+  xP: number;
+  yP: number;
+  wP: number;
+  hP: number;
+};
+
 export type ActionRotate = {
   degrees: number;
 };
@@ -55,10 +67,10 @@ export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
   | { name: typeof ActionName.RESIZE; args: Sizes }
   | { name: typeof ActionName.CROP; args: ActionCrop }
-  // | {
-  //     name: typeof ActionName.PRESET_CROP;
-  //     args: Sizes & CropSizes & CropPosition;
-  //   }
+  | {
+      name: typeof ActionName.PRESET_CROP;
+      args: ActionCrop;
+    }
   | { name: typeof ActionName.FLIP; args: ActionFlip }
   | { name: typeof ActionName.ROTATE; args: ActionRotate }
   | { name: typeof ActionName.FILTERS; args: Record<string, number> };
@@ -90,12 +102,6 @@ export type Preset = {
   options: Array<PresetOptions>;
 };
 
-export type Settings = {
-  quality?: number;
-  saveAsWEBP?: boolean;
-  exportAs?: "blob" | "base64";
-};
-
 export type ProcessedImage = {
   newBlob: Blob;
   previewBlob: Blob;
@@ -103,4 +109,12 @@ export type ProcessedImage = {
   width: number;
   height: number;
   isAlpha: boolean;
+};
+
+export type Settings = {
+  tools?: Tools[];
+  infobar?: boolean;
+  quality?: number;
+  saveAsWEBP?: boolean;
+  exportAs?: "blob" | "base64";
 };

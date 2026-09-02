@@ -26,9 +26,8 @@ const Probe = ({ args }: { args: ActionCrop }) => {
   );
 };
 
-// buttons in render order: the probe, then the crop tools save and close
 const getSaveButton = (container: HTMLElement) =>
-  container.querySelectorAll("button")[1];
+  container.querySelector<HTMLButtonElement>('button[aria-label="Save"]')!;
 
 const renderCrop = (args: ActionCrop) => {
   const view = render(

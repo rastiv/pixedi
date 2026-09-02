@@ -1,8 +1,9 @@
 .frame {
+  grid-area: frame;
   width: 100%;
   height: 100%;
   position: relative;
   box-sizing: border-box;
-  padding: 16px;
   margin: 0 auto;
+  overflow: hidden;
 }

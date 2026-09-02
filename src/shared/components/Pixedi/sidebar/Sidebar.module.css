@@ -1,89 +1,52 @@
 .sidebar {
+  grid-area: sidebar;
   position: relative;
-  width: 0;
+  width: 48px;
+  background: var(--background);
+  border-right: 1px solid var(--border);
   z-index: 10;
-  transition: transform 0.15s ease-out;
-  @media (min-width: 768px) {
-    width: 320px;
-    transition: none;
+  overflow: hidden;
+
+  &.mobile {
+    transform: translateX(-110%);
+    transition: transform 0.2s ease-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &.open {
+      transform: translateX(0%);
+    }
   }
 }
-.settings {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  @media (min-width: 768px) {
-    display: none;
-  }
-}
-.container {
-  position: absolute;
-  inset: 0;
-  box-sizing: border-box;
-  border-left: 1px solid var(--border);
-}
-.content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 320px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  background-color: var(--background);
-  padding: 16px;
-  box-sizing: border-box;
-  @media (max-width: 767px) {
-    padding-top: 48px;
-  }
-}
-.closeBtn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
-.separator {
-  margin-top: 20px;
-  margin-bottom: 12px;
-}
-.resize {
+.item {
+  position: relative;
+  height: 48px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-.resizeIcon {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.resizeSize {
-  font-size: 14px;
-  color: var(--muted-foreground);
-}
-.crop {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.ratio {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.sidebarPreset {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.flipRotate {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background-color: var(--accent);
+  }
+
+  &.selected {
+    color: var(--accent-blue);
+    background-color: var(--accent);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: 0px;
+      width: 2px;
+      background-color: var(--accent-blue);
+    }
+  }
 }

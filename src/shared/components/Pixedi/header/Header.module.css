@@ -1,4 +1,5 @@
 .header {
+  grid-area: header;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -8,16 +9,43 @@
   background-color: var(--background);
   border-bottom: 1px solid var(--border);
 }
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+.sidebarToggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  position: relative;
+  left: -8px;
+  border-right: solid 1px var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.mobile {
+    display: flex;
+  }
+}
+.sidebarIcon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.6;
+}
 .tools {
   display: flex;
   gap: 8px;
 }
 .history {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
 }
 .historyText {
   color: var(--muted-foreground);
   font-size: 14px;
+  font-family: var(--font-mono);
 }

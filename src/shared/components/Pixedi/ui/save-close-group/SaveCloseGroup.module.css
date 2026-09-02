@@ -3,14 +3,14 @@
   margin-left: 4px;
 }
 
-.group .save {
+.save {
   width: 36px;
   color: var(--color-green);
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
 
-.group .close {
+.close {
   width: 36px;
   color: var(--color-red);
   border-bottom-left-radius: 0;

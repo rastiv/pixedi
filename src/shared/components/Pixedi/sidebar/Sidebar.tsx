@@ -1,61 +1,128 @@
-import { useBellow } from "../hooks";
-import { Settings, X } from "../assets/icons";
-import { Button, Separator } from "../ui";
-import { SidebarResize } from "./SidebarResize";
-import { SidebarCrop } from "./SidebarCrop";
-import { SidebarPresets } from "./SidebarPresets";
-import { SidebarFlip } from "./SidebarFlip";
-import SidebarRotate from "./SidebarRotate";
+import { Crop, FlipH, Fullscreen, Presets, Rotate } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
-import buttonStyles from "../ui/button/Button.module.css";
+import { ActionName, type Tools } from "../types";
 import styles from "./Sidebar.module.css";
 
-export const Sidebar = () => {
-  const { sidebar: isSidebarOpen, setSidebar } = usePixediContext();
-  const isBellowMd = useBellow("md");
+type MappedTool = {
+  icon: React.ReactNode;
+  label: string;
+};
+
+const mapTools = (tool: Tools): MappedTool | null => {
+  switch (tool) {
+    case ActionName.RESIZE:
+      return {
+        icon: <Fullscreen />,
+        label: "Resize",
+      };
+    case ActionName.CROP:
+      return {
+        icon: <Crop />,
+        label: "Crop",
+      };
+    case ActionName.PRESET_CROP:
+      return {
+        icon: <Presets />,
+        label: "Presets",
+      };
+    case ActionName.FLIP:
+      return {
+        icon: <FlipH />,
+        label: "Flip",
+      };
+    case ActionName.ROTATE:
+      return {
+        icon: <Rotate />,
+        label: "Rotate",
+      };
+    default:
+      return null;
+  }
+};
+
+type SidebarProps = {
+  isMobile: boolean;
+};
+
+export const Sidebar = ({ isMobile }: SidebarProps) => {
+  const {
+    settings,
+    sidebar: isSidebarOpen,
+    currentAction,
+    getLastRotation,
+    getLastHistoryItem,
+    setCurrentAction,
+    setSidebar,
+  } = usePixediContext();
+  const tools = settings?.tools || [];
+  const actionName = currentAction?.name;
+  const { width, height } = getLastHistoryItem();
+
+  const handleClick = (tool: Tools) => {
+    if (tools.includes(tool) && actionName === tool) {
+      setCurrentAction(null);
+      return;
+    }
+
+    switch (tool) {
+      case ActionName.RESIZE:
+        setCurrentAction({ name: ActionName.RESIZE, args: { width, height } });
+        break;
+      case ActionName.CROP:
+        setCurrentAction({
+          name: ActionName.CROP,
+          args: { id: "freeform", ratio: width / height, isFree: true },
+        });
+        break;
+      case ActionName.PRESET_CROP:
+        setCurrentAction({
+          name: ActionName.PRESET_CROP,
+          args: {
+            id: "facebook-post",
+            ratio: 1200 / 630,
+            isFree: false,
+            preset: { width: 1200, height: 630 },
+          },
+        });
+        break;
+      case ActionName.FLIP:
+        setCurrentAction({
+          name: ActionName.FLIP,
+          args: { horizontal: false, vertical: false },
+        });
+        break;
+      case ActionName.ROTATE:
+        setCurrentAction({
+          name: ActionName.ROTATE,
+          args: { degrees: getLastRotation() },
+        });
+        break;
+    }
+
+    setSidebar(false);
+  };
 
   return (
-    <>
-      <Button
-        variant="outline"
-        className={styles.settings}
-        onClick={() => setSidebar(true)}
-      >
-        <Settings />
-      </Button>
-      <div
-        className={styles.sidebar}
-        style={{
-          transform:
-            isBellowMd && isSidebarOpen
-              ? "translateX(-320px)"
-              : "translateX(0%)",
-        }}
-      >
-        <div className={styles.container}>
-          <div className={styles.content}>
-            {isBellowMd && (
-              <Button
-                variant="ghost"
-                className={`${styles.closeBtn} ${buttonStyles.rect}`}
-                onClick={() => setSidebar(false)}
-              >
-                <X />
-              </Button>
-            )}
-            <SidebarResize />
-            <Separator className={styles.separator} />
-            <SidebarCrop />
-            <Separator className={styles.separator} />
-            <SidebarPresets />
-            <Separator className={styles.separator} />
-            <div className={styles.flipRotate}>
-              <SidebarFlip />
-              <SidebarRotate />
-            </div>
+    <nav
+      className={`${styles.sidebar} ${isMobile ? styles.mobile : ""} ${
+        isMobile && isSidebarOpen ? styles.open : ""
+      }`}
+    >
+      {tools.map((tool) => {
+        const mappedTool = mapTools(tool);
+        if (!mappedTool) return null;
+        const { icon, label } = mappedTool;
+        return (
+          <div
+            key={tool}
+            className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
+            onClick={() => handleClick(tool)}
+            title={label}
+          >
+            {icon}
           </div>
-        </div>
-      </div>
-    </>
+        );
+      })}
+    </nav>
   );
 };
