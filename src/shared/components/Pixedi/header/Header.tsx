@@ -22,7 +22,8 @@ type HeaderProps = {
 
 export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
   const { save, reset, isSaving } = useImageSaving(onSave);
-  const { sidebar, history, undo, redo, setSidebar } = usePixediContext();
+  const { sidebar, history, undo, redo, setSidebar, setCurrentAction } =
+    usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -32,6 +33,16 @@ export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
 
   const handleToggleSidebar = () => {
     setSidebar(!sidebar);
+  };
+
+  const handleUndo = () => {
+    undo();
+    setCurrentAction(null);
+  };
+
+  const handleRedo = () => {
+    redo();
+    setCurrentAction(null);
   };
 
   return (
@@ -59,7 +70,7 @@ export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
               variant="outline"
               disabled={disabledUndo}
               className={buttonStyles.rect}
-              onClick={undo}
+              onClick={handleUndo}
             >
               <Undo />
             </Button>
@@ -70,7 +81,7 @@ export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
               variant="outline"
               disabled={disabledRedo}
               className={buttonStyles.rect}
-              onClick={redo}
+              onClick={handleRedo}
             >
               <Redo />
             </Button>
