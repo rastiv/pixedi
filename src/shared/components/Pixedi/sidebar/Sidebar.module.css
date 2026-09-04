@@ -17,6 +17,10 @@
     }
   }
 }
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
 .item {
   position: relative;
   height: 48px;

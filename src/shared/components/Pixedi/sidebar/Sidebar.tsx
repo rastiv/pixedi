@@ -108,21 +108,23 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
         isMobile && isSidebarOpen ? styles.open : ""
       }`}
     >
-      {tools.map((tool) => {
-        const mappedTool = mapTools(tool);
-        if (!mappedTool) return null;
-        const { icon, label } = mappedTool;
-        return (
-          <div
-            key={tool}
-            className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
-            onClick={() => handleClick(tool)}
-            title={label}
-          >
-            {icon}
-          </div>
-        );
-      })}
+      <div className={styles.wrapper}>
+        {tools.map((tool) => {
+          const mappedTool = mapTools(tool);
+          if (!mappedTool) return null;
+          const { icon, label } = mappedTool;
+          return (
+            <div
+              key={tool}
+              className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
+              onClick={() => handleClick(tool)}
+              title={label}
+            >
+              {icon}
+            </div>
+          );
+        })}
+      </div>
     </nav>
   );
 };
