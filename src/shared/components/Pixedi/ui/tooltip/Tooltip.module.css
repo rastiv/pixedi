@@ -28,14 +28,14 @@
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition:
-    left 0.2s linear,
-    top 0.2s linear,
-    opacity 0.2s linear;
+    left 0.2s,
+    top 0.2s,
+    opacity 0.2s;
   opacity: var(--tooltip-opacity, 0);
   visibility: var(--tooltip-visibility, hidden);
   overflow: hidden;
-  width: 160px;
-  height: 32px;
+  width: var(--tooltip-item-w, 160px);
+  height: var(--tooltip-item-h, 32px);
 }
 
 .popup[data-orientation="vertical"] {
@@ -46,21 +46,26 @@
   display: flex;
   height: 100%;
   width: auto;
-  transition: transform 0.2s linear;
-  transform: var(--track-transform, translateX(0));
+  transition: transform 0.4s;
+  transform: translateX(
+    calc(-1 * var(--tooltip-index, 0) * var(--tooltip-item-w, 160px))
+  );
 
   &[data-orientation="vertical"] {
     flex-direction: column;
     height: auto;
     width: 100%;
+    transform: translateY(
+      calc(-1 * var(--tooltip-index, 0) * var(--tooltip-item-h, 32px))
+    );
   }
 }
 
 .title {
-  min-width: 160px;
-  max-width: 160px;
-  min-height: 32px;
-  max-height: 32px;
+  min-width: var(--tooltip-item-w, 160px);
+  max-width: var(--tooltip-item-w, 160px);
+  min-height: var(--tooltip-item-h, 32px);
+  max-height: var(--tooltip-item-h, 32px);
   display: flex;
   align-items: center;
   justify-content: center;

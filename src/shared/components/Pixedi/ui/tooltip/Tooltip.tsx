@@ -9,9 +9,6 @@ interface TooltipProps {
   classNameTitle?: string;
 }
 
-const WINDOW_WIDTH = 160;
-const WINDOW_HEIGHT = 32;
-
 export const Tooltip = ({
   children,
   orientation = "horizontal",
@@ -73,8 +70,8 @@ export const Tooltip = ({
   };
 
   const handleMouseLeave = () => {
-    // setActiveIndex(null);
-    // setPosition(null);
+    setActiveIndex(null);
+    setPosition(null);
   };
 
   const cssVars = {
@@ -82,9 +79,7 @@ export const Tooltip = ({
     "--tooltip-y": position ? `${position.y}px` : "0px",
     "--tooltip-opacity": activeIndex !== null ? "1" : "0",
     "--tooltip-visibility": activeIndex !== null ? "visible" : "hidden",
-    "--track-transform": isVertical
-      ? `translateY(-${(activeIndex || 0) * WINDOW_HEIGHT}px)`
-      : `translateX(-${(activeIndex || 0) * WINDOW_WIDTH}px)`,
+    "--tooltip-index": String(activeIndex ?? 0),
   } as React.CSSProperties;
 
   return (
