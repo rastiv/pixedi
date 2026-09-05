@@ -196,3 +196,9 @@
     }
   }
 }
+.tooltip {
+  background: var(--background);
+  color: var(--foreground);
+  margin-top: -4px;
+  --tooltip-item-w: 110px;
+}
