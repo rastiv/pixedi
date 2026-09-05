@@ -131,26 +131,17 @@ export const Tooltip = ({
   const handleMouseLeave = () => setIsVisible(false);
 
   const index = activeIndex ?? 0;
-  const active = sizes[index];
-  // The cross axis uses the largest title so the popup does not jitter
-  // sideways while sliding along the main axis.
-  const largest = sizes.reduce<Size>(
-    (acc, s) => ({ w: Math.max(acc.w, s.w), h: Math.max(acc.h, s.h) }),
-    { w: 0, h: 0 },
-  );
+  const size = sizes[index];
   const offset = sizes
     .slice(0, index)
     .reduce((acc, s) => acc + (isVertical ? s.h : s.w), 0);
-  const size = isVertical
-    ? { w: largest.w, h: active?.h }
-    : { w: active?.w, h: largest.h };
 
   const cssVars = {
     "--tooltip-x": position ? `${position.x}px` : "0px",
     "--tooltip-y": position ? `${position.y}px` : "0px",
     "--tooltip-opacity": isVisible ? "1" : "0",
-    "--tooltip-w": size.w ? `${size.w}px` : "auto",
-    "--tooltip-h": size.h ? `${size.h}px` : "auto",
+    "--tooltip-w": size?.w ? `${size.w}px` : "auto",
+    "--tooltip-h": size?.h ? `${size.h}px` : "auto",
     "--tooltip-offset": `${offset}px`,
   } as React.CSSProperties;
 

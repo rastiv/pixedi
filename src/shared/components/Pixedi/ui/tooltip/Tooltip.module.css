@@ -54,17 +54,17 @@
   border-radius: inherit;
 }
 
+/* max-content keeps the track independent of the popup, so titles end up
+   natural along the main axis and stretched to the longest one across it. */
 .track {
   display: flex;
   width: max-content;
-  height: 100%;
+  height: max-content;
   transform: translateX(calc(-1 * var(--tooltip-offset, 0px)));
 }
 
 .track[data-orientation="vertical"] {
   flex-direction: column;
-  width: 100%;
-  height: max-content;
   transform: translateY(calc(-1 * var(--tooltip-offset, 0px)));
 }
 

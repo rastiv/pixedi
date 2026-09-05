@@ -34,6 +34,10 @@
     height: 16px;
   }
 
+  &:hover {
+    background-color: var(--accent);
+  }
+
   &.selected {
     color: var(--accent-blue);
     background-color: var(--accent);
@@ -50,23 +54,14 @@
   }
 }
 .tooltip {
-  --tooltip-item-w: 140px;
-  --tooltip-item-h: 48px;
-
-  background: linear-gradient(
-    to right,
-    var(--accent-blue) 2.5px,
-    transparent 2.5px,
-    transparent 48px,
-    var(--background) 48px,
-    var(--background) 100%
-  );
-  color: var(--foreground);
-  border-radius: 0;
-  margin-left: -52px;
-}
-.tooltipTitle {
-  position: relative;
-  justify-content: flex-start;
-  padding-left: 64px;
+  &::before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateY(-50%) rotate(45deg);
+    background-color: inherit;
+  }
 }

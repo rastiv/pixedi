@@ -197,17 +197,13 @@
   }
 }
 .tooltip {
-  background: var(--background);
-  color: var(--foreground);
-  margin-top: -4px;
-
   &::before {
     content: "";
     position: absolute;
-    bottom: -6px;
+    bottom: -3px;
     left: 50%;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     transform: translateX(-50%) rotate(45deg);
     background-color: inherit;
   }
