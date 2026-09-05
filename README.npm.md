@@ -88,18 +88,21 @@ function AppBase64() {
 
 | Prop       | Type                                               | Description                                                                                   |
 | ---------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `image`    | `string`                                           | URL or base64 data URI of the image to edit.                                                  |
+| `image`    | `string \| Blob`                                   | URL, base64 data URI, or `Blob` of the image to edit.                                         |
 | `onSave`   | `(image: Blob \| string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as a `Blob` or a base64 data URI. |
 | `onBack`   | `() => void`                                       | Called when the user clicks Back/Cancel.                                                      |
+| `theme`    | `"light" \| "dark"`                                | UI color theme. Defaults to `"light"`.                                                        |
 | `settings` | `Settings`                                         | Optional editor settings (see below).                                                         |
 
 ### Settings
 
-| Setting      | Type                 | Default  | Description                                                                                     |
-| ------------ | -------------------- | -------- | ----------------------------------------------------------------------------------------------- |
-| `quality`    | `number`             | `0.85`   | Output compression quality (`0`–`1`) for JPEG/WebP.                                             |
-| `saveAsWEBP` | `boolean`            | `false`  | Encode the final image as WebP.                                                                 |
-| `exportAs`   | `"blob" \| "base64"` | `"blob"` | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`). |
+| Setting      | Type                                                                           | Default                                                    | Description                                                                                     |
+| ------------ | ------------------------------------------------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `tools`      | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters">` | `["resize","crop","presetCrop","flip","rotate","filters"]` | Tools to show in the sidebar. Use an empty array to disable editing.                            |
+| `infobar`    | `boolean`                                                                      | `false`                                                    | Show the image info panel below the canvas.                                                     |
+| `quality`    | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                             |
+| `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                 |
+| `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`). |
 
 ## Widget CDN
 
@@ -108,7 +111,7 @@ For non-React environments, use the standalone UMD widget from a CDN. See [`READ
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.0.6/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.3.0/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):
