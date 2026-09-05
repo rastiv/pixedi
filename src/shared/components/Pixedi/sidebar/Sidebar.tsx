@@ -1,44 +1,7 @@
-import { Crop, FlipH, Fullscreen, Presets, Rotate } from "../assets/icons";
+import { Tooltip } from "@/shared/components/Pixedi/ui";
 import { usePixediContext } from "../provider/usePixediContext";
-import { ActionName, type Tools } from "../types";
+import { useSidebar, getToolData } from "./useSidebar";
 import styles from "./Sidebar.module.css";
-
-type MappedTool = {
-  icon: React.ReactNode;
-  label: string;
-};
-
-const mapTools = (tool: Tools): MappedTool | null => {
-  switch (tool) {
-    case ActionName.RESIZE:
-      return {
-        icon: <Fullscreen />,
-        label: "Resize",
-      };
-    case ActionName.CROP:
-      return {
-        icon: <Crop />,
-        label: "Crop",
-      };
-    case ActionName.PRESET_CROP:
-      return {
-        icon: <Presets />,
-        label: "Presets",
-      };
-    case ActionName.FLIP:
-      return {
-        icon: <FlipH />,
-        label: "Flip",
-      };
-    case ActionName.ROTATE:
-      return {
-        icon: <Rotate />,
-        label: "Rotate",
-      };
-    default:
-      return null;
-  }
-};
 
 type SidebarProps = {
   isMobile: boolean;
@@ -49,58 +12,11 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
     settings,
     sidebar: isSidebarOpen,
     currentAction,
-    getLastRotation,
-    getLastHistoryItem,
-    setCurrentAction,
-    setSidebar,
   } = usePixediContext();
   const tools = settings?.tools || [];
   const actionName = currentAction?.name;
-  const { width, height } = getLastHistoryItem();
 
-  const handleClick = (tool: Tools) => {
-    if (tools.includes(tool) && actionName === tool) {
-      setCurrentAction(null);
-      return;
-    }
-
-    switch (tool) {
-      case ActionName.RESIZE:
-        setCurrentAction({ name: ActionName.RESIZE, args: { width, height } });
-        break;
-      case ActionName.CROP:
-        setCurrentAction({
-          name: ActionName.CROP,
-          args: { id: "freeform", ratio: width / height, isFree: true },
-        });
-        break;
-      case ActionName.PRESET_CROP:
-        setCurrentAction({
-          name: ActionName.PRESET_CROP,
-          args: {
-            id: "facebook-post",
-            ratio: 1200 / 630,
-            isFree: false,
-            preset: { width: 1200, height: 630 },
-          },
-        });
-        break;
-      case ActionName.FLIP:
-        setCurrentAction({
-          name: ActionName.FLIP,
-          args: { horizontal: false, vertical: false },
-        });
-        break;
-      case ActionName.ROTATE:
-        setCurrentAction({
-          name: ActionName.ROTATE,
-          args: { degrees: getLastRotation() },
-        });
-        break;
-    }
-
-    setSidebar(false);
-  };
+  const { click } = useSidebar();
 
   return (
     <nav
@@ -108,23 +24,28 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
         isMobile && isSidebarOpen ? styles.open : ""
       }`}
     >
-      <div className={styles.wrapper}>
+      <Tooltip
+        orientation="vertical"
+        className={styles.tooltip}
+        classNameTitle={styles.tooltipTitle}
+      >
         {tools.map((tool) => {
-          const mappedTool = mapTools(tool);
-          if (!mappedTool) return null;
-          const { icon, label } = mappedTool;
+          const toolData = getToolData(tool);
+          if (!toolData) return null;
+          const { icon, label } = toolData;
           return (
             <div
               key={tool}
               className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
-              onClick={() => handleClick(tool)}
-              title={label}
+              onClick={() => click(tool)}
+              data-tooltip={label}
+              aria-label={label}
             >
               {icon}
             </div>
           );
         })}
-      </div>
+      </Tooltip>
     </nav>
   );
 };
