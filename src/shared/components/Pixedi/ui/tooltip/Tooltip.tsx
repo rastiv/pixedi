@@ -1,4 +1,4 @@
-import { useState, useRef, Children, isValidElement } from "react";
+import { useState, useRef, useEffect, Children, isValidElement } from "react";
 import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
 
@@ -19,9 +19,25 @@ export const Tooltip = ({
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null,
   );
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimated, setIsAnimated] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const isVertical = orientation === "vertical";
+
+  // The first placement must be instant, so sliding transitions are enabled
+  // only once the popup has been committed at its initial position.
+  useEffect(() => {
+    if (!isVisible || isAnimated) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setIsAnimated(true));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [isVisible, isAnimated]);
 
   const titles: string[] = [];
   Children.forEach(children, (child) => {
@@ -41,44 +57,44 @@ export const Tooltip = ({
     ) as HTMLElement | null;
 
     if (!target) {
-      setActiveIndex(null);
-      setPosition(null);
+      setIsVisible(false);
       return;
     }
 
     const parent = target.parentElement;
     if (!parent) return;
     const index = Array.from(parent.children).indexOf(target);
+    if (index === -1 || (isVisible && index === activeIndex)) return;
 
-    const rect = target.getBoundingClientRect();
     const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!containerRect) return;
+    const rect = target.getBoundingClientRect();
 
-    if (containerRect && index !== -1) {
-      if (isVertical) {
-        setPosition({
-          x: rect.right - containerRect.left + 4,
-          y: rect.top - containerRect.top + rect.height / 2,
-        });
-      } else {
-        setPosition({
-          x: rect.left - containerRect.left + rect.width / 2,
-          y: rect.top - containerRect.top - 8,
-        });
-      }
-      setActiveIndex(index);
-    }
+    // Appearing from hidden must not animate the jump to the hovered item.
+    if (!isVisible) setIsAnimated(false);
+
+    setPosition(
+      isVertical
+        ? {
+            x: rect.right - containerRect.left + 4,
+            y: rect.top - containerRect.top + rect.height / 2,
+          }
+        : {
+            x: rect.left - containerRect.left + rect.width / 2,
+            y: rect.top - containerRect.top - 8,
+          },
+    );
+    setActiveIndex(index);
+    setIsVisible(true);
   };
 
-  const handleMouseLeave = () => {
-    setActiveIndex(null);
-    setPosition(null);
-  };
+  // Keep the last position/index so the popup fades out in place.
+  const handleMouseLeave = () => setIsVisible(false);
 
   const cssVars = {
     "--tooltip-x": position ? `${position.x}px` : "0px",
     "--tooltip-y": position ? `${position.y}px` : "0px",
-    "--tooltip-opacity": activeIndex !== null ? "1" : "0",
-    "--tooltip-visibility": activeIndex !== null ? "visible" : "hidden",
+    "--tooltip-opacity": isVisible ? "1" : "0",
     "--tooltip-index": String(activeIndex ?? 0),
   } as React.CSSProperties;
 
@@ -98,8 +114,9 @@ export const Tooltip = ({
         {children}
       </div>
       <div
+        aria-hidden="true"
         data-orientation={isVertical ? "vertical" : "horizontal"}
-        className={`${styles.popup} ${className}`}
+        className={`${styles.popup} ${isAnimated ? styles.animated : ""} ${className}`}
       >
         <div
           data-orientation={isVertical ? "vertical" : "horizontal"}
