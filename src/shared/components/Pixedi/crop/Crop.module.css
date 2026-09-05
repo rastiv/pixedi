@@ -196,15 +196,3 @@
     }
   }
 }
-.tooltip {
-  &::before {
-    content: "";
-    position: absolute;
-    bottom: -3px;
-    left: 50%;
-    width: 10px;
-    height: 10px;
-    transform: translateX(-50%) rotate(45deg);
-    background-color: inherit;
-  }
-}

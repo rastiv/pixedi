@@ -15,7 +15,6 @@
   pointer-events: auto;
 }
 
-/* Clipping lives on .mask so consumers can hang arrows off .popup. */
 .popup {
   position: absolute;
   top: var(--tooltip-y, 0px);
@@ -32,10 +31,32 @@
   width: var(--tooltip-w, auto);
   height: var(--tooltip-h, auto);
   transition: opacity var(--tooltip-fade, 0.2s);
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateX(-50%) rotate(45deg);
+    background-color: inherit;
+  }
 }
 
 .popup[data-orientation="vertical"] {
   transform: translate(0, -50%);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateY(-50%) rotate(45deg);
+    background-color: inherit;
+  }
 }
 
 .popup.animated {
@@ -54,8 +75,6 @@
   border-radius: inherit;
 }
 
-/* max-content keeps the track independent of the popup, so titles end up
-   natural along the main axis and stretched to the longest one across it. */
 .track {
   display: flex;
   width: max-content;
@@ -72,7 +91,6 @@
   transition: transform var(--tooltip-slide, 0.4s);
 }
 
-/* Sizes are content driven unless a consumer pins them via the vars. */
 .title {
   flex: 0 0 auto;
   min-width: var(--tooltip-item-w, auto);
