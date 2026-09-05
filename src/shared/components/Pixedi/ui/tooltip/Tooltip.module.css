@@ -1,0 +1,106 @@
+.tooltip {
+  position: relative;
+}
+
+.container {
+  display: flex;
+  gap: 0;
+}
+
+.container[data-orientation="vertical"] {
+  flex-direction: column;
+}
+
+.container [data-tooltip] {
+  pointer-events: auto;
+}
+
+.popup {
+  position: absolute;
+  top: var(--tooltip-y, 0px);
+  left: var(--tooltip-x, 0px);
+  transform: translate(-50%, -100%);
+  background-color: var(--foreground);
+  color: var(--background);
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 999;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: var(--tooltip-opacity, 0);
+  width: var(--tooltip-w, auto);
+  height: var(--tooltip-h, auto);
+  transition: opacity var(--tooltip-fade, 0.2s);
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateX(-50%) rotate(45deg);
+    background-color: inherit;
+  }
+}
+
+.popup[data-orientation="vertical"] {
+  transform: translate(0, -50%);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    transform: translateY(-50%) rotate(45deg);
+    background-color: inherit;
+  }
+}
+
+.popup.animated {
+  transition:
+    left var(--tooltip-slide, 0.4s),
+    top var(--tooltip-slide, 0.4s),
+    width var(--tooltip-slide, 0.4s),
+    height var(--tooltip-slide, 0.4s),
+    opacity var(--tooltip-fade, 0.2s);
+}
+
+.mask {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  height: max-content;
+  transform: translateX(calc(-1 * var(--tooltip-offset, 0px)));
+}
+
+.track[data-orientation="vertical"] {
+  flex-direction: column;
+  transform: translateY(calc(-1 * var(--tooltip-offset, 0px)));
+}
+
+.animated .track {
+  transition: transform var(--tooltip-slide, 0.4s);
+}
+
+.title {
+  flex: 0 0 auto;
+  min-width: var(--tooltip-item-w, auto);
+  max-width: var(--tooltip-item-w, none);
+  min-height: var(--tooltip-item-h, 32px);
+  max-height: var(--tooltip-item-h, none);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  padding: 0 10px;
+  box-sizing: border-box;
+}

@@ -1,4 +1,4 @@
-import { Button, SaveCloseGroup } from "../ui";
+import { Button, SaveCloseGroup, Tooltip } from "../ui";
 import { FlipH, FlipV } from "../assets/icons";
 import { useFlip } from "./useFlip";
 import styles from "./Flip.module.css";
@@ -16,30 +16,38 @@ export const FlipTools = () => {
   return (
     <div className={styles.flip}>
       <div className={styles.scGroup}>
-        <Button
-          variant="outline"
-          className={styles.btnH}
-          onClick={handleFlipHorizontal}
-        >
-          <FlipH
-            style={{
-              color: flipHorizontal
-                ? "var(--accent-blue)"
-                : "var(--foreground)",
-            }}
-          />
-        </Button>
-        <Button
-          variant="outline"
-          className={styles.btnV}
-          onClick={handleFlipVertical}
-        >
-          <FlipV
-            style={{
-              color: flipVertical ? "var(--accent-blue)" : "var(--foreground)",
-            }}
-          />
-        </Button>
+        <Tooltip orientation="horizontal" className={styles.tooltip}>
+          <Button
+            variant="outline"
+            className={styles.btnH}
+            onClick={handleFlipHorizontal}
+            aria-label="Horizontal"
+            data-tooltip="Horizontal"
+          >
+            <FlipH
+              style={{
+                color: flipHorizontal
+                  ? "var(--accent-blue)"
+                  : "var(--foreground)",
+              }}
+            />
+          </Button>
+          <Button
+            variant="outline"
+            className={styles.btnV}
+            onClick={handleFlipVertical}
+            aria-label="Vertical"
+            data-tooltip="Vertical"
+          >
+            <FlipV
+              style={{
+                color: flipVertical
+                  ? "var(--accent-blue)"
+                  : "var(--foreground)",
+              }}
+            />
+          </Button>
+        </Tooltip>
       </div>
       <SaveCloseGroup
         disabled={!flipHorizontal && !flipVertical}

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   Crop,
   Image,
@@ -5,8 +6,16 @@ import {
   Rectangle4x3,
   Square,
 } from "../assets/icons";
-import { Button } from "../ui";
+import { Button, Tooltip } from "../ui";
 import styles from "./Crop.module.css";
+
+const cropTools: Array<{ id: string; icon: ReactNode; label: string }> = [
+  { id: "freeform", icon: <Crop />, label: "Freeform" },
+  { id: "origin", icon: <Image />, label: "Original" },
+  { id: "1:1", icon: <Square />, label: "1 : 1" },
+  { id: "4:3", icon: <Rectangle4x3 />, label: "4 : 3" },
+  { id: "16:9", icon: <Rectangle16x9 />, label: "16 : 9" },
+];
 
 type CropButtonGroupProps = {
   value: string;
@@ -16,41 +25,20 @@ type CropButtonGroupProps = {
 export const CropButtonGroup = ({ value, onChange }: CropButtonGroupProps) => {
   return (
     <div className={styles.group}>
-      <Button
-        variant="outline"
-        className={`${styles.groupBtn} ${value === "freeform" ? styles.active : ""}`}
-        onClick={() => onChange("freeform")}
-      >
-        <Crop />
-      </Button>
-      <Button
-        variant="outline"
-        className={`${styles.groupBtn} ${value === "origin" ? styles.active : ""}`}
-        onClick={() => onChange("origin")}
-      >
-        <Image />
-      </Button>
-      <Button
-        variant="outline"
-        className={`${styles.groupBtn} ${value === "1:1" ? styles.active : ""}`}
-        onClick={() => onChange("1:1")}
-      >
-        <Square />
-      </Button>
-      <Button
-        variant="outline"
-        className={`${styles.groupBtn} ${value === "4:3" ? styles.active : ""}`}
-        onClick={() => onChange("4:3")}
-      >
-        <Rectangle4x3 />
-      </Button>
-      <Button
-        variant="outline"
-        className={`${styles.groupBtn} ${value === "16:9" ? styles.active : ""}`}
-        onClick={() => onChange("16:9")}
-      >
-        <Rectangle16x9 />
-      </Button>
+      <Tooltip orientation="horizontal" className={styles.tooltip}>
+        {cropTools.map((tool) => (
+          <Button
+            key={tool.id}
+            variant="outline"
+            className={`${styles.groupBtn} ${value === tool.id ? styles.active : ""}`}
+            onClick={() => onChange(tool.id)}
+            aria-label={tool.label}
+            data-tooltip={tool.label}
+          >
+            {tool.icon}
+          </Button>
+        ))}
+      </Tooltip>
     </div>
   );
 };
