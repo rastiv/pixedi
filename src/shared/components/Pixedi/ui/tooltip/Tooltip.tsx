@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, Children, isValidElement } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  Children,
+  isValidElement,
+} from "react";
 import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
 
@@ -8,6 +15,8 @@ interface TooltipProps {
   className?: string;
   classNameTitle?: string;
 }
+
+type Size = { w: number; h: number };
 
 export const Tooltip = ({
   children,
@@ -21,9 +30,51 @@ export const Tooltip = ({
   );
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
+  const [sizes, setSizes] = useState<Size[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isVertical = orientation === "vertical";
+
+  const titles: string[] = [];
+  Children.forEach(children, (child) => {
+    if (isValidElement(child)) {
+      const { "data-tooltip": tooltip } = child.props as {
+        "data-tooltip"?: string;
+      };
+      if (tooltip) {
+        titles.push(tooltip);
+      }
+    }
+  });
+
+  const titlesKey = titles.join("\u0000");
+  const titleCount = titles.length;
+
+  // Titles keep their natural size, so the popup can be sized to the hovered
+  // one instead of relying on a fixed item width.
+  useLayoutEffect(() => {
+    const measure = () => {
+      const next = titleRefs.current
+        .slice(0, titleCount)
+        .map((el) => ({ w: el?.offsetWidth ?? 0, h: el?.offsetHeight ?? 0 }));
+      setSizes((prev) =>
+        prev.length === next.length &&
+        prev.every((s, i) => s.w === next[i].w && s.h === next[i].h)
+          ? prev
+          : next,
+      );
+    };
+
+    measure();
+
+    const track = trackRef.current;
+    if (!track || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [titlesKey, titleCount]);
 
   // The first placement must be instant, so sliding transitions are enabled
   // only once the popup has been committed at its initial position.
@@ -38,18 +89,6 @@ export const Tooltip = ({
       cancelAnimationFrame(inner);
     };
   }, [isVisible, isAnimated]);
-
-  const titles: string[] = [];
-  Children.forEach(children, (child) => {
-    if (isValidElement(child)) {
-      const { "data-tooltip": tooltip } = child.props as {
-        "data-tooltip"?: string;
-      };
-      if (tooltip) {
-        titles.push(tooltip);
-      }
-    }
-  });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = (e.target as HTMLElement).closest(
@@ -91,11 +130,28 @@ export const Tooltip = ({
   // Keep the last position/index so the popup fades out in place.
   const handleMouseLeave = () => setIsVisible(false);
 
+  const index = activeIndex ?? 0;
+  const active = sizes[index];
+  // The cross axis uses the largest title so the popup does not jitter
+  // sideways while sliding along the main axis.
+  const largest = sizes.reduce<Size>(
+    (acc, s) => ({ w: Math.max(acc.w, s.w), h: Math.max(acc.h, s.h) }),
+    { w: 0, h: 0 },
+  );
+  const offset = sizes
+    .slice(0, index)
+    .reduce((acc, s) => acc + (isVertical ? s.h : s.w), 0);
+  const size = isVertical
+    ? { w: largest.w, h: active?.h }
+    : { w: active?.w, h: largest.h };
+
   const cssVars = {
     "--tooltip-x": position ? `${position.x}px` : "0px",
     "--tooltip-y": position ? `${position.y}px` : "0px",
     "--tooltip-opacity": isVisible ? "1" : "0",
-    "--tooltip-index": String(activeIndex ?? 0),
+    "--tooltip-w": size.w ? `${size.w}px` : "auto",
+    "--tooltip-h": size.h ? `${size.h}px` : "auto",
+    "--tooltip-offset": `${offset}px`,
   } as React.CSSProperties;
 
   return (
@@ -118,15 +174,24 @@ export const Tooltip = ({
         data-orientation={isVertical ? "vertical" : "horizontal"}
         className={`${styles.popup} ${isAnimated ? styles.animated : ""} ${className}`}
       >
-        <div
-          data-orientation={isVertical ? "vertical" : "horizontal"}
-          className={styles.track}
-        >
-          {titles.map((title, i) => (
-            <div key={i} className={`${styles.title} ${classNameTitle}`}>
-              {title}
-            </div>
-          ))}
+        <div className={styles.mask}>
+          <div
+            ref={trackRef}
+            data-orientation={isVertical ? "vertical" : "horizontal"}
+            className={styles.track}
+          >
+            {titles.map((title, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  titleRefs.current[i] = el;
+                }}
+                className={`${styles.title} ${classNameTitle}`}
+              >
+                {title}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

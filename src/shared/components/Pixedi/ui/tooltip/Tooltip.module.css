@@ -15,6 +15,7 @@
   pointer-events: auto;
 }
 
+/* Clipping lives on .mask so consumers can hang arrows off .popup. */
 .popup {
   position: absolute;
   top: var(--tooltip-y, 0px);
@@ -28,9 +29,8 @@
   pointer-events: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: var(--tooltip-opacity, 0);
-  overflow: hidden;
-  width: var(--tooltip-item-w, 160px);
-  height: var(--tooltip-item-h, 32px);
+  width: var(--tooltip-w, auto);
+  height: var(--tooltip-h, auto);
   transition: opacity var(--tooltip-fade, 0.2s);
 }
 
@@ -42,36 +42,43 @@
   transition:
     left var(--tooltip-slide, 0.4s),
     top var(--tooltip-slide, 0.4s),
+    width var(--tooltip-slide, 0.4s),
+    height var(--tooltip-slide, 0.4s),
     opacity var(--tooltip-fade, 0.2s);
+}
+
+.mask {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }
 
 .track {
   display: flex;
+  width: max-content;
   height: 100%;
-  width: auto;
-  transform: translateX(
-    calc(-1 * var(--tooltip-index, 0) * var(--tooltip-item-w, 160px))
-  );
+  transform: translateX(calc(-1 * var(--tooltip-offset, 0px)));
 }
 
 .track[data-orientation="vertical"] {
   flex-direction: column;
-  height: auto;
   width: 100%;
-  transform: translateY(
-    calc(-1 * var(--tooltip-index, 0) * var(--tooltip-item-h, 32px))
-  );
+  height: max-content;
+  transform: translateY(calc(-1 * var(--tooltip-offset, 0px)));
 }
 
 .animated .track {
   transition: transform var(--tooltip-slide, 0.4s);
 }
 
+/* Sizes are content driven unless a consumer pins them via the vars. */
 .title {
-  min-width: var(--tooltip-item-w, 160px);
-  max-width: var(--tooltip-item-w, 160px);
+  flex: 0 0 auto;
+  min-width: var(--tooltip-item-w, auto);
+  max-width: var(--tooltip-item-w, none);
   min-height: var(--tooltip-item-h, 32px);
-  max-height: var(--tooltip-item-h, 32px);
+  max-height: var(--tooltip-item-h, none);
   display: flex;
   align-items: center;
   justify-content: center;
