@@ -1,4 +1,4 @@
-import { Button, SaveCloseGroup, Tooltip } from "../ui";
+import { Button, SaveCloseGroup, SurfaceTool, Tooltip } from "../ui";
 import { FlipH, FlipV } from "../assets/icons";
 import { useFlip } from "./useFlip";
 import styles from "./Flip.module.css";
@@ -14,7 +14,7 @@ export const FlipTools = () => {
   } = useFlip();
 
   return (
-    <div className={styles.flip}>
+    <SurfaceTool>
       <div className={styles.scGroup}>
         <Tooltip orientation="horizontal" className={styles.tooltip}>
           <Button
@@ -54,6 +54,6 @@ export const FlipTools = () => {
         onSave={handleSave}
         onClose={handleClose}
       />
-    </div>
+    </SurfaceTool>
   );
 };

@@ -6,3 +6,4 @@ export { InputPixel } from "./input-pixel/InputPixel";
 export { SaveCloseGroup } from "./save-close-group/SaveCloseGroup";
 export { Slider } from "./slider/Slider";
 export { Tooltip } from "./tooltip/Tooltip";
+export { SurfaceTool } from "./surface-tool/SurfaceTool";
