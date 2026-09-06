@@ -6,6 +6,7 @@ import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
 import { Preview } from "../preview";
 import { ActionName } from "../types";
+import { FilterTools } from "../filters";
 import styles from "./Frame.module.css";
 import rootStyles from "../index.module.css";
 
@@ -17,6 +18,7 @@ export const Frame = () => {
   const isPreset = currentAction?.name === ActionName.PRESET_CROP;
   const isFlip = currentAction?.name === ActionName.FLIP;
   const isRotate = currentAction?.name === ActionName.ROTATE;
+  const isFilters = currentAction?.name === ActionName.FILTERS;
   const isFade = isCrop || isPreset;
 
   const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
@@ -32,6 +34,7 @@ export const Frame = () => {
       {isPreset && <PresetTools />}
       {isFlip && <FlipTools />}
       {isRotate && <RotateTools />}
+      {isFilters && <FilterTools />}
     </div>
   );
 };

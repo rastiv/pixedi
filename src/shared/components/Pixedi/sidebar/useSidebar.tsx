@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import { Crop, FlipH, Fullscreen, Presets, Rotate } from "../assets/icons";
+import {
+  Crop,
+  Filters,
+  FlipH,
+  Fullscreen,
+  Presets,
+  Rotate,
+} from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ActionName, type Tools } from "../types";
 
@@ -14,6 +21,7 @@ const TOOL_DATA: Partial<Record<Tools, MappedTool>> = {
   [ActionName.PRESET_CROP]: { icon: <Presets />, label: "Presets" },
   [ActionName.FLIP]: { icon: <FlipH />, label: "Flip" },
   [ActionName.ROTATE]: { icon: <Rotate />, label: "Rotate" },
+  [ActionName.FILTERS]: { icon: <Filters />, label: "Filters" },
 };
 
 export const getToolData = (tool: Tools): MappedTool | null =>
@@ -69,6 +77,12 @@ export const useSidebar = () => {
         setCurrentAction({
           name: ActionName.ROTATE,
           args: { degrees: getLastRotation() },
+        });
+        break;
+      case ActionName.FILTERS:
+        setCurrentAction({
+          name: ActionName.FILTERS,
+          args: {},
         });
         break;
     }

@@ -1,4 +1,4 @@
-import type { Preset } from "./types";
+import type { FilterOption, Preset } from "./types";
 
 export const PREVIEW_MAX_DIMENSION = 1920;
 export const PREVIEW_QUALITY = 0.85;
@@ -105,5 +105,58 @@ export const presetsData: Array<Preset> = [
         rightLabel: "400 x 400",
       },
     ],
+  },
+];
+
+export const filters: FilterOption[] = [
+  {
+    value: "saturate",
+    label: "Saturate",
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    value: "grayscale",
+    label: "Grayscale",
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    value: "sepia",
+    label: "Sepia",
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    value: "invert",
+    label: "Invert",
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    value: "hue-rotate",
+    label: "Hue Rotate",
+    min: 0,
+    max: 360,
+    step: 1,
+  },
+
+  {
+    value: "brightness",
+    label: "Brightness",
+    min: 0,
+    max: 100,
+    step: 1,
+  },
+  {
+    value: "contrast",
+    label: "Contrast",
+    min: 0,
+    max: 100,
+    step: 1,
   },
 ];

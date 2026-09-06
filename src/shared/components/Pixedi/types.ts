@@ -88,7 +88,7 @@ export type FuncSaveArgs = (payload: Blob | string) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 
-export type PresetOptions = {
+export type PresetOption = {
   value: string;
   label: string;
   w: number;
@@ -99,7 +99,15 @@ export type PresetOptions = {
 export type Preset = {
   value: string;
   label: string;
-  options: Array<PresetOptions>;
+  options: Array<PresetOption>;
+};
+
+export type FilterOption = {
+  value: string;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
 };
 
 export type ProcessedImage = {
