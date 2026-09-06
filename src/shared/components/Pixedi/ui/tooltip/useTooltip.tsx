@@ -9,18 +9,18 @@ import {
 } from "react";
 import type { ReactNode, CSSProperties } from "react";
 
-type Orientation = "horizontal" | "vertical";
+export type TooltipPosition = "top" | "bottom" | "left" | "right";
 
 type Size = { w: number; h: number };
 
-type Position = { x: number; y: number };
+type Coords = { x: number; y: number };
 
 export const useTooltip = (
   children: ReactNode,
-  orientation: Orientation = "horizontal",
+  position: TooltipPosition = "top",
 ) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [position, setPosition] = useState<Position | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<Coords | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
   const [sizes, setSizes] = useState<Size[]>([]);
@@ -28,7 +28,7 @@ export const useTooltip = (
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const isVertical = orientation === "vertical";
+  const isVerticalLayout = position === "left" || position === "right";
 
   const titles = useMemo(() => {
     const result: string[] = [];
@@ -101,19 +101,25 @@ export const useTooltip = (
     if (!containerRect) return;
     const rect = target.getBoundingClientRect();
 
-    const nextPosition = isVertical
+    const nextPosition = isVerticalLayout
       ? {
-          x: rect.right - containerRect.left + 4,
+          x:
+            position === "left"
+              ? rect.left - containerRect.left - 4
+              : rect.right - containerRect.left + 4,
           y: rect.top - containerRect.top + rect.height / 2,
         }
       : {
           x: rect.left - containerRect.left + rect.width / 2,
-          y: rect.top - containerRect.top - 8,
+          y:
+            position === "top"
+              ? rect.top - containerRect.top - 8
+              : rect.bottom - containerRect.top + 8,
         };
 
     if (!isVisible) setIsAnimated(false);
 
-    setPosition(nextPosition);
+    setTooltipPosition(nextPosition);
     setActiveIndex(index);
     setIsVisible(true);
   };
@@ -124,11 +130,11 @@ export const useTooltip = (
   const activeSize = sizes[index];
   const offset = sizes
     .slice(0, index)
-    .reduce((acc, s) => acc + (isVertical ? s.h : s.w), 0);
+    .reduce((acc, s) => acc + (isVerticalLayout ? s.h : s.w), 0);
 
   const cssVars = {
-    "--tooltip-x": position ? `${position.x}px` : "0px",
-    "--tooltip-y": position ? `${position.y}px` : "0px",
+    "--tooltip-x": tooltipPosition ? `${tooltipPosition.x}px` : "0px",
+    "--tooltip-y": tooltipPosition ? `${tooltipPosition.y}px` : "0px",
     "--tooltip-opacity": isVisible ? "1" : "0",
     "--tooltip-w": activeSize?.w ? `${activeSize.w}px` : "auto",
     "--tooltip-h": activeSize?.h ? `${activeSize.h}px` : "auto",
@@ -140,7 +146,7 @@ export const useTooltip = (
     trackRef,
     titleRefs,
     titles,
-    isVertical,
+    position,
     isVisible,
     isAnimated,
     cssVars,

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.1
+
+- Replace tooltip prop `orientation` with `position`.
+
 ## 1.5.0
 
 - Add SurfaceTool component.

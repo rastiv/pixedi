@@ -1,17 +1,18 @@
 import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
 import { useTooltip } from "./useTooltip";
+import type { TooltipPosition } from "./useTooltip";
 
 interface TooltipProps {
   children: ReactNode;
-  orientation?: "horizontal" | "vertical";
+  position?: TooltipPosition;
   className?: string;
   classNameTitle?: string;
 }
 
 export const Tooltip = ({
   children,
-  orientation = "horizontal",
+  position = "top",
   className = "",
   classNameTitle = "",
 }: TooltipProps) => {
@@ -20,12 +21,11 @@ export const Tooltip = ({
     trackRef,
     titleRefs,
     titles,
-    isVertical,
     isAnimated,
     cssVars,
     handleMouseMove,
     handleMouseLeave,
-  } = useTooltip(children, orientation);
+  } = useTooltip(children, position);
 
   return (
     <div
@@ -36,23 +36,16 @@ export const Tooltip = ({
       className={styles.tooltip}
       style={cssVars}
     >
-      <div
-        data-orientation={isVertical ? "vertical" : "horizontal"}
-        className={styles.container}
-      >
+      <div data-position={position} className={styles.container}>
         {children}
       </div>
       <div
         aria-hidden="true"
-        data-orientation={isVertical ? "vertical" : "horizontal"}
+        data-position={position}
         className={`${styles.popup} ${isAnimated ? styles.animated : ""} ${className}`}
       >
         <div className={styles.mask}>
-          <div
-            ref={trackRef}
-            data-orientation={isVertical ? "vertical" : "horizontal"}
-            className={styles.track}
-          >
+          <div ref={trackRef} data-position={position} className={styles.track}>
             {titles.map((title, i) => (
               <div
                 key={i}

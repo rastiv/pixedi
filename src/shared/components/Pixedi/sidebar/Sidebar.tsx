@@ -24,7 +24,7 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
         isMobile && isSidebarOpen ? styles.open : ""
       }`}
     >
-      <Tooltip orientation="vertical" className={styles.tooltip}>
+      <Tooltip position="right" className={styles.tooltip}>
         {tools.map((tool) => {
           const toolData = getToolData(tool);
           if (!toolData) return null;

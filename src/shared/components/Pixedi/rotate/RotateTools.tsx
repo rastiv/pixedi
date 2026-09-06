@@ -9,7 +9,7 @@ export const RotateTools = () => {
   return (
     <SurfaceTool>
       <div className={styles.scGroup}>
-        <Tooltip orientation="horizontal" className={styles.tooltip}>
+        <Tooltip position="top" className={styles.tooltip}>
           <Button
             variant="outline"
             className={styles.btnH}
