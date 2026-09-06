@@ -15,23 +15,6 @@
   touch-action: none;
   border: 1px solid var(--color-white-fade);
 }
-.tools {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--background);
-  display: flex;
-  gap: 6px;
-  padding: 4px;
-  align-items: center;
-  border-radius: 4px;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
 .toolsInfo {
   display: inline-block;
   min-width: 54px;

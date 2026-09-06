@@ -1,5 +1,5 @@
 import { Lock } from "../assets/icons";
-import { SaveCloseGroup, InputPixel } from "../ui";
+import { SaveCloseGroup, InputPixel, SurfaceTool } from "../ui";
 import { useResize } from "./useResize";
 import styles from "./Resize.module.css";
 
@@ -20,7 +20,7 @@ export const ResizeTools = () => {
   } = useResize();
 
   return (
-    <div ref={resizeRef} className={styles.resize}>
+    <SurfaceTool ref={resizeRef} className={styles.resize}>
       <div className={styles.indicatorWrapper}>
         <div className={styles.indicator} style={{ width: `${scale / 2}%` }} />
       </div>
@@ -46,6 +46,6 @@ export const ResizeTools = () => {
         onClose={close}
         disabled={width === currentWidth && height === currentHeight}
       />
-    </div>
+    </SurfaceTool>
   );
 };
