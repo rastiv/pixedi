@@ -47,19 +47,37 @@ const items = [
   </div>,
 ];
 
-export const Horizontal: Story = {
+export const Top: Story = {
   args: { children: null },
   render: (args) => (
-    <Tooltip {...args} orientation="horizontal">
+    <Tooltip {...args} position="top">
       {items}
     </Tooltip>
   ),
 };
 
-export const Vertical: Story = {
+export const Bottom: Story = {
   args: { children: null },
   render: (args) => (
-    <Tooltip {...args} orientation="vertical">
+    <Tooltip {...args} position="bottom">
+      {items}
+    </Tooltip>
+  ),
+};
+
+export const Left: Story = {
+  args: { children: null },
+  render: (args) => (
+    <Tooltip {...args} position="left">
+      {items}
+    </Tooltip>
+  ),
+};
+
+export const Right: Story = {
+  args: { children: null },
+  render: (args) => (
+    <Tooltip {...args} position="right">
       {items}
     </Tooltip>
   ),

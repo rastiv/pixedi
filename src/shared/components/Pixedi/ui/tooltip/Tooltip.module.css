@@ -7,7 +7,8 @@
   gap: 0;
 }
 
-.container[data-orientation="vertical"] {
+.container[data-position="left"],
+.container[data-position="right"] {
   flex-direction: column;
 }
 
@@ -44,18 +45,47 @@
   }
 }
 
-.popup[data-orientation="vertical"] {
+.popup[data-position="top"] {
+  transform: translate(-50%, -100%);
+
+  &::before {
+    top: auto;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+  }
+}
+
+.popup[data-position="bottom"] {
+  transform: translate(-50%, 0);
+
+  &::before {
+    bottom: auto;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+  }
+}
+
+.popup[data-position="left"] {
+  transform: translate(-100%, -50%);
+
+  &::before {
+    left: auto;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+  }
+}
+
+.popup[data-position="right"] {
   transform: translate(0, -50%);
 
   &::before {
-    content: "";
-    position: absolute;
+    right: auto;
     left: -3px;
     top: 50%;
-    width: 10px;
-    height: 10px;
     transform: translateY(-50%) rotate(45deg);
-    background-color: inherit;
   }
 }
 
@@ -82,7 +112,8 @@
   transform: translateX(calc(-1 * var(--tooltip-offset, 0px)));
 }
 
-.track[data-orientation="vertical"] {
+.track[data-position="left"],
+.track[data-position="right"] {
   flex-direction: column;
   transform: translateY(calc(-1 * var(--tooltip-offset, 0px)));
 }

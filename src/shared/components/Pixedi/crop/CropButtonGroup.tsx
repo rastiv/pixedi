@@ -25,7 +25,7 @@ type CropButtonGroupProps = {
 export const CropButtonGroup = ({ value, onChange }: CropButtonGroupProps) => {
   return (
     <div className={styles.group}>
-      <Tooltip orientation="horizontal" className={styles.tooltip}>
+      <Tooltip position="top" className={styles.tooltip}>
         {cropTools.map((tool) => (
           <Button
             key={tool.id}
