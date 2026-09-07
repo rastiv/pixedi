@@ -160,3 +160,10 @@ export const filters: FilterOption[] = [
     step: 1,
   },
 ];
+
+export const filterUrls = [
+  { value: "vintage", label: "Vintage" },
+  { value: "olive-army", label: "Olive Army" },
+  { value: "warm-sunset", label: "Warm Sunset" },
+  { value: "sin-city-red", label: "Sin City Red" },
+];

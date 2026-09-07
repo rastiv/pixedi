@@ -73,7 +73,12 @@ export type Action =
     }
   | { name: typeof ActionName.FLIP; args: ActionFlip }
   | { name: typeof ActionName.ROTATE; args: ActionRotate }
-  | { name: typeof ActionName.FILTERS; args: Record<string, number> };
+  | {
+      name: typeof ActionName.FILTERS;
+      url: string;
+      compare: boolean;
+      args: Record<string, number>;
+    };
 
 export type HistoryItem = Sizes & {
   action: Action;

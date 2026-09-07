@@ -82,6 +82,8 @@ export const useSidebar = () => {
       case ActionName.FILTERS:
         setCurrentAction({
           name: ActionName.FILTERS,
+          url: "",
+          compare: false,
           args: {},
         });
         break;

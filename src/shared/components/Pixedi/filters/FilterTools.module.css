@@ -1,3 +1,8 @@
 .select {
-  width: 150px;
+  width: 160px;
+}
+
+.compareActive {
+  color: var(--accent-blue);
+  background: var(--muted);
 }
