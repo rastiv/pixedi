@@ -88,8 +88,8 @@ export const Pixedi = ({
         >
           <Header onSave={onSave} onBack={onBack} isMobile={isBellowSm} />
           <Sidebar isMobile={isBellowSm} />
-          {defaultSettings?.infobar && <Infobar />}
           <Frame />
+          {defaultSettings?.infobar && <Infobar />}
         </div>
       </div>
     </PixediProvider>

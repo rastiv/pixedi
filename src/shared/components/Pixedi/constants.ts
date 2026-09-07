@@ -166,4 +166,11 @@ export const filterUrls = [
   { value: "olive-army", label: "Olive Army" },
   { value: "warm-sunset", label: "Warm Sunset" },
   { value: "sin-city-red", label: "Sin City Red" },
+  { value: "emboss", label: "Emboss Effect" },
+  { value: "crt-lines", label: "CRT Monitor" },
+  { value: "grain", label: "Grain / Noise" },
+  { value: "cross-process", label: "Cross-Processing" },
+  { value: "x-ray", label: "X-Ray" },
+  { value: "plastic-wrap", label: "Plastic Wrap" },
+  { value: "stippling", label: "Stippling / Pointillism" },
 ];

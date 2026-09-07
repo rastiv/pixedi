@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { filters } from "../constants";
+import { filters, filterUrls } from "../constants";
 import { ActionName } from "../types";
 import { Compare, Filters, PredefinedFilters } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button, SaveCloseGroup, Select, SurfaceTool, Tooltip } from "../ui";
+import type { SelectOption } from "../ui/select/Select";
+import { SvgFilters } from "./SvgFilters";
 import styles from "./FilterTools.module.css";
 
 export const FilterTools = () => {
   const [selected, setSelected] = useState<string>("saturate");
-  const { currentAction, setCurrentAction } = usePixediContext();
+  const { previewUrl, currentAction, setCurrentAction } = usePixediContext();
 
   const url =
     currentAction?.name === ActionName.FILTERS ? currentAction.url : "";
@@ -39,37 +41,55 @@ export const FilterTools = () => {
     return null;
   };
 
+  const getFilterOption = (option: SelectOption) => {
+    return (
+      <div className={styles.option}>
+        <img
+          src={previewUrl}
+          alt={option.label}
+          style={{ filter: `url(#${option.value})` }}
+        />
+      </div>
+    );
+  };
+
   return (
-    <SurfaceTool>
-      <Tooltip position="top">
-        <Button
-          variant="outline"
-          aria-label={url ? "Filters" : "Predefined Filters"}
-          data-tooltip={url ? "Filters" : "Predefined Filters"}
-          onClick={handleChangeMode}
-        >
-          {url ? <Filters /> : <PredefinedFilters />}
-        </Button>
-      </Tooltip>
-      <Tooltip position="top">
-        <Button
-          variant="outline"
-          aria-label="Compare"
-          data-tooltip="Compare"
-          onClick={toggleCompare}
-          className={compare ? styles.compareActive : ""}
-        >
-          <Compare />
-        </Button>
-      </Tooltip>
-      <Select
-        value={selected}
-        placeholder="Select filter"
-        onChange={(value) => setSelected(value)}
-        items={filters}
-        className={styles.select}
-      />
-      <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
+    <SurfaceTool className={styles.tools}>
+      <SvgFilters />
+      {!url && <div className={styles.row1}>Slider</div>}
+      <div className={styles.row2}>
+        <Tooltip position="top">
+          <Button
+            variant="outline"
+            aria-label="Compare"
+            data-tooltip="Compare"
+            onClick={toggleCompare}
+            className={compare ? styles.active : ""}
+          >
+            <Compare />
+          </Button>
+        </Tooltip>
+        <Tooltip position="top">
+          <Button
+            variant="outline"
+            aria-label={url ? "Filters" : "Predefined Filters"}
+            data-tooltip={url ? "Filters" : "Predefined Filters"}
+            onClick={handleChangeMode}
+          >
+            {url ? <Filters /> : <PredefinedFilters />}
+          </Button>
+        </Tooltip>
+
+        <Select
+          items={url ? filterUrls : filters}
+          value={url || selected}
+          placeholder="Select filter"
+          onChange={(value) => setSelected(value)}
+          className={styles.select}
+          renderOption={url ? getFilterOption : undefined}
+        />
+        <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
+      </div>
     </SurfaceTool>
   );
 };
