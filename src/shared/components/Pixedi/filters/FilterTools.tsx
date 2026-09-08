@@ -10,7 +10,8 @@ import styles from "./FilterTools.module.css";
 
 export const FilterTools = () => {
   const [selected, setSelected] = useState<string>("saturate");
-  const { previewUrl, currentAction, setCurrentAction } = usePixediContext();
+  const { previewUrl, currentAction, setCurrentAction, setSidebar } =
+    usePixediContext();
 
   const url =
     currentAction?.name === ActionName.FILTERS ? currentAction.url : "";
@@ -33,15 +34,28 @@ export const FilterTools = () => {
     });
   };
 
+  const handleChange = (value: string) => {
+    setSelected(value);
+  };
+
+  const handleChangeWhenUrl = (value: string) => {
+    if (currentAction?.name !== ActionName.FILTERS) return;
+    setCurrentAction({
+      ...currentAction,
+      url: value,
+    });
+  };
+
   const handleSave = () => {
-    return null;
+    setSidebar(true);
   };
 
   const handleClose = () => {
-    return null;
+    setCurrentAction(null);
+    setSidebar(true);
   };
 
-  const getFilterOption = (option: SelectOption) => {
+  const getFilterOptionWhenUrl = (option: SelectOption) => {
     return (
       <div className={styles.option}>
         <img
@@ -84,9 +98,9 @@ export const FilterTools = () => {
           items={url ? filterUrls : filters}
           value={url || selected}
           placeholder="Select filter"
-          onChange={(value) => setSelected(value)}
           className={styles.select}
-          renderOption={url ? getFilterOption : undefined}
+          renderOption={url ? getFilterOptionWhenUrl : undefined}
+          onChange={url ? handleChangeWhenUrl : handleChange}
         />
         <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
       </div>

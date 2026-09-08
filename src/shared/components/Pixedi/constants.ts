@@ -172,5 +172,4 @@ export const filterUrls = [
   { value: "cross-process", label: "Cross-Processing" },
   { value: "x-ray", label: "X-Ray" },
   { value: "plastic-wrap", label: "Plastic Wrap" },
-  { value: "stippling", label: "Stippling / Pointillism" },
 ];
