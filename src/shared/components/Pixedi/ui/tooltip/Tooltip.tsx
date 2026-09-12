@@ -3,13 +3,13 @@ import styles from "./Tooltip.module.css";
 import { useTooltip } from "./useTooltip";
 import type { TooltipPosition } from "./useTooltip";
 
-interface TooltipProps {
+type TooltipProps = {
   children: ReactNode;
   position?: TooltipPosition;
   className?: string;
   classNameTitle?: string;
   style?: React.CSSProperties;
-}
+};
 
 export const Tooltip = ({
   children,

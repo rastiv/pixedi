@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-export interface SelectOption {
+export type SelectOption = {
   value: string;
   label: string;
   options?: SelectOption[];
   rightLabel?: string;
   fullName?: string;
-}
+};
 
 type UseSelectArgs = {
   items: SelectOption[];

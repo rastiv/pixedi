@@ -1,10 +1,10 @@
 import styles from "./Button.module.css";
 
-interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
+type ButtonProps = React.ComponentPropsWithRef<"button"> & {
   variant?: "default" | "outline" | "ghost";
   className?: string;
   children?: React.ReactNode;
-}
+};
 
 export const Button = ({
   className = "",

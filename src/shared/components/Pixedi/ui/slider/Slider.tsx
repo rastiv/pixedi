@@ -1,75 +1,126 @@
-import React, { useMemo } from "react";
+import React, { useImperativeHandle, useLayoutEffect, useRef } from "react";
 import styles from "./Slider.module.css";
 
-interface CustomSliderProps {
+type CustomSliderProps = {
   min: number;
   max: number;
   value?: number;
   step?: number;
   onChange?: (value: number) => void;
-  onDrag?: (value: number) => void;
-}
+};
 
-interface SliderProps
-  extends
-    CustomSliderProps,
-    Omit<
-      React.ComponentPropsWithRef<"input">,
-      keyof CustomSliderProps | "type"
-    > {}
+export type SliderHandle = {
+  getValue: () => number;
+};
 
-export const Slider: React.FC<SliderProps> = ({
+type SliderProps = CustomSliderProps &
+  Omit<
+    React.ComponentPropsWithoutRef<"input">,
+    keyof CustomSliderProps | "type"
+  > & {
+    ref?: React.Ref<SliderHandle>;
+  };
+
+const getPercentage = (value: number, min: number, max: number) => {
+  const total = max - min;
+  return total <= 0 ? 0 : ((value - min) / total) * 100;
+};
+
+const commitKeys = new Set([
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowUp",
+  "End",
+  "Home",
+  "PageDown",
+  "PageUp",
+]);
+
+export const Slider = ({
   min,
   max,
   value,
   step = 1,
   disabled = false,
   onChange,
-  onDrag,
+  onInput,
+  onPointerUp,
+  onKeyUp,
   className,
+  ref,
   ...rest
-}) => {
-  const percentage = useMemo(() => {
-    const total = max - min;
-    return total <= 0 ? 0 : ((value - min) / total) * 100;
+}: SliderProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const initialValue = value ?? min;
+
+  const updateProgress = (currentValue: number) => {
+    const percentage = getPercentage(currentValue, min, max);
+    containerRef.current?.style.setProperty(
+      "--slider-progress",
+      `${percentage}%`,
+    );
+  };
+
+  const commitValue = () => {
+    if (!disabled && inputRef.current) {
+      onChange?.(Number(inputRef.current.value));
+    }
+  };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getValue: () => Number(inputRef.current?.value ?? initialValue),
+    }),
+    [initialValue],
+  );
+
+  useLayoutEffect(() => {
+    if (!inputRef.current) return;
+    if (value !== undefined) inputRef.current.value = String(value);
+    const percentage = getPercentage(Number(inputRef.current.value), min, max);
+    containerRef.current?.style.setProperty(
+      "--slider-progress",
+      `${percentage}%`,
+    );
   }, [value, min, max]);
-
-  const handleChange = (
-    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
-  ) => {
-    if (disabled) return;
-    const newValue = Number(e.currentTarget.value);
-    onChange?.(newValue);
-  };
-
-  const handleDrag = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) return;
-    const newValue = Number(e.target.value);
-    onDrag?.(newValue);
-  };
 
   return (
     <div
+      ref={containerRef}
       className={`${styles.sliderContainer} ${disabled ? styles.disabled : ""} ${className || ""}`}
-      style={{ "--slider-progress": `${percentage}%` } as React.CSSProperties}
+      style={
+        {
+          "--slider-progress": `${getPercentage(initialValue, min, max)}%`,
+        } as React.CSSProperties
+      }
     >
       <div className={styles.sliderTrack}>
         <div className={styles.sliderRange} />
-        <div
-          className={styles.sliderThumb}
-          style={{ left: `${percentage}%` }}
-        />
+        <div className={styles.sliderThumb} />
       </div>
       <input
+        ref={inputRef}
         type="range"
         min={min}
         max={max}
         step={step}
-        value={value}
+        defaultValue={initialValue}
         disabled={disabled}
-        onChange={handleDrag}
-        onMouseUp={handleChange}
-        onTouchEnd={handleChange}
+        onInput={(event) => {
+          updateProgress(Number(event.currentTarget.value));
+          onInput?.(event);
+        }}
+        onPointerUp={(event) => {
+          commitValue();
+          onPointerUp?.(event);
+        }}
+        onKeyUp={(event) => {
+          if (commitKeys.has(event.key)) commitValue();
+          onKeyUp?.(event);
+        }}
         className={styles.hiddenInput}
         {...rest}
       />

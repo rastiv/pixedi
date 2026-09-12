@@ -1,10 +1,10 @@
 import styles from "./InputPixel.module.css";
 import { Input } from "..";
 
-interface InputPixelProps extends React.ComponentPropsWithRef<"input"> {
+type InputPixelProps = React.ComponentPropsWithRef<"input"> & {
   label: string;
   className?: string;
-}
+};
 
 export const InputPixel = ({
   label,

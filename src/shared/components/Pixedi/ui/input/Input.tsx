@@ -1,8 +1,8 @@
 import styles from "./Input.module.css";
 
-export interface InputProps extends React.ComponentPropsWithRef<"input"> {
+export type InputProps = React.ComponentPropsWithRef<"input"> & {
   hideArrows?: boolean;
-}
+};
 
 export const Input = ({
   className = "",

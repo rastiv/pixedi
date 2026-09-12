@@ -42,6 +42,7 @@
 .sliderThumb {
   position: absolute;
   top: 50%;
+  left: var(--slider-progress);
   transform: translate(-50%, -50%);
   width: 12px;
   height: 13px;

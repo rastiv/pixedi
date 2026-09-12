@@ -1,7 +1,7 @@
 declare module "virtual:css-injected-by-js" {
-  interface CSSInjectionOptions {
+  type CSSInjectionOptions = {
     target?: HTMLElement | ShadowRoot;
-  }
+  };
 
   export function injectCSS(options?: CSSInjectionOptions): void;
   export function removeCSS(options?: CSSInjectionOptions): void;

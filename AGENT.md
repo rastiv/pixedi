@@ -74,6 +74,7 @@ pnpm storybook        # Run Storybook dev server on port 6006
 ## Important Conventions
 
 - **Always use `pnpm`**, not `npm` or `yarn`. A `pnpm-lock.yaml` is present.
+- **Use TypeScript `type` aliases only; do not declare `interface`s.**
 - **React and `react-dom` are `peerDependencies`** in the library build. Do not bundle them into `dist/lib`.
 - **Widget CSS is injected by JS** using `vite-plugin-css-injected-by-js` so the UMD bundle is self-contained.
 - **The widget mounts into a Shadow DOM** and exposes `window.PixediWidget`.
