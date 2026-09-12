@@ -55,6 +55,34 @@
   pointer-events: none;
 }
 
+.sliderTooltip {
+  position: absolute;
+  top: -40px;
+  left: var(--slider-progress);
+  transform: translateX(-50%);
+  padding: 7px 10px 8px 10px;
+  background-color: var(--foreground);
+  color: var(--background, #000);
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    background-color: var(--foreground);
+  }
+}
+
 .hiddenInput {
   position: absolute;
   top: 0;

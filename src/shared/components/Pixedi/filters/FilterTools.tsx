@@ -121,6 +121,8 @@ export const FilterTools = () => {
             max={selectedFilterItem.max}
             step={selectedFilterItem.step}
             value={sliderValue}
+            isTooltip
+            unit={selectedFilterItem.unit}
             onInput={handleSliderInput}
             onChange={handleSliderChange}
           />

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import styles from "./Slider.module.css";
 
 type SliderProps = {
@@ -7,6 +7,8 @@ type SliderProps = {
   value?: number;
   step?: number;
   disabled?: boolean;
+  isTooltip?: boolean;
+  unit?: string;
   className?: string;
   onChange?: (value: number) => void;
   onInput?: (value: number) => void;
@@ -34,6 +36,8 @@ export const Slider = ({
   value,
   step = 1,
   disabled = false,
+  isTooltip = false,
+  unit = "",
   className,
   onChange,
   onInput,
@@ -41,9 +45,11 @@ export const Slider = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const initialValue = value ?? min;
+  const [currentValue, setCurrentValue] = useState(initialValue);
 
-  const updateProgress = (currentValue: number) => {
-    const percentage = getPercentage(currentValue, min, max);
+  const updateProgress = (nextValue: number) => {
+    setCurrentValue(nextValue);
+    const percentage = getPercentage(nextValue, min, max);
     containerRef.current?.style.setProperty(
       "--slider-progress",
       `${percentage}%`,
@@ -59,7 +65,9 @@ export const Slider = ({
   useLayoutEffect(() => {
     if (!inputRef.current) return;
     if (value !== undefined) inputRef.current.value = String(value);
-    const percentage = getPercentage(Number(inputRef.current.value), min, max);
+    const nextValue = Number(inputRef.current.value);
+    setCurrentValue(nextValue);
+    const percentage = getPercentage(nextValue, min, max);
     containerRef.current?.style.setProperty(
       "--slider-progress",
       `${percentage}%`,
@@ -79,6 +87,9 @@ export const Slider = ({
       <div className={styles.sliderTrack}>
         <div className={styles.sliderRange} />
         <div className={styles.sliderThumb} />
+        {isTooltip && (
+          <div className={styles.sliderTooltip}>{`${currentValue}${unit}`}</div>
+        )}
       </div>
       <input
         ref={inputRef}
