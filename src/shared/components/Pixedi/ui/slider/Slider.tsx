@@ -1,25 +1,16 @@
-import React, { useImperativeHandle, useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import styles from "./Slider.module.css";
 
-type CustomSliderProps = {
+type SliderProps = {
   min: number;
   max: number;
   value?: number;
   step?: number;
+  disabled?: boolean;
+  className?: string;
   onChange?: (value: number) => void;
+  onInput?: (value: number) => void;
 };
-
-export type SliderHandle = {
-  getValue: () => number;
-};
-
-type SliderProps = CustomSliderProps &
-  Omit<
-    React.ComponentPropsWithoutRef<"input">,
-    keyof CustomSliderProps | "type"
-  > & {
-    ref?: React.Ref<SliderHandle>;
-  };
 
 const getPercentage = (value: number, min: number, max: number) => {
   const total = max - min;
@@ -43,13 +34,9 @@ export const Slider = ({
   value,
   step = 1,
   disabled = false,
+  className,
   onChange,
   onInput,
-  onPointerUp,
-  onKeyUp,
-  className,
-  ref,
-  ...rest
 }: SliderProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -68,14 +55,6 @@ export const Slider = ({
       onChange?.(Number(inputRef.current.value));
     }
   };
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      getValue: () => Number(inputRef.current?.value ?? initialValue),
-    }),
-    [initialValue],
-  );
 
   useLayoutEffect(() => {
     if (!inputRef.current) return;
@@ -110,19 +89,17 @@ export const Slider = ({
         defaultValue={initialValue}
         disabled={disabled}
         onInput={(event) => {
-          updateProgress(Number(event.currentTarget.value));
-          onInput?.(event);
+          const value = Number(event.currentTarget.value);
+          updateProgress(value);
+          onInput?.(value);
         }}
-        onPointerUp={(event) => {
+        onPointerUp={() => {
           commitValue();
-          onPointerUp?.(event);
         }}
         onKeyUp={(event) => {
           if (commitKeys.has(event.key)) commitValue();
-          onKeyUp?.(event);
         }}
         className={styles.hiddenInput}
-        {...rest}
       />
     </div>
   );

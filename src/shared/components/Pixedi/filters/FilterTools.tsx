@@ -7,9 +7,9 @@ import {
   Button,
   SaveCloseGroup,
   Select,
-  Slider,
   SurfaceTool,
   Tooltip,
+  Slider,
 } from "../ui";
 import type { SelectOption } from "../ui/select/Select";
 import { SvgFilters } from "./SvgFilters";
@@ -29,7 +29,7 @@ export const FilterTools = () => {
 
   const { width, height } = getLastHistoryItem();
   const lastFilter = getLastFilter();
-  console.log("lastFilter", lastFilter);
+  // console.log("lastFilter", lastFilter);
 
   const [selectedFilter, setSelectedFilter] = useState<string>("saturate");
   const [selectedUrl, setSelectedUrl] = useState<string>("vintage");
@@ -37,12 +37,19 @@ export const FilterTools = () => {
   const [sliderValue, setSliderValue] = useState<number>(0);
   const [isUrl, setIsUrl] = useState<boolean>(false);
 
+  const handleSliderInput = (value: number) => {
+    // console.log("slider-value", value);
+  };
+
   const selectedFilterItem = filters.find(
     (filter) => filter.value === selectedFilter,
   );
 
   const handleChange = (value: string) => {
     setSelectedFilter(value);
+    setSliderValue(
+      filters.find((filter) => filter.value === value)?.sliderValue || 0,
+    );
   };
 
   const handleChangeWhenUrl = (value: string) => {
@@ -50,6 +57,7 @@ export const FilterTools = () => {
   };
 
   const handleSliderChange = (value: number) => {
+    setSliderValue(value);
     setFilters((prev) =>
       prev.map((filter) =>
         filter.value === selectedFilter
@@ -113,10 +121,8 @@ export const FilterTools = () => {
             max={selectedFilterItem.max}
             step={selectedFilterItem.step}
             value={sliderValue}
+            onInput={handleSliderInput}
             onChange={handleSliderChange}
-            // onDrag={(ii) => {
-            //   setSliderValue(ii);
-            // }}
           />
           <div className={styles.max}>
             {selectedFilterItem.max}

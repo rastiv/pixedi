@@ -6,14 +6,14 @@ import type { SelectOption } from "./useSelect";
 
 export type { SelectOption } from "./useSelect";
 
-type SelectProps = {
+interface SelectProps {
   items: SelectOption[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
   renderOption?: (option: SelectOption) => React.ReactNode;
-};
+}
 
 export const Select = ({
   items,
