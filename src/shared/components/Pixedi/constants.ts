@@ -1,9 +1,9 @@
-import type { FilterOption, Preset } from "./types";
+import type { Option, FilterData, Preset } from "./types";
 
 export const PREVIEW_MAX_DIMENSION = 1920;
 export const PREVIEW_QUALITY = 0.85;
 
-export const presetsData: Array<Preset> = [
+export const presetsData: Preset[] = [
   {
     label: "Facebook",
     value: "facebook",
@@ -108,13 +108,16 @@ export const presetsData: Array<Preset> = [
   },
 ];
 
-export const filters: FilterOption[] = [
+export const filtersData: FilterData[] = [
   {
     value: "saturate",
     label: "Saturate",
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
   },
   {
     value: "grayscale",
@@ -122,6 +125,9 @@ export const filters: FilterOption[] = [
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
   },
   {
     value: "sepia",
@@ -129,6 +135,9 @@ export const filters: FilterOption[] = [
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
   },
   {
     value: "invert",
@@ -136,13 +145,19 @@ export const filters: FilterOption[] = [
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
   },
   {
-    value: "hue-rotate",
+    value: "hueRotate",
     label: "Hue Rotate",
     min: 0,
     max: 360,
     step: 1,
+    unit: "°",
+    sliderValue: 0,
+    rightLabel: "0°",
   },
 
   {
@@ -151,6 +166,9 @@ export const filters: FilterOption[] = [
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
   },
   {
     value: "contrast",
@@ -158,10 +176,13 @@ export const filters: FilterOption[] = [
     min: 0,
     max: 100,
     step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
   },
 ];
 
-export const filterUrls = [
+export const filterUrlsData: Option[] = [
   { value: "vintage", label: "Vintage" },
   { value: "olive-army", label: "Olive Army" },
   { value: "warm-sunset", label: "Warm Sunset" },

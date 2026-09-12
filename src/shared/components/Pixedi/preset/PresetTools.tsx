@@ -5,7 +5,7 @@ import styles from "./PresetTools.module.css";
 export const PresetTools = () => {
   const { currentValue, presetsData, handleChange, handleSave, handleClose } =
     usePreset();
-
+  console.log("presetsData", presetsData);
   return (
     <SurfaceTool>
       <Select

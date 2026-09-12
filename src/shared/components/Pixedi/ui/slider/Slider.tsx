@@ -4,9 +4,10 @@ import styles from "./Slider.module.css";
 interface CustomSliderProps {
   min: number;
   max: number;
-  value: number;
+  value?: number;
   step?: number;
-  onChange: (value: number) => void;
+  onChange?: (value: number) => void;
+  onDrag?: (value: number) => void;
 }
 
 interface SliderProps
@@ -24,6 +25,7 @@ export const Slider: React.FC<SliderProps> = ({
   step = 1,
   disabled = false,
   onChange,
+  onDrag,
   className,
   ...rest
 }) => {
@@ -32,10 +34,18 @@ export const Slider: React.FC<SliderProps> = ({
     return total <= 0 ? 0 : ((value - min) / total) * 100;
   }, [value, min, max]);
 
-  const handleSlide = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.MouseEvent<HTMLInputElement> | React.TouchEvent<HTMLInputElement>,
+  ) => {
+    if (disabled) return;
+    const newValue = Number(e.currentTarget.value);
+    onChange?.(newValue);
+  };
+
+  const handleDrag = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
     const newValue = Number(e.target.value);
-    onChange(newValue);
+    onDrag?.(newValue);
   };
 
   return (
@@ -57,7 +67,9 @@ export const Slider: React.FC<SliderProps> = ({
         step={step}
         value={value}
         disabled={disabled}
-        onChange={handleSlide}
+        onChange={handleDrag}
+        onMouseUp={handleChange}
+        onTouchEnd={handleChange}
         className={styles.hiddenInput}
         {...rest}
       />

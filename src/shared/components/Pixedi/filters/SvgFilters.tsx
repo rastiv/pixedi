@@ -124,7 +124,7 @@ export const SvgFilters = () => {
             surfaceScale="5"
             specularConstant="1"
             specularExponent="20"
-            lighting-color="#fff"
+            lightingColor="#fff"
             result="light"
           >
             <feDistantLight azimuth="225" elevation="45" />

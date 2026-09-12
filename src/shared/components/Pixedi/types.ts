@@ -75,9 +75,7 @@ export type Action =
   | { name: typeof ActionName.ROTATE; args: ActionRotate }
   | {
       name: typeof ActionName.FILTERS;
-      url: string;
-      compare: boolean;
-      args: Record<string, number>;
+      args: Record<string, number | string>;
     };
 
 export type HistoryItem = Sizes & {
@@ -93,26 +91,27 @@ export type FuncSaveArgs = (payload: Blob | string) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 
-export type PresetOption = {
-  value: string;
+export type Option<T = string> = {
+  value: T;
   label: string;
-  w: number;
-  h: number;
   rightLabel?: string;
 };
 
-export type Preset = {
-  value: string;
-  label: string;
+export type PresetOption = Option & {
+  w: number;
+  h: number;
+};
+
+export type Preset = Option & {
   options: Array<PresetOption>;
 };
 
-export type FilterOption = {
-  value: string;
-  label: string;
+export type FilterData = Option & {
   min: number;
   max: number;
   step: number;
+  unit: string;
+  sliderValue: number;
 };
 
 export type ProcessedImage = {

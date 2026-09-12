@@ -93,7 +93,11 @@ export const Select = ({
               ) : (
                 <span className={styles.itemLeft}>{item.label}</span>
               )}
-              {value === item.value && <Check className={styles.itemCheck} />}
+              <div className={styles.itemAddon}>
+                {item.rightLabel && <span>{item.rightLabel}</span>}
+                {value === item.value && <Check className={styles.itemCheck} />}
+                {value !== item.value && <b />}
+              </div>
             </div>
           );
         })}
