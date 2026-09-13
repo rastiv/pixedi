@@ -1,4 +1,4 @@
-export const SvgFilters = () => {
+export const UrlFilters = () => {
   return (
     <svg style={{ display: "none" }} xmlns="http://w3.org">
       <defs>

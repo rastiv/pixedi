@@ -12,7 +12,7 @@ import {
   Slider,
 } from "../ui";
 import type { SelectOption } from "../ui/select/Select";
-import { SvgFilters } from "./SvgFilters";
+import { UrlFilters } from "./UrlFilters";
 import styles from "./FilterTools.module.css";
 
 export const FilterTools = () => {
@@ -116,7 +116,7 @@ export const FilterTools = () => {
 
   return (
     <SurfaceTool className={styles.tools}>
-      <SvgFilters />
+      <UrlFilters />
       {!isUrl && selectedFilterItem && (
         <div className={styles.row1}>
           <div className={styles.min}>
