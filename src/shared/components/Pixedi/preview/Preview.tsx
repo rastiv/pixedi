@@ -26,6 +26,7 @@ export const Preview = ({
     rotation,
     flipH,
     flipV,
+    filters,
   } = usePreview({ isClipped, isFiltered });
 
   const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
@@ -63,6 +64,7 @@ export const Preview = ({
               height: `${(1 / box.h) * 100}%`,
               left: `${-(box.x / box.w) * 100}%`,
               top: `${-(box.y / box.h) * 100}%`,
+              filter: filters.join(" "),
             }}
           />
         </div>

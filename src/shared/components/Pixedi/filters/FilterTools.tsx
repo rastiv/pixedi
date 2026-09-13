@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { filtersData, filterUrlsData } from "../constants";
 import { ActionName, type FilterData } from "../types";
 import { Compare, Filters, PredefinedFilters } from "../assets/icons";
@@ -51,8 +51,10 @@ export const FilterTools = () => {
   );
 
   const handleSliderInput = (value: number) => {
-    filtersObject[selectedFilter] = value;
-    emitFilterUpdate(eventBus, filtersObject);
+    emitFilterUpdate(eventBus, {
+      ...filtersObject,
+      [selectedFilter]: value,
+    });
   };
 
   const selectedFilterItem = filters.find(
@@ -120,6 +122,24 @@ export const FilterTools = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    if (isUrl) {
+      emitFilterUpdate(eventBus, { url: selectedUrl });
+    } else {
+      emitFilterUpdate(eventBus, {
+        ...filtersObject,
+        [selectedFilter]: sliderValue,
+      });
+    }
+  }, [
+    isUrl,
+    selectedUrl,
+    sliderValue,
+    filtersObject,
+    selectedFilter,
+    eventBus,
+  ]);
 
   return (
     <SurfaceTool className={styles.tools}>

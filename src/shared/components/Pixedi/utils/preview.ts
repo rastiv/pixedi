@@ -80,6 +80,7 @@ export type Preview = {
   rotation: number;
   flipH: boolean;
   flipV: boolean;
+  filters: string[];
 };
 
 export const getPreview = (items: HistoryItem[]): Preview => {
@@ -125,7 +126,7 @@ export const getPreview = (items: HistoryItem[]): Preview => {
         h: box.h * (t1 - t0),
       };
       // cropping never changes the orientation
-    } else if (item.action.name === "flip") {
+    } else if (item.action.name === ActionName.FLIP) {
       // the history item names the axes as the user sees them, but the flip
       // layer lives under the rotate layer - at 90/270 the axes are swapped
       const swapped = isQuarterTurn(rotation);
@@ -137,7 +138,7 @@ export const getPreview = (items: HistoryItem[]): Preview => {
         : item.action.args.vertical;
       if (horizontal) flipH = !flipH;
       if (vertical) flipV = !flipV;
-    } else if (item.action.name === "rotate") {
+    } else if (item.action.name === ActionName.ROTATE) {
       // degrees are absolute (and kept unnormalized so CSS animates the short
       // way round): the last rotate up to the pointer wins
       rotation = item.action.args.degrees;
@@ -156,6 +157,19 @@ export const getPreview = (items: HistoryItem[]): Preview => {
   const newWidth = items.at(-1)?.width || 0;
   const newHeight = items.at(-1)?.height || 0;
 
+  // get last filter action
+  const filterAction = items
+    .filter((item) => item.action.name === ActionName.FILTERS)
+    .at(-1);
+  const filters = Object.entries(filterAction?.action.args || {}).map(
+    ([key, value]) =>
+      key === "url"
+        ? `url(#${value})`
+        : key === "hueRotate"
+          ? `hue-rotate(${value}deg)`
+          : `${key}(${value}%)`,
+  );
+
   return {
     box,
     boxWidth,
@@ -169,6 +183,7 @@ export const getPreview = (items: HistoryItem[]): Preview => {
     rotation,
     flipH,
     flipV,
+    filters,
   };
 };
 

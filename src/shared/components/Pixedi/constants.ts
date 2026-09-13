@@ -174,7 +174,7 @@ export const filtersData: FilterData[] = [
     value: "contrast",
     label: "Contrast",
     min: 0,
-    max: 100,
+    max: 200,
     step: 1,
     unit: "%",
     sliderValue: 100,

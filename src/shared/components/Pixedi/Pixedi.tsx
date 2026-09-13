@@ -7,6 +7,7 @@ import { Sidebar } from "./sidebar";
 import { Infobar } from "./infobar";
 import { Frame } from "./frame";
 import { Loader } from "./assets/icons";
+import { UrlFilters } from "./filters/UrlFilters";
 import type { FuncSaveArgs, Theme, Settings } from "./types";
 import styles from "./index.module.css";
 
@@ -81,6 +82,7 @@ export const Pixedi = ({
         className={`${styles.root} ${styles.wrapper}`}
         data-theme={theme}
       >
+        <UrlFilters />
         <div
           className={`${
             defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar

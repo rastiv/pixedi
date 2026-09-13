@@ -73,10 +73,6 @@ export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
       previewRef.current.style.transition = "none";
     }
 
-    if (isFiltered && imageRef.current) {
-      imageRef.current.style.filter = "none";
-    }
-
     if (currentAction?.name !== ActionName.RESIZE && previewRef.current) {
       previewRef.current.style.transform = "scale(1)";
     }
@@ -100,17 +96,22 @@ export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
 
     const onFilterUpdate = (event: Event) => {
       if (!isFiltered) return;
+
       const customEvent = event as CustomEvent<Record<string, number | string>>;
       const filters = customEvent.detail;
+
       if (imageRef.current) {
         if (filters.url) {
           imageRef.current.style.filter = `url(#${filters.url})`;
         } else {
           const filterString = Object.entries(filters)
-            .map(([key, value]) => `${key}(${value}%)`)
+            .map(([key, value]) =>
+              key === "hueRotate"
+                ? `hue-rotate(${value}deg)`
+                : `${key}(${value}%)`,
+            )
             .join(" ");
-          console.log("filterString", filterString);
-          imageRef.current.style.filter = "saturate(62%)";
+          imageRef.current.style.filter = filterString;
         }
       }
     };
