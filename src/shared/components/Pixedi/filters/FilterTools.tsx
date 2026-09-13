@@ -19,23 +19,31 @@ export const FilterTools = () => {
   const {
     showCompare,
     previewUrl,
-    getLastHistoryItem,
     getLastFilter,
+    getLastHistoryItem,
     setCurrentAction,
     setSidebar,
     toggleCompare,
     addToHistory,
   } = usePixediContext();
-
   const { width, height } = getLastHistoryItem();
-  const lastFilter = getLastFilter();
-  // console.log("lastFilter", lastFilter);
+  const { action } = getLastFilter() || {};
+  const args = (action?.args || {}) as Record<string, string | number>;
+  const prevUrl = args?.url as string;
+  const prevFilters = filtersData.map((filter) => ({
+    ...filter,
+    sliderValue: (args[filter.value] ?? filter.sliderValue) as number,
+    rightLabel: `${args[filter.value] ?? filter.sliderValue}${filter.unit}`,
+  }));
+  const prevSaturation = prevFilters.find(
+    (filter) => filter.value === "saturate",
+  )?.sliderValue;
 
   const [selectedFilter, setSelectedFilter] = useState<string>("saturate");
-  const [selectedUrl, setSelectedUrl] = useState<string>("vintage");
-  const [filters, setFilters] = useState<FilterData[]>(filtersData);
-  const [sliderValue, setSliderValue] = useState<number>(0);
-  const [isUrl, setIsUrl] = useState<boolean>(false);
+  const [selectedUrl, setSelectedUrl] = useState<string>(prevUrl ?? "vintage");
+  const [filters, setFilters] = useState<FilterData[]>(prevFilters);
+  const [sliderValue, setSliderValue] = useState<number>(prevSaturation ?? 0);
+  const [isUrl, setIsUrl] = useState<boolean>(Boolean(prevUrl));
 
   const handleSliderInput = (value: number) => {
     // console.log("slider-value", value);
