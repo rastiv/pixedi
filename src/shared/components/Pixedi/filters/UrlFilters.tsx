@@ -1,6 +1,9 @@
 export const UrlFilters = () => {
   return (
-    <svg style={{ display: "none" }} xmlns="http://w3.org">
+    <svg
+      style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
+      xmlns="http://w3.org"
+    >
       <defs>
         <filter id="vintage">
           <feColorMatrix

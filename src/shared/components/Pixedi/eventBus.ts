@@ -14,3 +14,14 @@ export const emitResizeUpdate = (eventBus: EventTarget, detail: number) => {
   const event = new CustomEvent<number>("resize-update", { detail });
   eventBus.dispatchEvent(event);
 };
+
+export const emitFilterUpdate = (
+  eventBus: EventTarget,
+  detail: Record<string, number | string>,
+) => {
+  const event = new CustomEvent<Record<string, number | string>>(
+    "filter-update",
+    { detail },
+  );
+  eventBus.dispatchEvent(event);
+};

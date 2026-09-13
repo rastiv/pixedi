@@ -25,7 +25,7 @@ export const Frame = () => {
 
   return (
     <div className={frameClassName}>
-      <Preview style={isFade ? { opacity: 0.4 } : {}} />
+      <Preview faded={isFade} />
       {isResize && <ResizeTools />}
       {isCrop && <CropTools />}
       {isPreset && <PresetTools />}

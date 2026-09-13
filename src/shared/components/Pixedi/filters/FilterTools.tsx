@@ -12,7 +12,7 @@ import {
   Slider,
 } from "../ui";
 import type { SelectOption } from "../ui/select/Select";
-import { UrlFilters } from "./UrlFilters";
+import { emitFilterUpdate } from "../eventBus";
 import styles from "./FilterTools.module.css";
 
 export const FilterTools = () => {
@@ -25,6 +25,7 @@ export const FilterTools = () => {
     setSidebar,
     toggleCompare,
     addToHistory,
+    eventBus,
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
   const { action } = getLastFilter() || {};
@@ -45,8 +46,13 @@ export const FilterTools = () => {
   const [sliderValue, setSliderValue] = useState<number>(prevSaturation ?? 0);
   const [isUrl, setIsUrl] = useState<boolean>(Boolean(prevUrl));
 
+  const filtersObject = Object.fromEntries(
+    filters.map((filter) => [filter.value, filter.sliderValue]),
+  );
+
   const handleSliderInput = (value: number) => {
-    // console.log("slider-value", value);
+    filtersObject[selectedFilter] = value;
+    emitFilterUpdate(eventBus, filtersObject);
   };
 
   const selectedFilterItem = filters.find(
@@ -62,6 +68,7 @@ export const FilterTools = () => {
 
   const handleChangeWhenUrl = (value: string) => {
     setSelectedUrl(value);
+    emitFilterUpdate(eventBus, { url: value });
   };
 
   const handleSliderChange = (value: number) => {
@@ -116,7 +123,6 @@ export const FilterTools = () => {
 
   return (
     <SurfaceTool className={styles.tools}>
-      <UrlFilters />
       {!isUrl && selectedFilterItem && (
         <div className={styles.row1}>
           <div className={styles.min}>

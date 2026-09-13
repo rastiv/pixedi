@@ -6,12 +6,14 @@ import { getPreview } from "../utils/preview";
 
 type UsePreviewProps = {
   isClipped?: boolean;
+  isFiltered?: boolean;
 };
 
-export const usePreview = ({ isClipped }: UsePreviewProps) => {
+export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
   const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const previousActionRef = useRef(currentAction?.name);
   const previousPreviewUrlRef = useRef(previewUrl);
 
@@ -71,6 +73,10 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
       previewRef.current.style.transition = "none";
     }
 
+    if (isFiltered && imageRef.current) {
+      imageRef.current.style.filter = "none";
+    }
+
     if (currentAction?.name !== ActionName.RESIZE && previewRef.current) {
       previewRef.current.style.transform = "scale(1)";
     }
@@ -92,14 +98,33 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
       }
     };
 
+    const onFilterUpdate = (event: Event) => {
+      if (!isFiltered) return;
+      const customEvent = event as CustomEvent<Record<string, number | string>>;
+      const filters = customEvent.detail;
+      if (imageRef.current) {
+        if (filters.url) {
+          imageRef.current.style.filter = `url(#${filters.url})`;
+        } else {
+          const filterString = Object.entries(filters)
+            .map(([key, value]) => `${key}(${value}%)`)
+            .join(" ");
+          console.log("filterString", filterString);
+          imageRef.current.style.filter = "saturate(62%)";
+        }
+      }
+    };
+
     eventBus.addEventListener("resize-update", onResizeUpdate);
     eventBus.addEventListener("clip-path-update", onClipPathUpdate);
+    eventBus.addEventListener("filter-update", onFilterUpdate);
 
     return () => {
       eventBus.removeEventListener("resize-update", onResizeUpdate);
       eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
+      eventBus.removeEventListener("filter-update", onFilterUpdate);
     };
-  }, [isClipped, currentAction?.name, eventBus]);
+  }, [isClipped, isFiltered, currentAction?.name, eventBus]);
 
-  return { previewRef, previewUrl, ...preview };
+  return { previewRef, imageRef, previewUrl, ...preview };
 };

@@ -3,12 +3,20 @@ import styles from "./Preview.module.css";
 
 type PreviewType = {
   isClipped?: boolean;
+  isFiltered?: boolean;
+  faded?: boolean;
   style?: React.CSSProperties;
 };
 
-export const Preview = ({ isClipped, style = {} }: PreviewType) => {
+export const Preview = ({
+  isClipped,
+  isFiltered,
+  faded,
+  style = {},
+}: PreviewType) => {
   const {
     previewRef,
+    imageRef,
     previewUrl,
     box,
     boxWidth,
@@ -18,12 +26,14 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     rotation,
     flipH,
     flipV,
-  } = usePreview({ isClipped });
+  } = usePreview({ isClipped, isFiltered });
+
+  const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
 
   return (
     <div
       ref={previewRef}
-      className={styles.preview}
+      className={previewClassName}
       style={{
         aspectRatio: `${viewWidth} / ${viewHeight}`,
         ...style,
@@ -44,6 +54,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
           }}
         >
           <img
+            ref={imageRef}
             className={styles.image}
             src={previewUrl}
             alt="Preview Image"
