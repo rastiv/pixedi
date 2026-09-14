@@ -1,4 +1,4 @@
-import { ActionName, type HistoryItem } from "../types";
+import { ActionName, type ActionFilter, type HistoryItem } from "../types";
 import { isQuarterTurn } from "../utils/crop";
 
 type Mat = [[number, number], [number, number]];
@@ -201,6 +201,11 @@ export const getActions = (items: HistoryItem[]) => {
     viewHeight,
   } = getPreview(items);
 
+  const filterAction = items
+    .filter((item) => item.action.name === ActionName.FILTERS)
+    .at(-1);
+  const ActionFilter = filterAction?.action.args as ActionFilter | undefined;
+
   const clampedX = clamp(box.x, 0, 1);
   const clampedY = clamp(box.y, 0, 1);
   const clampedBox = {
@@ -254,5 +259,6 @@ export const getActions = (items: HistoryItem[]) => {
           },
         }
       : {}),
+    ...(ActionFilter ? { filters: ActionFilter } : {}),
   };
 };

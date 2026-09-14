@@ -1,4 +1,5 @@
 import type {
+  ActionFilter,
   ProcessedImage,
   Settings,
 } from "@/shared/components/Pixedi/types";
@@ -107,6 +108,28 @@ export async function imageProcessor(blob: Blob) {
     ctx.drawImage(tempCanvas, 0, 0, width, height);
   };
 
+  const filters = (args: ActionFilter) => {
+    if (!ctx) return;
+
+    const tempCanvas = snapshot();
+
+    const filterStr =
+      "url" in args
+        ? `url(#${args.url})`
+        : Object.entries(args)
+            .map(([key, value]) =>
+              key === "hueRotate"
+                ? `hue-rotate(${value}deg)`
+                : `${key}(${value}%)`,
+            )
+            .join(" ");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.filter = filterStr;
+    ctx.drawImage(tempCanvas, 0, 0);
+    ctx.filter = "none";
+  };
+
   const get = async (settings: Settings): Promise<ProcessedImage> => {
     const { quality = 0.85, saveAsWEBP = false } = settings;
     const outputMimeType = saveAsWEBP ? "image/webp" : mimeType;
@@ -156,6 +179,7 @@ export async function imageProcessor(blob: Blob) {
     flip,
     rotate,
     resize,
+    filters,
     get,
   };
 }

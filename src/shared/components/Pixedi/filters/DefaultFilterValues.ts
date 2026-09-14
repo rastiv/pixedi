@@ -1,4 +1,6 @@
-export const DefaultFilterValues = (): Record<string, number> => ({
+import type { ActionFilter } from "../types";
+
+export const DefaultFilterValues = (): ActionFilter => ({
   saturate: 100,
   grayscale: 0,
   sepia: 0,

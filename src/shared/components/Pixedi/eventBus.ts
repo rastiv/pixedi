@@ -1,4 +1,4 @@
-import type { CropRect } from "./types";
+import type { ActionFilter, CropRect } from "./types";
 
 export const emitCropUpdate = (eventBus: EventTarget, detail: CropRect) => {
   const event = new CustomEvent<CropRect>("crop-update", { detail });
@@ -17,11 +17,8 @@ export const emitResizeUpdate = (eventBus: EventTarget, detail: number) => {
 
 export const emitFilterUpdate = (
   eventBus: EventTarget,
-  detail: Record<string, number | string>,
+  detail: ActionFilter,
 ) => {
-  const event = new CustomEvent<Record<string, number | string>>(
-    "filter-update",
-    { detail },
-  );
+  const event = new CustomEvent<ActionFilter>("filter-update", { detail });
   eventBus.dispatchEvent(event);
 };

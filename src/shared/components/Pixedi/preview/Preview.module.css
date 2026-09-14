@@ -39,5 +39,7 @@
   position: absolute;
   max-width: none;
   max-height: none;
-  transition: all 0.2s linear;
+  transition:
+    all 0.2s linear,
+    filter 0s;
 }

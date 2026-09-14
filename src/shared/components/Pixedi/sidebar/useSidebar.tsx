@@ -82,8 +82,15 @@ export const useSidebar = () => {
       case ActionName.FILTERS:
         setCurrentAction({
           name: ActionName.FILTERS,
-          compare: false,
-          args: {},
+          args: {
+            brightness: 100,
+            contrast: 100,
+            grayscale: 0,
+            hueRotate: 0,
+            invert: 0,
+            saturate: 100,
+            sepia: 0,
+          },
         });
         break;
     }

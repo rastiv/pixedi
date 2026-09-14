@@ -38,6 +38,7 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
       if (actions.rotate) processor.rotate(actions.rotate.degrees);
       if (actions.resize)
         processor.resize(actions.resize.width, actions.resize.height);
+      if (actions.filters) processor.filters(actions.filters);
 
       const { newBlob, previewBlob, mimeType, width, height, isAlpha } =
         await processor.get(settings);

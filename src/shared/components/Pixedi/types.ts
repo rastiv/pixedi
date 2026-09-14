@@ -63,6 +63,20 @@ export type ActionRotate = {
   degrees: number;
 };
 
+export type CssFilters = {
+  brightness: number;
+  contrast: number;
+  grayscale: number;
+  hueRotate: number;
+  invert: number;
+  saturate: number;
+  sepia: number;
+};
+
+export type UrlFilter = { url: string };
+
+export type ActionFilter = UrlFilter | CssFilters;
+
 export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
   | { name: typeof ActionName.RESIZE; args: Sizes }
@@ -75,7 +89,7 @@ export type Action =
   | { name: typeof ActionName.ROTATE; args: ActionRotate }
   | {
       name: typeof ActionName.FILTERS;
-      args: Record<string, number | string>;
+      args: ActionFilter;
     };
 
 export type HistoryItem = Sizes & {

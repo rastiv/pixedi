@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { filtersData } from "../constants";
-import { ActionName, type FilterData } from "../types";
+import { ActionName, type ActionFilter, type FilterData } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
 import { emitFilterUpdate } from "../eventBus";
 
@@ -43,7 +43,7 @@ export const useFilters = () => {
     emitFilterUpdate(eventBus, {
       ...filtersObject,
       [selectedFilter]: value,
-    });
+    } as ActionFilter);
   };
 
   const selectedFilterItem = filters.find(
@@ -89,7 +89,7 @@ export const useFilters = () => {
             : Object.fromEntries(
                 filters.map((filter) => [filter.value, filter.sliderValue]),
               )),
-        },
+        } as ActionFilter,
       },
     });
     setSidebar(true);
@@ -109,7 +109,7 @@ export const useFilters = () => {
       emitFilterUpdate(eventBus, {
         ...filtersObject,
         [selectedFilter]: sliderValue,
-      });
+      } as ActionFilter);
     }
   }, [
     isUrl,
