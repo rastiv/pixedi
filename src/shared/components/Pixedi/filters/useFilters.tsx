@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { filtersData } from "../constants";
 import { ActionName, type ActionFilter, type FilterData } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
@@ -35,8 +35,9 @@ export const useFilters = () => {
   const [sliderValue, setSliderValue] = useState<number>(prevSaturation ?? 0);
   const [isUrl, setIsUrl] = useState<boolean>(Boolean(prevUrl));
 
-  const filtersObject = Object.fromEntries(
-    filters.map((filter) => [filter.value, filter.sliderValue]),
+  const filtersObject = useMemo(
+    () => Object.fromEntries(filters.map((f) => [f.value, f.sliderValue])),
+    [filters],
   );
 
   const handleSliderInput = (value: number) => {

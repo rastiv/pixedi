@@ -82,6 +82,7 @@ export const Pixedi = ({
         className={`${styles.root} ${styles.wrapper}`}
         data-theme={theme}
       >
+        {/* {createPortal(<UrlFilters />, document.body)} */}
         <UrlFilters />
         <div
           className={`${

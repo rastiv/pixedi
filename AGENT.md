@@ -75,6 +75,7 @@ pnpm storybook        # Run Storybook dev server on port 6006
 
 - **Always use `pnpm`**, not `npm` or `yarn`. A `pnpm-lock.yaml` is present.
 - **Use TypeScript `type` aliases only; do not declare `interface`s.**
+- **Do not use `forwardRef`.** React 19 passes `ref` as a plain prop — add `ref?: Ref<Handle>` directly to the component's `type` and call `useImperativeHandle` as normal.
 - **React and `react-dom` are `peerDependencies`** in the library build. Do not bundle them into `dist/lib`.
 - **Widget CSS is injected by JS** using `vite-plugin-css-injected-by-js` so the UMD bundle is self-contained.
 - **The widget mounts into a Shadow DOM** and exposes `window.PixediWidget`.

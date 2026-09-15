@@ -2,7 +2,7 @@ export const UrlFilters = () => {
   return (
     <svg
       style={{ position: "absolute", width: 0, height: 0, overflow: "hidden" }}
-      xmlns="http://w3.org"
+      xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
         <filter id="vintage">

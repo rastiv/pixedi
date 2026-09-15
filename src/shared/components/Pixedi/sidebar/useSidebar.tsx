@@ -8,6 +8,7 @@ import {
   Rotate,
 } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
+import { DefaultFilterValues } from "../filters";
 import { ActionName, type Tools } from "../types";
 
 type MappedTool = {
@@ -82,15 +83,7 @@ export const useSidebar = () => {
       case ActionName.FILTERS:
         setCurrentAction({
           name: ActionName.FILTERS,
-          args: {
-            brightness: 100,
-            contrast: 100,
-            grayscale: 0,
-            hueRotate: 0,
-            invert: 0,
-            saturate: 100,
-            sepia: 0,
-          },
+          args: DefaultFilterValues(),
         });
         break;
     }
