@@ -1,22 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Pixedi } from "@/shared/components/Pixedi";
 import { Modal } from "@/shared/components/Modal";
 import { ImagePreview } from "./ImagePreview";
+import { ImageList } from "./ImageList";
+import { UploadImage } from "./UploadImage";
 import styles from "./PackageDemo.module.css";
-
-const imagesData = [
-  { id: "1", original: "/bird.jpg" },
-  { id: "2", original: "/butterfly.jpg" },
-  { id: "4", original: "/leafs.jpg" },
-  { id: "5", original: "/parrot.jpg" },
-  { id: "6", original: "/sunset.png" },
-  { id: "3", original: "/flowers.png" },
-];
 
 export const PackageDemo = () => {
   const [openModal, setOpenModal] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>("");
+  const uploadUrlRef = useRef<string | null>(null);
 
   const handleSave = async (image: Blob | string) => {
     return new Promise<void>((resolve) => {
@@ -27,19 +21,36 @@ export const PackageDemo = () => {
     });
   };
 
+  const revokeUploadUrl = () => {
+    if (uploadUrlRef.current) {
+      URL.revokeObjectURL(uploadUrlRef.current);
+      uploadUrlRef.current = null;
+    }
+  };
+
   const handleCancel = () => {
     setOpenModal(false);
+    revokeUploadUrl();
   };
 
   const handleClose = () => {
     setBlob(null);
     setOpenModal(false);
+    revokeUploadUrl();
   };
 
-  const handleClickImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const src = (e.target as HTMLImageElement).src;
+  const handleClickImage = (src: string) => {
+    revokeUploadUrl();
     setSelectedImage(src);
+    setBlob(null);
+    setOpenModal(true);
+  };
+
+  const openFileForEdit = (file: File) => {
+    revokeUploadUrl();
+    const url = URL.createObjectURL(file);
+    uploadUrlRef.current = url;
+    setSelectedImage(url);
     setBlob(null);
     setOpenModal(true);
   };
@@ -67,20 +78,9 @@ export const PackageDemo = () => {
     <>
       <div className={`${styles.packageDemo} ${styles.container}`}>
         <h3>Click on a image to edit it</h3>
-        <div className={styles.grid}>
-          {imagesData.map((image) => (
-            <div key={image.id} className={styles.gridItem}>
-              <img
-                src={image.original}
-                alt={image.id}
-                className={styles.gridItemImg}
-                onClick={handleClickImage}
-              />
-            </div>
-          ))}
-        </div>
+        <ImageList onImageClick={handleClickImage} />
         <h3>OR</h3>
-        {/* TODO: Add upload button */}
+        <UploadImage onFileSelect={openFileForEdit} />
       </div>
       <Modal
         open={openModal}
