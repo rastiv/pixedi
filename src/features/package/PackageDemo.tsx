@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Pixedi } from "@/shared/components/Pixedi";
 import { Modal } from "@/shared/components/Modal";
+import { ImagePreview } from "./ImagePreview";
 import styles from "./PackageDemo.module.css";
 
 const imagesData = [
@@ -14,15 +15,15 @@ const imagesData = [
 
 export const PackageDemo = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [blob, setBlob] = useState<Blob | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>("");
 
   const handleSave = async (image: Blob | string) => {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
-        // TODO: Save the image
-        console.log(image);
+        setBlob(image as Blob);
         resolve();
-      }, 2000);
+      }, 500);
     });
   };
 
@@ -30,11 +31,36 @@ export const PackageDemo = () => {
     setOpenModal(false);
   };
 
+  const handleClose = () => {
+    setBlob(null);
+    setOpenModal(false);
+  };
+
   const handleClickImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     const src = (e.target as HTMLImageElement).src;
     setSelectedImage(src);
+    setBlob(null);
     setOpenModal(true);
+  };
+
+  const handleDownload = () => {
+    if (!blob) return;
+    const mimeToExt: Record<string, string> = {
+      "image/png": "png",
+      "image/jpeg": "jpg",
+      "image/jpg": "jpg",
+      "image/gif": "gif",
+      "image/webp": "webp",
+    };
+    const mimeType = blob.type || "image/webp";
+    const ext = mimeToExt[mimeType] || "webp";
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `picture-${Date.now()}.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -53,6 +79,8 @@ export const PackageDemo = () => {
             </div>
           ))}
         </div>
+        <h3>OR</h3>
+        {/* TODO: Add upload button */}
       </div>
       <Modal
         open={openModal}
@@ -60,14 +88,23 @@ export const PackageDemo = () => {
         size="lg"
         className={styles.modal}
       >
-        <Pixedi
-          image={selectedImage || ""}
-          onBack={handleCancel}
-          onSave={handleSave}
-          settings={{
-            quality: 0.85,
-          }}
-        />
+        {blob && (
+          <ImagePreview
+            blob={blob}
+            onClose={handleClose}
+            onDownload={handleDownload}
+          />
+        )}
+        {!blob && (
+          <Pixedi
+            image={selectedImage || ""}
+            onBack={handleCancel}
+            onSave={handleSave}
+            settings={{
+              quality: 0.85,
+            }}
+          />
+        )}
       </Modal>
     </>
   );

@@ -3,8 +3,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 24px;
+  gap: 32px;
+  padding: 32px;
 }
 
 .container {
@@ -28,7 +28,7 @@
 
 .gridItem {
   aspect-ratio: 1;
-  background-color: var(--card);
+  background-color: var(--primary-light);
   border-radius: 4px;
   overflow: hidden;
   border: solid 1px var(--primary-muted);
