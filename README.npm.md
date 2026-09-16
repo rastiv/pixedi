@@ -2,17 +2,18 @@
 
 A lightweight, embeddable React image editor component.
 
-`pixedi` provides a ready-to-use image editing UI with cropping, resizing, filters, horizontal/vertical flip, undo/redo, and social-media presets. It is built for React applications.
+`pixedi` provides a ready-to-use image editing UI with cropping, resizing, image adjustments, predefined artistic filters, horizontal/vertical flip, rotation, undo/redo, and social-media size presets. It is built for React applications.
 
 ## Features
 
 - Crop with free or fixed-ratio selection
 - Resize by exact pixel dimensions
 - Horizontal and vertical flip
-- Image filters (brightness, contrast, saturation, etc.)
+- Rotation
+- **Image filters** — two modes (see [Filters](#filters) below)
 - Undo/redo history
 - Social-media size presets (Facebook, Instagram, LinkedIn)
-- React component
+- React component and standalone UMD widget
 - TypeScript declarations included
 
 ## Installation
@@ -103,6 +104,45 @@ function AppBase64() {
 | `quality`    | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                             |
 | `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                 |
 | `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`). |
+
+## Filters
+
+The Filters tool offers two modes, switchable via the toolbar toggle. Filter state is preserved in undo/redo history and baked into the image on save.
+
+### CSS adjustments
+
+Slider-based adjustments applied via CSS `filter`. Each slider affects only that property; the rest stay at their defaults.
+
+| Filter     | Range  | Default |
+| ---------- | ------ | ------- |
+| Saturate   | 0–200% | 100%    |
+| Grayscale  | 0–100% | 0%      |
+| Sepia      | 0–100% | 0%      |
+| Invert     | 0–100% | 0%      |
+| Hue-Rotate | 0–360° | 0°      |
+| Brightness | 0–200% | 100%    |
+| Contrast   | 0–200% | 100%    |
+
+### Predefined artistic filters
+
+SVG-based filters selected from a dropdown. Each is a non-destructive preset applied as a single named filter.
+
+| Filter           | Description                                     |
+| ---------------- | ----------------------------------------------- |
+| Vintage          | Warm reddish tint with boosted reds             |
+| Olive Army       | Desaturated olive-green tone                    |
+| Warm Sunset      | Boosted reds and oranges, reduced blues         |
+| Sin City Red     | High-contrast red channel, grey everything else |
+| Emboss Effect    | Edge emboss with greyscale conversion           |
+| CRT Monitor      | Scanline overlay simulating a CRT screen        |
+| Grain / Noise    | Film-grain texture via fractal noise            |
+| Cross-Processing | Shifted colour curves for a lo-fi look          |
+| X-Ray            | Inverted luminance, blue-green hue              |
+| Plastic Wrap     | Specular highlight overlay                      |
+
+### Compare mode
+
+Click the Compare button in the filter toolbar to toggle a side-by-side before/after view. The original image is shown at full opacity while the comparison is active.
 
 ## Widget CDN
 
