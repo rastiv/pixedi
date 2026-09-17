@@ -15,7 +15,6 @@ export const UrlFilters = () => {
         0    0    0    1  0"
           />
         </filter>
-
         <filter id="olive-army">
           <feColorMatrix
             type="matrix"
@@ -26,7 +25,6 @@ export const UrlFilters = () => {
         0    0    0    1 0"
           />
         </filter>
-
         <filter id="warm-sunset">
           <feColorMatrix
             type="matrix"
@@ -37,7 +35,6 @@ export const UrlFilters = () => {
         0    0    0    1   0"
           />
         </filter>
-
         <filter id="sin-city-red">
           <feColorMatrix
             type="matrix"
@@ -48,7 +45,6 @@ export const UrlFilters = () => {
         0    0    0    1   0"
           />
         </filter>
-
         <filter id="emboss">
           <feConvolveMatrix order="3" kernelMatrix="-2 -1 0 -1 1 1 0 1 2" />
           <feColorMatrix
@@ -60,7 +56,6 @@ export const UrlFilters = () => {
         0    0    0    1 0"
           />
         </filter>
-
         <filter id="crt-lines">
           <feTurbulence
             type="fractalNoise"
@@ -85,7 +80,6 @@ export const UrlFilters = () => {
           />
           <feBlend mode="overlay" in="SourceGraphic" in2="pattern" />
         </filter>
-
         <filter id="grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence
             type="fractalNoise"
@@ -95,7 +89,6 @@ export const UrlFilters = () => {
           />
           <feBlend mode="multiply" in="SourceGraphic" in2="noise" />
         </filter>
-
         <filter id="cross-process">
           <feComponentTransfer>
             <feFuncR type="table" tableValues="0 0.05 0.2 0.5 0.8 0.95 1" />
@@ -110,7 +103,6 @@ export const UrlFilters = () => {
             <feFuncG type="linear" slope="1.1" intercept="-0.05" />
           </feComponentTransfer>
         </filter>
-
         <filter id="x-ray">
           <feColorMatrix
             type="matrix"
@@ -121,7 +113,6 @@ export const UrlFilters = () => {
          0     0     0    1 0"
           />
         </filter>
-
         <filter id="plastic-wrap">
           <feSpecularLighting
             surfaceScale="5"

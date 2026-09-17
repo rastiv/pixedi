@@ -22,3 +22,8 @@ export const emitFilterUpdate = (
   const event = new CustomEvent<ActionFilter>("filter-update", { detail });
   eventBus.dispatchEvent(event);
 };
+
+export const emitCompareUpdate = (eventBus: EventTarget, detail: number) => {
+  const event = new CustomEvent<number>("compare-update", { detail });
+  eventBus.dispatchEvent(event);
+};

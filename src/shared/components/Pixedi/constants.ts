@@ -187,10 +187,10 @@ export const filterUrlsData: Option[] = [
   { value: "olive-army", label: "Olive Army" },
   { value: "warm-sunset", label: "Warm Sunset" },
   { value: "sin-city-red", label: "Sin City Red" },
-  { value: "emboss", label: "Emboss Effect" },
+  { value: "plastic-wrap", label: "Plastic Wrap" },
+  { value: "cross-process", label: "Cross-Processing" },
   { value: "crt-lines", label: "CRT Monitor" },
   { value: "grain", label: "Grain / Noise" },
-  { value: "cross-process", label: "Cross-Processing" },
+  { value: "emboss", label: "Emboss Effect" },
   { value: "x-ray", label: "X-Ray" },
-  { value: "plastic-wrap", label: "Plastic Wrap" },
 ];

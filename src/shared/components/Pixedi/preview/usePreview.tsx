@@ -6,10 +6,9 @@ import { getPreview } from "../utils/preview";
 
 type UsePreviewProps = {
   isClipped?: boolean;
-  isFiltered?: boolean;
 };
 
-export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
+export const usePreview = ({ isClipped }: UsePreviewProps) => {
   const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -87,6 +86,7 @@ export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
 
     const onClipPathUpdate = (event: Event) => {
       if (!isClipped) return;
+
       const customEvent = event as CustomEvent<CropRect>;
       const { x, y, w, h } = customEvent.detail;
       if (previewRef.current) {
@@ -95,8 +95,6 @@ export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
     };
 
     const onFilterUpdate = (event: Event) => {
-      if (!isFiltered) return;
-
       const customEvent = event as CustomEvent<Record<string, number | string>>;
       const filters = customEvent.detail;
 
@@ -125,7 +123,7 @@ export const usePreview = ({ isClipped, isFiltered }: UsePreviewProps) => {
       eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
       eventBus.removeEventListener("filter-update", onFilterUpdate);
     };
-  }, [isClipped, isFiltered, currentAction?.name, eventBus]);
+  }, [isClipped, currentAction?.name, eventBus]);
 
   return { previewRef, imageRef, previewUrl, ...preview };
 };

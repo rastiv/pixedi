@@ -17,7 +17,7 @@
     Helvetica, Arial, sans-serif;
   --font-mono: "Courier New", Courier, monospace;
   --color-white: #fff;
-  --color-white-fade: color-mix(in srgb, var(--color-white) 40%, transparent);
+  --color-white-fade: color-mix(in srgb, var(--color-white) 65%, transparent);
   --color-black: #000;
   --color-red: oklch(0.637 0.237 25.331);
   --color-green: oklch(0.768 0.188 151.716);
