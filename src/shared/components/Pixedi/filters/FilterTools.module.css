@@ -56,7 +56,6 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  overflow: hidden;
   max-width: calc(100% - 32px);
   max-height: calc(100% - 32px);
 
