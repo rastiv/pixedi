@@ -6,12 +6,14 @@ import { getPreview } from "../utils/preview";
 
 type UsePreviewProps = {
   isClipped?: boolean;
+  isFilter?: boolean;
 };
 
-export const usePreview = ({ isClipped }: UsePreviewProps) => {
+export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
   const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const previousActionRef = useRef(currentAction?.name);
   const previousPreviewUrlRef = useRef(previewUrl);
 
@@ -85,6 +87,7 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
 
     const onClipPathUpdate = (event: Event) => {
       if (!isClipped) return;
+
       const customEvent = event as CustomEvent<CropRect>;
       const { x, y, w, h } = customEvent.detail;
       if (previewRef.current) {
@@ -92,14 +95,47 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
       }
     };
 
-    eventBus.addEventListener("resize-update", onResizeUpdate);
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
+    const onFilterUpdate = (event: Event) => {
+      if (!isFilter) return;
+      const customEvent = event as CustomEvent<Record<string, number | string>>;
+      const filters = customEvent.detail;
 
-    return () => {
-      eventBus.removeEventListener("resize-update", onResizeUpdate);
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
+      if (imageRef.current) {
+        if (filters.url) {
+          imageRef.current.style.filter = `url(#${filters.url})`;
+        } else {
+          const filterString = Object.entries(filters)
+            .map(([key, value]) =>
+              key === "hueRotate"
+                ? `hue-rotate(${value}deg)`
+                : `${key}(${value}%)`,
+            )
+            .join(" ");
+          imageRef.current.style.filter = filterString;
+        }
+      }
     };
-  }, [isClipped, currentAction?.name, eventBus]);
 
-  return { previewRef, previewUrl, ...preview };
+    const onCompareUpdate = (event: Event) => {
+      if (!isFilter) return;
+
+      const customEvent = event as CustomEvent<number>;
+      const percent = customEvent.detail;
+      if (previewRef.current) {
+        previewRef.current.style.clipPath = `xywh(${percent}% 0% ${100 - percent}% 100%)`;
+      }
+    };
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    eventBus.addEventListener("resize-update", onResizeUpdate, { signal });
+    eventBus.addEventListener("clip-path-update", onClipPathUpdate, { signal });
+    eventBus.addEventListener("filter-update", onFilterUpdate, { signal });
+    eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
+
+    return () => controller.abort();
+  }, [isClipped, isFilter, currentAction?.name, eventBus]);
+
+  return { previewRef, imageRef, previewUrl, ...preview };
 };

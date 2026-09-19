@@ -63,6 +63,20 @@ export type ActionRotate = {
   degrees: number;
 };
 
+export type CssFilters = {
+  brightness: number;
+  contrast: number;
+  grayscale: number;
+  hueRotate: number;
+  invert: number;
+  saturate: number;
+  sepia: number;
+};
+
+export type UrlFilter = { url: string };
+
+export type ActionFilter = UrlFilter | CssFilters;
+
 export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
   | { name: typeof ActionName.RESIZE; args: Sizes }
@@ -73,7 +87,10 @@ export type Action =
     }
   | { name: typeof ActionName.FLIP; args: ActionFlip }
   | { name: typeof ActionName.ROTATE; args: ActionRotate }
-  | { name: typeof ActionName.FILTERS; args: Record<string, number> };
+  | {
+      name: typeof ActionName.FILTERS;
+      args: ActionFilter;
+    };
 
 export type HistoryItem = Sizes & {
   action: Action;
@@ -88,18 +105,27 @@ export type FuncSaveArgs = (payload: Blob | string) => Promise<void> | void;
 
 export type Theme = "light" | "dark";
 
-export type PresetOptions = {
-  value: string;
+export type Option<T = string> = {
+  value: T;
   label: string;
-  w: number;
-  h: number;
   rightLabel?: string;
 };
 
-export type Preset = {
-  value: string;
-  label: string;
-  options: Array<PresetOptions>;
+export type PresetOption = Option & {
+  w: number;
+  h: number;
+};
+
+export type Preset = Option & {
+  options: Array<PresetOption>;
+};
+
+export type FilterData = Option & {
+  min: number;
+  max: number;
+  step: number;
+  unit: string;
+  sliderValue: number;
 };
 
 export type ProcessedImage = {

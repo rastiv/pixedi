@@ -3,18 +3,20 @@ import styles from "./Tooltip.module.css";
 import { useTooltip } from "./useTooltip";
 import type { TooltipPosition } from "./useTooltip";
 
-interface TooltipProps {
+type TooltipProps = {
   children: ReactNode;
   position?: TooltipPosition;
   className?: string;
   classNameTitle?: string;
-}
+  style?: React.CSSProperties;
+};
 
 export const Tooltip = ({
   children,
   position = "top",
   className = "",
   classNameTitle = "",
+  style,
 }: TooltipProps) => {
   const {
     containerRef,
@@ -34,15 +36,18 @@ export const Tooltip = ({
       onMouseLeave={handleMouseLeave}
       onBlur={handleMouseLeave}
       className={styles.tooltip}
-      style={cssVars}
+      style={{ ...cssVars, ...style }}
     >
-      <div data-position={position} className={styles.container}>
+      <div
+        data-position={position}
+        className={`${styles.container} ${className}`}
+      >
         {children}
       </div>
       <div
         aria-hidden="true"
         data-position={position}
-        className={`${styles.popup} ${isAnimated ? styles.animated : ""} ${className}`}
+        className={`${styles.popup} ${isAnimated ? styles.animated : ""}`}
       >
         <div className={styles.mask}>
           <div ref={trackRef} data-position={position} className={styles.track}>

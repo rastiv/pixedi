@@ -76,6 +76,9 @@ export const PixediProvider = ({
       };
     });
 
+  const toggleCompare = () =>
+    setState((store) => ({ ...store, showCompare: !store.showCompare }));
+
   const getLastHistoryItem = (): HistoryItem => {
     const { items, pointer } = state.history;
     return (
@@ -85,6 +88,18 @@ export const PixediProvider = ({
         height: 0,
         action: { name: ActionName.INITIAL, args: null },
       }
+    );
+  };
+
+  const getLastFilter = (): HistoryItem | null => {
+    const { items, pointer } = state.history;
+    return (
+      items
+        .filter(
+          (item, index) =>
+            index <= pointer && item.action.name === ActionName.FILTERS,
+        )
+        .at(-1) ?? null
     );
   };
 
@@ -154,8 +169,10 @@ export const PixediProvider = ({
     ...state,
     setImage,
     setCurrentAction,
+    toggleCompare,
     getLastHistoryItem,
     getLastRotation,
+    getLastFilter,
     addToHistory,
     resetHistory,
     undo,

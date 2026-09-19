@@ -16,7 +16,7 @@ export const FlipTools = () => {
   return (
     <SurfaceTool>
       <div className={styles.scGroup}>
-        <Tooltip position="top" className={styles.tooltip}>
+        <Tooltip position="top">
           <Button
             variant="outline"
             className={styles.btnH}

@@ -1,0 +1,33 @@
+.uploadArea {
+  border: 2px dashed var(--primary-muted);
+  border-radius: 8px;
+  padding: 40px 24px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+  color: var(--primary-foreground);
+
+  &:hover {
+    border-color: var(--accent-muted);
+    background-color: oklch(0.97 0.02 251.687 / 40%);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.uploadAreaDragging {
+  border-color: var(--accent);
+  background-color: oklch(0.95 0.04 251.687 / 40%);
+}
+
+.uploadSubtext {
+  font-size: 12px;
+  color: var(--primary-muted);
+}

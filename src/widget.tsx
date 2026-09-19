@@ -6,33 +6,31 @@ import { Pixedi } from "@/shared/components/Pixedi";
 
 type WidgetTheme = "light" | "dark";
 
-interface WidgetOptions {
+type WidgetOptions = {
   containerId: string;
   image: string | Blob;
   onSave: FuncSaveArgs;
   onBack: () => void;
   theme?: WidgetTheme;
   settings?: Settings;
-}
+};
 
-interface PixediWidgetInstance {
+type PixediWidgetInstance = {
   destroy: () => void;
-}
+};
 
-interface PixediWidget {
+type PixediWidget = {
   init: (options: WidgetOptions) => PixediWidgetInstance | undefined;
-}
+};
 
-interface ActiveWidget {
+type ActiveWidget = {
   root: ReactDOM.Root;
   shadowRoot: ShadowRoot;
-}
+};
 
-declare global {
-  interface Window {
-    PixediWidget?: PixediWidget;
-  }
-}
+type PixediWindow = Window & {
+  PixediWidget?: PixediWidget;
+};
 
 let activeWidget: ActiveWidget | null = null;
 
@@ -94,7 +92,7 @@ const PixediWidget: PixediWidget = {
 };
 
 if (typeof window !== "undefined") {
-  window.PixediWidget = PixediWidget;
+  (window as PixediWindow).PixediWidget = PixediWidget;
 }
 
 export default PixediWidget;

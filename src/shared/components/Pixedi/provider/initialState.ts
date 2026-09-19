@@ -11,6 +11,7 @@ export type PixediContextType = {
   sidebar: boolean;
   settings: Settings;
   isAlpha: boolean;
+  showCompare: boolean;
 };
 
 export const initialSettings: Settings = {
@@ -50,4 +51,5 @@ export const getInitialState = (
   sidebar: false,
   settings,
   isAlpha,
+  showCompare: false,
 });

@@ -1,14 +1,24 @@
 import { usePreview } from "./usePreview";
+import { usePixediContext } from "../provider/usePixediContext";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
   isClipped?: boolean;
+  isFilter?: boolean;
+  faded?: boolean;
   style?: React.CSSProperties;
 };
 
-export const Preview = ({ isClipped, style = {} }: PreviewType) => {
+export const Preview = ({
+  isClipped,
+  isFilter,
+  faded,
+  style = {},
+}: PreviewType) => {
+  const { showCompare } = usePixediContext();
   const {
     previewRef,
+    imageRef,
     previewUrl,
     box,
     boxWidth,
@@ -18,17 +28,26 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
     rotation,
     flipH,
     flipV,
-  } = usePreview({ isClipped });
+    filters,
+  } = usePreview({ isClipped, isFilter });
+
+  const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
 
   return (
     <div
       ref={previewRef}
-      className={styles.preview}
+      className={previewClassName}
       style={{
         aspectRatio: `${viewWidth} / ${viewHeight}`,
         ...style,
       }}
     >
+      {showCompare && !isFilter && (
+        <div className={`${styles.label} ${styles.before}`}>Before</div>
+      )}
+      {showCompare && isFilter && (
+        <div className={`${styles.label} ${styles.after}`}>After</div>
+      )}
       <div
         className={styles.rotate}
         style={{
@@ -44,6 +63,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
           }}
         >
           <img
+            ref={imageRef}
             className={styles.image}
             src={previewUrl}
             alt="Preview Image"
@@ -52,6 +72,7 @@ export const Preview = ({ isClipped, style = {} }: PreviewType) => {
               height: `${(1 / box.h) * 100}%`,
               left: `${-(box.x / box.w) * 100}%`,
               top: `${-(box.y / box.h) * 100}%`,
+              filter: filters.join(" "),
             }}
           />
         </div>

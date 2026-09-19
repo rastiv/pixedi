@@ -5,8 +5,10 @@ import type { Action, HistoryItem, ProcessedImage } from "../types";
 type StoreContextType = PixediContextType & {
   setImage: (payload: ProcessedImage) => void;
   setCurrentAction: (payload: Action | null) => void;
+  toggleCompare: () => void;
   getLastHistoryItem: () => HistoryItem;
   getLastRotation: () => number;
+  getLastFilter: () => HistoryItem | null;
   addToHistory: (payload: HistoryItem) => void;
   resetHistory: () => void;
   undo: () => void;

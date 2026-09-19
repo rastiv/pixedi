@@ -10,7 +10,7 @@ export const PresetTools = () => {
     <SurfaceTool>
       <Select
         value={currentValue}
-        placeholder="Select a preset"
+        placeholder="Select preset"
         onChange={handleChange}
         items={presetsData}
         className={styles.select}
