@@ -1,4 +1,5 @@
 import { usePreview } from "./usePreview";
+import { usePixediContext } from "../provider/usePixediContext";
 import styles from "./Preview.module.css";
 
 type PreviewType = {
@@ -14,6 +15,7 @@ export const Preview = ({
   faded,
   style = {},
 }: PreviewType) => {
+  const { showCompare } = usePixediContext();
   const {
     previewRef,
     imageRef,
@@ -40,6 +42,12 @@ export const Preview = ({
         ...style,
       }}
     >
+      {showCompare && !isFilter && (
+        <div className={`${styles.label} ${styles.before}`}>Before</div>
+      )}
+      {showCompare && isFilter && (
+        <div className={`${styles.label} ${styles.after}`}>After</div>
+      )}
       <div
         className={styles.rotate}
         style={{

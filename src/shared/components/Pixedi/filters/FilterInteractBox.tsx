@@ -33,8 +33,6 @@ export const FilterInteractBox = () => {
               <Compare />
             </div>
           </div>
-          <div className={`${styles.before} ${styles.label}`}>Before</div>
-          <div className={`${styles.after} ${styles.label}`}>After</div>
         </>
       )}
     </div>

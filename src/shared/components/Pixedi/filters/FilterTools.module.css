@@ -106,28 +106,3 @@
     height: 20px;
   }
 }
-
-.label {
-  position: absolute;
-  top: 8px;
-  background: var(--color-white-fade);
-  box-sizing: border-box;
-  height: 28px;
-  width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: var(--color-black);
-}
-
-.before {
-  left: 8px;
-}
-
-.after {
-  right: 8px;
-}

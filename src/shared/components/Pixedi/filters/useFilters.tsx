@@ -102,6 +102,9 @@ export const useFilters = () => {
   };
 
   const handleClose = () => {
+    if (showCompare) {
+      toggleCompare();
+    }
     setCurrentAction(null);
     setSidebar(true);
   };
