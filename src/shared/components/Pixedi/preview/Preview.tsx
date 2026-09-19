@@ -3,11 +3,17 @@ import styles from "./Preview.module.css";
 
 type PreviewType = {
   isClipped?: boolean;
+  isFilter?: boolean;
   faded?: boolean;
   style?: React.CSSProperties;
 };
 
-export const Preview = ({ isClipped, faded, style = {} }: PreviewType) => {
+export const Preview = ({
+  isClipped,
+  isFilter,
+  faded,
+  style = {},
+}: PreviewType) => {
   const {
     previewRef,
     imageRef,
@@ -21,7 +27,7 @@ export const Preview = ({ isClipped, faded, style = {} }: PreviewType) => {
     flipH,
     flipV,
     filters,
-  } = usePreview({ isClipped });
+  } = usePreview({ isClipped, isFilter });
 
   const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
 

@@ -16,7 +16,6 @@ export const FilterTools = () => {
   const {
     showCompare,
     previewUrl,
-    toggleCompare,
     isUrl,
     toggleIsUrl,
     filters,
@@ -24,6 +23,7 @@ export const FilterTools = () => {
     selectedFilterItem,
     selectedUrl,
     sliderValue,
+    handleToggleCompare,
     handleSliderInput,
     handleSliderChange,
     handleChange,
@@ -75,7 +75,7 @@ export const FilterTools = () => {
             variant="outline"
             aria-label="Compare"
             data-tooltip="Compare"
-            onClick={toggleCompare}
+            onClick={handleToggleCompare}
             className={showCompare ? styles.active : ""}
           >
             <Compare />

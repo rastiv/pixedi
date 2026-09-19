@@ -6,7 +6,9 @@
   max-width: calc(100% - 32px);
   max-height: calc(100% - 32px);
   box-sizing: border-box;
-  transition: all 0.2s linear;
+  transition:
+    all 0.2s linear,
+    clip-path 0s ease;
 
   &.faded {
     opacity: 0.5;

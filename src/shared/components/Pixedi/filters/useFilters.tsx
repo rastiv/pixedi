@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { filtersData } from "../constants";
 import { ActionName, type ActionFilter, type FilterData } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
-import { emitFilterUpdate } from "../eventBus";
+import { emitCompareUpdate, emitFilterUpdate } from "../eventBus";
 
 export const useFilters = () => {
   const {
@@ -39,6 +39,11 @@ export const useFilters = () => {
     () => Object.fromEntries(filters.map((f) => [f.value, f.sliderValue])),
     [filters],
   );
+
+  const handleToggleCompare = () => {
+    toggleCompare();
+    emitCompareUpdate(eventBus, 50);
+  };
 
   const handleSliderInput = (value: number) => {
     emitFilterUpdate(eventBus, {
@@ -124,7 +129,6 @@ export const useFilters = () => {
   return {
     showCompare,
     previewUrl,
-    toggleCompare,
     isUrl,
     toggleIsUrl,
     filters,
@@ -132,6 +136,7 @@ export const useFilters = () => {
     selectedFilterItem,
     selectedUrl,
     sliderValue,
+    handleToggleCompare,
     handleSliderInput,
     handleSliderChange,
     handleChange,

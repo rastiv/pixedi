@@ -6,9 +6,10 @@ import { getPreview } from "../utils/preview";
 
 type UsePreviewProps = {
   isClipped?: boolean;
+  isFilter?: boolean;
 };
 
-export const usePreview = ({ isClipped }: UsePreviewProps) => {
+export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
   const { history, previewUrl, currentAction, getLastRotation, eventBus } =
     usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -95,6 +96,7 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
     };
 
     const onFilterUpdate = (event: Event) => {
+      if (!isFilter) return;
       const customEvent = event as CustomEvent<Record<string, number | string>>;
       const filters = customEvent.detail;
 
@@ -114,16 +116,26 @@ export const usePreview = ({ isClipped }: UsePreviewProps) => {
       }
     };
 
-    eventBus.addEventListener("resize-update", onResizeUpdate);
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
-    eventBus.addEventListener("filter-update", onFilterUpdate);
+    const onCompareUpdate = (event: Event) => {
+      if (!isFilter) return;
 
-    return () => {
-      eventBus.removeEventListener("resize-update", onResizeUpdate);
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
-      eventBus.removeEventListener("filter-update", onFilterUpdate);
+      const customEvent = event as CustomEvent<number>;
+      const percent = customEvent.detail;
+      if (previewRef.current) {
+        previewRef.current.style.clipPath = `xywh(${percent}% 0% ${100 - percent}% 100%)`;
+      }
     };
-  }, [isClipped, currentAction?.name, eventBus]);
+
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    eventBus.addEventListener("resize-update", onResizeUpdate, { signal });
+    eventBus.addEventListener("clip-path-update", onClipPathUpdate, { signal });
+    eventBus.addEventListener("filter-update", onFilterUpdate, { signal });
+    eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
+
+    return () => controller.abort();
+  }, [isClipped, isFilter, currentAction?.name, eventBus]);
 
   return { previewRef, imageRef, previewUrl, ...preview };
 };
