@@ -2,7 +2,8 @@
   grid-area: sidebar;
   position: relative;
   width: 48px;
-  background: var(--background);
+  background: var(--background-fade);
+  backdrop-filter: blur(5px);
   border-right: 1px solid var(--border);
   z-index: 10;
 
@@ -28,6 +29,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: var(--foreground);
 
   svg {
     width: 16px;

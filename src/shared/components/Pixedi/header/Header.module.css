@@ -23,6 +23,7 @@
   position: relative;
   left: -8px;
   border-right: solid 1px var(--border);
+  color: var(--foreground);
   cursor: pointer;
   transition: all 0.2s ease;
 

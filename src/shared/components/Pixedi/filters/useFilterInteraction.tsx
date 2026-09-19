@@ -31,7 +31,7 @@ export const useFilterInteraction = ({
 
     const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
     startPointRef.current = clientX;
-    console.log("asdadadasd");
+
     if (!mobile) {
       document.body.style.cursor = "pointer";
     }
