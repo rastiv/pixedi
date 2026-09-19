@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
 import styles from "./Separator.module.css";
 
-interface SeparatorProps extends React.ComponentPropsWithoutRef<"hr"> {
+type SeparatorProps = React.ComponentPropsWithoutRef<"hr"> & {
   orientation?: "horizontal" | "vertical";
   className?: string;
-}
+};
 
 export const Separator = forwardRef<HTMLHRElement, SeparatorProps>(
   ({ className = "", orientation = "horizontal", ...props }, ref) => {

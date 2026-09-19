@@ -27,11 +27,11 @@
   font-size: 14px;
   z-index: 999;
   pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: var(--tooltip-opacity, 0);
   width: var(--tooltip-w, auto);
   height: var(--tooltip-h, auto);
   transition: opacity var(--tooltip-fade, 0.2s);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   &::before {
     content: "";

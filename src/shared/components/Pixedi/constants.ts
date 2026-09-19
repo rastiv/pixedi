@@ -1,9 +1,9 @@
-import type { Preset } from "./types";
+import type { Option, FilterData, Preset } from "./types";
 
 export const PREVIEW_MAX_DIMENSION = 1920;
 export const PREVIEW_QUALITY = 0.85;
 
-export const presetsData: Array<Preset> = [
+export const presetsData: Preset[] = [
   {
     label: "Facebook",
     value: "facebook",
@@ -106,4 +106,91 @@ export const presetsData: Array<Preset> = [
       },
     ],
   },
+];
+
+export const filtersData: FilterData[] = [
+  {
+    value: "saturate",
+    label: "Saturate",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+  {
+    value: "grayscale",
+    label: "Grayscale",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
+  },
+  {
+    value: "sepia",
+    label: "Sepia",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
+  },
+  {
+    value: "invert",
+    label: "Invert",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
+  },
+  {
+    value: "hueRotate",
+    label: "Hue Rotate",
+    min: 0,
+    max: 360,
+    step: 1,
+    unit: "°",
+    sliderValue: 0,
+    rightLabel: "0°",
+  },
+
+  {
+    value: "brightness",
+    label: "Brightness",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+  {
+    value: "contrast",
+    label: "Contrast",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+];
+
+export const filterUrlsData: Option[] = [
+  { value: "vintage", label: "Vintage" },
+  { value: "olive-army", label: "Olive Army" },
+  { value: "warm-sunset", label: "Warm Sunset" },
+  { value: "sin-city-red", label: "Sin City Red" },
+  { value: "plastic-wrap", label: "Plastic Wrap" },
+  { value: "cross-process", label: "Cross-Processing" },
+  { value: "crt-lines", label: "CRT Monitor" },
+  { value: "grain", label: "Grain / Noise" },
+  { value: "emboss", label: "Emboss Effect" },
+  { value: "x-ray", label: "X-Ray" },
 ];
