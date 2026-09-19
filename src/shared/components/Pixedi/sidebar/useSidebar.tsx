@@ -32,6 +32,8 @@ export const useSidebar = () => {
   const {
     settings,
     currentAction,
+    showCompare,
+    toggleCompare,
     getLastRotation,
     getLastHistoryItem,
     setCurrentAction,
@@ -87,6 +89,8 @@ export const useSidebar = () => {
         });
         break;
     }
+
+    if (showCompare) toggleCompare();
 
     setSidebar(false);
   };
