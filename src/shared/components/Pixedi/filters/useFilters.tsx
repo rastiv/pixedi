@@ -98,6 +98,9 @@ export const useFilters = () => {
         } as ActionFilter,
       },
     });
+    if (showCompare) {
+      toggleCompare();
+    }
     setSidebar(true);
   };
 
