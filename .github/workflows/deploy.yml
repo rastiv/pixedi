@@ -47,6 +47,9 @@ jobs:
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - name: Download dist artifact
         uses: actions/download-artifact@v4
@@ -55,12 +58,11 @@ jobs:
           path: dist
 
       - name: Deploy SPA & Widget CDN to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: "pixedi"
-          directory: "dist"
+          command: pages deploy dist --project-name=pixedi
 
   publish:
     needs: build-and-test
