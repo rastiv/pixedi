@@ -83,9 +83,8 @@ export const useResize = () => {
   useEffect(() => {
     const isInsideFrame = (event: Event) => {
       const frame = resizeRef.current?.parentElement;
-      return (
-        event.target instanceof Node && Boolean(frame?.contains(event.target))
-      );
+      const target = event.composedPath?.()[0] ?? event.target;
+      return target instanceof Node && Boolean(frame?.contains(target));
     };
 
     const handleWheel = (event: WheelEvent) => {
