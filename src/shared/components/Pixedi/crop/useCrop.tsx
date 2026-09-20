@@ -86,7 +86,6 @@ export const useCrop = () => {
         isFree: value === "freeform",
       },
     });
-    setSidebar(true);
   };
 
   return {
