@@ -17,6 +17,7 @@ type WidgetOptions = {
 
 type PixediWidgetInstance = {
   destroy: () => void;
+  setTheme: (theme: WidgetTheme) => void;
 };
 
 type PixediWidget = {
@@ -69,23 +70,29 @@ const PixediWidget: PixediWidget = {
       shadowRoot,
     };
 
-    root.render(
-      <React.StrictMode>
-        <Pixedi
-          image={options.image}
-          onSave={options.onSave}
-          onBack={options.onBack}
-          theme={options.theme}
-          settings={options.settings}
-        />
-      </React.StrictMode>,
-    );
+    const render = (theme: WidgetTheme = "light") =>
+      root.render(
+        <React.StrictMode>
+          <Pixedi
+            image={options.image}
+            onSave={options.onSave}
+            onBack={options.onBack}
+            theme={theme}
+            settings={options.settings}
+          />
+        </React.StrictMode>,
+      );
+
+    render(options.theme);
 
     return {
       destroy: () => {
         if (activeWidget?.root === root) {
           destroyActiveWidget();
         }
+      },
+      setTheme: (theme: WidgetTheme) => {
+        if (activeWidget?.root === root) render(theme);
       },
     };
   },
