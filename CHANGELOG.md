@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.7.0
+
+- Add method `setTheme` in widget.
+- Bugfix: the image resize with scroll up/down did not work in widget.
+
 ## 1.6.1
 
 - Bugfix, the Sidebar pop-left when change the crop resolution.
