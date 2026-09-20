@@ -67,7 +67,8 @@ SVG filter definitions (`UrlFilters`) are rendered once in the component tree. T
 
 ## Consumer Documentation
 
-- **[Consumer usage](./README.npm.md)** — React component, widget CDN, API reference.
+- **[Consumer usage](./README.npm.md)** — React component props and settings.
+- **[Widget usage](./README.widget.md)** — standalone UMD widget: `init`, `setTheme`, `destroy`, API reference.
 
 ## Deployment
 
