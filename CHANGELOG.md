@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.6.1
+
+- Bugfix, the Sidebar pop-left when change the crop resolution.
+
 ## 1.6.0
 
 - Add filters tool.
