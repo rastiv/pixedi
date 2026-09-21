@@ -1,6 +1,7 @@
 .surfaceTool {
   position: absolute;
   display: flex;
+  align-items: center;
   gap: 4px;
   bottom: 16px;
   left: 50%;
@@ -12,4 +13,17 @@
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 9;
+}
+
+.content {
+  display: flex;
+}
+
+.drag {
+  width: 16px;
+  height: 16px;
+  cursor: move;
+  padding: 0 2px;
+  touch-action: none;
+  user-select: none;
 }

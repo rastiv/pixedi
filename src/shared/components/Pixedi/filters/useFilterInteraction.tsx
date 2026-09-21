@@ -16,11 +16,6 @@ export const useFilterInteraction = ({
   const startPointRef = useRef<number | null>(null);
   const rectRef = useRef<number>(null);
 
-  useEffect(() => {
-    rectRef.current = 0;
-    emitCompareUpdate(eventBus, 0);
-  }, [eventBus]);
-
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (!compareRef.current) return;
 
@@ -36,6 +31,11 @@ export const useFilterInteraction = ({
       document.body.style.cursor = "pointer";
     }
   };
+
+  useEffect(() => {
+    rectRef.current = 0;
+    emitCompareUpdate(eventBus, 0);
+  }, [eventBus]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent | TouchEvent) => {
