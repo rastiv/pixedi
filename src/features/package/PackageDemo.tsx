@@ -100,8 +100,9 @@ export const PackageDemo = () => {
             image={selectedImage || ""}
             onBack={handleCancel}
             onSave={handleSave}
+            // theme={"dark"}
             settings={{
-              tools: ["crop"],
+              // tools: ["crop"],
               quality: 0.85,
             }}
           />
