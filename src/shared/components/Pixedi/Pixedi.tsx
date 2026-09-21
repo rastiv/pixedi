@@ -8,7 +8,12 @@ import { Infobar } from "./infobar";
 import { Frame } from "./frame";
 import { Loader } from "./assets/icons";
 import { UrlFilters } from "./filters/UrlFilters";
-import type { FuncSaveArgs, Theme, Settings } from "./types";
+import {
+  type FuncSaveArgs,
+  type Theme,
+  type Settings,
+  ActionName,
+} from "./types";
 import styles from "./index.module.css";
 
 type PixediProps = {
@@ -76,24 +81,32 @@ export const Pixedi = ({
       previewUrl={previewUrl}
       isAlpha={isAlpha}
       settings={defaultSettings}
+      onSave={onSave}
+      onBack={onBack}
     >
       <div
         ref={setWrapper}
         className={`${styles.root} ${styles.wrapper}`}
         data-theme={theme}
       >
-        {/* {createPortal(<UrlFilters />, document.body)} */}
-        <UrlFilters />
-        <div
-          className={`${
-            defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
-          } ${isBellowSm ? styles.mobile : ""}`}
-        >
-          <Header onSave={onSave} onBack={onBack} isMobile={isBellowSm} />
-          <Sidebar isMobile={isBellowSm} />
-          <Frame />
-          {defaultSettings?.infobar && <Infobar />}
-        </div>
+        {defaultSettings?.tools?.includes(ActionName.FILTERS) && <UrlFilters />}
+
+        {defaultSettings?.tools?.length === 1 ? (
+          <div className={styles.gridSingleTool}>
+            <Frame />
+          </div>
+        ) : (
+          <div
+            className={`${
+              defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
+            } ${isBellowSm ? styles.mobile : ""}`}
+          >
+            <Header isMobile={isBellowSm} />
+            <Sidebar isMobile={isBellowSm} />
+            <Frame />
+            {defaultSettings?.infobar && <Infobar />}
+          </div>
+        )}
       </div>
     </PixediProvider>
   );

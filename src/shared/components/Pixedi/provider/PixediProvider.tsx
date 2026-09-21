@@ -5,6 +5,7 @@ import type { PixediContextType } from "./initialState";
 import {
   ActionName,
   type Action,
+  type FuncSaveArgs,
   type HistoryItem,
   type ProcessedImage,
   type Settings,
@@ -19,7 +20,11 @@ type PixediProviderProps = {
   previewUrl: string;
   isAlpha: boolean;
   settings: Settings;
+  onSave?: FuncSaveArgs;
+  onBack?: () => void;
 };
+
+const noop = () => {};
 
 export const PixediProvider = ({
   children,
@@ -30,6 +35,8 @@ export const PixediProvider = ({
   previewUrl,
   isAlpha,
   settings,
+  onSave = noop,
+  onBack = noop,
 }: PixediProviderProps) => {
   const [state, setState] = useState<PixediContextType>(
     getInitialState(
@@ -179,6 +186,8 @@ export const PixediProvider = ({
     redo,
     setSidebar,
     eventBus,
+    onSave,
+    onBack,
   };
 
   return <StoreContext value={value}>{children}</StoreContext>;

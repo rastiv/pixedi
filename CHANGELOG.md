@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Add single-tool mode: with one tool in `settings.tools` the editor renders only that tool, its Close button calls `onBack` and its Save button produces the image, calls `onSave` and shows a spinner while saving.
+
 ## 1.8.0
 
 - Make SurfaceTool component draggible.

@@ -3,8 +3,14 @@ import { usePreset } from "./usePreset";
 import styles from "./PresetTools.module.css";
 
 export const PresetTools = () => {
-  const { currentValue, presetsData, handleChange, handleSave, handleClose } =
-    usePreset();
+  const {
+    currentValue,
+    presetsData,
+    handleChange,
+    handleSave,
+    handleClose,
+    isSaving,
+  } = usePreset();
 
   return (
     <SurfaceTool>
@@ -15,7 +21,11 @@ export const PresetTools = () => {
         items={presetsData}
         className={styles.select}
       />
-      <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
+      <SaveCloseGroup
+        onSave={handleSave}
+        onClose={handleClose}
+        saving={isSaving}
+      />
     </SurfaceTool>
   );
 };

@@ -4,7 +4,7 @@ import { useRotate } from "./useRotate";
 import styles from "./Rotate.module.css";
 
 export const RotateTools = () => {
-  const { handleRotate, handleSave, handleClose } = useRotate();
+  const { handleRotate, handleSave, handleClose, isSaving } = useRotate();
 
   return (
     <SurfaceTool>
@@ -30,7 +30,11 @@ export const RotateTools = () => {
           </Button>
         </Tooltip>
       </div>
-      <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
+      <SaveCloseGroup
+        onSave={handleSave}
+        onClose={handleClose}
+        saving={isSaving}
+      />
     </SurfaceTool>
   );
 };

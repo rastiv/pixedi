@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { ActionName } from "../types";
 
 export const useFlip = () => {
-  const { getLastHistoryItem, setCurrentAction, addToHistory, setSidebar } =
-    usePixediContext();
+  const { getLastHistoryItem, setCurrentAction } = usePixediContext();
+  const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const [flipHorizontal, setFlipHorizontal] = useState(false);
   const [flipVertical, setFlipVertical] = useState(false);
@@ -29,7 +30,7 @@ export const useFlip = () => {
   };
 
   const handleSave = () => {
-    addToHistory({
+    commit({
       width,
       height,
       action: {
@@ -37,12 +38,6 @@ export const useFlip = () => {
         args: { horizontal: flipHorizontal, vertical: flipVertical },
       },
     });
-    setSidebar(true);
-  };
-
-  const handleClose = () => {
-    setCurrentAction(null);
-    setSidebar(true);
   };
 
   return {
@@ -51,6 +46,7 @@ export const useFlip = () => {
     handleFlipHorizontal,
     handleFlipVertical,
     handleSave,
-    handleClose,
+    handleClose: close,
+    isSaving,
   };
 };

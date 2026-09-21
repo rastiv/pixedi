@@ -1,8 +1,15 @@
 import { createContext } from "react";
 import { type PixediContextType } from "./initialState";
-import type { Action, HistoryItem, ProcessedImage } from "../types";
+import type {
+  Action,
+  FuncSaveArgs,
+  HistoryItem,
+  ProcessedImage,
+} from "../types";
 
 type StoreContextType = PixediContextType & {
+  onSave: FuncSaveArgs;
+  onBack: () => void;
   setImage: (payload: ProcessedImage) => void;
   setCurrentAction: (payload: Action | null) => void;
   toggleCompare: () => void;

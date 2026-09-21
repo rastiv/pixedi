@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { presetsData } from "../constants";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { ActionName, type CropRect } from "../types";
 import { getInitalCrop } from "../utils/crop";
 
@@ -8,14 +9,9 @@ const presetOptions = presetsData.map((p) => p.options).flat();
 const flattenPresets = () => presetOptions;
 
 export const usePreset = () => {
-  const {
-    currentAction,
-    getLastHistoryItem,
-    addToHistory,
-    setSidebar,
-    setCurrentAction,
-    eventBus,
-  } = usePixediContext();
+  const { currentAction, getLastHistoryItem, setCurrentAction, eventBus } =
+    usePixediContext();
+  const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const currentValue =
     currentAction?.name === ActionName.PRESET_CROP &&
@@ -70,7 +66,7 @@ export const usePreset = () => {
       return;
     }
 
-    addToHistory({
+    commit({
       width: currentAction.args?.preset?.width || 0,
       height: currentAction.args?.preset?.height || 0,
       action: {
@@ -78,13 +74,6 @@ export const usePreset = () => {
         args: { ...currentAction.args, ...clipPathRef.current },
       },
     });
-
-    setSidebar(true);
-  };
-
-  const handleClose = () => {
-    setCurrentAction(null);
-    setSidebar(true);
   };
 
   return {
@@ -92,6 +81,7 @@ export const usePreset = () => {
     presetsData,
     handleChange,
     handleSave,
-    handleClose,
+    handleClose: close,
+    isSaving,
   };
 };
