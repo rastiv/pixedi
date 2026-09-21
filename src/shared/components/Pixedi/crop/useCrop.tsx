@@ -11,6 +11,7 @@ export const useCrop = () => {
     addToHistory,
     setSidebar,
     eventBus,
+    singleToolUI,
   } = usePixediContext();
   const { width, height } = getLastHistoryItem();
   const { name, args } = currentAction || {};
@@ -64,6 +65,11 @@ export const useCrop = () => {
   };
 
   const handleClose = () => {
+    if (singleToolUI) {
+      setCurrentAction(null);
+      setSidebar(false);
+      return;
+    }
     setCurrentAction(null);
     setSidebar(true);
   };

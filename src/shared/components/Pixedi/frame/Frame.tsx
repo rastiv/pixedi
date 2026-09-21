@@ -6,7 +6,6 @@ import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
 import { FilterTools, FilterInteractBox } from "../filters";
 import { Preview } from "../preview";
-import { SurfaceToolOffsetProvider } from "../ui";
 import { ActionName } from "../types";
 import styles from "./Frame.module.css";
 import rootStyles from "../index.module.css";
@@ -26,19 +25,18 @@ export const Frame = () => {
 
   return (
     <div className={frameClassName}>
-      <SurfaceToolOffsetProvider>
-        <Preview faded={isFade} />
-        {isResize && <ResizeTools />}
-        {isCrop && <CropTools />}
-        {isPreset && <PresetTools />}
-        {isFlip && <FlipTools />}
-        {isRotate && <RotateTools />}
-        {isFilters && <FilterTools />}
-        {(isCrop || isPreset) && (
-          <CropInteractBox key={currentAction?.args?.id} />
-        )}
-        {isFilters && <FilterInteractBox />}
-      </SurfaceToolOffsetProvider>
+      <Preview faded={isFade} />
+      {isResize && <ResizeTools />}
+      {isCrop && <CropTools />}
+      {isPreset && <PresetTools />}
+      {isFlip && <FlipTools />}
+      {isRotate && <RotateTools />}
+      {isFilters && <FilterTools />}
+
+      {(isCrop || isPreset) && (
+        <CropInteractBox key={currentAction?.args?.id} />
+      )}
+      {isFilters && <FilterInteractBox />}
     </div>
   );
 };

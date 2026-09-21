@@ -101,6 +101,7 @@ export const PackageDemo = () => {
             onBack={handleCancel}
             onSave={handleSave}
             settings={{
+              tools: ["crop"],
               quality: 0.85,
             }}
           />
