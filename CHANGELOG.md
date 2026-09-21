@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.8.0
+
+- Make SurfaceTool component draggible.
+
 ## 1.7.0
 
 - Add method `setTheme` in widget.
