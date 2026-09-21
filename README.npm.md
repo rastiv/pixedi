@@ -13,6 +13,7 @@ A lightweight, embeddable React image editor component.
 - **Image filters** — two modes (see [Filters](#filters) below)
 - Undo/redo history
 - Social-media size presets (Facebook, Instagram, LinkedIn)
+- Single-tool mode — a minimal editor when only one tool is enabled (see [Single-tool mode](#single-tool-mode))
 - React component and standalone UMD widget
 - TypeScript declarations included
 
@@ -97,13 +98,33 @@ function AppBase64() {
 
 ### Settings
 
-| Setting      | Type                                                                           | Default                                                    | Description                                                                                     |
-| ------------ | ------------------------------------------------------------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `tools`      | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters">` | `["resize","crop","presetCrop","flip","rotate","filters"]` | Tools to show in the sidebar. Use an empty array to disable editing.                            |
-| `infobar`    | `boolean`                                                                      | `false`                                                    | Show the image info panel below the canvas.                                                     |
-| `quality`    | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                             |
-| `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                 |
-| `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`). |
+| Setting      | Type                                                                           | Default                                                    | Description                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `tools`      | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters">` | `["resize","crop","presetCrop","flip","rotate","filters"]` | Tools to show in the sidebar. A single tool switches to [single-tool mode](#single-tool-mode). Use an empty array to disable editing. |
+| `infobar`    | `boolean`                                                                      | `true`                                                     | Show the image info panel below the canvas.                                                                                           |
+| `quality`    | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
+| `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                                                       |
+| `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
+
+## Single-tool mode
+
+Passing exactly one entry in `settings.tools` renders a minimal editor: no header, sidebar or infobar — just the image with that tool already open.
+
+```tsx
+<Pixedi
+  image="https://example.com/photo.jpg"
+  onSave={async (image) => console.log(image)}
+  onBack={() => console.log("User cancelled editing")}
+  settings={{ tools: ["crop"] }}
+/>
+```
+
+In this mode the tool's own buttons drive the flow:
+
+- **Close** (red ✕) calls `onBack` immediately.
+- **Save** (green ✓) applies the change, encodes the image and calls `onSave` with the result. While saving, the check icon is replaced by a spinner and both buttons are disabled.
+
+After a successful save the editor stays mounted and reopens the tool on the newly produced image, so the user can keep editing or close.
 
 ## Filters
 

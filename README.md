@@ -20,6 +20,7 @@ Pixedi provides a ready-to-use image editing UI with cropping, resizing, image a
   - _Compare mode_ — toggle before/after preview while adjusting
 - **Undo/redo** — full history across all tools
 - **Social-media presets** — Facebook, Instagram, LinkedIn crop sizes
+- **Single-tool mode** — configure exactly one tool to get a minimal, header-less editor
 
 ## Quick Start
 
@@ -58,6 +59,12 @@ src/
 ```
 
 The reusable editor component lives in `src/shared/components/Pixedi`.
+
+### Single-tool mode
+
+When `settings.tools` contains exactly one tool, the editor drops the header, sidebar and infobar and renders only the frame with that tool already open. The tool's own Save/Close buttons take over the header's role: Close calls `onBack`, and Save processes the image and calls `onSave` while showing a spinner in place of the check icon.
+
+Both callbacks travel through `PixediProvider` context, so every tool hook reaches them via the shared `useToolCommit` hook (`hooks/useToolCommit.tsx`), which either commits the change to the history (multi-tool) or hands it straight to `useImageSaving` as a pending history item (single-tool).
 
 ### Filter architecture
 
