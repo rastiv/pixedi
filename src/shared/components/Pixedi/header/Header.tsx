@@ -10,19 +10,16 @@ import {
 import { usePixediContext } from "../provider/usePixediContext";
 import { Button } from "../ui";
 import { useImageSaving } from "../hooks/useImageSaving";
-import type { FuncSaveArgs } from "../types";
 import buttonStyles from "../ui/button/Button.module.css";
 import styles from "./Header.module.css";
 
 type HeaderProps = {
-  onBack: () => void;
-  onSave: FuncSaveArgs;
   isMobile: boolean;
 };
 
-export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
-  const { save, reset, isSaving } = useImageSaving(onSave);
-  const { sidebar, history, undo, redo, setSidebar, setCurrentAction } =
+export const Header = ({ isMobile }: HeaderProps) => {
+  const { save, reset, isSaving } = useImageSaving();
+  const { sidebar, history, undo, redo, setSidebar, setCurrentAction, onBack } =
     usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
@@ -58,7 +55,11 @@ export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
             <SidebarClose className={styles.sidebarIcon} />
           )}
         </div>
-        <Button variant="ghost" className={buttonStyles.rect} onClick={onBack}>
+        <Button
+          variant="ghost"
+          className={buttonStyles.rect}
+          onClick={() => onBack()}
+        >
           <ArrowLeft />
         </Button>
       </div>
@@ -90,7 +91,7 @@ export const Header = ({ onBack, onSave, isMobile }: HeaderProps) => {
         <Button variant="outline" disabled={disableReset} onClick={reset}>
           Reset
         </Button>
-        <Button disabled={disableSave} onClick={save}>
+        <Button disabled={disableSave} onClick={() => save()}>
           {isSaving ? <Loader /> : <Check />}
           Save
         </Button>

@@ -81,6 +81,8 @@ export const Pixedi = ({
       previewUrl={previewUrl}
       isAlpha={isAlpha}
       settings={defaultSettings}
+      onSave={onSave}
+      onBack={onBack}
     >
       <div
         ref={setWrapper}
@@ -99,7 +101,7 @@ export const Pixedi = ({
               defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
             } ${isBellowSm ? styles.mobile : ""}`}
           >
-            <Header onSave={onSave} onBack={onBack} isMobile={isBellowSm} />
+            <Header isMobile={isBellowSm} />
             <Sidebar isMobile={isBellowSm} />
             <Frame />
             {defaultSettings?.infobar && <Infobar />}

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { filtersData } from "../constants";
 import { ActionName, type ActionFilter, type FilterData } from "../types";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { emitCompareUpdate, emitFilterUpdate } from "../eventBus";
 
 export const useFilters = () => {
@@ -10,12 +11,10 @@ export const useFilters = () => {
     previewUrl,
     getLastFilter,
     getLastHistoryItem,
-    setCurrentAction,
-    setSidebar,
     toggleCompare,
-    addToHistory,
     eventBus,
   } = usePixediContext();
+  const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const { action } = getLastFilter() || {};
   const args = (action?.args || {}) as Record<string, string | number>;
@@ -84,7 +83,10 @@ export const useFilters = () => {
   };
 
   const handleSave = () => {
-    addToHistory({
+    if (showCompare) {
+      toggleCompare();
+    }
+    commit({
       width,
       height,
       action: {
@@ -98,18 +100,13 @@ export const useFilters = () => {
         } as ActionFilter,
       },
     });
-    if (showCompare) {
-      toggleCompare();
-    }
-    setSidebar(true);
   };
 
   const handleClose = () => {
     if (showCompare) {
       toggleCompare();
     }
-    setCurrentAction(null);
-    setSidebar(true);
+    close();
   };
 
   const toggleIsUrl = () => setIsUrl(!isUrl);
@@ -149,5 +146,6 @@ export const useFilters = () => {
     handleChangeWhenUrl,
     handleSave,
     handleClose,
+    isSaving,
   };
 };

@@ -17,6 +17,7 @@ export const ResizeTools = () => {
     handleHeightBlur,
     save,
     close,
+    isSaving,
   } = useResize();
 
   return (
@@ -44,6 +45,7 @@ export const ResizeTools = () => {
       <SaveCloseGroup
         onSave={save}
         onClose={close}
+        saving={isSaving}
         disabled={width === currentWidth && height === currentHeight}
       />
     </SurfaceTool>

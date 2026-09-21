@@ -1,18 +1,13 @@
 import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { ActionName, type CropRect } from "../types";
 import { getInitalCrop } from "../utils/crop";
 
 export const useCrop = () => {
-  const {
-    setCurrentAction,
-    currentAction,
-    getLastHistoryItem,
-    addToHistory,
-    setSidebar,
-    eventBus,
-    singleToolUI,
-  } = usePixediContext();
+  const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
+    usePixediContext();
+  const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const { name, args } = currentAction || {};
   const currentValue = name === ActionName.CROP ? (args?.id as string) : "";
@@ -52,7 +47,7 @@ export const useCrop = () => {
       currentAction.args?.preset?.height ||
       Math.round((height * clipPathRef.current.h) / 100);
 
-    addToHistory({
+    commit({
       width: updatedWidth,
       height: updatedHeight,
       action: {
@@ -60,18 +55,6 @@ export const useCrop = () => {
         args: { ...currentAction.args, ...clipPathRef.current },
       },
     });
-
-    setSidebar(true);
-  };
-
-  const handleClose = () => {
-    if (singleToolUI) {
-      setCurrentAction(null);
-      setSidebar(false);
-      return;
-    }
-    setCurrentAction(null);
-    setSidebar(true);
   };
 
   const handleChange = (value: string) => {
@@ -98,6 +81,7 @@ export const useCrop = () => {
     currentValue,
     handleChange,
     handleSave,
-    handleClose,
+    handleClose: close,
+    isSaving,
   };
 };

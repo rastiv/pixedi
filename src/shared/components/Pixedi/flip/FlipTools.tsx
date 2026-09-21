@@ -11,6 +11,7 @@ export const FlipTools = () => {
     handleFlipVertical,
     handleSave,
     handleClose,
+    isSaving,
   } = useFlip();
 
   return (
@@ -51,6 +52,7 @@ export const FlipTools = () => {
       </div>
       <SaveCloseGroup
         disabled={!flipHorizontal && !flipVertical}
+        saving={isSaving}
         onSave={handleSave}
         onClose={handleClose}
       />

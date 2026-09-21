@@ -1,16 +1,13 @@
 import { useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { ActionName } from "../types";
 import { getOrientedSizes } from "../utils/crop";
 
 export const useRotate = () => {
-  const {
-    getLastRotation,
-    getLastHistoryItem,
-    addToHistory,
-    setSidebar,
-    setCurrentAction,
-  } = usePixediContext();
+  const { getLastRotation, getLastHistoryItem, setCurrentAction } =
+    usePixediContext();
+  const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
 
   const lastRotation = getLastRotation();
@@ -26,7 +23,7 @@ export const useRotate = () => {
   };
 
   const handleSave = () => {
-    addToHistory({
+    commit({
       ...getOrientedSizes(
         width,
         height,
@@ -38,17 +35,12 @@ export const useRotate = () => {
         args: { degrees: angleRef.current },
       },
     });
-    setSidebar(true);
-  };
-
-  const handleClose = () => {
-    setCurrentAction(null);
-    setSidebar(true);
   };
 
   return {
     handleRotate,
     handleSave,
-    handleClose,
+    handleClose: close,
+    isSaving,
   };
 };

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { imageProcessor, blobToBase64 } from "../utils/imageProcessor";
 import { getActions } from "../utils/preview";
-import type { FuncSaveArgs } from "../types";
+import type { HistoryItem } from "../types";
 
-export const useImageSaving = (onSave: FuncSaveArgs) => {
+export const useImageSaving = () => {
   const [isSaving, setIsSaving] = useState(false);
   const {
     setImage,
@@ -13,14 +13,19 @@ export const useImageSaving = (onSave: FuncSaveArgs) => {
     originalBlob,
     setCurrentAction,
     resetHistory,
+    onSave,
   } = usePixediContext();
 
-  const save = async () => {
-    if (!originalBlob) return;
+  // a pending item lets a tool save a change that is not in the history yet
+  const save = async (pendingItem?: HistoryItem) => {
+    if (!originalBlob || isSaving) return;
 
     setIsSaving(true);
 
-    const historyItems = history.items.slice(0, history.pointer + 1);
+    const historyItems = [
+      ...history.items.slice(0, history.pointer + 1),
+      ...(pendingItem ? [pendingItem] : []),
+    ];
     const actions = getActions(historyItems);
 
     try {

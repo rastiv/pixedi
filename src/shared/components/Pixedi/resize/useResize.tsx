@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { emitResizeUpdate } from "../eventBus";
 import { usePixediContext } from "../provider/usePixediContext";
+import { useToolCommit } from "../hooks";
 import { ActionName } from "../types";
 
 const MIN_SCALE = 15;
@@ -17,13 +18,8 @@ const calculateSize = (scale: number, width: number, height: number) => {
 };
 
 export const useResize = () => {
-  const {
-    getLastHistoryItem,
-    setCurrentAction,
-    addToHistory,
-    setSidebar,
-    eventBus,
-  } = usePixediContext();
+  const { getLastHistoryItem, eventBus } = usePixediContext();
+  const { commit, close: closeTool, isSaving } = useToolCommit();
   const { width: currentWidth, height: currentHeight } = getLastHistoryItem();
   const [width, setWidth] = useState(currentWidth);
   const [height, setHeight] = useState(currentHeight);
@@ -63,12 +59,11 @@ export const useResize = () => {
 
   const close = () => {
     emitResizeUpdate(eventBus, 100);
-    setCurrentAction(null);
-    setSidebar(true);
+    closeTool();
   };
 
   const save = () => {
-    addToHistory({
+    commit({
       width,
       height,
       action: {
@@ -77,7 +72,6 @@ export const useResize = () => {
       },
     });
     emitResizeUpdate(eventBus, 100);
-    setSidebar(true);
   };
 
   useEffect(() => {
@@ -128,5 +122,6 @@ export const useResize = () => {
     handleHeightBlur,
     save,
     close,
+    isSaving,
   };
 };

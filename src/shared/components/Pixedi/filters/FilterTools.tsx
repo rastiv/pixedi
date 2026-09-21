@@ -30,6 +30,7 @@ export const FilterTools = () => {
     handleChangeWhenUrl,
     handleSave,
     handleClose,
+    isSaving,
   } = useFilters();
 
   const getFilterOptionWhenUrl = (option: SelectOption) => {
@@ -99,7 +100,11 @@ export const FilterTools = () => {
           renderOption={isUrl ? getFilterOptionWhenUrl : undefined}
           onChange={isUrl ? handleChangeWhenUrl : handleChange}
         />
-        <SaveCloseGroup onSave={handleSave} onClose={handleClose} />
+        <SaveCloseGroup
+          onSave={handleSave}
+          onClose={handleClose}
+          saving={isSaving}
+        />
       </div>
     </SurfaceTool>
   );
