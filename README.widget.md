@@ -64,6 +64,7 @@ Creates the editor inside the element with the given `containerId`. Only one wid
 | `quality`    | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
 | `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                                                       |
 | `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
+| `background` | `"circled" \| "diagonals" \| "rhombus"`                                        | —                                                          | Apply a decorative pattern to the editor frame background.                                                                            |
 
 ## Single-tool mode
 

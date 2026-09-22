@@ -143,4 +143,5 @@ export type Settings = {
   quality?: number;
   saveAsWEBP?: boolean;
   exportAs?: "blob" | "base64";
+  background?: "circled" | "diagonals" | "rhombus";
 };

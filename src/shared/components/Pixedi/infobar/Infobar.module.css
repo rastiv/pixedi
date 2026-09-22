@@ -1,6 +1,7 @@
 .infobar {
   grid-area: infobar;
   background: var(--muted);
+  border-top: solid 1px var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
