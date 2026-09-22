@@ -62,7 +62,6 @@ export const initialSettings: Settings = {
   quality: 0.85,
   saveAsWEBP: false,
   exportAs: "blob",
-  background: "circled",
 };
 
 export const getInitialState = (
