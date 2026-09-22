@@ -102,8 +102,9 @@ export const PackageDemo = () => {
             onSave={handleSave}
             // theme={"dark"}
             settings={{
-              // tools: ["crop"],
               quality: 0.85,
+              // tools: ["crop"],
+              background: "circled",
             }}
           />
         )}

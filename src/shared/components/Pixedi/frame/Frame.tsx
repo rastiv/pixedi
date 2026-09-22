@@ -8,10 +8,9 @@ import { FilterTools, FilterInteractBox } from "../filters";
 import { Preview } from "../preview";
 import { ActionName } from "../types";
 import styles from "./Frame.module.css";
-import rootStyles from "../index.module.css";
 
 export const Frame = () => {
-  const { currentAction } = usePixediContext();
+  const { settings, currentAction } = usePixediContext();
 
   const isResize = currentAction?.name === ActionName.RESIZE;
   const isCrop = currentAction?.name === ActionName.CROP;
@@ -21,7 +20,10 @@ export const Frame = () => {
   const isFilters = currentAction?.name === ActionName.FILTERS;
   const isFade = isCrop || isPreset;
 
-  const frameClassName = `${styles.frame} ${isFade ? rootStyles.mask : ""}`;
+  const frameClassName = `
+    ${styles.frame} 
+    ${settings?.background ? styles[`bg-${settings.background}`] : ""}
+  `;
 
   return (
     <div className={frameClassName}>
