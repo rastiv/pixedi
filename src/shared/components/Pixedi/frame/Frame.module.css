@@ -7,8 +7,10 @@
   margin: 0 auto;
   overflow: hidden;
 
-  /* background: var(--background); */
+  background: var(--background);
+}
 
+.bg-circled {
   background:
     radial-gradient(
       50% 50% at 100% 0,
@@ -68,4 +70,76 @@
       )
       calc(48px / 2) calc(48px / 2) var(--background);
   background-size: 48px 48px;
+}
+
+.bg-diagonals {
+  background:
+    linear-gradient(
+        45deg,
+        var(--muted) 12.5%,
+        var(--background) 0 25%,
+        #0000 0 75%,
+        var(--background) 0 87.5%,
+        var(--muted) 0
+      )
+      calc(55px / 2) calc(55px / 2),
+    linear-gradient(
+      45deg,
+      var(--background) 12.5%,
+      var(--muted) 0 25%,
+      #0000 0 75%,
+      var(--muted) 0 87.5%,
+      var(--background) 0
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      var(--muted) 0 12.5%,
+      var(--background) 0 25%,
+      var(--muted) 0 37.5%,
+      var(--background) 0 62.5%
+    );
+  background-size: 55px 55px;
+}
+
+.bg-rhombus {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #0000 calc(-650% / 13) calc(50% / 13),
+      var(--muted) 0 calc(100% / 13),
+      #0000 0 calc(150% / 13),
+      var(--muted) 0 calc(200% / 13),
+      #0000 0 calc(250% / 13),
+      var(--muted) 0 calc(300% / 13)
+    ),
+    repeating-linear-gradient(
+        45deg,
+        #0000 calc(-650% / 13) calc(50% / 13),
+        var(--muted) 0 calc(100% / 13),
+        #0000 0 calc(150% / 13),
+        var(--muted) 0 calc(200% / 13),
+        #0000 0 calc(250% / 13),
+        var(--muted) 0 calc(300% / 13)
+      )
+      36px 36px,
+    repeating-linear-gradient(
+      -45deg,
+      #0000 calc(-650% / 13) calc(50% / 13),
+      var(--muted) 0 calc(100% / 13),
+      #0000 0 calc(150% / 13),
+      var(--muted) 0 calc(200% / 13),
+      #0000 0 calc(250% / 13),
+      var(--muted) 0 calc(300% / 13)
+    ),
+    repeating-linear-gradient(
+        -45deg,
+        #0000 calc(-650% / 13) calc(50% / 13),
+        var(--muted) 0 calc(100% / 13),
+        #0000 0 calc(150% / 13),
+        var(--muted) 0 calc(200% / 13),
+        #0000 0 calc(250% / 13),
+        var(--muted) 0 calc(300% / 13)
+      )
+      36px 36px var(--background);
+  background-size: calc(2 * 36px) calc(2 * 36px);
 }
