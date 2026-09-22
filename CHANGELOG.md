@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.10.1
+
+- Add `background` option to settings.
+
 ## 1.9.0
 
 - Add single-tool mode: with one tool in `settings.tools` the editor renders only that tool, its Close button calls `onBack` and its Save button produces the image, calls `onSave` and shows a spinner while saving.
