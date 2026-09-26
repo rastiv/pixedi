@@ -17,7 +17,7 @@ export default defineConfig({
     lib: {
       entry: "src/shared/components/Pixedi/Pixedi.tsx",
       name: "Pixedi",
-      fileName: (format) => `index.${format === "es" ? "js" : "umd.js"}`,
+      fileName: (format) => `index.${format === "es" ? "js" : "umd.cjs"}`,
       formats: ["es", "umd"],
     },
     rollupOptions: {
