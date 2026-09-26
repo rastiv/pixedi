@@ -1,14 +1,19 @@
 .homePage {
+  box-sizing: border-box;
+  text-align: center;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px;
 }
 
-.commingsoon {
-  text-align: center;
-  color: var(--primary);
-  font-size: 2rem;
-  font-weight: 600;
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.modal {
+  height: 100%;
+  max-height: 80vh;
 }
