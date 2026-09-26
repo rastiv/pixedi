@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## 1.10.1
 
+- Fix UMD build output to use .cjs extension and add exports field to package.json.
+
+## 1.10.0
+
 - Add `background` option to settings.
 
 ## 1.9.0
