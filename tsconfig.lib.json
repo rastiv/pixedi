@@ -3,8 +3,9 @@
   "compilerOptions": {
     "declaration": true,
     "emitDeclarationOnly": true,
+    "noEmit": false,
     "outDir": "./dist/lib",
-    "rootDir": "."
+    "rootDir": "./src/shared/components/Pixedi"
   },
   "include": ["src/shared/components/Pixedi/**/*"],
   "exclude": [

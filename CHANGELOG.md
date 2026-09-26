@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.10.2
+
+- Fix `Calling require for "react"` crash in browser bundlers: `react/jsx-runtime` is no longer bundled into the library.
+- Ship TypeScript declarations (`dist/lib/index.d.ts`) with the package.
+
 ## 1.10.1
 
 - Fix UMD build output to use .cjs extension and add exports field to package.json.

@@ -15,17 +15,18 @@ export default defineConfig({
     outDir: "dist/lib",
     emptyOutDir: false,
     lib: {
-      entry: "src/shared/components/Pixedi/Pixedi.tsx",
+      entry: "src/shared/components/Pixedi/index.ts",
       name: "Pixedi",
       fileName: (format) => `index.${format === "es" ? "js" : "umd.cjs"}`,
       formats: ["es", "umd"],
     },
-    rollupOptions: {
-      external: ["react", "react-dom"],
+    rolldownOptions: {
+      external: [/^react($|\/)/, /^react-dom($|\/)/],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          "react/jsx-runtime": "ReactJSXRuntime",
         },
       },
     },
