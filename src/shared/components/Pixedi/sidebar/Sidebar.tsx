@@ -1,4 +1,4 @@
-import { Tooltip } from "@/shared/components/Pixedi/ui";
+import { Tooltip } from "../ui";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useSidebar, getToolData } from "./useSidebar";
 import styles from "./Sidebar.module.css";

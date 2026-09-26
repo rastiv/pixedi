@@ -1,8 +1,4 @@
-import type {
-  ActionFilter,
-  ProcessedImage,
-  Settings,
-} from "@/shared/components/Pixedi/types";
+import type { ActionFilter, ProcessedImage, Settings } from "../types";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
 
 export const blobToBase64 = (blob: Blob): Promise<string> =>
