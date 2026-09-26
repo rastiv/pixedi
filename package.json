@@ -5,9 +5,16 @@
   "description": "A lightweight, embeddable React image editor component.",
   "type": "module",
   "packageManager": "pnpm@11.17.0",
-  "main": "./dist/lib/index.umd.js",
+  "main": "./dist/lib/index.umd.cjs",
   "module": "./dist/lib/index.js",
   "types": "./dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/lib/index.js",
+      "require": "./dist/lib/index.umd.cjs",
+      "types": "./dist/lib/index.d.ts"
+    }
+  },
   "files": [
     "dist/lib",
     "dist/widget",
