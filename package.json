@@ -16,26 +16,22 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build:app": "tsc -b tsconfig.app.json && vite build",
     "build:widget": "vite build --config vite.widget.config.ts --mode production",
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
-    "build": "pnpm build:app && pnpm build:widget && pnpm build:lib",
+    "build": "pnpm build:widget && pnpm build:lib",
     "lint": "eslint .",
-    "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "type-check": "tsc -b tsconfig.app.json",
+    "type-check": "tsc -b tsconfig.lib.json",
     "test": "vitest run",
     "test:watch": "vitest"
-  },
-  "dependencies": {
-    "react-router": "^8.0.1"
   },
   "peerDependencies": {
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "react-router": "^8.0.1",
     "@eslint/js": "^10.0.1",
     "@storybook/addon-actions": "^8.6.0",
     "@storybook/addon-essentials": "^8.6.0",

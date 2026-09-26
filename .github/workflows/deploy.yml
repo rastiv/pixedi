@@ -38,7 +38,7 @@ jobs:
       - name: Run Vitest Tests
         run: pnpm test
 
-      - name: Run Unified Build Configuration
+      - name: Build widget and library
         run: pnpm build
 
       - name: Upload dist artifact
@@ -46,26 +46,6 @@ jobs:
         with:
           name: dist
           path: dist
-
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-    steps:
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      - name: Deploy SPA & Widget CDN to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=pixedi
 
   publish:
     needs: build-and-test
