@@ -11,22 +11,24 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { DefaultFilterValues } from "../filters";
 import { ActionName, type Tools } from "../types";
 
-type MappedTool = {
-  icon: ReactNode;
-  label: string;
+export const getToolIcon = (tool: Tools): ReactNode => {
+  switch (tool) {
+    case ActionName.RESIZE:
+      return <Fullscreen />;
+    case ActionName.CROP:
+      return <Crop />;
+    case ActionName.PRESET_CROP:
+      return <Presets />;
+    case ActionName.FLIP:
+      return <FlipH />;
+    case ActionName.ROTATE:
+      return <Rotate />;
+    case ActionName.FILTERS:
+      return <Filters />;
+    default:
+      return null;
+  }
 };
-
-const TOOL_DATA: Partial<Record<Tools, MappedTool>> = {
-  [ActionName.RESIZE]: { icon: <Fullscreen />, label: "Resize" },
-  [ActionName.CROP]: { icon: <Crop />, label: "Crop" },
-  [ActionName.PRESET_CROP]: { icon: <Presets />, label: "Presets" },
-  [ActionName.FLIP]: { icon: <FlipH />, label: "Flip" },
-  [ActionName.ROTATE]: { icon: <Rotate />, label: "Rotate" },
-  [ActionName.FILTERS]: { icon: <Filters />, label: "Filters" },
-};
-
-export const getToolData = (tool: Tools): MappedTool | null =>
-  TOOL_DATA[tool] ?? null;
 
 export const useSidebar = () => {
   const {

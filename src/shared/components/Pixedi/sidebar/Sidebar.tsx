@@ -1,6 +1,6 @@
 import { Tooltip } from "../ui";
 import { usePixediContext } from "../provider/usePixediContext";
-import { useSidebar, getToolData } from "./useSidebar";
+import { useSidebar, getToolIcon } from "./useSidebar";
 import styles from "./Sidebar.module.css";
 
 type SidebarProps = {
@@ -11,6 +11,7 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
   const {
     settings,
     sidebar: isSidebarOpen,
+    i18n,
     currentAction,
   } = usePixediContext();
   const tools = settings?.tools || [];
@@ -26,9 +27,7 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
     >
       <Tooltip position="right" className={styles.tooltip}>
         {tools.map((tool) => {
-          const toolData = getToolData(tool);
-          if (!toolData) return null;
-          const { icon, label } = toolData;
+          const label = i18n(tool);
           return (
             <div
               key={tool}
@@ -37,7 +36,7 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
               data-tooltip={label}
               aria-label={label}
             >
-              {icon}
+              {getToolIcon(tool)}
             </div>
           );
         })}

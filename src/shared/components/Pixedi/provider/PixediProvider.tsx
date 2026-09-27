@@ -172,6 +172,12 @@ export const PixediProvider = ({
     );
   };
 
+  const i18n = (key: string) => {
+    const { translations } = state.settings;
+    if (!translations) return key;
+    return translations[key] || key;
+  };
+
   const value = {
     ...state,
     setImage,
@@ -186,6 +192,7 @@ export const PixediProvider = ({
     redo,
     setSidebar,
     eventBus,
+    i18n,
     onSave,
     onBack,
   };

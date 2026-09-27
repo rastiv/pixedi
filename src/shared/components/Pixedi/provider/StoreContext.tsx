@@ -20,6 +20,7 @@ type StoreContextType = PixediContextType & {
   resetHistory: () => void;
   undo: () => void;
   redo: () => void;
+  i18n: (key: string) => string;
   setSidebar: (payload: boolean) => void;
   eventBus: EventTarget;
 };

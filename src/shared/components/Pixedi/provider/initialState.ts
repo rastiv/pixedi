@@ -1,3 +1,4 @@
+import { translations } from "../constants";
 import { DefaultFilterValues } from "../filters";
 import { type History, type Action, ActionName } from "../types";
 
@@ -62,6 +63,7 @@ export const initialSettings: Settings = {
   quality: 0.85,
   saveAsWEBP: false,
   exportAs: "blob",
+  translations,
 };
 
 export const getInitialState = (

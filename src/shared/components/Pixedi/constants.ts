@@ -182,6 +182,33 @@ export const filtersData: FilterData[] = [
   },
 ];
 
+export const translations = {
+  save: "Save",
+  reset: "Reset",
+  resize: "Resize",
+  crop: "Crop",
+  presets: "Presets",
+  flip: "Flip",
+  rotate: "Rotate",
+  filters: "Filters",
+  width: "Width",
+  height: "Height",
+  freeform: "Free form",
+  original: "Original",
+  horizontal: "Horizontal",
+  vertical: "Vertical",
+  predefinedFilters: "Predefined filters",
+  saturate: "Saturate",
+  greyscale: "Greyscale",
+  sepia: "Sepia",
+  invert: "Invert",
+  hueRotate: "Hue Rotate",
+  brightness: "Brightness",
+  contrast: "Contrast",
+  msgNoTools: "No tools selected",
+  msgFailedToLoadImage: "Failed to load image",
+};
+
 export const filterUrlsData: Option[] = [
   { value: "vintage", label: "Vintage" },
   { value: "olive-army", label: "Olive Army" },

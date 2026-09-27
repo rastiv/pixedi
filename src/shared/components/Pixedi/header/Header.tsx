@@ -19,8 +19,16 @@ type HeaderProps = {
 
 export const Header = ({ isMobile }: HeaderProps) => {
   const { save, reset, isSaving } = useImageSaving();
-  const { sidebar, history, undo, redo, setSidebar, setCurrentAction, onBack } =
-    usePixediContext();
+  const {
+    sidebar,
+    history,
+    undo,
+    redo,
+    i18n,
+    setSidebar,
+    setCurrentAction,
+    onBack,
+  } = usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -75,9 +83,11 @@ export const Header = ({ isMobile }: HeaderProps) => {
             >
               <Undo />
             </Button>
-            <div className={styles.historyText}>
-              {history.pointer + 1}/{history.items.length}
-            </div>
+            {!isMobile && (
+              <div className={styles.historyText}>
+                {history.pointer + 1}/{history.items.length}
+              </div>
+            )}
             <Button
               variant="outline"
               disabled={disabledRedo}
@@ -89,11 +99,11 @@ export const Header = ({ isMobile }: HeaderProps) => {
           </div>
         )}
         <Button variant="outline" disabled={disableReset} onClick={reset}>
-          Reset
+          {i18n("reset")}
         </Button>
         <Button disabled={disableSave} onClick={() => save()}>
           {isSaving ? <Loader /> : <Check />}
-          Save
+          {i18n("save")}
         </Button>
       </div>
     </div>
