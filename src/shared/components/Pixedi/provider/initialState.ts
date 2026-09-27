@@ -1,5 +1,5 @@
 import { translations } from "../constants";
-import { DefaultFilterValues } from "../filters";
+import { DefaultFilterValues } from "../filters/DefaultFilterValues";
 import { type History, type Action, ActionName } from "../types";
 
 import type { Settings } from "../types";

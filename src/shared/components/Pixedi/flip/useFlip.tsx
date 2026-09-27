@@ -4,7 +4,7 @@ import { useToolCommit } from "../hooks";
 import { ActionName } from "../types";
 
 export const useFlip = () => {
-  const { getLastHistoryItem, setCurrentAction } = usePixediContext();
+  const { getLastHistoryItem, setCurrentAction, i18n } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const [flipHorizontal, setFlipHorizontal] = useState(false);
@@ -48,5 +48,6 @@ export const useFlip = () => {
     handleSave,
     handleClose: close,
     isSaving,
+    i18n,
   };
 };

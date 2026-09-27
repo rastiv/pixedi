@@ -13,6 +13,7 @@ export const useFilters = () => {
     getLastHistoryItem,
     toggleCompare,
     eventBus,
+    i18n,
   } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
@@ -21,6 +22,7 @@ export const useFilters = () => {
   const prevUrl = args?.url as string;
   const prevFilters = filtersData.map((filter) => ({
     ...filter,
+    label: i18n(filter.value),
     sliderValue: (args[filter.value] ?? filter.sliderValue) as number,
     rightLabel: `${args[filter.value] ?? filter.sliderValue}${filter.unit}`,
   }));
@@ -147,5 +149,6 @@ export const useFilters = () => {
     handleSave,
     handleClose,
     isSaving,
+    i18n,
   };
 };

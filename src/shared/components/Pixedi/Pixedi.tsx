@@ -33,7 +33,16 @@ export const Pixedi = ({
 }: PixediProps) => {
   const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
   const isBelowSm = useBelow("sm", wrapper);
-  const defaultSettings = { ...initialSettings, ...settings };
+  const defaultSettings = {
+    ...initialSettings,
+    ...{
+      ...settings,
+      translations: {
+        ...initialSettings.translations,
+        ...settings.translations,
+      },
+    },
+  };
   const {
     loading,
     error,

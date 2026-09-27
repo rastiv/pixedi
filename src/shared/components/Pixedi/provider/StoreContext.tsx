@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { type PixediContextType } from "./initialState";
+import type { PixediContextType } from "./initialState";
 import type {
   Action,
   FuncSaveArgs,

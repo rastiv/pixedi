@@ -99,11 +99,11 @@ export const Header = ({ isMobile }: HeaderProps) => {
           </div>
         )}
         <Button variant="outline" disabled={disableReset} onClick={reset}>
-          {i18n("reset")}
+          <span className={styles.btnText}>{i18n("reset")}</span>
         </Button>
         <Button disabled={disableSave} onClick={() => save()}>
           {isSaving ? <Loader /> : <Check />}
-          {i18n("save")}
+          <span className={styles.btnText}>{i18n("save")}</span>
         </Button>
       </div>
     </div>

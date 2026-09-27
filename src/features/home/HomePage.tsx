@@ -105,6 +105,11 @@ const HomePage = () => {
               quality: 0.85,
               // tools: ["crop"],
               background: "circled",
+              // translations: {
+              //   save: "Запази",
+              //   flip: "Обърни",
+              //   rotate: "Завърти",
+              // },
             }}
           />
         )}
