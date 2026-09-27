@@ -81,6 +81,7 @@ pnpm storybook        # Run Storybook dev server on port 6006
 - **The widget mounts into a Shadow DOM** and exposes `window.PixediWidget`.
 - **Type declarations** for the library are emitted to `dist/lib/index.d.ts` from `tsconfig.lib.json`.
 - **Test environment mocks canvas APIs** because jsdom does not support `HTMLCanvasElement` rendering.
+- **UI strings are customizable** via the `translations` prop (`Record<string, string>`); English defaults live in `src/shared/components/Pixedi/constants.ts` and consumer overrides are merged shallowly in `Pixedi.tsx`.
 
 ## CI / CD
 
