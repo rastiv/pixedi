@@ -85,7 +85,37 @@ PixediWidget.init({
 });
 ```
 
-See the [full list of translation keys](https://github.com/rastiv/pixedi/blob/main/README.npm.md#localization) in the React component documentation.
+Available keys and their default English values:
+
+| Key                    | Default                |
+| ---------------------- | ---------------------- |
+| `save`                 | `Save`                 |
+| `reset`                | `Reset`                |
+| `resize`               | `Resize`               |
+| `crop`                 | `Crop`                 |
+| `presetCrop`           | `Presets`              |
+| `flip`                 | `Flip`                 |
+| `rotate`               | `Rotate`               |
+| `filters`              | `Filters`              |
+| `width`                | `Width`                |
+| `height`               | `Height`               |
+| `freeform`             | `Free form`            |
+| `origin`               | `Original`             |
+| `horizontal`           | `Horizontal`           |
+| `vertical`             | `Vertical`             |
+| `predefinedFilters`    | `Predefined filters`   |
+| `compare`              | `Compare`              |
+| `before`               | `Before`               |
+| `after`                | `After`                |
+| `saturate`             | `Saturate`             |
+| `greyscale`            | `Greyscale`            |
+| `sepia`                | `Sepia`                |
+| `invert`               | `Invert`               |
+| `hueRotate`            | `Hue Rotate`           |
+| `brightness`           | `Brightness`           |
+| `contrast`             | `Contrast`             |
+| `msgNoTools`           | `No tools selected`    |
+| `msgFailedToLoadImage` | `Failed to load image` |
 
 ## Single-tool mode
 
