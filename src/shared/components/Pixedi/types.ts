@@ -107,7 +107,7 @@ export type Theme = "light" | "dark";
 
 export type Option<T = string> = {
   value: T;
-  label: string;
+  label?: string;
   rightLabel?: string;
 };
 

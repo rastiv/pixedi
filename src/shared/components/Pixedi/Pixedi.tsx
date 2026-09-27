@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { PixediProvider } from "./provider/PixediProvider";
 import { initialSettings } from "./provider/initialState";
-import { useBellow, useImageLoader } from "./hooks";
+import { translations as initilaTranslations } from "./constants";
+import { useBelow, useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 import { Infobar } from "./infobar";
@@ -22,6 +23,7 @@ type PixediProps = {
   onBack: () => void;
   theme?: Theme;
   settings?: Settings;
+  translations?: Record<string, string>;
 };
 
 export const Pixedi = ({
@@ -30,10 +32,19 @@ export const Pixedi = ({
   onBack,
   theme = "light",
   settings = initialSettings,
+  translations,
 }: PixediProps) => {
   const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
-  const isBellowSm = useBellow("sm", wrapper);
-  const defaultSettings = { ...initialSettings, ...settings };
+
+  const isBelowSm = useBelow("sm", wrapper);
+
+  const defaultSettings = {
+    ...initialSettings,
+    ...settings,
+  };
+
+  const defaultTranslations = { ...initilaTranslations, ...translations };
+
   const {
     loading,
     error,
@@ -52,7 +63,9 @@ export const Pixedi = ({
     return (
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
-          <div className={styles.textRed}>No tools selected.</div>
+          <div className={styles.textRed}>
+            {defaultTranslations?.msgNoTools || "msgNoTools"}
+          </div>
         </div>
       </div>
     );
@@ -65,7 +78,10 @@ export const Pixedi = ({
           {loading && <Loader style={{ width: 48, height: 48 }} />}
           {error && <div className={styles.textRed}>{error}</div>}
           {!loading && !error && (!originalBlob || !mimeType) && (
-            <div className={styles.textRed}>Failed to load image.</div>
+            <div className={styles.textRed}>
+              {defaultTranslations?.msgFailedToLoadImage ||
+                "msgFailedToLoadImage"}
+            </div>
           )}
         </div>
       </div>
@@ -81,6 +97,7 @@ export const Pixedi = ({
       previewUrl={previewUrl}
       isAlpha={isAlpha}
       settings={defaultSettings}
+      translations={defaultTranslations}
       onSave={onSave}
       onBack={onBack}
     >
@@ -99,10 +116,10 @@ export const Pixedi = ({
           <div
             className={`${
               defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
-            } ${isBellowSm ? styles.mobile : ""}`}
+            } ${isBelowSm ? styles.mobile : ""}`}
           >
-            <Header isMobile={isBellowSm} />
-            <Sidebar isMobile={isBellowSm} />
+            <Header isMobile={isBelowSm} />
+            <Sidebar isMobile={isBelowSm} />
             <Frame />
             {defaultSettings?.infobar && <Infobar />}
           </div>

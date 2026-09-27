@@ -31,6 +31,7 @@ export const FilterTools = () => {
     handleSave,
     handleClose,
     isSaving,
+    i18n,
   } = useFilters();
 
   const getFilterOptionWhenUrl = (option: SelectOption) => {
@@ -74,8 +75,8 @@ export const FilterTools = () => {
         <Tooltip position="top">
           <Button
             variant="outline"
-            aria-label="Compare"
-            data-tooltip="Compare"
+            aria-label={i18n("compare")}
+            data-tooltip={i18n("compare")}
             onClick={handleToggleCompare}
             className={showCompare ? styles.active : ""}
           >
@@ -85,8 +86,8 @@ export const FilterTools = () => {
         <Tooltip position="top">
           <Button
             variant="outline"
-            aria-label={isUrl ? "Filters" : "Predefined Filters"}
-            data-tooltip={isUrl ? "Filters" : "Predefined Filters"}
+            aria-label={isUrl ? i18n("filters") : i18n("predefinedFilters")}
+            data-tooltip={isUrl ? i18n("filters") : i18n("predefinedFilters")}
             onClick={toggleIsUrl}
           >
             {isUrl ? <Filters /> : <PredefinedFilters />}
@@ -95,7 +96,7 @@ export const FilterTools = () => {
         <Select
           items={isUrl ? filterUrlsData : filters}
           value={isUrl ? selectedUrl : selectedFilter}
-          placeholder="Select filter"
+          placeholder=""
           className={styles.select}
           renderOption={isUrl ? getFilterOptionWhenUrl : undefined}
           onChange={isUrl ? handleChangeWhenUrl : handleChange}

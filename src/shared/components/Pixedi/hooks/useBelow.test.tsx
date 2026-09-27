@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { useBellow } from "./useBellow";
+import { useBelow } from "./useBelow";
 
 describe("useBellow", () => {
   afterEach(() => {
@@ -22,7 +22,7 @@ describe("useBellow", () => {
     );
 
     const element = document.createElement("div");
-    const { result, unmount } = renderHook(() => useBellow("sm", element));
+    const { result, unmount } = renderHook(() => useBelow("sm", element));
     const resize = (width: number) => {
       act(() => {
         callback?.(

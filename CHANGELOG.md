@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.11.0
+
+- Add `translations` prop to widget to customize UI text.
+
 ## 1.10.3
 
 - Add more space of resize tool fields.

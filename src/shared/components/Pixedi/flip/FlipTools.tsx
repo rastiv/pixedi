@@ -12,6 +12,7 @@ export const FlipTools = () => {
     handleSave,
     handleClose,
     isSaving,
+    i18n,
   } = useFlip();
 
   return (
@@ -22,8 +23,8 @@ export const FlipTools = () => {
             variant="outline"
             className={styles.btnH}
             onClick={handleFlipHorizontal}
-            aria-label="Horizontal"
-            data-tooltip="Horizontal"
+            aria-label={i18n("horizontal")}
+            data-tooltip={i18n("horizontal")}
           >
             <FlipH
               style={{
@@ -37,8 +38,8 @@ export const FlipTools = () => {
             variant="outline"
             className={styles.btnV}
             onClick={handleFlipVertical}
-            aria-label="Vertical"
-            data-tooltip="Vertical"
+            aria-label={i18n("vertical")}
+            data-tooltip={i18n("vertical")}
           >
             <FlipV
               style={{

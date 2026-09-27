@@ -111,7 +111,6 @@ export const presetsData: Preset[] = [
 export const filtersData: FilterData[] = [
   {
     value: "saturate",
-    label: "Saturate",
     min: 0,
     max: 200,
     step: 1,
@@ -121,7 +120,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "grayscale",
-    label: "Grayscale",
     min: 0,
     max: 100,
     step: 1,
@@ -131,7 +129,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "sepia",
-    label: "Sepia",
     min: 0,
     max: 100,
     step: 1,
@@ -141,7 +138,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "invert",
-    label: "Invert",
     min: 0,
     max: 100,
     step: 1,
@@ -151,7 +147,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "hueRotate",
-    label: "Hue Rotate",
     min: 0,
     max: 360,
     step: 1,
@@ -162,7 +157,6 @@ export const filtersData: FilterData[] = [
 
   {
     value: "brightness",
-    label: "Brightness",
     min: 0,
     max: 200,
     step: 1,
@@ -172,7 +166,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "contrast",
-    label: "Contrast",
     min: 0,
     max: 200,
     step: 1,
@@ -181,6 +174,36 @@ export const filtersData: FilterData[] = [
     rightLabel: "100%",
   },
 ];
+
+export const translations = {
+  save: "Save",
+  reset: "Reset",
+  resize: "Resize",
+  crop: "Crop",
+  presetCrop: "Presets",
+  flip: "Flip",
+  rotate: "Rotate",
+  filters: "Filters",
+  width: "Width",
+  height: "Height",
+  freeform: "Free form",
+  origin: "Original",
+  horizontal: "Horizontal",
+  vertical: "Vertical",
+  predefinedFilters: "Predefined filters",
+  compare: "Compare",
+  before: "Before",
+  after: "After",
+  saturate: "Saturate",
+  greyscale: "Greyscale",
+  sepia: "Sepia",
+  invert: "Invert",
+  hueRotate: "Hue Rotate",
+  brightness: "Brightness",
+  contrast: "Contrast",
+  msgNoTools: "No tools selected",
+  msgFailedToLoadImage: "Failed to load image",
+};
 
 export const filterUrlsData: Option[] = [
   { value: "vintage", label: "Vintage" },

@@ -10,8 +10,14 @@ type UsePreviewProps = {
 };
 
 export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
-  const { history, previewUrl, currentAction, getLastRotation, eventBus } =
-    usePixediContext();
+  const {
+    history,
+    previewUrl,
+    currentAction,
+    getLastRotation,
+    eventBus,
+    i18n,
+  } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const previousActionRef = useRef(currentAction?.name);
@@ -137,5 +143,5 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     return () => controller.abort();
   }, [isClipped, isFilter, currentAction?.name, eventBus]);
 
-  return { previewRef, imageRef, previewUrl, ...preview };
+  return { previewRef, imageRef, previewUrl, i18n, ...preview };
 };

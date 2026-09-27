@@ -88,13 +88,14 @@ function AppBase64() {
 
 ### Props
 
-| Prop       | Type                                               | Description                                                                                   |
-| ---------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `image`    | `string \| Blob`                                   | URL, base64 data URI, or `Blob` of the image to edit.                                         |
-| `onSave`   | `(image: Blob \| string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as a `Blob` or a base64 data URI. |
-| `onBack`   | `() => void`                                       | Called when the user clicks Back/Cancel.                                                      |
-| `theme`    | `"light" \| "dark"`                                | UI color theme. Defaults to `"light"`.                                                        |
-| `settings` | `Settings`                                         | Optional editor settings (see below).                                                         |
+| Prop           | Type                                               | Description                                                                                   |
+| -------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `image`        | `string \| Blob`                                   | URL, base64 data URI, or `Blob` of the image to edit.                                         |
+| `onSave`       | `(image: Blob \| string) => void \| Promise<void>` | Called when the user clicks Save. Receives the edited image as a `Blob` or a base64 data URI. |
+| `onBack`       | `() => void`                                       | Called when the user clicks Back/Cancel.                                                      |
+| `theme`        | `"light" \| "dark"`                                | UI color theme. Defaults to `"light"`.                                                        |
+| `settings`     | `Settings`                                         | Optional editor settings (see below).                                                         |
+| `translations` | `Record<string, string>`                           | Optional UI label overrides (see [Localization](#localization)).                              |
 
 ### Settings
 
@@ -106,6 +107,55 @@ function AppBase64() {
 | `saveAsWEBP` | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                                                       |
 | `exportAs`   | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
 | `background` | `"circled" \| "diagonals" \| "rhombus"`                                        | —                                                          | Apply a decorative pattern to the editor frame background.                                                                            |
+
+## Localization
+
+Pass a `translations` object to override any UI label. Only the keys you provide are replaced — the rest fall back to the English defaults.
+
+```tsx
+<Pixedi
+  image="https://example.com/photo.jpg"
+  onSave={async (image) => console.log(image)}
+  onBack={() => console.log("User cancelled editing")}
+  translations={{
+    save: "Enregistrer",
+    crop: "Recadrer",
+    filters: "Filtres",
+  }}
+/>
+```
+
+Available keys and their default English values:
+
+| Key                    | Default                |
+| ---------------------- | ---------------------- |
+| `save`                 | `Save`                 |
+| `reset`                | `Reset`                |
+| `resize`               | `Resize`               |
+| `crop`                 | `Crop`                 |
+| `presetCrop`           | `Presets`              |
+| `flip`                 | `Flip`                 |
+| `rotate`               | `Rotate`               |
+| `filters`              | `Filters`              |
+| `width`                | `Width`                |
+| `height`               | `Height`               |
+| `freeform`             | `Free form`            |
+| `origin`               | `Original`             |
+| `horizontal`           | `Horizontal`           |
+| `vertical`             | `Vertical`             |
+| `predefinedFilters`    | `Predefined filters`   |
+| `compare`              | `Compare`              |
+| `before`               | `Before`               |
+| `after`                | `After`                |
+| `saturate`             | `Saturate`             |
+| `greyscale`            | `Greyscale`            |
+| `sepia`                | `Sepia`                |
+| `invert`               | `Invert`               |
+| `hueRotate`            | `Hue Rotate`           |
+| `brightness`           | `Brightness`           |
+| `contrast`             | `Contrast`             |
+| `msgNoTools`           | `No tools selected`    |
+| `msgFailedToLoadImage` | `Failed to load image` |
 
 ## Single-tool mode
 

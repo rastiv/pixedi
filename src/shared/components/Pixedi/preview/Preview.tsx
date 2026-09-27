@@ -29,6 +29,7 @@ export const Preview = ({
     flipH,
     flipV,
     filters,
+    i18n,
   } = usePreview({ isClipped, isFilter });
 
   const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
@@ -43,10 +44,12 @@ export const Preview = ({
       }}
     >
       {showCompare && !isFilter && (
-        <div className={`${styles.label} ${styles.before}`}>Before</div>
+        <div className={`${styles.label} ${styles.before}`}>
+          {i18n("before")}
+        </div>
       )}
       {showCompare && isFilter && (
-        <div className={`${styles.label} ${styles.after}`}>After</div>
+        <div className={`${styles.label} ${styles.after}`}>{i18n("after")}</div>
       )}
       <div
         className={styles.rotate}

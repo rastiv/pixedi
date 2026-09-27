@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 export type SelectOption = {
   value: string;
-  label: string;
+  label?: string;
   options?: SelectOption[];
   rightLabel?: string;
   fullName?: string;

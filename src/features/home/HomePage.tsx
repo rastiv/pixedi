@@ -101,6 +101,11 @@ const HomePage = () => {
             onBack={handleCancel}
             onSave={handleSave}
             // theme={"dark"}
+            // translations={{
+            //   save: "Запази",
+            //   flip: "Обърни",
+            //   rotate: "Завърти",
+            // }}
             settings={{
               quality: 0.85,
               // tools: ["crop"],

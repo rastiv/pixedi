@@ -25,6 +25,7 @@
   color: var(--background);
   border-radius: 4px;
   font-size: 14px;
+  line-height: 12px;
   z-index: 999;
   pointer-events: none;
   opacity: var(--tooltip-opacity, 0);
@@ -134,4 +135,9 @@
   white-space: nowrap;
   padding: 0 10px;
   box-sizing: border-box;
+
+  span {
+    position: relative;
+    top: -1.5px;
+  }
 }

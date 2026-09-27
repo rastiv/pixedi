@@ -38,6 +38,7 @@ const renderCrop = (args: ActionCrop) => {
       width={width}
       height={height}
       settings={{}}
+      translations={{}}
       isAlpha={false}
     >
       <Probe args={args} />

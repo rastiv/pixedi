@@ -59,7 +59,7 @@ export const Tooltip = ({
                 }}
                 className={`${styles.title} ${classNameTitle}`}
               >
-                {title}
+                <span>{title}</span>
               </div>
             ))}
           </div>
