@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.10.3
+
+- Add more space of resize tool fields.
+- Reduce sidebar item height from 48px to 44px and container min-height from 480px to 460px.
+- Remove unused css variables.
+
 ## 1.10.2
 
 - Fix `Calling require for "react"` crash in browser bundlers: `react/jsx-runtime` is no longer bundled into the library.
