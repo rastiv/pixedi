@@ -17,19 +17,16 @@
     }
   }
 }
-.wrapper {
-  display: flex;
-  flex-direction: column;
-}
+
 .item {
   position: relative;
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
   color: var(--foreground);
+  height: 44px;
 
   svg {
     width: 16px;
