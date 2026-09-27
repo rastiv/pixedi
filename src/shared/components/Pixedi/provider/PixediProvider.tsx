@@ -20,6 +20,7 @@ type PixediProviderProps = {
   previewUrl: string;
   isAlpha: boolean;
   settings: Settings;
+  translations: Record<string, string>;
   onSave?: FuncSaveArgs;
   onBack?: () => void;
 };
@@ -35,6 +36,7 @@ export const PixediProvider = ({
   previewUrl,
   isAlpha,
   settings,
+  translations,
   onSave = noop,
   onBack = noop,
 }: PixediProviderProps) => {
@@ -47,6 +49,7 @@ export const PixediProvider = ({
       previewUrl,
       isAlpha,
       settings,
+      translations,
     ),
   );
 
@@ -168,14 +171,13 @@ export const PixediProvider = ({
         ownedPreviewUrlRef.current,
         payload.isAlpha,
         settings,
+        translations,
       ),
     );
   };
 
   const i18n = (key: string) => {
-    const { translations } = state.settings;
-    if (!translations) return key;
-    return translations[key] || key;
+    return state.translations[key] || key;
   };
 
   const value = {

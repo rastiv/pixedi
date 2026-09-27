@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PixediProvider } from "./provider/PixediProvider";
 import { initialSettings } from "./provider/initialState";
+import { translations as initilaTranslations } from "./constants";
 import { useBelow, useImageLoader } from "./hooks";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
@@ -22,6 +23,7 @@ type PixediProps = {
   onBack: () => void;
   theme?: Theme;
   settings?: Settings;
+  translations?: Record<string, string>;
 };
 
 export const Pixedi = ({
@@ -30,19 +32,19 @@ export const Pixedi = ({
   onBack,
   theme = "light",
   settings = initialSettings,
+  translations,
 }: PixediProps) => {
   const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
+
   const isBelowSm = useBelow("sm", wrapper);
+
   const defaultSettings = {
     ...initialSettings,
-    ...{
-      ...settings,
-      translations: {
-        ...initialSettings.translations,
-        ...settings.translations,
-      },
-    },
+    ...settings,
   };
+
+  const defaultTranslations = { ...initilaTranslations, ...translations };
+
   const {
     loading,
     error,
@@ -62,7 +64,7 @@ export const Pixedi = ({
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
           <div className={styles.textRed}>
-            {defaultSettings?.translations?.msgNoTools || "msgNoTools"}
+            {defaultTranslations?.msgNoTools || "msgNoTools"}
           </div>
         </div>
       </div>
@@ -77,7 +79,7 @@ export const Pixedi = ({
           {error && <div className={styles.textRed}>{error}</div>}
           {!loading && !error && (!originalBlob || !mimeType) && (
             <div className={styles.textRed}>
-              {defaultSettings?.translations?.msgFailedToLoadImage ||
+              {defaultTranslations?.msgFailedToLoadImage ||
                 "msgFailedToLoadImage"}
             </div>
           )}
@@ -95,6 +97,7 @@ export const Pixedi = ({
       previewUrl={previewUrl}
       isAlpha={isAlpha}
       settings={defaultSettings}
+      translations={defaultTranslations}
       onSave={onSave}
       onBack={onBack}
     >

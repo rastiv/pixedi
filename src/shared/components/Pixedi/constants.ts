@@ -111,7 +111,6 @@ export const presetsData: Preset[] = [
 export const filtersData: FilterData[] = [
   {
     value: "saturate",
-    label: "Saturate",
     min: 0,
     max: 200,
     step: 1,
@@ -121,7 +120,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "grayscale",
-    label: "Grayscale",
     min: 0,
     max: 100,
     step: 1,
@@ -131,7 +129,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "sepia",
-    label: "Sepia",
     min: 0,
     max: 100,
     step: 1,
@@ -141,7 +138,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "invert",
-    label: "Invert",
     min: 0,
     max: 100,
     step: 1,
@@ -151,7 +147,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "hueRotate",
-    label: "Hue Rotate",
     min: 0,
     max: 360,
     step: 1,
@@ -162,7 +157,6 @@ export const filtersData: FilterData[] = [
 
   {
     value: "brightness",
-    label: "Brightness",
     min: 0,
     max: 200,
     step: 1,
@@ -172,7 +166,6 @@ export const filtersData: FilterData[] = [
   },
   {
     value: "contrast",
-    label: "Contrast",
     min: 0,
     max: 200,
     step: 1,

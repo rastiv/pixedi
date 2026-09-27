@@ -13,6 +13,7 @@ type WidgetOptions = {
   onBack: () => void;
   theme?: WidgetTheme;
   settings?: Settings;
+  translations?: Record<string, string>;
 };
 
 type PixediWidgetInstance = {
@@ -79,6 +80,7 @@ const PixediWidget: PixediWidget = {
             onBack={options.onBack}
             theme={theme}
             settings={options.settings}
+            translations={options.translations}
           />
         </React.StrictMode>,
       );

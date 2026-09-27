@@ -107,7 +107,7 @@ export type Theme = "light" | "dark";
 
 export type Option<T = string> = {
   value: T;
-  label: string;
+  label?: string;
   rightLabel?: string;
 };
 
@@ -144,5 +144,4 @@ export type Settings = {
   saveAsWEBP?: boolean;
   exportAs?: "blob" | "base64";
   background?: "circled" | "diagonals" | "rhombus";
-  translations?: Record<string, string>;
 };

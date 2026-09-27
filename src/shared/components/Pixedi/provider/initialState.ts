@@ -1,4 +1,3 @@
-import { translations } from "../constants";
 import { DefaultFilterValues } from "../filters/DefaultFilterValues";
 import { type History, type Action, ActionName } from "../types";
 
@@ -12,6 +11,7 @@ export type PixediContextType = {
   mimeType: string | null;
   sidebar: boolean;
   settings: Settings;
+  translations: Record<string, string>;
   isAlpha: boolean;
   showCompare: boolean;
   singleToolUI: boolean;
@@ -63,7 +63,7 @@ export const initialSettings: Settings = {
   quality: 0.85,
   saveAsWEBP: false,
   exportAs: "blob",
-  translations,
+  background: "circled",
 };
 
 export const getInitialState = (
@@ -74,6 +74,7 @@ export const getInitialState = (
   previewUrl: string,
   isAlpha: boolean,
   settings: Settings,
+  translations: Record<string, string>,
 ): PixediContextType => ({
   history: {
     pointer: 0,
@@ -94,6 +95,7 @@ export const getInitialState = (
   mimeType,
   sidebar: false,
   settings,
+  translations,
   isAlpha,
   showCompare: false,
   singleToolUI: settings?.tools?.length === 1,
