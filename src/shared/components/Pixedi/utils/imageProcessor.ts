@@ -1,5 +1,26 @@
-import type { ActionFilter, ProcessedImage, Settings } from "../types";
+import type { ActionFilter, ProcessedImage, Settings, Sizes } from "../types";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
+
+export const fitToMaxSize = (
+  width: number,
+  height: number,
+  maxSize?: number,
+): Sizes => {
+  const longest = Math.max(width, height);
+  if (
+    !maxSize ||
+    !Number.isFinite(maxSize) ||
+    maxSize <= 0 ||
+    longest <= maxSize
+  )
+    return { width, height };
+
+  const scale = maxSize / longest;
+  return {
+    width: Math.max(1, Math.round(width * scale)),
+    height: Math.max(1, Math.round(height * scale)),
+  };
+};
 
 export const blobToBase64 = (blob: Blob): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -127,8 +148,12 @@ export async function imageProcessor(blob: Blob) {
   };
 
   const get = async (settings: Settings): Promise<ProcessedImage> => {
-    const { quality = 0.85, saveAsWEBP = false } = settings;
+    const { quality = 0.85, saveAsWEBP = false, maxImageSize } = settings;
     const outputMimeType = saveAsWEBP ? "image/webp" : mimeType;
+
+    const target = fitToMaxSize(canvas.width, canvas.height, maxImageSize);
+    if (target.width !== canvas.width || target.height !== canvas.height)
+      resize(target.width, target.height);
 
     const newBlob = await new Promise<Blob>((resolve, reject) => {
       if (

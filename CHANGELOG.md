@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.12.0
+
+- Add `maxImageSize` option to settings: the longest side of the saved image is downscaled proportionally to fit.
+
 ## 1.11.0
 
 - Add `translations` prop to widget to customize UI text.

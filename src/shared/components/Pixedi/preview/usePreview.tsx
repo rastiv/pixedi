@@ -19,7 +19,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     i18n,
   } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
   const previousActionRef = useRef(currentAction?.name);
   const previousPreviewUrlRef = useRef(previewUrl);
 
@@ -106,9 +106,9 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
       const customEvent = event as CustomEvent<Record<string, number | string>>;
       const filters = customEvent.detail;
 
-      if (imageRef.current) {
+      if (filterRef.current) {
         if (filters.url) {
-          imageRef.current.style.filter = `url(#${filters.url})`;
+          filterRef.current.style.filter = `url(#${filters.url})`;
         } else {
           const filterString = Object.entries(filters)
             .map(([key, value]) =>
@@ -117,7 +117,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
                 : `${key}(${value}%)`,
             )
             .join(" ");
-          imageRef.current.style.filter = filterString;
+          filterRef.current.style.filter = filterString;
         }
       }
     };
@@ -143,5 +143,5 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     return () => controller.abort();
   }, [isClipped, isFilter, currentAction?.name, eventBus]);
 
-  return { previewRef, imageRef, previewUrl, i18n, ...preview };
+  return { previewRef, filterRef, previewUrl, i18n, ...preview };
 };

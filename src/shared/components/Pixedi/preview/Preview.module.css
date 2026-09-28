@@ -16,6 +16,12 @@
   }
 }
 
+.filter {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 .rotate {
   position: absolute;
   width: 100%;
@@ -41,9 +47,7 @@
   position: absolute;
   max-width: none;
   max-height: none;
-  transition:
-    all 0.2s linear,
-    filter 0s;
+  transition: all 0.2s linear;
 }
 
 .label {
