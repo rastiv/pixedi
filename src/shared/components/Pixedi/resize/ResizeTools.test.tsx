@@ -33,7 +33,8 @@ const renderResize = () =>
   );
 
 const getPreview = (container: HTMLElement) =>
-  container.querySelector("img")!.parentElement!.parentElement!.parentElement!;
+  container.querySelector("img")!.parentElement!.parentElement!.parentElement!
+    .parentElement!;
 
 const getInputs = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLInputElement>("input"));

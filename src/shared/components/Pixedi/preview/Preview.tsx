@@ -18,7 +18,7 @@ export const Preview = ({
   const { showCompare } = usePixediContext();
   const {
     previewRef,
-    imageRef,
+    filterRef,
     previewUrl,
     box,
     boxWidth,
@@ -52,32 +52,36 @@ export const Preview = ({
         <div className={`${styles.label} ${styles.after}`}>{i18n("after")}</div>
       )}
       <div
-        className={styles.rotate}
-        style={{
-          width: `${(boxWidth / viewWidth) * 100}%`,
-          height: `${(boxHeight / viewHeight) * 100}%`,
-          transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
-        }}
+        ref={filterRef}
+        className={styles.filter}
+        style={{ filter: filters.join(" ") }}
       >
         <div
-          className={styles.flip}
+          className={styles.rotate}
           style={{
-            transform: `scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
+            width: `${(boxWidth / viewWidth) * 100}%`,
+            height: `${(boxHeight / viewHeight) * 100}%`,
+            transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
           }}
         >
-          <img
-            ref={imageRef}
-            className={styles.image}
-            src={previewUrl}
-            alt="Preview Image"
+          <div
+            className={styles.flip}
             style={{
-              width: `${(1 / box.w) * 100}%`,
-              height: `${(1 / box.h) * 100}%`,
-              left: `${-(box.x / box.w) * 100}%`,
-              top: `${-(box.y / box.h) * 100}%`,
-              filter: filters.join(" "),
+              transform: `scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
             }}
-          />
+          >
+            <img
+              className={styles.image}
+              src={previewUrl}
+              alt="Preview Image"
+              style={{
+                width: `${(1 / box.w) * 100}%`,
+                height: `${(1 / box.h) * 100}%`,
+                left: `${-(box.x / box.w) * 100}%`,
+                top: `${-(box.y / box.h) * 100}%`,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

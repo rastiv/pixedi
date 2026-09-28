@@ -104,7 +104,7 @@ const renderPreview = (degrees: number) => {
 
   const image = container.querySelector("img")!;
   const rotateLayer = image.parentElement?.parentElement;
-  const preview = rotateLayer?.parentElement;
+  const preview = rotateLayer?.parentElement?.parentElement;
 
   expect(rotateLayer).not.toBeNull();
   expect(preview).not.toBeNull();
@@ -130,7 +130,7 @@ describe("Preview resize geometry", () => {
     );
     const preview =
       container.querySelector("img")!.parentElement!.parentElement!
-        .parentElement!;
+        .parentElement!.parentElement!;
 
     fireEvent.click(getByText("Resize"));
     expect(preview.style.transform).toBe("scale(1.5)");
@@ -168,7 +168,8 @@ describe("Preview image replacement", () => {
       </PixediProvider>,
     );
     const image = container.querySelector("img")!;
-    const preview = image.parentElement!.parentElement!.parentElement!;
+    const preview =
+      image.parentElement!.parentElement!.parentElement!.parentElement!;
 
     fireEvent.click(getByText("Commit flip"));
     expect(image.parentElement!.style.transform).toBe("scale(-1, 1)");
@@ -228,7 +229,7 @@ describe("Preview clipping", () => {
       );
       const preview =
         container.querySelector("img")!.parentElement!.parentElement!
-          .parentElement!;
+          .parentElement!.parentElement!;
 
       fireEvent.click(getByText("Update clip path"));
 
