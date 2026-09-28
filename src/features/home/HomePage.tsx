@@ -110,6 +110,7 @@ const HomePage = () => {
               quality: 0.85,
               // tools: ["crop"],
               background: "circled",
+              maxImageSize: 1920,
             }}
           />
         )}

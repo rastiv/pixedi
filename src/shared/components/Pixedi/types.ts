@@ -144,4 +144,5 @@ export type Settings = {
   saveAsWEBP?: boolean;
   exportAs?: "blob" | "base64";
   background?: "circled" | "diagonals" | "rhombus";
+  maxImageSize?: number;
 };
