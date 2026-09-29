@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.12.1
+
+- Fix compare tool not working when filter is active.
+
 ## 1.12.0
 
 - Add `maxImageSize` option to settings: the longest side of the saved image is downscaled proportionally to fit.
