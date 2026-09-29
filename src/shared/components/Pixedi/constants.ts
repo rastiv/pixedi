@@ -184,6 +184,7 @@ export const translations = {
   flip: "Flip",
   rotate: "Rotate",
   filters: "Filters",
+  shapes: "Shapes",
   width: "Width",
   height: "Height",
   freeform: "Free form",

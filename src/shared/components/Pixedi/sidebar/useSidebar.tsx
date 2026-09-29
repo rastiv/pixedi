@@ -6,6 +6,7 @@ import {
   Fullscreen,
   Presets,
   Rotate,
+  Shapes,
 } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { DefaultFilterValues } from "../filters";
@@ -25,6 +26,8 @@ export const getToolIcon = (tool: Tools): ReactNode => {
       return <Rotate />;
     case ActionName.FILTERS:
       return <Filters />;
+    case ActionName.SHAPES:
+      return <Shapes />;
     default:
       return null;
   }
@@ -88,6 +91,12 @@ export const useSidebar = () => {
         setCurrentAction({
           name: ActionName.FILTERS,
           args: DefaultFilterValues(),
+        });
+        break;
+      case ActionName.SHAPES:
+        setCurrentAction({
+          name: ActionName.SHAPES,
+          args: null,
         });
         break;
     }

@@ -21,6 +21,7 @@ export const ActionName = {
   FLIP: "flip",
   ROTATE: "rotate",
   FILTERS: "filters",
+  SHAPES: "shapes",
 } as const;
 
 export type Tools = Exclude<
@@ -90,6 +91,10 @@ export type Action =
   | {
       name: typeof ActionName.FILTERS;
       args: ActionFilter;
+    }
+  | {
+      name: typeof ActionName.SHAPES;
+      args: null;
     };
 
 export type HistoryItem = Sizes & {
