@@ -238,6 +238,57 @@ describe("Preview clipping", () => {
   );
 });
 
+describe("Preview filter compare", () => {
+  it("clears the compare clip-path when compare is switched off", () => {
+    const CompareControls = () => {
+      const { eventBus, toggleCompare } = usePixediContext();
+
+      return (
+        <>
+          <button type="button" onClick={toggleCompare}>
+            Toggle compare
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              eventBus.dispatchEvent(
+                new CustomEvent("compare-update", { detail: 50 }),
+              )
+            }
+          >
+            Update compare
+          </button>
+        </>
+      );
+    };
+    const { container, getByText } = render(
+      <PixediProvider
+        mimeType="png"
+        previewUrl="data:image/png;base64,initial"
+        originalBlob={new Blob([], { type: "image/png" })}
+        width={800}
+        height={600}
+        settings={{}}
+        isAlpha={false}
+        translations={{}}
+      >
+        <Preview isFilter={true} />
+        <CompareControls />
+      </PixediProvider>,
+    );
+    const preview =
+      container.querySelector("img")!.parentElement!.parentElement!
+        .parentElement!.parentElement!;
+
+    fireEvent.click(getByText("Toggle compare"));
+    fireEvent.click(getByText("Update compare"));
+    expect(preview.style.clipPath).toBe("xywh(50% 0% 50% 100%)");
+
+    fireEvent.click(getByText("Toggle compare"));
+    expect(preview.style.clipPath).toBe("");
+  });
+});
+
 describe("Preview rotation geometry", () => {
   it.each([
     { degrees: 0, rotation: 0, viewWidth: 800, viewHeight: 600 },
