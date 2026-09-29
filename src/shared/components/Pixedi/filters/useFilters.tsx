@@ -42,8 +42,8 @@ export const useFilters = () => {
   );
 
   const handleToggleCompare = () => {
+    if (!showCompare) emitCompareUpdate(eventBus, 50);
     toggleCompare();
-    emitCompareUpdate(eventBus, 50);
   };
 
   const handleSliderInput = (value: number) => {

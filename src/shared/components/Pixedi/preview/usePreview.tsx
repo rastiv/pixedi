@@ -16,6 +16,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     currentAction,
     getLastRotation,
     eventBus,
+    showCompare,
     i18n,
   } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
@@ -73,6 +74,12 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
   }
 
   const preview = getPreview(historyItems);
+
+  useLayoutEffect(() => {
+    if (isFilter && !showCompare && previewRef.current) {
+      previewRef.current.style.removeProperty("clip-path");
+    }
+  }, [isFilter, showCompare]);
 
   useEffect(() => {
     if (isClipped && previewRef.current) {
