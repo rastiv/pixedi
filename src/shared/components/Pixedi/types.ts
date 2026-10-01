@@ -151,3 +151,21 @@ export type Settings = {
   background?: "circled" | "diagonals" | "rhombus";
   maxImageSize?: number;
 };
+
+export type ShapeType =
+  | "heart"
+  | "star"
+  | "shield"
+  | "tag"
+  | "sparkle"
+  | "astroid"
+  | "badge"
+  | "moon"
+  | "circle"
+  | "ellipse"
+  | "triangle"
+  | "rectangle"
+  | "square"
+  | "pentagon"
+  | "hexagon"
+  | "octagon";

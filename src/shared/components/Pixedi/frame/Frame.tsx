@@ -5,6 +5,7 @@ import { PresetTools } from "../preset";
 import { FlipTools } from "../flip";
 import { RotateTools } from "../rotate";
 import { FilterTools, FilterInteractBox } from "../filters";
+import { ShapeTools, ShapeInteractBox } from "../shapes";
 import { Preview } from "../preview";
 import { ActionName } from "../types";
 import styles from "./Frame.module.css";
@@ -18,7 +19,8 @@ export const Frame = () => {
   const isFlip = currentAction?.name === ActionName.FLIP;
   const isRotate = currentAction?.name === ActionName.ROTATE;
   const isFilters = currentAction?.name === ActionName.FILTERS;
-  const isFade = isCrop || isPreset;
+  const isShapes = currentAction?.name === ActionName.SHAPES;
+  const isFade = isCrop || isPreset || isShapes;
 
   const frameClassName = `
     ${styles.frame} 
@@ -34,11 +36,13 @@ export const Frame = () => {
       {isFlip && <FlipTools />}
       {isRotate && <RotateTools />}
       {isFilters && <FilterTools />}
+      {isShapes && <ShapeTools />}
 
       {(isCrop || isPreset) && (
         <CropInteractBox key={currentAction?.args?.id} />
       )}
       {isFilters && <FilterInteractBox />}
+      {isShapes && <ShapeInteractBox />}
     </div>
   );
 };
