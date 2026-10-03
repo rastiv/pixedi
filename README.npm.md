@@ -189,7 +189,6 @@ Slider-based adjustments applied via CSS `filter`. Each slider affects only that
 | Filter     | Range  | Default |
 | ---------- | ------ | ------- |
 | Saturate   | 0–200% | 100%    |
-| Grayscale  | 0–100% | 0%      |
 | Sepia      | 0–100% | 0%      |
 | Invert     | 0–100% | 0%      |
 | Hue-Rotate | 0–360° | 0°      |

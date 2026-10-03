@@ -11,15 +11,6 @@ export const filtersData: FilterData[] = [
     rightLabel: "100%",
   },
   {
-    value: "grayscale",
-    min: 0,
-    max: 100,
-    step: 1,
-    unit: "%",
-    sliderValue: 0,
-    rightLabel: "0%",
-  },
-  {
     value: "sepia",
     min: 0,
     max: 100,

@@ -67,7 +67,6 @@ export type ActionRotate = {
 export type CssFilters = {
   brightness: number;
   contrast: number;
-  grayscale: number;
   hueRotate: number;
   invert: number;
   saturate: number;
