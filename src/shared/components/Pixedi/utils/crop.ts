@@ -1,7 +1,27 @@
 import { PREVIEW_MAX_DIMENSION, PREVIEW_QUALITY } from "../constants";
-import type { CropRect, CropRectExtended, Direction, Sizes } from "../types";
+import {
+  ActionName,
+  type Action,
+  type CropRect,
+  type CropRectExtended,
+  type Direction,
+  type Sizes,
+} from "../types";
 
 const minSize = 32;
+
+// tools driven by the crop box; shapes are always cut from a square
+export const getCropSettings = (
+  action: Action | null,
+): { ratio: number; isFree: boolean } | null => {
+  if (
+    action?.name === ActionName.CROP ||
+    action?.name === ActionName.PRESET_CROP
+  )
+    return { ratio: action.args.ratio, isFree: action.args.isFree };
+  if (action?.name === ActionName.SHAPES) return { ratio: 1, isFree: false };
+  return null;
+};
 
 const getCropTL = (
   isFree: boolean,

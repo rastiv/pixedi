@@ -1,5 +1,13 @@
-import type { ActionFilter, ProcessedImage, Settings, Sizes } from "../types";
+import type {
+  ActionFilter,
+  ProcessedImage,
+  Settings,
+  ShapeMask,
+  Sizes,
+} from "../types";
+import { shapes } from "../constants/shapes";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
+import { SHAPE_MITER_LIMIT } from "./shape";
 
 export const fitToMaxSize = (
   width: number,
@@ -147,6 +155,30 @@ export async function imageProcessor(blob: Blob) {
     ctx.filter = "none";
   };
 
+  // keeps only the pixels covered by the unit-square shape path
+  const shape = ({ shape, outlined, border }: ShapeMask) => {
+    if (!ctx) return;
+
+    const path = new Path2D(shapes[shape]);
+
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.scale(canvas.width, canvas.height);
+    if (outlined) {
+      // matches the preview mask: an inside-only stroke keeps sharp corners
+      ctx.clip(path);
+      ctx.lineWidth = border * 2;
+      ctx.lineJoin = "miter";
+      ctx.miterLimit = SHAPE_MITER_LIMIT;
+      ctx.strokeStyle = "#fff";
+      ctx.stroke(path);
+    } else {
+      ctx.fillStyle = "#fff";
+      ctx.fill(path);
+    }
+    ctx.restore();
+  };
+
   const get = async (settings: Settings): Promise<ProcessedImage> => {
     const { quality = 0.85, saveAsWEBP = false, maxImageSize } = settings;
     const outputMimeType = saveAsWEBP ? "image/webp" : mimeType;
@@ -201,6 +233,7 @@ export async function imageProcessor(blob: Blob) {
     rotate,
     resize,
     filters,
+    shape,
     get,
   };
 }

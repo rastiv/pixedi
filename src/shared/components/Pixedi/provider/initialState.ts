@@ -1,4 +1,5 @@
 import { DefaultFilterValues } from "../filters/DefaultFilterValues";
+import { SHAPE_BORDER } from "../constants/shapes";
 import { type History, type Action, ActionName } from "../types";
 
 import type { Settings } from "../types";
@@ -24,14 +25,14 @@ const getInitialAction = (
 ): Action | null => {
   if (tools.length === 1) {
     switch (tools[0]) {
-      case "resize":
+      case ActionName.RESIZE:
         return { name: ActionName.RESIZE, args: { width, height } };
-      case "crop":
+      case ActionName.CROP:
         return {
           name: ActionName.CROP,
           args: { id: "freeform", ratio: width / height, isFree: true },
         };
-      case "presetCrop":
+      case ActionName.PRESET_CROP:
         return {
           name: ActionName.PRESET_CROP,
           args: {
@@ -41,15 +42,20 @@ const getInitialAction = (
             preset: { width: 1200, height: 630 },
           },
         };
-      case "flip":
+      case ActionName.FLIP:
         return {
           name: ActionName.FLIP,
           args: { horizontal: false, vertical: false },
         };
-      case "rotate":
+      case ActionName.ROTATE:
         return { name: ActionName.ROTATE, args: { degrees: 0 } };
       case "filters":
         return { name: ActionName.FILTERS, args: DefaultFilterValues() };
+      case ActionName.SHAPES:
+        return {
+          name: ActionName.SHAPES,
+          args: { shape: "heart", outlined: false, border: SHAPE_BORDER },
+        };
       default:
         return null;
     }
@@ -58,7 +64,15 @@ const getInitialAction = (
 };
 
 export const initialSettings: Settings = {
-  tools: ["resize", "crop", "presetCrop", "flip", "rotate", "filters"],
+  tools: [
+    ActionName.RESIZE,
+    ActionName.CROP,
+    ActionName.PRESET_CROP,
+    ActionName.FLIP,
+    ActionName.ROTATE,
+    ActionName.FILTERS,
+    ActionName.SHAPES,
+  ],
   infobar: true,
   quality: 0.85,
   saveAsWEBP: false,

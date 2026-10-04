@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { HistoryItem } from "../types";
-import { getActions, getPreview } from "./preview";
+import type { CropRect, HistoryItem } from "../types";
+import {
+  getActions,
+  getPreview,
+  getPreviewLayers,
+  getProcessingSteps,
+  splitSegments,
+} from "./preview";
 import { getOrientedSizes } from "../utils/crop";
 
 const initial: HistoryItem = {
@@ -142,5 +148,81 @@ describe("getActions", () => {
     expect(getActions(items)).toEqual({
       crop: { x: 0, y: 0, w: 3050, h: 2007 },
     });
+  });
+});
+
+const shapeItem = (args: Partial<CropRect> = {}): HistoryItem => ({
+  width: 2000,
+  height: 2000,
+  action: {
+    name: "shapes",
+    args: { shape: "heart", outlined: false, border: 0.075, ...args },
+  },
+});
+
+const committedShape = shapeItem({ x: 10, y: 0, w: 50, h: 100 });
+const filter: HistoryItem = {
+  width: 6099,
+  height: 4014,
+  action: { name: "filters", args: { url: "sepia" } },
+};
+
+describe("splitSegments", () => {
+  it("closes a segment on a committed shape", () => {
+    const segments = splitSegments([initial, committedShape, rotatedTo(90)]);
+
+    expect(segments).toHaveLength(2);
+    expect(segments[0]).toEqual([initial, committedShape]);
+    expect(segments[1][0]).toEqual({
+      width: 2000,
+      height: 2000,
+      action: { name: "initial", args: null },
+    });
+  });
+
+  it("ignores an open shape without a rect", () => {
+    expect(splitSegments([initial, shapeItem()])).toHaveLength(1);
+  });
+});
+
+describe("getProcessingSteps", () => {
+  it("crops and masks first, then applies later edits to the result", () => {
+    const rotated: HistoryItem = {
+      width: 2000,
+      height: 2000,
+      action: { name: "rotate", args: { degrees: 90 } },
+    };
+    const { steps, filters } = getProcessingSteps([
+      initial,
+      filter,
+      committedShape,
+      rotated,
+    ]);
+
+    expect(steps).toEqual([
+      {
+        crop: { x: 610, y: 0, w: 3050, h: 4014 },
+        resize: { width: 2000, height: 2000 },
+        shape: { shape: "heart", outlined: false, border: 0.075 },
+      },
+      { rotate: { degrees: 90 } },
+    ]);
+    // filters are global and applied once over the final output
+    expect(filters).toEqual({ url: "sepia" });
+  });
+});
+
+describe("getPreviewLayers", () => {
+  it("renders one layer per segment with the shape on the closed one", () => {
+    const { layers } = getPreviewLayers([initial, committedShape]);
+
+    expect(layers).toHaveLength(2);
+    expect(layers[0].shape).toEqual({
+      shape: "heart",
+      outlined: false,
+      border: 0.075,
+    });
+    expect(layers[1].shape).toBeNull();
+    expect(layers[1].viewWidth).toBe(2000);
   });
 });

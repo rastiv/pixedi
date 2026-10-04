@@ -1,0 +1,59 @@
+import type { FilterData } from "../types";
+
+export const filtersData: FilterData[] = [
+  {
+    value: "saturate",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+  {
+    value: "sepia",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
+  },
+  {
+    value: "invert",
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: "%",
+    sliderValue: 0,
+    rightLabel: "0%",
+  },
+  {
+    value: "hueRotate",
+    min: 0,
+    max: 360,
+    step: 1,
+    unit: "°",
+    sliderValue: 0,
+    rightLabel: "0°",
+  },
+
+  {
+    value: "brightness",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+  {
+    value: "contrast",
+    min: 0,
+    max: 200,
+    step: 1,
+    unit: "%",
+    sliderValue: 100,
+    rightLabel: "100%",
+  },
+];

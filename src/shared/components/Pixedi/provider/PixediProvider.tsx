@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialState } from "./initialState";
 import { StoreContext } from "./StoreContext";
 import type { PixediContextType } from "./initialState";
+import { isCommittedShape } from "../utils/preview";
 import {
   ActionName,
   type Action,
@@ -116,9 +117,13 @@ export const PixediProvider = ({
   const getLastRotation = (): number => {
     const { items, pointer } = state.history;
     if (items.length === 0 || pointer < 0) return 0;
+    // a committed shape bakes the rotation in, so later rotations start at 0
     const lastRotateItem = items
       .slice(0, pointer + 1)
-      .findLast((item) => item.action.name === ActionName.ROTATE);
+      .findLast(
+        (item) =>
+          item.action.name === ActionName.ROTATE || isCommittedShape(item),
+      );
     if (lastRotateItem?.action.name === ActionName.ROTATE) {
       return lastRotateItem.action.args.degrees;
     }

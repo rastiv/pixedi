@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { imageProcessor, blobToBase64 } from "../utils/imageProcessor";
-import { getActions } from "../utils/preview";
+import { getProcessingSteps } from "../utils/preview";
 import type { HistoryItem } from "../types";
 
 export const useImageSaving = () => {
@@ -26,27 +26,27 @@ export const useImageSaving = () => {
       ...history.items.slice(0, history.pointer + 1),
       ...(pendingItem ? [pendingItem] : []),
     ];
-    const actions = getActions(historyItems);
+    const { steps, filters } = getProcessingSteps(historyItems);
+    const hasShape = steps.some((step) => step.shape);
 
     try {
       const processor = await imageProcessor(originalBlob);
 
-      if (actions.crop)
-        processor.crop(
-          actions.crop.x,
-          actions.crop.y,
-          actions.crop.w,
-          actions.crop.h,
-        );
-      if (actions.flip)
-        processor.flip(actions.flip.horizontal, actions.flip.vertical);
-      if (actions.rotate) processor.rotate(actions.rotate.degrees);
-      if (actions.resize)
-        processor.resize(actions.resize.width, actions.resize.height);
-      if (actions.filters) processor.filters(actions.filters);
+      for (const { crop, flip, rotate, resize, shape } of steps) {
+        if (crop) processor.crop(crop.x, crop.y, crop.w, crop.h);
+        if (flip) processor.flip(flip.horizontal, flip.vertical);
+        if (rotate) processor.rotate(rotate.degrees);
+        if (resize) processor.resize(resize.width, resize.height);
+        if (shape) processor.shape(shape);
+      }
+      if (filters) processor.filters(filters);
 
+      // shapes leave transparent corners, which only WEBP keeps compactly
       const { newBlob, previewBlob, mimeType, width, height, isAlpha } =
-        await processor.get(settings);
+        await processor.get({
+          ...settings,
+          saveAsWEBP: settings.saveAsWEBP || hasShape,
+        });
 
       let base64 = "";
       if (settings.exportAs === "base64") {

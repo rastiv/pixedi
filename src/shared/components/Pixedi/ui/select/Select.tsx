@@ -9,18 +9,18 @@ export type { SelectOption } from "./useSelect";
 type SelectProps = {
   items: SelectOption[];
   value: string;
-  onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  onChange: (value: string) => void;
   renderOption?: (option: SelectOption) => React.ReactNode;
 };
 
 export const Select = ({
   items,
   value,
-  onChange,
   placeholder = "Select an option",
   className = "",
+  onChange,
   renderOption,
 }: SelectProps) => {
   const {

@@ -50,6 +50,12 @@
   transition: all 0.2s linear;
 }
 
+.layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 .label {
   position: absolute;
   top: 8px;

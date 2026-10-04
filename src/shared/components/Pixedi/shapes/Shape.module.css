@@ -1,0 +1,8 @@
+.selector {
+  transform: translateX(-71px);
+}
+
+.buttons {
+  display: flex;
+  gap: 4px;
+}

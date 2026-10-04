@@ -2,14 +2,20 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ActionName, type CropRect } from "../types";
 import { getOrientedSizes } from "../utils/crop";
-import { getPreview } from "../utils/preview";
+import { getPreviewLayers } from "../utils/preview";
+import { applyShapeMaskGeometry } from "../utils/shape";
 
 type UsePreviewProps = {
   isClipped?: boolean;
   isFilter?: boolean;
+  isMasked?: boolean;
 };
 
-export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
+export const usePreview = ({
+  isClipped,
+  isFilter,
+  isMasked,
+}: UsePreviewProps) => {
   const {
     history,
     previewUrl,
@@ -24,16 +30,40 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
   const previousActionRef = useRef(currentAction?.name);
   const previousPreviewUrlRef = useRef(previewUrl);
 
+  const historyItems = history.items.slice(0, history.pointer + 1);
+  if (currentAction) {
+    const { width, height } = history.items.at(history.pointer)!;
+    historyItems.push({
+      ...(currentAction.name === ActionName.ROTATE
+        ? getOrientedSizes(
+            width,
+            height,
+            getLastRotation(),
+            currentAction.args.degrees,
+          )
+        : { width, height }),
+      action: currentAction,
+    });
+  }
+
+  const preview = getPreviewLayers(historyItems);
+  const layerCount = preview.layers.length;
+  const previousLayerCountRef = useRef(layerCount);
+
   useLayoutEffect(() => {
     const previousAction = previousActionRef.current;
     const nextAction = currentAction?.name;
     const previewChanged = previousPreviewUrlRef.current !== previewUrl;
+    // a committed (or undone) shape moves the transforms into a new inner
+    // layer while the reused outer one resets, so animating would replay them
+    const layersChanged = previousLayerCountRef.current !== layerCount;
     previousActionRef.current = nextAction;
     previousPreviewUrlRef.current = previewUrl;
+    previousLayerCountRef.current = layerCount;
 
     const actionChanged =
       previousAction && nextAction && previousAction !== nextAction;
-    if (!actionChanged && !previewChanged) return;
+    if (!actionChanged && !previewChanged && !layersChanged) return;
 
     const preview = previewRef.current;
     if (!preview) return;
@@ -55,25 +85,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
       cancelAnimationFrame(frame);
       restoreTransitions();
     };
-  }, [currentAction?.name, previewUrl]);
-
-  const historyItems = history.items.slice(0, history.pointer + 1);
-  if (currentAction) {
-    const { width, height } = history.items.at(history.pointer)!;
-    historyItems.push({
-      ...(currentAction.name === ActionName.ROTATE
-        ? getOrientedSizes(
-            width,
-            height,
-            getLastRotation(),
-            currentAction.args.degrees,
-          )
-        : { width, height }),
-      action: currentAction,
-    });
-  }
-
-  const preview = getPreview(historyItems);
+  }, [currentAction?.name, previewUrl, layerCount]);
 
   useLayoutEffect(() => {
     if (isFilter && !showCompare && previewRef.current) {
@@ -105,6 +117,8 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
       const { x, y, w, h } = customEvent.detail;
       if (previewRef.current) {
         previewRef.current.style.clipPath = `xywh(${x}% ${y}% ${w}% ${h}%)`;
+        if (isMasked)
+          applyShapeMaskGeometry(previewRef.current, { x, y, w, h });
       }
     };
 
@@ -148,7 +162,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
 
     return () => controller.abort();
-  }, [isClipped, isFilter, currentAction?.name, eventBus]);
+  }, [isClipped, isFilter, isMasked, currentAction?.name, eventBus]);
 
   return { previewRef, filterRef, previewUrl, i18n, ...preview };
 };

@@ -1,15 +1,13 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export type SelectOption = {
+export type SelectIconOption = {
   value: string;
   label?: string;
-  options?: SelectOption[];
-  rightLabel?: string;
-  fullName?: string;
+  options?: SelectIconOption[];
 };
 
 type UseSelectArgs = {
-  items: SelectOption[];
+  items: SelectIconOption[];
   value: string;
   onChange: (value: string) => void;
 };
@@ -35,35 +33,15 @@ const getClipBounds = (element: HTMLElement) => {
   return { top, bottom };
 };
 
-export const useSelect = ({ items, value, onChange }: UseSelectArgs) => {
+export const useSelectIcon = ({
+  items,
+  onChange,
+}: Omit<UseSelectArgs, "value">) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const allOptions = useMemo(() => {
-    const flatten = (list: SelectOption[]): SelectOption[] => {
-      return list.reduce<SelectOption[]>((acc, item) => {
-        if (item.options) {
-          return [
-            ...acc,
-            ...flatten(
-              item.options.map((option) => ({
-                ...option,
-                fullName: `${item.label} . ${option.label}`,
-              })),
-            ),
-          ];
-        }
-        return [...acc, item];
-      }, []);
-    };
-    return flatten(items);
-  }, [items]);
-
-  const selectedOption = allOptions.find((option) => option.value === value);
-  const selectedLabel = selectedOption?.fullName ?? selectedOption?.label;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -123,7 +101,6 @@ export const useSelect = ({ items, value, onChange }: UseSelectArgs) => {
 
   return {
     isOpen,
-    selectedLabel,
     containerRef,
     triggerRef,
     contentRef,

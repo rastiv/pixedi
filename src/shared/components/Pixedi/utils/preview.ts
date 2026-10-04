@@ -1,4 +1,9 @@
-import { ActionName, type ActionFilter, type HistoryItem } from "../types";
+import {
+  ActionName,
+  type ActionFilter,
+  type HistoryItem,
+  type ShapeMask,
+} from "../types";
 import { isQuarterTurn } from "../utils/crop";
 
 type Mat = [[number, number], [number, number]];
@@ -67,6 +72,25 @@ const applyOrientation = (m: Mat, u: number, v: number) => {
   return [m[0][0] * u + m[0][1] * v + c[0], m[1][0] * u + m[1][1] * v + c[1]];
 };
 
+// an open shape tool has no rect yet, only a saved one changes the image
+export const isCommittedShape = (item: HistoryItem): boolean =>
+  item.action.name === ActionName.SHAPES &&
+  item.action.args.w !== undefined &&
+  item.action.args.h !== undefined;
+
+const getLastFilterArgs = (items: HistoryItem[]) =>
+  items.filter((item) => item.action.name === ActionName.FILTERS).at(-1)?.action
+    .args as ActionFilter | undefined;
+
+const getFilters = (items: HistoryItem[]): string[] =>
+  Object.entries(getLastFilterArgs(items) || {}).map(([key, value]) =>
+    key === "url"
+      ? `url(#${value})`
+      : key === "hueRotate"
+        ? `hue-rotate(${value}deg)`
+        : `${key}(${value}%)`,
+  );
+
 export type Preview = {
   box: { x: number; y: number; w: number; h: number };
   boxWidth: number;
@@ -81,6 +105,7 @@ export type Preview = {
   flipH: boolean;
   flipV: boolean;
   filters: string[];
+  shape: ShapeMask | null;
 };
 
 export const getPreview = (items: HistoryItem[]): Preview => {
@@ -100,7 +125,10 @@ export const getPreview = (items: HistoryItem[]): Preview => {
       rotation = 0;
       flipH = false;
       flipV = false;
-    } else if (item.action.name === ActionName.CROP) {
+    } else if (
+      item.action.name === ActionName.CROP ||
+      item.action.name === ActionName.SHAPES
+    ) {
       const l = (item.action.args.x ?? 0) / 100;
       const t = (item.action.args.y ?? 0) / 100;
       const cw = (item.action.args.w ?? 100) / 100;
@@ -154,21 +182,20 @@ export const getPreview = (items: HistoryItem[]): Preview => {
   const viewWidth = swapped ? boxHeight : boxWidth;
   const viewHeight = swapped ? boxWidth : boxHeight;
 
-  const newWidth = items.at(-1)?.width || 0;
-  const newHeight = items.at(-1)?.height || 0;
+  const lastItem = items.at(-1);
+  const newWidth = lastItem?.width || 0;
+  const newHeight = lastItem?.height || 0;
 
-  // get last filter action
-  const filterAction = items
-    .filter((item) => item.action.name === ActionName.FILTERS)
-    .at(-1);
-  const filters = Object.entries(filterAction?.action.args || {}).map(
-    ([key, value]) =>
-      key === "url"
-        ? `url(#${value})`
-        : key === "hueRotate"
-          ? `hue-rotate(${value}deg)`
-          : `${key}(${value}%)`,
-  );
+  const filters = getFilters(items);
+
+  let shape: ShapeMask | null = null;
+  if (
+    lastItem?.action.name === ActionName.SHAPES &&
+    isCommittedShape(lastItem)
+  ) {
+    const { shape: type, outlined, border } = lastItem.action.args;
+    shape = { shape: type, outlined, border };
+  }
 
   return {
     box,
@@ -184,7 +211,45 @@ export const getPreview = (items: HistoryItem[]): Preview => {
     flipH,
     flipV,
     filters,
+    shape,
   };
+};
+
+// a shape bakes its mask into the image, so every committed shape closes a
+// segment and its output becomes the initial image of the next one
+export const splitSegments = (items: HistoryItem[]): HistoryItem[][] => {
+  const segments: HistoryItem[][] = [[]];
+  for (const item of items) {
+    segments.at(-1)!.push(item);
+    if (isCommittedShape(item)) {
+      segments.push([
+        {
+          width: item.width,
+          height: item.height,
+          action: { name: ActionName.INITIAL, args: null },
+        },
+      ]);
+    }
+  }
+  return segments;
+};
+
+// filters are applied once over the final output, transparent pixels stay
+// transparent, so they do not need to be split by segment
+export const getPreviewLayers = (items: HistoryItem[]) => ({
+  layers: splitSegments(items).map(getPreview),
+  filters: getFilters(items),
+});
+
+export const getProcessingSteps = (items: HistoryItem[]) => {
+  const steps = splitSegments(items)
+    .map((segment) => {
+      const step = getActions(segment);
+      delete step.filters;
+      return step;
+    })
+    .filter((step) => Object.keys(step).length > 0);
+  return { steps, filters: getLastFilterArgs(items) };
 };
 
 export const getActions = (items: HistoryItem[]) => {
@@ -199,12 +264,10 @@ export const getActions = (items: HistoryItem[]) => {
     initHeight,
     viewWidth,
     viewHeight,
+    shape,
   } = getPreview(items);
 
-  const filterAction = items
-    .filter((item) => item.action.name === ActionName.FILTERS)
-    .at(-1);
-  const ActionFilter = filterAction?.action.args as ActionFilter | undefined;
+  const ActionFilter = getLastFilterArgs(items);
 
   const clampedX = clamp(box.x, 0, 1);
   const clampedY = clamp(box.y, 0, 1);
@@ -260,5 +323,6 @@ export const getActions = (items: HistoryItem[]) => {
         }
       : {}),
     ...(ActionFilter ? { filters: ActionFilter } : {}),
+    ...(shape ? { shape } : {}),
   };
 };

@@ -23,6 +23,7 @@ const renderResize = () =>
       height={600}
       settings={{}}
       isAlpha={false}
+      translations={{}}
     >
       <div data-testid="frame">
         <Preview />

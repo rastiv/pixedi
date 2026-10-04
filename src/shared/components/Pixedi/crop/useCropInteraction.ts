@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
-import { getCropPoints, getInitalCrop, snapRectToRatio } from "../utils/crop";
+import {
+  getCropPoints,
+  getCropSettings,
+  getInitalCrop,
+  snapRectToRatio,
+} from "../utils/crop";
 import type { CropRect, Direction } from "../types";
-import { ActionName } from "../types";
 import { emitCropUpdate, emitClipPathUpdate } from "../eventBus";
 import { useMobile } from "../hooks";
 
@@ -59,11 +63,10 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
   const mobile = useMobile();
 
   const { width, height } = getLastHistoryItem();
-  const isCrop =
-    currentAction?.name === ActionName.CROP ||
-    currentAction?.name === ActionName.PRESET_CROP;
-  const ratio = isCrop ? currentAction.args.ratio : 1;
-  const isFree = isCrop ? currentAction.args.isFree : true;
+  const { ratio, isFree } = getCropSettings(currentAction) ?? {
+    ratio: 1,
+    isFree: true,
+  };
 
   const initialCrop = useMemo(
     () => getInitalCrop(ratio, width, height),

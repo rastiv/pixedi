@@ -21,6 +21,7 @@ export const ActionName = {
   FLIP: "flip",
   ROTATE: "rotate",
   FILTERS: "filters",
+  SHAPES: "shapes",
 } as const;
 
 export type Tools = Exclude<
@@ -66,7 +67,6 @@ export type ActionRotate = {
 export type CssFilters = {
   brightness: number;
   contrast: number;
-  grayscale: number;
   hueRotate: number;
   invert: number;
   saturate: number;
@@ -76,6 +76,14 @@ export type CssFilters = {
 export type UrlFilter = { url: string };
 
 export type ActionFilter = UrlFilter | CssFilters;
+
+export type ShapeMask = {
+  shape: ShapeType;
+  outlined: boolean;
+  border: number;
+};
+
+export type ActionShape = ShapeMask & Partial<CropRect>;
 
 export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
@@ -90,6 +98,10 @@ export type Action =
   | {
       name: typeof ActionName.FILTERS;
       args: ActionFilter;
+    }
+  | {
+      name: typeof ActionName.SHAPES;
+      args: ActionShape;
     };
 
 export type HistoryItem = Sizes & {
@@ -146,3 +158,25 @@ export type Settings = {
   background?: "circled" | "diagonals" | "rhombus";
   maxImageSize?: number;
 };
+
+export type ShapeType =
+  | "star"
+  | "heart"
+  | "shield"
+  | "tag"
+  | "flower"
+  | "settings"
+  | "droplet"
+  | "pointer"
+  | "sparkle"
+  | "astroid"
+  | "badge"
+  | "moon"
+  | "circle"
+  | "ellipse"
+  | "triangle"
+  | "rectangle"
+  | "square"
+  | "pentagon"
+  | "hexagon"
+  | "octagon";
