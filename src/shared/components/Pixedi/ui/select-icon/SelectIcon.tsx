@@ -14,7 +14,7 @@ export const SelectIcon = ({
   items,
   value,
   className = "",
-  gridCols = 4,
+  gridCols = 5,
   onChange,
 }: SelectIconProps) => {
   const {
@@ -29,7 +29,7 @@ export const SelectIcon = ({
   return (
     <div
       ref={containerRef}
-      className={`${styles.wrapper} ${className}`.trim()}
+      className={styles.wrapper}
       data-state={isOpen ? "open" : "closed"}
     >
       <button
@@ -38,34 +38,36 @@ export const SelectIcon = ({
         className={styles.trigger}
         onClick={toggleOpen}
       >
-        12
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1 1"
+          className={styles.svg}
+        >
+          <path d={items.find((item) => item.value === value)?.label || ""} />
+        </svg>
       </button>
 
       <div
         ref={contentRef}
-        className={styles.content}
+        className={`${styles.content} ${className}`.trim()}
         style={{ gridTemplateColumns: `repeat(${gridCols}, 1fr)` }}
       >
         {items.map((item, index) => {
-          return <b key={index}>asd</b>;
-          //   return (
-          //     <div
-          //       key={item.value}
-          //       className={styles.item}
-          //       onClick={() => handleSelectItem(item.value)}
-          //     >
-          //       {renderOption ? (
-          //         renderOption(item)
-          //       ) : (
-          //         <span className={styles.itemLeft}>{item.label}</span>
-          //       )}
-          //       <div className={styles.itemAddon}>
-          //         {item.rightLabel && <span>{item.rightLabel}</span>}
-          //         {value === item.value && <Check className={styles.itemCheck} />}
-          //         {value !== item.value && <b />}
-          //       </div>
-          //     </div>
-          //   );
+          return (
+            <div
+              key={index}
+              className={`${styles.item} ${item.value === value ? styles.selected : ""}`}
+              onClick={() => handleSelectItem(item.value)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1 1"
+                className={styles.svg}
+              >
+                <path d={item.label} />
+              </svg>
+            </div>
+          );
         })}
       </div>
     </div>

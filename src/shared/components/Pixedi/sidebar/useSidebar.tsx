@@ -96,7 +96,11 @@ export const useSidebar = () => {
       case ActionName.SHAPES:
         setCurrentAction({
           name: ActionName.SHAPES,
-          args: null,
+          args: {
+            shape: "heart",
+            outlined: false,
+            border: 0.075,
+          },
         });
         break;
     }

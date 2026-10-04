@@ -77,6 +77,12 @@ export type UrlFilter = { url: string };
 
 export type ActionFilter = UrlFilter | CssFilters;
 
+export type ActionShape = {
+  shape: ShapeType;
+  outlined: boolean;
+  border: number;
+};
+
 export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
   | { name: typeof ActionName.RESIZE; args: Sizes }
@@ -93,7 +99,7 @@ export type Action =
     }
   | {
       name: typeof ActionName.SHAPES;
-      args: null;
+      args: ActionShape;
     };
 
 export type HistoryItem = Sizes & {
@@ -156,6 +162,10 @@ export type ShapeType =
   | "star"
   | "shield"
   | "tag"
+  | "flower"
+  | "settings"
+  | "droplet"
+  | "pointer"
   | "sparkle"
   | "astroid"
   | "badge"

@@ -25,6 +25,8 @@ export const translations = {
   hueRotate: "Hue Rotate",
   brightness: "Brightness",
   contrast: "Contrast",
+  fullfield: "Fullfield",
+  outlined: "Outlined",
   msgNoTools: "No tools selected",
   msgFailedToLoadImage: "Failed to load image",
 };

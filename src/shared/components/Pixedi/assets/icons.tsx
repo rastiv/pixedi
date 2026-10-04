@@ -227,6 +227,16 @@ export const Shapes = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
+export const Stripes = (props: React.ComponentPropsWithoutRef<"svg">) => (
+  <svg {...baseSvgProps} {...props}>
+    <path d="M11.5 20 L20 11.5" />
+    <path d="M18.5 20 L20 18.5" />
+    <path d="M4 12.5 L12.5 4" />
+    <path d="M4 20 L20 4" />
+    <path d="M4 5.5 L5.5 4" />
+  </svg>
+);
+
 export const Loader = (props: React.ComponentPropsWithoutRef<"svg">) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56">

@@ -1,6 +1,7 @@
 export { Button } from "./button/Button";
 export { Separator } from "./separator/Separator";
 export { Select } from "./select/Select";
+export { SelectIcon } from "./select-icon/SelectIcon";
 export { Input } from "./input/Input";
 export { InputPixel } from "./input-pixel/InputPixel";
 export { SaveCloseGroup } from "./save-close-group/SaveCloseGroup";

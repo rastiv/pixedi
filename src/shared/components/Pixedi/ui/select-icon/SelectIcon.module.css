@@ -1,0 +1,106 @@
+.wrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+.trigger {
+  width: 32px;
+  height: 32px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--foreground);
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  user-select: none;
+  transition: all 0.2s;
+
+  &:hover,
+  &:focus {
+    background-color: var(--muted);
+  }
+}
+.content {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  /* transform: translateX(-50%); */
+  max-height: 282px;
+  overflow-y: auto;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  box-sizing: border-box;
+  padding: 4px;
+  display: grid;
+  gap: 4px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 10px;
+  }
+}
+.wrapper[data-state="closed"] .content {
+  display: none;
+}
+
+.item {
+  width: 32px;
+  height: 32px;
+  aspect-ratio: 1;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--foreground);
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  user-select: none;
+  transition: background-color 0.2s;
+
+  &:hover,
+  &:focus {
+    background-color: var(--muted);
+  }
+
+  &.selected {
+    background-color: var(--muted);
+    color: var(--accent-blue);
+  }
+}
+
+.svg {
+  width: 18px;
+  height: 18px;
+  overflow: visible;
+
+  path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+}
