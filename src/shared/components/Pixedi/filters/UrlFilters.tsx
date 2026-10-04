@@ -45,17 +45,6 @@ export const UrlFilters = () => {
         0    0    0    1   0"
           />
         </filter>
-        <filter id="emboss">
-          <feConvolveMatrix order="3" kernelMatrix="-2 -1 0 -1 1 1 0 1 2" />
-          <feColorMatrix
-            type="matrix"
-            values="
-        0.33 0.33 0.33 0 0.5
-        0.33 0.33 0.33 0 0.5
-        0.33 0.33 0.33 0 0.5
-        0    0    0    1 0"
-          />
-        </filter>
         <filter id="crt-lines">
           <feTurbulence
             type="fractalNoise"
@@ -81,13 +70,49 @@ export const UrlFilters = () => {
           <feBlend mode="overlay" in="SourceGraphic" in2="pattern" />
         </filter>
         <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+          <feColorMatrix
+            type="matrix"
+            values="
+        0.393 0.769 0.189 0 0
+        0.349 0.686 0.168 0 0
+        0.272 0.534 0.131 0 0
+        0.000 0.000 0.000 1 0"
+            result="sepiaBase"
+          />
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.8"
+            baseFrequency="0.6"
             numOctaves="3"
-            result="noise"
+            result="grainNoise"
           />
-          <feBlend mode="multiply" in="SourceGraphic" in2="noise" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01 0.8"
+            numOctaves="2"
+            result="scratchNoise"
+          />
+          <feColorMatrix
+            type="matrix"
+            values="
+        1 0 0 0 0
+        0 1 0 0 0
+        0 0 1 0 0
+        0 0 0 12 -9.5"
+            result="sharpScratches"
+          />
+          <feBlend
+            mode="multiply"
+            in="grainNoise"
+            in2="sharpScratches"
+            result="textureOverlay"
+          />
+          <feBlend
+            mode="overlay"
+            in="sepiaBase"
+            in2="textureOverlay"
+            result="finalComposite"
+          />
+          <feComposite operator="in" in="finalComposite" in2="SourceGraphic" />
         </filter>
         <filter id="cross-process">
           <feComponentTransfer>
@@ -113,17 +138,26 @@ export const UrlFilters = () => {
          0     0     0    1 0"
           />
         </filter>
-        <filter id="plastic-wrap">
-          <feSpecularLighting
-            surfaceScale="5"
-            specularConstant="1"
-            specularExponent="20"
-            lightingColor="#fff"
-            result="light"
-          >
-            <feDistantLight azimuth="225" elevation="45" />
-          </feSpecularLighting>
-          <feBlend mode="overlay" in="SourceGraphic" in2="light" />
+        <filter id="util-vignette">
+          <feFlood flood-color="#111111" result="darkBase" />
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01"
+            numOctaves="1"
+            result="noise"
+          />
+          <feColorMatrix
+            type="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 8 -3"
+            result="vignetteShape"
+          />
+          <feBlend
+            mode="multiply"
+            in="SourceGraphic"
+            in2="vignetteShape"
+            result="vignettedImage"
+          />
+          <feComposite operator="in" in="vignettedImage" in2="SourceGraphic" />
         </filter>
       </defs>
     </svg>

@@ -1,5 +1,26 @@
 import { describe, expect, it } from "vitest";
+import { shapes } from "../constants/shapes";
 import { getShapeMaskGeometry, getShapeMaskImage } from "./shape";
+
+describe("shapes", () => {
+  // a path ending next to (not on) the start makes Z add a tiny segment, whose
+  // miter joins spike into an outlined shape
+  it.each(Object.entries(shapes))(
+    "%s does not end a hair away from its start point",
+    (_, d) => {
+      const [sx, sy] = d
+        .match(/^M([\d.]+),([\d.]+)/)!
+        .slice(1)
+        .map(Number);
+      const [ex, ey] = d
+        .match(/([\d.]+),([\d.]+) Z$/)!
+        .slice(1)
+        .map(Number);
+      const gap = Math.hypot(ex - sx, ey - sy);
+      expect(gap === 0 || gap > 0.01).toBe(true);
+    },
+  );
+});
 
 const decode = (image: string) =>
   decodeURIComponent(

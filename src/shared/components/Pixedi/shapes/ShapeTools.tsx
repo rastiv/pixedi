@@ -6,7 +6,7 @@ import {
   SurfaceTool,
 } from "../ui";
 import { shapes } from "../constants";
-import { Square, Stripes } from "../assets/icons";
+import { Dashed, Stripes } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useShape } from "./useShape";
 import styles from "./Shape.module.css";
@@ -39,7 +39,7 @@ export const ShapeTools = () => {
             data-tooltip={outlineLabel}
             onClick={handleToggleOutlined}
           >
-            {outlined ? <Stripes /> : <Square />}
+            {outlined ? <Stripes /> : <Dashed />}
           </Button>
         </Tooltip>
         <SelectIcon
