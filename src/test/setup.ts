@@ -8,6 +8,10 @@ vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation((cb) => {
   cb(null);
 });
 
+if (!globalThis.Path2D) {
+  vi.stubGlobal("Path2D", class Path2DMock {});
+}
+
 if (!globalThis.ImageBitmap) {
   class ImageBitmapMock {
     close() {}

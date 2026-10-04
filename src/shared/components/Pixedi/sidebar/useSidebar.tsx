@@ -10,6 +10,7 @@ import {
 } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
 import { DefaultFilterValues } from "../filters";
+import { SHAPE_BORDER } from "../constants";
 import { ActionName, type Tools } from "../types";
 
 export const getToolIcon = (tool: Tools): ReactNode => {
@@ -99,7 +100,7 @@ export const useSidebar = () => {
           args: {
             shape: "heart",
             outlined: false,
-            border: 0.075,
+            border: SHAPE_BORDER,
           },
         });
         break;

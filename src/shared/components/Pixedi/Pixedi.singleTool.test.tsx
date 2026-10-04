@@ -39,6 +39,7 @@ const renderSingleTool = (onSave = vi.fn(), onBack = vi.fn()) => {
       height={600}
       settings={settings}
       isAlpha={false}
+      translations={{}}
       onSave={onSave}
       onBack={onBack}
     >

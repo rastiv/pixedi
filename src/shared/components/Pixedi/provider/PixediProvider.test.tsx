@@ -34,6 +34,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
     height={initialItem.height}
     settings={{}}
     isAlpha={false}
+    translations={{}}
   >
     {children}
   </PixediProvider>
@@ -91,6 +92,39 @@ describe("PixediProvider", () => {
 
     unmount();
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:second");
+  });
+
+  it("starts rotations from zero after a committed shape", () => {
+    const { result } = renderHook(() => usePixediContext(), { wrapper });
+
+    act(() => {
+      result.current.addToHistory({
+        width: 600,
+        height: 800,
+        action: { name: "rotate", args: { degrees: 90 } },
+      });
+    });
+    expect(result.current.getLastRotation()).toBe(90);
+
+    act(() => {
+      result.current.addToHistory({
+        width: 400,
+        height: 400,
+        action: {
+          name: "shapes",
+          args: {
+            shape: "heart",
+            outlined: false,
+            border: 0.075,
+            x: 0,
+            y: 0,
+            w: 66,
+            h: 50,
+          },
+        },
+      });
+    });
+    expect(result.current.getLastRotation()).toBe(0);
   });
 
   it("initializes the image history and editor state", () => {

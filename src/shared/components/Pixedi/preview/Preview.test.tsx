@@ -94,6 +94,7 @@ const renderPreview = (degrees: number) => {
       height={600}
       settings={{}}
       isAlpha={false}
+      translations={{}}
     >
       <Preview />
       <SetRotation degrees={degrees} />
@@ -123,6 +124,7 @@ describe("Preview resize geometry", () => {
         height={600}
         settings={{}}
         isAlpha={false}
+        translations={{}}
       >
         <Preview />
         <PreviewControls />
@@ -162,6 +164,7 @@ describe("Preview image replacement", () => {
         height={600}
         settings={{}}
         isAlpha={false}
+        translations={{}}
       >
         <Preview />
         <PreviewControls />
@@ -222,6 +225,7 @@ describe("Preview clipping", () => {
           height={600}
           settings={{}}
           isAlpha={false}
+          translations={{}}
         >
           <Preview isClipped={isClipped} />
           <ClipPathUpdate />

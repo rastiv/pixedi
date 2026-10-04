@@ -1,0 +1,39 @@
+import { describe, expect, it } from "vitest";
+import { getShapeMaskGeometry, getShapeMaskImage } from "./shape";
+
+const decode = (image: string) =>
+  decodeURIComponent(image.replace(/^url\("data:image\/svg\+xml,/, "").replace(/"\)$/, ""));
+
+describe("getShapeMaskImage", () => {
+  it("fills the path for a full shape", () => {
+    const svg = decode(
+      getShapeMaskImage({ shape: "square", outlined: false, border: 0.1 }),
+    );
+    expect(svg).toContain("fill='white'");
+    expect(svg).not.toContain("stroke");
+  });
+
+  it("strokes the path with the border for an outlined shape", () => {
+    const svg = decode(
+      getShapeMaskImage({ shape: "square", outlined: true, border: 0.1 }),
+    );
+    expect(svg).toContain("fill='none'");
+    expect(svg).toContain("stroke-width='0.1'");
+  });
+});
+
+describe("getShapeMaskGeometry", () => {
+  it("converts a rect offset into a mask position", () => {
+    expect(getShapeMaskGeometry({ x: 25, y: 10, w: 50, h: 80 })).toEqual({
+      size: "50% 80%",
+      position: "50% 50%",
+    });
+  });
+
+  it("does not divide by zero for a full-size rect", () => {
+    expect(getShapeMaskGeometry({ x: 0, y: 0, w: 100, h: 100 })).toEqual({
+      size: "100% 100%",
+      position: "0% 0%",
+    });
+  });
+});

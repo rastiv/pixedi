@@ -1,4 +1,5 @@
 import { DefaultFilterValues } from "../filters/DefaultFilterValues";
+import { SHAPE_BORDER } from "../constants/shapes";
 import { type History, type Action, ActionName } from "../types";
 
 import type { Settings } from "../types";
@@ -50,6 +51,11 @@ const getInitialAction = (
         return { name: ActionName.ROTATE, args: { degrees: 0 } };
       case "filters":
         return { name: ActionName.FILTERS, args: DefaultFilterValues() };
+      case ActionName.SHAPES:
+        return {
+          name: ActionName.SHAPES,
+          args: { shape: "heart", outlined: false, border: SHAPE_BORDER },
+        };
       default:
         return null;
     }

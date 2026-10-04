@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { getInitalCrop } from "../utils/crop";
+import { getCropSettings, getInitalCrop } from "../utils/crop";
 import { usePixediContext } from "../provider/usePixediContext";
-import { ActionName, type CropRectExtended } from "../types";
+import type { CropRectExtended } from "../types";
 import styles from "./Crop.module.css";
 
 export const CropInfo = () => {
@@ -12,15 +12,11 @@ export const CropInfo = () => {
 
   const { currentAction, getLastHistoryItem, eventBus } = usePixediContext();
   const { width, height } = getLastHistoryItem();
+  const ratio = getCropSettings(currentAction)?.ratio;
 
   useEffect(() => {
-    if (!(
-      currentAction?.name === ActionName.CROP ||
-      currentAction?.name === ActionName.PRESET_CROP
-    )) {
-      return;
-    }
-    const initialCrop = getInitalCrop(currentAction.args.ratio, width, height);
+    if (ratio === undefined) return;
+    const initialCrop = getInitalCrop(ratio, width, height);
     const { xP, yP, wP, hP } = initialCrop;
 
     if (xRef.current) xRef.current.textContent = xP.toString();
@@ -42,7 +38,7 @@ export const CropInfo = () => {
     return () => {
       eventBus.removeEventListener("crop-update", onCropUpdate);
     };
-  }, [currentAction, height, width, eventBus]);
+  }, [ratio, height, width, eventBus]);
 
   return (
     <>

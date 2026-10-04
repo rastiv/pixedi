@@ -2,14 +2,20 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ActionName, type CropRect } from "../types";
 import { getOrientedSizes } from "../utils/crop";
-import { getPreview } from "../utils/preview";
+import { getPreviewLayers } from "../utils/preview";
+import { applyShapeMaskGeometry } from "../utils/shape";
 
 type UsePreviewProps = {
   isClipped?: boolean;
   isFilter?: boolean;
+  isMasked?: boolean;
 };
 
-export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
+export const usePreview = ({
+  isClipped,
+  isFilter,
+  isMasked,
+}: UsePreviewProps) => {
   const {
     history,
     previewUrl,
@@ -73,7 +79,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     });
   }
 
-  const preview = getPreview(historyItems);
+  const preview = getPreviewLayers(historyItems);
 
   useLayoutEffect(() => {
     if (isFilter && !showCompare && previewRef.current) {
@@ -105,6 +111,8 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
       const { x, y, w, h } = customEvent.detail;
       if (previewRef.current) {
         previewRef.current.style.clipPath = `xywh(${x}% ${y}% ${w}% ${h}%)`;
+        if (isMasked)
+          applyShapeMaskGeometry(previewRef.current, { x, y, w, h });
       }
     };
 
@@ -148,7 +156,7 @@ export const usePreview = ({ isClipped, isFilter }: UsePreviewProps) => {
     eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
 
     return () => controller.abort();
-  }, [isClipped, isFilter, currentAction?.name, eventBus]);
+  }, [isClipped, isFilter, isMasked, currentAction?.name, eventBus]);
 
   return { previewRef, filterRef, previewUrl, i18n, ...preview };
 };

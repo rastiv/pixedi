@@ -1,4 +1,11 @@
-import type { ActionFilter, ProcessedImage, Settings, Sizes } from "../types";
+import type {
+  ActionFilter,
+  ProcessedImage,
+  Settings,
+  ShapeMask,
+  Sizes,
+} from "../types";
+import { shapes } from "../constants/shapes";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
 
 export const fitToMaxSize = (
@@ -147,6 +154,28 @@ export async function imageProcessor(blob: Blob) {
     ctx.filter = "none";
   };
 
+  // keeps only the pixels covered by the unit-square shape path
+  const shape = ({ shape, outlined, border }: ShapeMask) => {
+    if (!ctx) return;
+
+    const path = new Path2D(shapes[shape]);
+
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.scale(canvas.width, canvas.height);
+    if (outlined) {
+      ctx.lineWidth = border;
+      ctx.lineJoin = "round";
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#fff";
+      ctx.stroke(path);
+    } else {
+      ctx.fillStyle = "#fff";
+      ctx.fill(path);
+    }
+    ctx.restore();
+  };
+
   const get = async (settings: Settings): Promise<ProcessedImage> => {
     const { quality = 0.85, saveAsWEBP = false, maxImageSize } = settings;
     const outputMimeType = saveAsWEBP ? "image/webp" : mimeType;
@@ -201,6 +230,7 @@ export async function imageProcessor(blob: Blob) {
     rotate,
     resize,
     filters,
+    shape,
     get,
   };
 }

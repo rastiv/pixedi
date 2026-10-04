@@ -8,7 +8,7 @@ import {
 import { shapes } from "../constants";
 import { Square, Stripes } from "../assets/icons";
 import { usePixediContext } from "../provider/usePixediContext";
-import { ActionName, type ShapeType } from "../types";
+import { useShape } from "./useShape";
 import styles from "./Shape.module.css";
 
 const selectItems = Object.entries(shapes).map(([key, value]) => ({
@@ -17,44 +17,17 @@ const selectItems = Object.entries(shapes).map(([key, value]) => ({
 }));
 
 export const ShapeTools = () => {
-  const { setCurrentAction, currentAction, i18n } = usePixediContext();
-  const isShapes = currentAction?.name === ActionName.SHAPES;
-  const shape = (isShapes && currentAction?.args?.shape) || "heart";
-  const outlined = (isShapes && currentAction?.args?.outlined) || false;
-  const border = (isShapes && currentAction?.args?.border) || 5;
-
-  const handleChangeShape = (value: string) => {
-    console.log("shape", value);
-    setCurrentAction({
-      name: ActionName.SHAPES,
-      args: {
-        outlined,
-        border,
-        shape: value as ShapeType,
-      },
-    });
-  };
-
-  const handleClose = () => {
-    setCurrentAction(null);
-  };
-
-  const handleSave = () => {
-    // TODO: Implement save logic
-  };
-
-  const handleToggleOutlined = () => {
-    setCurrentAction({
-      name: ActionName.SHAPES,
-      args: {
-        outlined: !outlined,
-        border,
-        shape,
-      },
-    });
-  };
-
-  const isSaving = false;
+  const { i18n } = usePixediContext();
+  const {
+    shape,
+    outlined,
+    handleChangeShape,
+    handleToggleOutlined,
+    handleSave,
+    handleClose,
+    isSaving,
+  } = useShape();
+  const outlineLabel = outlined ? i18n("fullfield") : i18n("outlined");
 
   return (
     <SurfaceTool>
@@ -62,8 +35,8 @@ export const ShapeTools = () => {
         <Tooltip position="top">
           <Button
             variant="outline"
-            aria-label={outlined ? i18n("fullfield") : i18n("outlined")}
-            data-tooltip={outlined ? i18n("fullfield") : i18n("outlined")}
+            aria-label={outlineLabel}
+            data-tooltip={outlineLabel}
             onClick={handleToggleOutlined}
           >
             {outlined ? <Stripes /> : <Square />}

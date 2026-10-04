@@ -77,11 +77,13 @@ export type UrlFilter = { url: string };
 
 export type ActionFilter = UrlFilter | CssFilters;
 
-export type ActionShape = {
+export type ShapeMask = {
   shape: ShapeType;
   outlined: boolean;
   border: number;
 };
+
+export type ActionShape = ShapeMask & Partial<CropRect>;
 
 export type Action =
   | { name: typeof ActionName.INITIAL; args: null }
