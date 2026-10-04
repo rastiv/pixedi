@@ -30,16 +30,40 @@ export const usePreview = ({
   const previousActionRef = useRef(currentAction?.name);
   const previousPreviewUrlRef = useRef(previewUrl);
 
+  const historyItems = history.items.slice(0, history.pointer + 1);
+  if (currentAction) {
+    const { width, height } = history.items.at(history.pointer)!;
+    historyItems.push({
+      ...(currentAction.name === ActionName.ROTATE
+        ? getOrientedSizes(
+            width,
+            height,
+            getLastRotation(),
+            currentAction.args.degrees,
+          )
+        : { width, height }),
+      action: currentAction,
+    });
+  }
+
+  const preview = getPreviewLayers(historyItems);
+  const layerCount = preview.layers.length;
+  const previousLayerCountRef = useRef(layerCount);
+
   useLayoutEffect(() => {
     const previousAction = previousActionRef.current;
     const nextAction = currentAction?.name;
     const previewChanged = previousPreviewUrlRef.current !== previewUrl;
+    // a committed (or undone) shape moves the transforms into a new inner
+    // layer while the reused outer one resets, so animating would replay them
+    const layersChanged = previousLayerCountRef.current !== layerCount;
     previousActionRef.current = nextAction;
     previousPreviewUrlRef.current = previewUrl;
+    previousLayerCountRef.current = layerCount;
 
     const actionChanged =
       previousAction && nextAction && previousAction !== nextAction;
-    if (!actionChanged && !previewChanged) return;
+    if (!actionChanged && !previewChanged && !layersChanged) return;
 
     const preview = previewRef.current;
     if (!preview) return;
@@ -61,25 +85,7 @@ export const usePreview = ({
       cancelAnimationFrame(frame);
       restoreTransitions();
     };
-  }, [currentAction?.name, previewUrl]);
-
-  const historyItems = history.items.slice(0, history.pointer + 1);
-  if (currentAction) {
-    const { width, height } = history.items.at(history.pointer)!;
-    historyItems.push({
-      ...(currentAction.name === ActionName.ROTATE
-        ? getOrientedSizes(
-            width,
-            height,
-            getLastRotation(),
-            currentAction.args.degrees,
-          )
-        : { width, height }),
-      action: currentAction,
-    });
-  }
-
-  const preview = getPreviewLayers(historyItems);
+  }, [currentAction?.name, previewUrl, layerCount]);
 
   useLayoutEffect(() => {
     if (isFilter && !showCompare && previewRef.current) {
