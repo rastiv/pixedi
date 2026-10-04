@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.14.0
+
+- Add shapes tool.
+
 ## 1.12.1
 
 - Fix compare tool not working when filter is active.
