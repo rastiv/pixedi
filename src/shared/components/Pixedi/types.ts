@@ -160,8 +160,8 @@ export type Settings = {
 };
 
 export type ShapeType =
-  | "heart"
   | "star"
+  | "heart"
   | "shield"
   | "tag"
   | "flower"
