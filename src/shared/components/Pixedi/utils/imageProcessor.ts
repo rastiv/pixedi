@@ -161,21 +161,36 @@ export async function imageProcessor(blob: Blob) {
 
     const path = new Path2D(shapes[shape]);
 
+    if (outlined) {
+      // a clip would also confine the destination-in composite, leaving the
+      // pixels outside the shape untouched, so the mask is drawn separately
+      const maskCanvas = document.createElement("canvas");
+      maskCanvas.width = canvas.width;
+      maskCanvas.height = canvas.height;
+      const maskCtx = maskCanvas.getContext("2d", { alpha: true });
+      if (!maskCtx) return;
+
+      // matches the preview mask: an inside-only stroke keeps sharp corners
+      maskCtx.scale(canvas.width, canvas.height);
+      maskCtx.clip(path);
+      maskCtx.lineWidth = border * 2;
+      maskCtx.lineJoin = "miter";
+      maskCtx.miterLimit = SHAPE_MITER_LIMIT;
+      maskCtx.strokeStyle = "#fff";
+      maskCtx.stroke(path);
+
+      ctx.save();
+      ctx.globalCompositeOperation = "destination-in";
+      ctx.drawImage(maskCanvas, 0, 0);
+      ctx.restore();
+      return;
+    }
+
     ctx.save();
     ctx.globalCompositeOperation = "destination-in";
     ctx.scale(canvas.width, canvas.height);
-    if (outlined) {
-      // matches the preview mask: an inside-only stroke keeps sharp corners
-      ctx.clip(path);
-      ctx.lineWidth = border * 2;
-      ctx.lineJoin = "miter";
-      ctx.miterLimit = SHAPE_MITER_LIMIT;
-      ctx.strokeStyle = "#fff";
-      ctx.stroke(path);
-    } else {
-      ctx.fillStyle = "#fff";
-      ctx.fill(path);
-    }
+    ctx.fillStyle = "#fff";
+    ctx.fill(path);
     ctx.restore();
   };
 

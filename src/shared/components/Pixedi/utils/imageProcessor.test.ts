@@ -1,5 +1,53 @@
-import { describe, expect, it } from "vitest";
-import { blobToBase64, fitToMaxSize } from "./imageProcessor";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { blobToBase64, fitToMaxSize, imageProcessor } from "./imageProcessor";
+
+const createCtxMock = () => {
+  const ctx = {
+    globalCompositeOperation: "source-over",
+    composites: [] as string[],
+    save: vi.fn(),
+    restore: vi.fn(),
+    scale: vi.fn(),
+    clip: vi.fn(),
+    stroke: vi.fn(),
+    fill: vi.fn(),
+    clearRect: vi.fn(),
+    drawImage: vi.fn(() => {
+      ctx.composites.push(ctx.globalCompositeOperation);
+    }),
+  };
+  return ctx;
+};
+
+describe("imageProcessor shape", () => {
+  afterEach(() => {
+    vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(null);
+  });
+
+  it("masks an outlined shape without clipping the image itself", async () => {
+    const contexts: ReturnType<typeof createCtxMock>[] = [];
+    vi.mocked(HTMLCanvasElement.prototype.getContext).mockImplementation(() => {
+      const ctx = createCtxMock();
+      contexts.push(ctx);
+      return ctx as unknown as CanvasRenderingContext2D;
+    });
+    vi.mocked(createImageBitmap).mockResolvedValue({
+      width: 100,
+      height: 100,
+      close: vi.fn(),
+    } as unknown as ImageBitmap);
+
+    const processor = await imageProcessor(new Blob([], { type: "image/png" }));
+    processor.shape({ shape: "star", outlined: true, border: 0.1 });
+
+    const [main, mask] = contexts;
+    // a clip on the main context would keep every pixel outside the shape
+    expect(main.clip).not.toHaveBeenCalled();
+    expect(mask.clip).toHaveBeenCalled();
+    expect(mask.stroke).toHaveBeenCalled();
+    expect(main.composites.at(-1)).toBe("destination-in");
+  });
+});
 
 describe("fitToMaxSize", () => {
   it.each([undefined, 0, -100, NaN, Infinity])(
