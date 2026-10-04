@@ -16,7 +16,7 @@ Pixedi provides a ready-to-use image editing UI with cropping, resizing, image a
 - **Rotate** — arbitrary angle
 - **Filters** — two modes, both preserved in undo/redo history:
   - _CSS adjustments_ — Saturate, Sepia, Invert, Hue-Rotate, Brightness, Contrast
-  - _Predefined artistic_ — Vintage, Olive Army, Warm Sunset, Sin City Red, Emboss Effect, CRT Monitor, Grain/Noise, Cross-Processing, X-Ray, Plastic Wrap
+  - _Predefined artistic_ — Vintage, Olive Army, Warm Sunset, Sin City Red, CRT Monitor, Grain/Noise, Cross-Processing, X-Ray, Vignette Shadow
   - _Compare mode_ — toggle before/after preview while adjusting
 - **Undo/redo** — full history across all tools
 - **Social-media presets** — Facebook, Instagram, LinkedIn crop sizes

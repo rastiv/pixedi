@@ -205,12 +205,11 @@ SVG-based filters selected from a dropdown. Each is a non-destructive preset app
 | Olive Army       | Desaturated olive-green tone                    |
 | Warm Sunset      | Boosted reds and oranges, reduced blues         |
 | Sin City Red     | High-contrast red channel, grey everything else |
-| Emboss Effect    | Edge emboss with greyscale conversion           |
 | CRT Monitor      | Scanline overlay simulating a CRT screen        |
 | Grain / Noise    | Film-grain texture via fractal noise            |
 | Cross-Processing | Shifted colour curves for a lo-fi look          |
 | X-Ray            | Inverted luminance, blue-green hue              |
-| Plastic Wrap     | Specular highlight overlay                      |
+| Vignette Shadow  | VIGNETTE SHADOW FRAME                           |
 
 ### Compare mode
 
