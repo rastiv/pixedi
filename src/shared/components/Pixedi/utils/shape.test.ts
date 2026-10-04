@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import { getShapeMaskGeometry, getShapeMaskImage } from "./shape";
 
 const decode = (image: string) =>
-  decodeURIComponent(image.replace(/^url\("data:image\/svg\+xml,/, "").replace(/"\)$/, ""));
+  decodeURIComponent(
+    image.replace(/^url\("data:image\/svg\+xml,/, "").replace(/"\)$/, ""),
+  );
 
 describe("getShapeMaskImage", () => {
   it("fills the path for a full shape", () => {
@@ -13,12 +15,15 @@ describe("getShapeMaskImage", () => {
     expect(svg).not.toContain("stroke");
   });
 
-  it("strokes the path with the border for an outlined shape", () => {
+  it("strokes the inside of the path with sharp joins for an outlined shape", () => {
     const svg = decode(
       getShapeMaskImage({ shape: "square", outlined: true, border: 0.1 }),
     );
     expect(svg).toContain("fill='none'");
-    expect(svg).toContain("stroke-width='0.1'");
+    // twice the border, clipped to the path, leaves exactly the border inside
+    expect(svg).toContain("stroke-width='0.2'");
+    expect(svg).toContain("clip-path='url(#s)'");
+    expect(svg).toContain("stroke-linejoin='miter'");
   });
 });
 

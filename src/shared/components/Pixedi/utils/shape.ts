@@ -2,15 +2,20 @@ import type { CSSProperties } from "react";
 import { shapes } from "../constants/shapes";
 import type { CropRect, ShapeMask } from "../types";
 
+// sharp corners need a miter join, which would spike out past the unit square,
+// so the outline is drawn twice as wide and clipped to the inside of the path
+export const SHAPE_MITER_LIMIT = 10;
+
 export const getShapeMaskImage = ({
   shape,
   outlined,
   border,
 }: ShapeMask): string => {
-  const paint = outlined
-    ? `fill='none' stroke='white' stroke-width='${border}' stroke-linejoin='round' stroke-linecap='round'`
-    : "fill='white'";
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'><path d='${shapes[shape]}' ${paint}/></svg>`;
+  const d = shapes[shape];
+  const body = outlined
+    ? `<clipPath id='s'><path d='${d}'/></clipPath><path d='${d}' clip-path='url(#s)' fill='none' stroke='white' stroke-width='${border * 2}' stroke-linejoin='miter' stroke-miterlimit='${SHAPE_MITER_LIMIT}'/>`
+    : `<path d='${d}' fill='white'/>`;
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'>${body}</svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 };
 

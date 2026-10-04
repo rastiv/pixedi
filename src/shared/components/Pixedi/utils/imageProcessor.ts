@@ -7,6 +7,7 @@ import type {
 } from "../types";
 import { shapes } from "../constants/shapes";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
+import { SHAPE_MITER_LIMIT } from "./shape";
 
 export const fitToMaxSize = (
   width: number,
@@ -164,9 +165,11 @@ export async function imageProcessor(blob: Blob) {
     ctx.globalCompositeOperation = "destination-in";
     ctx.scale(canvas.width, canvas.height);
     if (outlined) {
-      ctx.lineWidth = border;
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
+      // matches the preview mask: an inside-only stroke keeps sharp corners
+      ctx.clip(path);
+      ctx.lineWidth = border * 2;
+      ctx.lineJoin = "miter";
+      ctx.miterLimit = SHAPE_MITER_LIMIT;
       ctx.strokeStyle = "#fff";
       ctx.stroke(path);
     } else {
