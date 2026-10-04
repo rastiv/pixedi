@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.14.1
+
+- Fix wrong image processing when using shape crop with outlined mode.
+
 ## 1.14.0
 
 - Add shapes tool.
