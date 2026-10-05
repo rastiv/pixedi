@@ -46,31 +46,32 @@ export const FilterTools = () => {
     );
   };
 
+  const sliderContent = selectedFilterItem && !isUrl && (
+    <div className={styles.row1}>
+      <div className={styles.min}>
+        {selectedFilterItem.min}
+        {selectedFilterItem.unit}
+      </div>
+      <Slider
+        className={styles.slider}
+        min={selectedFilterItem.min}
+        max={selectedFilterItem.max}
+        step={selectedFilterItem.step}
+        value={sliderValue}
+        isTooltip
+        unit={selectedFilterItem.unit}
+        onInput={handleSliderInput}
+        onChange={handleSliderChange}
+      />
+      <div className={styles.max}>
+        {selectedFilterItem.max}
+        {selectedFilterItem.unit}
+      </div>
+    </div>
+  );
+
   return (
-    <SurfaceTool className={styles.tools}>
-      {/* {!isUrl && selectedFilterItem && (
-        <div className={styles.row1}>
-          <div className={styles.min}>
-            {selectedFilterItem.min}
-            {selectedFilterItem.unit}
-          </div>
-          <Slider
-            className={styles.slider}
-            min={selectedFilterItem.min}
-            max={selectedFilterItem.max}
-            step={selectedFilterItem.step}
-            value={sliderValue}
-            isTooltip
-            unit={selectedFilterItem.unit}
-            onInput={handleSliderInput}
-            onChange={handleSliderChange}
-          />
-          <div className={styles.max}>
-            {selectedFilterItem.max}
-            {selectedFilterItem.unit}
-          </div>
-        </div>
-      )} */}
+    <SurfaceTool className={styles.tools} additional={sliderContent}>
       <div className={styles.row2}>
         <Tooltip position="top">
           <Button
