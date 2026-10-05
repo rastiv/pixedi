@@ -21,10 +21,10 @@ export const ResizeTools = () => {
   } = useResize();
 
   return (
-    <SurfaceTool ref={resizeRef} className={styles.resize}>
-      <div className={styles.indicatorWrapper}>
+    <SurfaceTool ref={resizeRef} className={styles.tools}>
+      {/* <div className={styles.indicatorWrapper}>
         <div className={styles.indicator} style={{ width: `${scale / 2}%` }} />
-      </div>
+      </div> */}
       <div className={styles.inputs}>
         <InputPixel
           value={width}

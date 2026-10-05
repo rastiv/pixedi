@@ -30,7 +30,7 @@ export const ShapeTools = () => {
   const outlineLabel = outlined ? i18n("fullfield") : i18n("outlined");
 
   return (
-    <SurfaceTool>
+    <SurfaceTool className={styles.tools}>
       <div className={styles.buttons}>
         <Tooltip position="top">
           <Button

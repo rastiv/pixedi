@@ -48,7 +48,7 @@ export const FilterTools = () => {
 
   return (
     <SurfaceTool className={styles.tools}>
-      {!isUrl && selectedFilterItem && (
+      {/* {!isUrl && selectedFilterItem && (
         <div className={styles.row1}>
           <div className={styles.min}>
             {selectedFilterItem.min}
@@ -70,7 +70,7 @@ export const FilterTools = () => {
             {selectedFilterItem.unit}
           </div>
         </div>
-      )}
+      )} */}
       <div className={styles.row2}>
         <Tooltip position="top">
           <Button

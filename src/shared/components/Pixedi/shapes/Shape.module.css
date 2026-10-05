@@ -1,3 +1,8 @@
+.tools {
+  display: flex;
+  gap: 4px;
+}
+
 .selector {
   transform: translateX(-71px);
 }

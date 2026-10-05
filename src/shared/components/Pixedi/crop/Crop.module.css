@@ -1,3 +1,7 @@
+.tools {
+  display: flex;
+  gap: 4px;
+}
 .wrapper {
   position: absolute;
   inset: 0;
@@ -14,23 +18,6 @@
   -webkit-user-select: none;
   touch-action: none;
   border: 1px solid var(--color-white-fade);
-}
-.toolsInfo {
-  display: inline-block;
-  min-width: 54px;
-  margin-top: -2px;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.toolsInfoLabel {
-  font-size: 12px;
-  line-height: 12px;
-  color: var(--muted-foreground);
-}
-.toolsInfoValue {
-  font-size: 14px;
-  line-height: 14px;
-  color: var(--foreground);
 }
 .linesBox {
   position: absolute;

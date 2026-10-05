@@ -5,6 +5,7 @@ import styles from "./SurfaceTool.module.css";
 
 type SurfaceToolProps = {
   children: ReactNode;
+  fadedContent?: ReactNode;
   className?: string;
   ref?: React.RefObject<HTMLDivElement | null>;
 };
@@ -25,13 +26,16 @@ export const SurfaceTool = ({
   };
 
   return (
-    <div ref={setRef} className={styles.surfaceTool}>
-      <Drag
-        className={styles.drag}
-        onMouseDown={handleDragStart}
-        onTouchStart={handleDragStart}
-      />
-      <div className={`${styles.content} ${className}`}>{children}</div>
+    <div ref={setRef} className={styles.surface}>
+      asd
+      <div className={styles.content}>
+        <Drag
+          className={styles.drag}
+          onMouseDown={handleDragStart}
+          onTouchStart={handleDragStart}
+        />
+        <div className={`${className}`}>{children}</div>
+      </div>
     </div>
   );
 };

@@ -7,29 +7,27 @@ export const RotateTools = () => {
   const { handleRotate, handleSave, handleClose, isSaving } = useRotate();
 
   return (
-    <SurfaceTool>
-      <div className={styles.scGroup}>
-        <Tooltip position="top">
-          <Button
-            variant="outline"
-            className={styles.btnH}
-            onClick={() => handleRotate(90)}
-            aria-label="+90°"
-            data-tooltip="+90°"
-          >
-            <Rotate />
-          </Button>
-          <Button
-            variant="outline"
-            className={styles.btnV}
-            onClick={() => handleRotate(-90)}
-            aria-label="-90°"
-            data-tooltip="-90°"
-          >
-            <RotateCCW />
-          </Button>
-        </Tooltip>
-      </div>
+    <SurfaceTool className={styles.tools}>
+      <Tooltip position="top">
+        <Button
+          variant="outline"
+          className={styles.btnCW}
+          onClick={() => handleRotate(90)}
+          aria-label="+90°"
+          data-tooltip="+90°"
+        >
+          <Rotate />
+        </Button>
+        <Button
+          variant="outline"
+          className={styles.btnCCW}
+          onClick={() => handleRotate(-90)}
+          aria-label="-90°"
+          data-tooltip="-90°"
+        >
+          <RotateCCW />
+        </Button>
+      </Tooltip>
       <SaveCloseGroup
         onSave={handleSave}
         onClose={handleClose}

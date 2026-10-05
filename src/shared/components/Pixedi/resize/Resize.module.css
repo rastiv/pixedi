@@ -1,6 +1,7 @@
-.resize {
-  align-items: center;
-  padding-top: 16px;
+.tools {
+  padding: 6px 2px 2px 0;
+  display: flex;
+  gap: 4px;
 }
 .inputs {
   display: flex;
