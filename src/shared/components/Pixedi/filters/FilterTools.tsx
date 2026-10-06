@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { filterUrlsData } from "../constants";
 import { Compare, Filters, PredefinedFilters } from "../assets/icons";
 import {
@@ -13,6 +14,7 @@ import { useFilters } from "./useFilters";
 import styles from "./FilterTools.module.css";
 
 export const FilterTools = () => {
+  const valueRef = useRef<HTMLDivElement>(null);
   const {
     showCompare,
     previewUrl,
@@ -32,7 +34,7 @@ export const FilterTools = () => {
     handleClose,
     isSaving,
     i18n,
-  } = useFilters();
+  } = useFilters(valueRef);
 
   const getFilterOptionWhenUrl = (option: SelectOption) => {
     return (
@@ -47,32 +49,27 @@ export const FilterTools = () => {
   };
 
   const sliderContent = selectedFilterItem && !isUrl && (
-    <div className={styles.row1}>
-      <div className={styles.min}>
-        {selectedFilterItem.min}
-        {selectedFilterItem.unit}
-      </div>
+    <div className={styles.sliderCintainer}>
       <Slider
         className={styles.slider}
         min={selectedFilterItem.min}
         max={selectedFilterItem.max}
         step={selectedFilterItem.step}
         value={sliderValue}
-        isTooltip
         unit={selectedFilterItem.unit}
         onInput={handleSliderInput}
         onChange={handleSliderChange}
       />
-      <div className={styles.max}>
-        {selectedFilterItem.max}
-        {selectedFilterItem.unit}
+      <div className={styles.value}>
+        <div ref={valueRef}>{selectedFilterItem.sliderValue}</div>
+        <div>{selectedFilterItem.unit}</div>
       </div>
     </div>
   );
 
   return (
     <SurfaceTool className={styles.tools} additional={sliderContent}>
-      <div className={styles.row2}>
+      <div className={styles.toolsContainer}>
         <Tooltip position="top">
           <Button
             variant="outline"

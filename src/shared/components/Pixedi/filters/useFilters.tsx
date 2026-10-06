@@ -5,7 +5,7 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
 import { emitCompareUpdate, emitFilterUpdate } from "../eventBus";
 
-export const useFilters = () => {
+export const useFilters = (valueRef: React.RefObject<HTMLDivElement>) => {
   const {
     showCompare,
     previewUrl,
@@ -47,6 +47,9 @@ export const useFilters = () => {
   };
 
   const handleSliderInput = (value: number) => {
+    if (valueRef.current) {
+      valueRef.current.textContent = value.toString();
+    }
     emitFilterUpdate(eventBus, {
       ...filtersObject,
       [selectedFilter]: value,
