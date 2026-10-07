@@ -5,7 +5,9 @@ import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
 import { emitCompareUpdate, emitFilterUpdate } from "../eventBus";
 
-export const useFilters = (valueRef: React.RefObject<HTMLDivElement>) => {
+export const useFilters = (
+  valueRef: React.RefObject<HTMLDivElement | null>,
+) => {
   const {
     showCompare,
     previewUrl,

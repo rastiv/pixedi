@@ -6,7 +6,7 @@ import { ActionName } from "../types";
 
 const MIN_SCALE = 15;
 const MAX_SCALE = 200;
-const SCALE_STEP = 2;
+const WHEEL_STEP = 2;
 
 const calculateSize = (scale: number, width: number, height: number) => {
   const updatedScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
@@ -17,7 +17,7 @@ const calculateSize = (scale: number, width: number, height: number) => {
   };
 };
 
-export const useResize = () => {
+export const useResize = (valueRef: React.RefObject<HTMLDivElement | null>) => {
   const { getLastHistoryItem, eventBus } = usePixediContext();
   const { commit, close: closeTool, isSaving } = useToolCommit();
   const { width: currentWidth, height: currentHeight } = getLastHistoryItem();
@@ -35,10 +35,24 @@ export const useResize = () => {
       setHeight(next.height);
       setScale(next.scale);
       scaleRef.current = next.scale;
+      if (valueRef.current) {
+        valueRef.current.textContent = Math.round(next.scale).toString();
+      }
       emitResizeUpdate(eventBus, next.scale);
     },
-    [currentHeight, currentWidth, eventBus],
+    [currentHeight, currentWidth, eventBus, valueRef],
   );
+
+  const handleSliderInput = (value: number) => {
+    if (valueRef.current) {
+      valueRef.current.textContent = value.toString();
+    }
+    emitResizeUpdate(eventBus, value);
+  };
+
+  const handleSliderChange = (value: number) => {
+    updateScale(value);
+  };
 
   const updateFromInput = (value: string, dimension: number) => {
     const nextValue = Number.parseInt(value, 10);
@@ -83,7 +97,7 @@ export const useResize = () => {
 
     const handleWheel = (event: WheelEvent) => {
       if (!isInsideFrame(event)) return;
-      updateScale(scaleRef.current - Math.sign(event.deltaY) * SCALE_STEP);
+      updateScale(scaleRef.current - Math.sign(event.deltaY) * WHEEL_STEP);
     };
 
     const handleTouchStart = (event: TouchEvent) => {
@@ -96,7 +110,7 @@ export const useResize = () => {
       const y = event.touches[0].clientY;
       const deltaY = startVerticalSlideRef.current - y;
       if (Math.abs(deltaY) < 10) return;
-      updateScale(scaleRef.current + Math.sign(deltaY) * SCALE_STEP);
+      updateScale(scaleRef.current + Math.sign(deltaY) * WHEEL_STEP);
       startVerticalSlideRef.current = y;
     };
 
@@ -111,6 +125,8 @@ export const useResize = () => {
 
   return {
     resizeRef,
+    MIN_SCALE,
+    MAX_SCALE,
     width,
     height,
     scale,
@@ -120,6 +136,8 @@ export const useResize = () => {
     setHeight,
     handleWidthBlur,
     handleHeightBlur,
+    handleSliderInput,
+    handleSliderChange,
     save,
     close,
     isSaving,

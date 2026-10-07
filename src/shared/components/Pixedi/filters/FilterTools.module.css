@@ -23,6 +23,8 @@
   display: flex;
   align-items: center;
   background: var(--color-white-fade);
+  border: solid 1px var(--border);
+  border-radius: 4px;
 
   & > div:first-child {
     padding: 6px 6px;
