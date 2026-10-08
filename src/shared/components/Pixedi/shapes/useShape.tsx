@@ -11,8 +11,8 @@ import {
   type ShapeType,
 } from "../types";
 
-const MIN_OUTLINE = 1.5;
-const MAX_OUTLINE = 20;
+const MIN_OUTLINE = 1;
+const MAX_OUTLINE = 25;
 
 export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
   const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
