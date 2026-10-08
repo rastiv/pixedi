@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
-import { useTooltip } from "./useTooltip";
+import { TOOLTIP_DELAY, useTooltip } from "./useTooltip";
 import type { TooltipPosition } from "./useTooltip";
 
 type TooltipProps = {
   children: ReactNode;
   position?: TooltipPosition;
+  delay?: number;
   className?: string;
   classNameTitle?: string;
   style?: React.CSSProperties;
@@ -14,6 +15,7 @@ type TooltipProps = {
 export const Tooltip = ({
   children,
   position = "top",
+  delay = TOOLTIP_DELAY,
   className = "",
   classNameTitle = "",
   style,
@@ -27,7 +29,7 @@ export const Tooltip = ({
     cssVars,
     handleMouseMove,
     handleMouseLeave,
-  } = useTooltip(children, position);
+  } = useTooltip(children, position, delay);
 
   return (
     <div

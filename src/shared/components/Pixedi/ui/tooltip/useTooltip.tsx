@@ -15,9 +15,14 @@ type Size = { w: number; h: number };
 
 type Coords = { x: number; y: number };
 
+type PendingShow = { index: number; position: Coords };
+
+export const TOOLTIP_DELAY = 500;
+
 export const useTooltip = (
   children: ReactNode,
   position: TooltipPosition = "top",
+  delay: number = TOOLTIP_DELAY,
 ) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<Coords | null>(null);
@@ -28,6 +33,8 @@ export const useTooltip = (
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingRef = useRef<PendingShow | null>(null);
   const isVerticalLayout = position === "left" || position === "right";
 
   const titles = useMemo(() => {
@@ -82,12 +89,33 @@ export const useTooltip = (
     };
   }, [isVisible, isAnimated]);
 
+  useEffect(
+    () => () => {
+      if (showTimerRef.current) clearTimeout(showTimerRef.current);
+    },
+    [],
+  );
+
+  const cancelShow = () => {
+    if (showTimerRef.current) clearTimeout(showTimerRef.current);
+    showTimerRef.current = null;
+    pendingRef.current = null;
+  };
+
+  const show = ({ index, position }: PendingShow, fromHidden: boolean) => {
+    if (fromHidden) setIsAnimated(false);
+    setTooltipPosition(position);
+    setActiveIndex(index);
+    setIsVisible(true);
+  };
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = (e.target as HTMLElement).closest(
       "[data-tooltip]",
     ) as HTMLElement | null;
 
     if (!target) {
+      cancelShow();
       setIsVisible(false);
       return;
     }
@@ -95,7 +123,12 @@ export const useTooltip = (
     const parent = target.parentElement;
     if (!parent) return;
     const index = Array.from(parent.children).indexOf(target);
-    if (index === -1 || (isVisible && index === activeIndex)) return;
+    if (
+      index === -1 ||
+      (isVisible && index === activeIndex) ||
+      pendingRef.current?.index === index
+    )
+      return;
 
     const containerRect = containerRef.current?.getBoundingClientRect();
     if (!containerRect) return;
@@ -117,14 +150,28 @@ export const useTooltip = (
               : rect.bottom - containerRect.top + 8,
         };
 
-    if (!isVisible) setIsAnimated(false);
+    const next = { index, position: nextPosition };
 
-    setTooltipPosition(nextPosition);
-    setActiveIndex(index);
-    setIsVisible(true);
+    // the delay only gates the first appearance, moving between anchors of a
+    // visible tooltip keeps sliding right away
+    if (isVisible || delay <= 0) {
+      show(next, !isVisible);
+      return;
+    }
+
+    pendingRef.current = next;
+    showTimerRef.current ??= setTimeout(() => {
+      const pending = pendingRef.current;
+      showTimerRef.current = null;
+      pendingRef.current = null;
+      if (pending) show(pending, true);
+    }, delay);
   };
 
-  const handleMouseLeave = () => setIsVisible(false);
+  const handleMouseLeave = () => {
+    cancelShow();
+    setIsVisible(false);
+  };
 
   const index = activeIndex ?? 0;
   const activeSize = sizes[index];
