@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { SurfaceTool } from "./SurfaceTool";
 import { SurfaceToolOffsetProvider } from "./SurfaceToolOffsetProvider";
 
@@ -44,6 +44,18 @@ describe("SurfaceTool", () => {
     fireEvent.mouseUp(document);
 
     expect(tool.style.transform).toBe("translate(calc(-50% + 50px), -10px)");
+  });
+
+  it("lets the handle mousedown reach document listeners", () => {
+    const { container } = render(<Harness />);
+    const { handle } = setup(container);
+    const onMouseDown = vi.fn();
+    document.addEventListener("mousedown", onMouseDown);
+
+    fireEvent.mouseDown(handle, { clientX: 200, clientY: 200 });
+    document.removeEventListener("mousedown", onMouseDown);
+
+    expect(onMouseDown).toHaveBeenCalledOnce();
   });
 
   it("keeps the tool inside its parent", () => {

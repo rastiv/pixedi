@@ -51,8 +51,6 @@ export const useSurfaceTool = ({
     const el = surfaceRef.current;
     if (!el) return;
 
-    e.stopPropagation();
-
     const bounds = getOffsetBounds(el, offsetRef.current);
     if (!bounds) return;
 
