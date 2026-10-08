@@ -2,7 +2,7 @@
   flex-direction: column;
 }
 
-.sliderCintainer {
+.sliderContainer {
   display: flex;
   flex-direction: row;
   gap: 16px;

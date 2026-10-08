@@ -49,7 +49,7 @@ export const FilterTools = () => {
   };
 
   const sliderContent = selectedFilterItem && !isUrl && (
-    <div className={styles.sliderCintainer}>
+    <div className={styles.sliderContainer}>
       <Slider
         className={styles.slider}
         min={selectedFilterItem.min}

@@ -27,7 +27,7 @@ export const ResizeTools = () => {
   } = useResize(valueRef);
 
   const sliderContent = (
-    <div className={styles.sliderCintainer}>
+    <div className={styles.sliderContainer}>
       <Slider
         className={styles.slider}
         min={MIN_SCALE}

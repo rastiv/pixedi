@@ -3,11 +3,57 @@
   gap: 4px;
 }
 
-.selector {
-  transform: translateX(-71px);
+.sliderContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  padding: 8px 8px 8px 16px;
 }
 
-.buttons {
+.slider {
+  flex: 1;
+}
+
+.value {
+  text-align: right;
+  font-size: 14px;
+  font-family: var(--font-mono);
+  min-width: 64px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  background: var(--color-white-fade);
+  border: solid 1px var(--border);
+  border-radius: 4px;
+
+  & > div:first-child {
+    padding: 6px 6px;
+    color: var(--accent-blue);
+    text-align: right;
+    flex: 1;
+  }
+  & > div:last-child {
+    padding: 6px 4px;
+    border-left: solid 1px var(--border);
+  }
+}
+
+.toolsContainer {
   display: flex;
   gap: 4px;
+}
+
+.toolsGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.spacer {
+  width: 140px;
+}
+
+.selector {
+  transform: translateX(-68px);
 }

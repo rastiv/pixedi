@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
 import { SHAPE_BORDER } from "../constants";
@@ -10,9 +10,14 @@ import {
   type ShapeType,
 } from "../types";
 
-export const useShape = () => {
+const MIN_OUTLINE = 1.5;
+const MAX_OUTLINE = 25;
+const DEFAULT_SLIDER_VALUE = 7.5;
+
+export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
   const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
     usePixediContext();
+  const [sliderValue, setSliderValue] = useState<number>(DEFAULT_SLIDER_VALUE);
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const isShapes = currentAction?.name === ActionName.SHAPES;
@@ -50,6 +55,16 @@ export const useShape = () => {
 
   const handleToggleOutlined = () => update({ outlined: !mask.outlined });
 
+  const handleSliderInput = (value: number) => {
+    if (valueRef.current) {
+      valueRef.current.textContent = value.toFixed(1);
+    }
+  };
+
+  const handleSliderChange = (value: number) => {
+    setSliderValue(value);
+  };
+
   const handleSave = () => {
     if (!isShapes) return;
 
@@ -63,10 +78,15 @@ export const useShape = () => {
 
   return {
     ...mask,
+    sliderValue,
+    handleSliderInput,
+    handleSliderChange,
     handleChangeShape,
     handleToggleOutlined,
     handleSave,
     handleClose: close,
     isSaving,
+    MIN_OUTLINE,
+    MAX_OUTLINE,
   };
 };

@@ -83,7 +83,6 @@
   position: absolute;
   inset: 0;
   box-sizing: border-box;
-  border: 2px solid var(--accent-blue);
 }
 .mobilePointer {
   position: absolute;
