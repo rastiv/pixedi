@@ -5,6 +5,7 @@ import type { SurfaceToolOffset } from "./SurfaceToolContext";
 
 type UseSurfaceToolArgs = {
   surfaceRef: React.RefObject<HTMLDivElement | null>;
+  hasAdditional?: boolean;
 };
 
 function clamp(value: number, min: number, max: number): number {
@@ -36,7 +37,10 @@ function getOffsetBounds(el: HTMLDivElement, offset: SurfaceToolOffset) {
   };
 }
 
-export const useSurfaceTool = ({ surfaceRef }: UseSurfaceToolArgs) => {
+export const useSurfaceTool = ({
+  surfaceRef,
+  hasAdditional,
+}: UseSurfaceToolArgs) => {
   const mobile = useMobile();
   const offsetRef = useSurfaceToolOffset();
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -46,8 +50,6 @@ export const useSurfaceTool = ({ surfaceRef }: UseSurfaceToolArgs) => {
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     const el = surfaceRef.current;
     if (!el) return;
-
-    e.stopPropagation();
 
     const bounds = getOffsetBounds(el, offsetRef.current);
     if (!bounds) return;
@@ -136,7 +138,7 @@ export const useSurfaceTool = ({ surfaceRef }: UseSurfaceToolArgs) => {
     }
 
     return () => controller.abort();
-  }, [surfaceRef, offsetRef, mobile]);
+  }, [surfaceRef, offsetRef, mobile, hasAdditional]);
 
   return {
     handleDragStart,

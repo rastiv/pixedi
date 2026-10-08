@@ -16,41 +16,37 @@ export const FlipTools = () => {
   } = useFlip();
 
   return (
-    <SurfaceTool>
-      <div className={styles.scGroup}>
-        <Tooltip position="top">
-          <Button
-            variant="outline"
-            className={styles.btnH}
-            onClick={handleFlipHorizontal}
-            aria-label={i18n("horizontal")}
-            data-tooltip={i18n("horizontal")}
-          >
-            <FlipH
-              style={{
-                color: flipHorizontal
-                  ? "var(--accent-blue)"
-                  : "var(--foreground)",
-              }}
-            />
-          </Button>
-          <Button
-            variant="outline"
-            className={styles.btnV}
-            onClick={handleFlipVertical}
-            aria-label={i18n("vertical")}
-            data-tooltip={i18n("vertical")}
-          >
-            <FlipV
-              style={{
-                color: flipVertical
-                  ? "var(--accent-blue)"
-                  : "var(--foreground)",
-              }}
-            />
-          </Button>
-        </Tooltip>
-      </div>
+    <SurfaceTool className={styles.tools}>
+      <Tooltip position="top">
+        <Button
+          variant="outline"
+          className={styles.btnH}
+          onClick={handleFlipHorizontal}
+          aria-label={i18n("horizontal")}
+          data-tooltip={i18n("horizontal")}
+        >
+          <FlipH
+            style={{
+              color: flipHorizontal
+                ? "var(--accent-blue)"
+                : "var(--foreground)",
+            }}
+          />
+        </Button>
+        <Button
+          variant="outline"
+          className={styles.btnV}
+          onClick={handleFlipVertical}
+          aria-label={i18n("vertical")}
+          data-tooltip={i18n("vertical")}
+        >
+          <FlipV
+            style={{
+              color: flipVertical ? "var(--accent-blue)" : "var(--foreground)",
+            }}
+          />
+        </Button>
+      </Tooltip>
       <SaveCloseGroup
         disabled={!flipHorizontal && !flipVertical}
         saving={isSaving}

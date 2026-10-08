@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
+import { emitShapeMaskUpdate } from "../eventBus";
 import { SHAPE_BORDER } from "../constants";
 import { getInitalCrop } from "../utils/crop";
 import {
@@ -10,7 +11,10 @@ import {
   type ShapeType,
 } from "../types";
 
-export const useShape = () => {
+const MIN_OUTLINE = 1;
+const MAX_OUTLINE = 25;
+
+export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
   const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
     usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
@@ -23,6 +27,7 @@ export const useShape = () => {
         border: currentAction.args.border,
       }
     : { shape: "heart", outlined: false, border: SHAPE_BORDER };
+  const borderPercent = Math.round(mask.border * 1000) / 10;
 
   const clipPathRef = useRef<CropRect>(getInitalCrop(1, width, height));
 
@@ -50,6 +55,15 @@ export const useShape = () => {
 
   const handleToggleOutlined = () => update({ outlined: !mask.outlined });
 
+  const handleSliderInput = (value: number) => {
+    if (valueRef.current) {
+      valueRef.current.textContent = value.toFixed(1);
+    }
+    emitShapeMaskUpdate(eventBus, { ...mask, border: value / 100 });
+  };
+
+  const handleSliderChange = (value: number) => update({ border: value / 100 });
+
   const handleSave = () => {
     if (!isShapes) return;
 
@@ -63,10 +77,15 @@ export const useShape = () => {
 
   return {
     ...mask,
+    borderPercent,
+    handleSliderInput,
+    handleSliderChange,
     handleChangeShape,
     handleToggleOutlined,
     handleSave,
     handleClose: close,
     isSaving,
+    MIN_OUTLINE,
+    MAX_OUTLINE,
   };
 };

@@ -1,4 +1,4 @@
-import type { ActionFilter, CropRect } from "./types";
+import type { ActionFilter, CropRect, ShapeMask } from "./types";
 
 export const emitCropUpdate = (eventBus: EventTarget, detail: CropRect) => {
   const event = new CustomEvent<CropRect>("crop-update", { detail });
@@ -20,6 +20,14 @@ export const emitFilterUpdate = (
   detail: ActionFilter,
 ) => {
   const event = new CustomEvent<ActionFilter>("filter-update", { detail });
+  eventBus.dispatchEvent(event);
+};
+
+export const emitShapeMaskUpdate = (
+  eventBus: EventTarget,
+  detail: ShapeMask,
+) => {
+  const event = new CustomEvent<ShapeMask>("shape-mask-update", { detail });
   eventBus.dispatchEvent(event);
 };
 

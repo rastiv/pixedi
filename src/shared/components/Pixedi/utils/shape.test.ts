@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { shapes } from "../constants/shapes";
-import { getShapeMaskGeometry, getShapeMaskImage } from "./shape";
+import {
+  applyShapeMaskImage,
+  getShapeMaskGeometry,
+  getShapeMaskImage,
+} from "./shape";
 
 describe("shapes", () => {
   // a path ending next to (not on) the start makes Z add a tiny segment, whose
@@ -45,6 +49,16 @@ describe("getShapeMaskImage", () => {
     expect(svg).toContain("stroke-width='0.2'");
     expect(svg).toContain("clip-path='url(#s)'");
     expect(svg).toContain("stroke-linejoin='miter'");
+  });
+});
+
+describe("applyShapeMaskImage", () => {
+  it("sets the mask image for the given border", () => {
+    const el = document.createElement("div");
+    const mask = { shape: "star", outlined: true, border: 0.125 } as const;
+    applyShapeMaskImage(el, mask);
+    expect(el.style.maskImage).toBe(getShapeMaskImage(mask));
+    expect(decode(el.style.maskImage)).toContain("stroke-width='0.25'");
   });
 });
 

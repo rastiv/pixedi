@@ -1,10 +1,15 @@
-.btnH {
+.tools {
+  display: flex;
+  gap: 4px;
+}
+
+.btnCW {
   width: 36px;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
 
-.btnV {
+.btnCCW {
   width: 36px;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;

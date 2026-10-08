@@ -1,0 +1,8 @@
+.tools {
+  display: flex;
+  gap: 4px;
+}
+
+.select {
+  width: 220px;
+}

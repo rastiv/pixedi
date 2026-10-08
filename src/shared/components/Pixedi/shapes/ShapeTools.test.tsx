@@ -85,6 +85,31 @@ describe("ShapeTools", () => {
     });
   });
 
+  it("controls the outline border with the slider", () => {
+    const { container, getByTestId, getByLabelText, getByText } =
+      renderShapes();
+
+    fireEvent.click(getByLabelText("outlined"));
+    const input = container.querySelector<HTMLInputElement>(
+      'input[type="range"]',
+    )!;
+    const isMasked = (el: HTMLElement) =>
+      decodeURIComponent(el.style.maskImage).includes("stroke-width='0.25'");
+
+    fireEvent.input(input, { target: { value: "12.5" } });
+    expect(getByText("12.5")).toBeTruthy();
+    expect(
+      Array.from(container.querySelectorAll<HTMLElement>("div")).some(isMasked),
+    ).toBe(true);
+
+    fireEvent.pointerUp(input);
+    fireEvent.click(
+      container.querySelector<HTMLButtonElement>('button[aria-label="Save"]')!,
+    );
+
+    expect(getItem(getByTestId).action.args.border).toBe(0.125);
+  });
+
   it("masks the committed shape in the preview", () => {
     const { container } = renderShapes();
 
