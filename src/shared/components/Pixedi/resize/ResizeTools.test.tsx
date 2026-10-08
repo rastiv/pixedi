@@ -38,7 +38,9 @@ const getPreview = (container: HTMLElement) =>
     .parentElement!;
 
 const getInputs = (container: HTMLElement) =>
-  Array.from(container.querySelectorAll<HTMLInputElement>("input"));
+  ["width", "height"].map((name) =>
+    container.querySelector<HTMLInputElement>(`input[name="${name}"]`)!,
+  );
 
 describe("ResizeTools", () => {
   it("keeps dimensions proportional and clamps typed values", () => {
