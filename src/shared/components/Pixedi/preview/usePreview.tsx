@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
-import { ActionName, type CropRect } from "../types";
+import { ActionName, type CropRect, type ShapeMask } from "../types";
 import { getOrientedSizes } from "../utils/crop";
 import { getPreviewLayers } from "../utils/preview";
-import { applyShapeMaskGeometry } from "../utils/shape";
+import { applyShapeMaskGeometry, applyShapeMaskImage } from "../utils/shape";
 
 type UsePreviewProps = {
   isClipped?: boolean;
@@ -122,6 +122,14 @@ export const usePreview = ({
       }
     };
 
+    const onShapeMaskUpdate = (event: Event) => {
+      if (!isMasked || !previewRef.current) return;
+      applyShapeMaskImage(
+        previewRef.current,
+        (event as CustomEvent<ShapeMask>).detail,
+      );
+    };
+
     const onFilterUpdate = (event: Event) => {
       if (!isFilter) return;
       const customEvent = event as CustomEvent<Record<string, number | string>>;
@@ -158,6 +166,9 @@ export const usePreview = ({
 
     eventBus.addEventListener("resize-update", onResizeUpdate, { signal });
     eventBus.addEventListener("clip-path-update", onClipPathUpdate, { signal });
+    eventBus.addEventListener("shape-mask-update", onShapeMaskUpdate, {
+      signal,
+    });
     eventBus.addEventListener("filter-update", onFilterUpdate, { signal });
     eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
 

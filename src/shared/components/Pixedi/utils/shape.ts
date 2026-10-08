@@ -47,6 +47,12 @@ export const getShapeMaskStyle = (
   };
 };
 
+export const applyShapeMaskImage = (el: HTMLElement, mask: ShapeMask) => {
+  const image = getShapeMaskImage(mask);
+  el.style.maskImage = image;
+  el.style.setProperty("-webkit-mask-image", image);
+};
+
 export const applyShapeMaskGeometry = (el: HTMLElement, rect: CropRect) => {
   const { size, position } = getShapeMaskGeometry(rect);
   el.style.maskSize = size;

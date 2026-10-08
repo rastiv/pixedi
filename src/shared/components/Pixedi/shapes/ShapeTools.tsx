@@ -24,7 +24,7 @@ export const ShapeTools = () => {
   const {
     shape,
     outlined,
-    sliderValue,
+    borderPercent,
     handleSliderInput,
     handleSliderChange,
     handleChangeShape,
@@ -44,13 +44,13 @@ export const ShapeTools = () => {
         min={MIN_OUTLINE}
         max={MAX_OUTLINE}
         step={0.5}
-        value={7.5}
+        value={borderPercent}
         unit="%"
         onInput={handleSliderInput}
         onChange={handleSliderChange}
       />
       <div className={styles.value}>
-        <div ref={valueRef}>{sliderValue.toFixed(1)}</div>
+        <div ref={valueRef}>{borderPercent.toFixed(1)}</div>
         <div>%</div>
       </div>
     </div>

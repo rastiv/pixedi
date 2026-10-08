@@ -1,6 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
+import { emitShapeMaskUpdate } from "../eventBus";
 import { SHAPE_BORDER } from "../constants";
 import { getInitalCrop } from "../utils/crop";
 import {
@@ -11,13 +12,11 @@ import {
 } from "../types";
 
 const MIN_OUTLINE = 1.5;
-const MAX_OUTLINE = 25;
-const DEFAULT_SLIDER_VALUE = 7.5;
+const MAX_OUTLINE = 20;
 
 export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
   const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
     usePixediContext();
-  const [sliderValue, setSliderValue] = useState<number>(DEFAULT_SLIDER_VALUE);
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const isShapes = currentAction?.name === ActionName.SHAPES;
@@ -28,6 +27,7 @@ export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
         border: currentAction.args.border,
       }
     : { shape: "heart", outlined: false, border: SHAPE_BORDER };
+  const borderPercent = Math.round(mask.border * 1000) / 10;
 
   const clipPathRef = useRef<CropRect>(getInitalCrop(1, width, height));
 
@@ -59,11 +59,10 @@ export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
     if (valueRef.current) {
       valueRef.current.textContent = value.toFixed(1);
     }
+    emitShapeMaskUpdate(eventBus, { ...mask, border: value / 100 });
   };
 
-  const handleSliderChange = (value: number) => {
-    setSliderValue(value);
-  };
+  const handleSliderChange = (value: number) => update({ border: value / 100 });
 
   const handleSave = () => {
     if (!isShapes) return;
@@ -78,7 +77,7 @@ export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
 
   return {
     ...mask,
-    sliderValue,
+    borderPercent,
     handleSliderInput,
     handleSliderChange,
     handleChangeShape,
