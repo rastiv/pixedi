@@ -40,7 +40,7 @@
 }
 
 .root[data-theme="dark"] {
-  --color-white-fade: color-mix(in srgb, var(--color-white) 45%, transparent);
+  --color-white-fade: color-mix(in srgb, var(--color-black) 35%, transparent);
   --background: oklch(0.245 0 0);
   --background-fade: color-mix(in srgb, var(--background) 70%, transparent);
   --foreground: oklch(0.785 0 0);

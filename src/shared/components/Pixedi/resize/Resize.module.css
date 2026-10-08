@@ -49,5 +49,6 @@
   & > div:last-child {
     padding: 6px 4px;
     border-left: solid 1px var(--border);
+    color: var(--muted-foreground);
   }
 }

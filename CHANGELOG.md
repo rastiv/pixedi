@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+# 1.15.1
+
+- Fix label color in dark theme.
+
 # 1.15.0
 
 - Improve surface component.

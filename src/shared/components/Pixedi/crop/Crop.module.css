@@ -26,7 +26,7 @@
 }
 .line {
   position: absolute;
-  border: 1px dashed var(--color-white);
+  border: 1px dashed var(--color-white-fade);
   opacity: 0.5;
 }
 .lineV {
@@ -110,6 +110,7 @@
   b {
     font-weight: 600;
     transform: translateY(1px);
+    color: var(--foreground);
   }
 }
 .infoX {
