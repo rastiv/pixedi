@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useMobile } from "../../hooks";
 import { useSurfaceToolOffset } from "./SurfaceToolContext";
 import type { SurfaceToolOffset } from "./SurfaceToolContext";
 
@@ -41,106 +40,100 @@ export const useSurfaceTool = ({
   surfaceRef,
   hasAdditional,
 }: UseSurfaceToolArgs) => {
-  const mobile = useMobile();
   const offsetRef = useSurfaceToolOffset();
+  const pointerIdRef = useRef<number | null>(null);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
   const startOffsetRef = useRef<SurfaceToolOffset>({ dx: 0, dy: 0 });
   const boundsRef = useRef<ReturnType<typeof getOffsetBounds>>(null);
 
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+  const commit = (el: HTMLDivElement, offset: SurfaceToolOffset) => {
+    offsetRef.current = offset;
+    applyOffset(el, offset);
+  };
+
+  // no preventDefault here: it would suppress the compatibility mousedown that
+  // click-outside listeners (e.g. select dropdowns) rely on; touch-action and
+  // user-select on the handle already block scrolling and text selection
+  const handlePointerDown = (e: React.PointerEvent<Element>) => {
+    if (pointerIdRef.current !== null || e.button !== 0) return;
+
     const el = surfaceRef.current;
     if (!el) return;
 
     const bounds = getOffsetBounds(el, offsetRef.current);
     if (!bounds) return;
 
-    const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-    const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
-    startPointRef.current = { x: clientX, y: clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+    pointerIdRef.current = e.pointerId;
+    startPointRef.current = { x: e.clientX, y: e.clientY };
     startOffsetRef.current = { ...offsetRef.current };
     boundsRef.current = bounds;
+  };
 
-    if (!mobile) {
-      document.body.style.cursor = "move";
+  const handlePointerMove = (e: React.PointerEvent<Element>) => {
+    const el = surfaceRef.current;
+    const start = startPointRef.current;
+    const bounds = boundsRef.current;
+    if (e.pointerId !== pointerIdRef.current || !el || !start || !bounds) {
+      return;
     }
+
+    commit(el, {
+      dx: clamp(
+        startOffsetRef.current.dx + (e.clientX - start.x),
+        bounds.minDx,
+        bounds.maxDx,
+      ),
+      dy: clamp(
+        startOffsetRef.current.dy + (e.clientY - start.y),
+        bounds.minDy,
+        bounds.maxDy,
+      ),
+    });
+  };
+
+  const handlePointerEnd = (e: React.PointerEvent<Element>) => {
+    if (e.pointerId !== pointerIdRef.current) return;
+
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    pointerIdRef.current = null;
+    startPointRef.current = null;
+    boundsRef.current = null;
   };
 
   useEffect(() => {
     const el = surfaceRef.current;
     if (!el) return;
 
-    const commit = (offset: SurfaceToolOffset) => {
-      offsetRef.current = offset;
-      applyOffset(el, offset);
-    };
-
     const clampToParent = () => {
       const bounds = getOffsetBounds(el, offsetRef.current);
       if (!bounds) return;
       const { dx, dy } = offsetRef.current;
-      commit({
+      offsetRef.current = {
         dx: clamp(dx, bounds.minDx, bounds.maxDx),
         dy: clamp(dy, bounds.minDy, bounds.maxDy),
-      });
-    };
-
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      const start = startPointRef.current;
-      const bounds = boundsRef.current;
-      if (!start || !bounds) return;
-
-      e.preventDefault();
-
-      const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-      const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
-
-      commit({
-        dx: clamp(
-          startOffsetRef.current.dx + (clientX - start.x),
-          bounds.minDx,
-          bounds.maxDx,
-        ),
-        dy: clamp(
-          startOffsetRef.current.dy + (clientY - start.y),
-          bounds.minDy,
-          bounds.maxDy,
-        ),
-      });
-    };
-
-    const handleEnd = () => {
-      if (!startPointRef.current) return;
-      startPointRef.current = null;
-      boundsRef.current = null;
-      if (!mobile) {
-        document.body.style.cursor = "";
-      }
+      };
+      applyOffset(el, offsetRef.current);
     };
 
     // restore the offset a previously mounted tool was dragged to
     clampToParent();
 
-    const controller = new AbortController();
-    const { signal } = controller;
+    if (typeof ResizeObserver === "undefined" || !el.parentElement) return;
 
-    document.addEventListener("mousemove", handleMove, { signal });
-    document.addEventListener("touchmove", handleMove, {
-      signal,
-      passive: false,
-    });
-    document.addEventListener("mouseup", handleEnd, { signal });
-    document.addEventListener("touchend", handleEnd, { signal });
-
-    if (typeof ResizeObserver !== "undefined" && el.parentElement) {
-      const observer = new ResizeObserver(clampToParent);
-      observer.observe(el.parentElement);
-      signal.addEventListener("abort", () => observer.disconnect());
-    }
-
-    return () => controller.abort();
-  }, [surfaceRef, offsetRef, mobile, hasAdditional]);
+    const observer = new ResizeObserver(clampToParent);
+    observer.observe(el.parentElement);
+    return () => observer.disconnect();
+  }, [surfaceRef, offsetRef, hasAdditional]);
 
   return {
-    handleDragStart,
+    dragHandlers: {
+      onPointerDown: handlePointerDown,
+      onPointerMove: handlePointerMove,
+      onPointerUp: handlePointerEnd,
+      onPointerCancel: handlePointerEnd,
+    },
   };
 };

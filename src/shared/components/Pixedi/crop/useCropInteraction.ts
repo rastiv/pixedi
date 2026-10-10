@@ -117,7 +117,8 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
       return;
     }
 
-    e.preventDefault();
+    // no preventDefault: it would suppress the compatibility mousedown that
+    // click-outside listeners rely on; touch-action/user-select cover the rest
     e.currentTarget.setPointerCapture(e.pointerId);
 
     pointerIdRef.current = e.pointerId;
