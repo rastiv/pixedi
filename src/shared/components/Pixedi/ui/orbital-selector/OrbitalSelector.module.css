@@ -98,14 +98,19 @@
   fill: none;
   position: absolute;
   inset: 5px;
-  width: calc(100% - 8px);
-  height: calc(100% - 8px);
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  overflow: visible;
   pointer-events: none;
+  transform: rotate(-90deg);
 
-  path {
+  circle {
     stroke: var(--accent-blue);
-    stroke-width: 4px;
+    stroke-width: 10px;
     stroke-linecap: round;
-    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 360 360;
+    transition:
+      stroke-dashoffset 0.2s ease,
+      opacity 0.2s ease;
   }
 }

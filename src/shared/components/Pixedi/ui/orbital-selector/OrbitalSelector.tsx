@@ -9,24 +9,6 @@ type OrbitalSelectorProps = {
   onInput?: (value: number) => void;
 };
 
-const generateArcPath = (angleInDegrees: number): string => {
-  const cx = 12;
-  const cy = 12;
-  const radius = 11;
-
-  const radians = ((angleInDegrees - 90) * Math.PI) / 180;
-
-  const endX = cx + radius * Math.cos(radians);
-  const endY = cy + radius * Math.sin(radians);
-
-  const largeArcFlag = angleInDegrees > 180 ? 1 : 0;
-
-  const startX = 12;
-  const startY = 1;
-
-  return `M ${startX},${startY} A ${radius},${radius} 0 ${largeArcFlag},1 ${endX.toFixed(4)},${endY.toFixed(4)}`;
-};
-
 export const OrbitalSelector = ({
   value,
   angles,
@@ -39,10 +21,18 @@ export const OrbitalSelector = ({
     <div className={`${styles.container} ${className}`}>
       <div className={styles.ring} />
 
-      <svg xmlns="http://w3.org" viewBox="0 0 24 24" className={styles.arc}>
-        {value > 0 && (
-          <path d={generateArcPath(value)} className={styles.activeArc} />
-        )}
+      <svg xmlns="http://www.w3.org/2000/svg" className={styles.arc}>
+        <circle
+          cx="50%"
+          cy="50%"
+          r="50%"
+          pathLength={360}
+          className={styles.activeArc}
+          style={{
+            strokeDashoffset: 360 - Math.min(Math.max(value, 0), 360),
+            opacity: value > 0 ? 0.4 : 0,
+          }}
+        />
       </svg>
 
       {angles?.map((angle) => (
