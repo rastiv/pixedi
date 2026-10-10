@@ -56,7 +56,7 @@
   --ring: oklch(0.556 0 0);
   --overlay-bg: color-mix(in srgb, var(--color-black) 75%, transparent);
   --surface-border: solid 1px var(--border);
-  --orbital-track: color-mix(in oklch, var(--color-white) 11%, transparent);
+  --orbital-track: color-mix(in oklch, var(--color-white) 20%, transparent);
 }
 
 .root h1,

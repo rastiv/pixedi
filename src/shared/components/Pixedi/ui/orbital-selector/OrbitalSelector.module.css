@@ -28,11 +28,14 @@
     height: 10px;
     transform: translateX(-50%);
     border-radius: 50%;
-    background-color: var(--accent-blue);
+    background-image: radial-gradient(
+      circle,
+      var(--color-white) 0%,
+      var(--color-white) 10%,
+      var(--accent-blue) 50%,
+      var(--accent-blue) 100%
+    );
   }
-  /* &:hover::before {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  } */
   &::before {
     content: "";
     position: absolute;
@@ -50,7 +53,7 @@
   }
   &:hover::before {
     transform: translate(-50%, calc(-50% + 5px)) scale(1);
-    opacity: 0.15;
+    opacity: 0.25;
   }
 }
 .thumb {
