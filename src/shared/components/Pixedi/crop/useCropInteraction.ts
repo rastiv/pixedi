@@ -73,6 +73,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     [ratio, width, height],
   );
 
+  const pointerIdRef = useRef<number | null>(null);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
   const directionRef = useRef<Direction | "">("");
   // the crop rect lives here in frame percentages and is never read back from
@@ -85,153 +86,107 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     emitClipPathUpdate(eventBus, initialCrop);
   }, [initialCrop, eventBus]);
 
-  const handleCropStart = (
-    e: React.MouseEvent | React.TouchEvent,
-    type: Direction,
-    cursor?: string,
-  ) => {
-    if (!boxRef.current) return;
+  const commit = (elCrop: HTMLDivElement, rect: CropRect) => {
+    rectRef.current = rect;
+    applyRect(elCrop, rect);
 
-    e.stopPropagation();
-    e.preventDefault();
+    emitCropUpdate(eventBus, {
+      x: Math.round((rect.x / 100) * width),
+      y: Math.round((rect.y / 100) * height),
+      w: Math.round((rect.w / 100) * width),
+      h: Math.round((rect.h / 100) * height),
+    });
+    emitClipPathUpdate(eventBus, rect);
+  };
 
-    startRectRef.current = rectRef.current;
-
-    const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-    const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
-    startPointRef.current = { x: clientX, y: clientY };
+  // handles call this before the event bubbles up to the box, which then
+  // starts the gesture as a resize instead of a move
+  const handleCropStart = (type: Direction, cursor?: string) => {
+    if (pointerIdRef.current !== null) return;
     directionRef.current = type;
-
-    if (!mobile) {
+    if (!mobile && boxRef.current) {
       boxRef.current.style.cursor = `${cursor}-resize`;
-      document.body.style.cursor = `${cursor}-resize`;
     }
   };
 
-  useEffect(() => {
-    const commit = (elCrop: HTMLDivElement, rect: CropRect) => {
-      rectRef.current = rect;
-      applyRect(elCrop, rect);
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (pointerIdRef.current !== null) return;
+    if (e.button !== 0) {
+      directionRef.current = "";
+      e.currentTarget.style.cursor = "";
+      return;
+    }
 
-      emitCropUpdate(eventBus, {
-        x: Math.round((rect.x / 100) * width),
-        y: Math.round((rect.y / 100) * height),
-        w: Math.round((rect.w / 100) * width),
-        h: Math.round((rect.h / 100) * height),
-      });
-      emitClipPathUpdate(eventBus, rect);
-    };
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
 
-    const handleDragStart = (e: MouseEvent | TouchEvent) => {
-      e.preventDefault();
-      startRectRef.current = rectRef.current;
-      const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-      const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
-      startPointRef.current = { x: clientX, y: clientY };
-      document.body.style.cursor = "move";
-    };
+    pointerIdRef.current = e.pointerId;
+    startRectRef.current = rectRef.current;
+    startPointRef.current = { x: e.clientX, y: e.clientY };
+  };
 
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!boxRef.current || !startPointRef.current) return;
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerId !== pointerIdRef.current || !startPointRef.current) return;
 
-      e.preventDefault();
+    const elCrop = e.currentTarget;
+    const parent = elCrop.parentElement;
+    if (!parent) return;
 
-      const elCrop = boxRef.current;
-      const parent = elCrop.parentElement;
-      if (!parent) return;
+    const { frameW, frameH } = getFrameSize(parent);
+    const start = startPointRef.current;
 
-      const { frameW, frameH } = getFrameSize(parent);
-
-      if (directionRef.current) {
-        handleResize(e, elCrop, frameW, frameH);
-        return;
-      }
-
-      handleDrag(e, elCrop, frameW, frameH);
-    };
-
-    const handleResize = (
-      e: MouseEvent | TouchEvent,
-      elCrop: HTMLDivElement,
-      frameW: number,
-      frameH: number,
-    ) => {
-      if (!startPointRef.current) return;
-
-      const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-      const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
+    if (directionRef.current) {
       const resized = getCropPoints(
-        directionRef.current as Direction,
+        directionRef.current,
         isFree,
         ratio,
-        startPointRef.current.x,
-        startPointRef.current.y,
-        clientX,
-        clientY,
+        start.x,
+        start.y,
+        e.clientX,
+        e.clientY,
         frameW,
         frameH,
         toPixels(startRectRef.current, frameW, frameH),
         toPixels(rectRef.current, frameW, frameH),
       );
-
       const rect = toPercent(resized, frameW, frameH);
-
       commit(
         elCrop,
         isFree ? rect : snapRectToRatio(rect, ratio, width, height),
       );
-    };
+      return;
+    }
 
-    const handleDrag = (
-      e: MouseEvent | TouchEvent,
-      elCrop: HTMLDivElement,
-      frameW: number,
-      frameH: number,
-    ) => {
-      if (!startPointRef.current) return;
+    const { x, y, w, h } = startRectRef.current;
+    const dx = ((e.clientX - start.x) / frameW) * 100;
+    const dy = ((e.clientY - start.y) / frameH) * 100;
 
-      const { x, y, w, h } = startRectRef.current;
-      const clientX = "clientX" in e ? e.clientX : e.touches[0].clientX;
-      const clientY = "clientY" in e ? e.clientY : e.touches[0].clientY;
-      const dx = ((clientX - startPointRef.current.x) / frameW) * 100;
-      const dy = ((clientY - startPointRef.current.y) / frameH) * 100;
-
-      commit(elCrop, {
-        x: clamp(x + dx, 0, Math.max(0, 100 - w)),
-        y: clamp(y + dy, 0, Math.max(0, 100 - h)),
-        w,
-        h,
-      });
-    };
-
-    const handleMoveEnd = () => {
-      if (!boxRef.current) return;
-      startPointRef.current = null;
-      directionRef.current = "";
-      boxRef.current.style.cursor = "move";
-      document.body.style.cursor = "auto";
-    };
-
-    if (!boxRef.current) return;
-
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    boxRef.current.addEventListener("mousedown", handleDragStart, { signal });
-    boxRef.current.addEventListener("touchstart", handleDragStart, {
-      signal,
-      passive: false,
+    commit(elCrop, {
+      x: clamp(x + dx, 0, Math.max(0, 100 - w)),
+      y: clamp(y + dy, 0, Math.max(0, 100 - h)),
+      w,
+      h,
     });
-    document.addEventListener("mousemove", handleMove, { signal });
-    document.addEventListener("touchmove", handleMove, {
-      signal,
-      passive: false,
-    });
-    document.addEventListener("mouseup", handleMoveEnd, { signal });
-    document.addEventListener("touchend", handleMoveEnd, { signal });
+  };
 
-    return () => controller.abort();
-  }, [isFree, ratio, width, height, boxRef, eventBus]);
+  const handlePointerEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerId !== pointerIdRef.current) return;
 
-  return { handleCropStart, initialCrop };
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    pointerIdRef.current = null;
+    startPointRef.current = null;
+    directionRef.current = "";
+    e.currentTarget.style.cursor = "";
+  };
+
+  const boxHandlers = {
+    onPointerDown: handlePointerDown,
+    onPointerMove: handlePointerMove,
+    onPointerUp: handlePointerEnd,
+    onPointerCancel: handlePointerEnd,
+  };
+
+  return { handleCropStart, boxHandlers, initialCrop };
 };

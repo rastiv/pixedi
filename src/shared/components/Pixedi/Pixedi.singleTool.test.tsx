@@ -27,7 +27,7 @@ vi.mock("./utils/imageProcessor", () => ({
   })),
 }));
 
-const settings: Settings = { tools: ["rotate"] };
+const settings: Settings = { tools: ["flip"] };
 
 const renderSingleTool = (onSave = vi.fn(), onBack = vi.fn()) => {
   const view = render(
@@ -71,7 +71,7 @@ describe("Pixedi single tool mode", () => {
   it("opens the only tool without the header", () => {
     const { container } = renderSingleTool();
 
-    expect(getButton(container, "+90°")).toBeTruthy();
+    expect(getButton(container, "Horizontal")).toBeTruthy();
     expect(container.textContent).not.toContain("Reset");
   });
 
@@ -87,7 +87,7 @@ describe("Pixedi single tool mode", () => {
   it("processes the image and calls onSave", async () => {
     const { container, onSave } = renderSingleTool();
 
-    fireEvent.click(getButton(container, "+90°"));
+    fireEvent.click(getButton(container, "Horizontal"));
     fireEvent.click(getButton(container, "Save"));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledWith(newBlob));
@@ -104,7 +104,7 @@ describe("Pixedi single tool mode", () => {
     );
     const { container } = renderSingleTool(onSave);
 
-    fireEvent.click(getButton(container, "+90°"));
+    fireEvent.click(getButton(container, "Horizontal"));
     fireEvent.click(getButton(container, "Save"));
 
     await waitFor(() => expect(onSave).toHaveBeenCalled());

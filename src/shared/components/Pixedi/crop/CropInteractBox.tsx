@@ -5,7 +5,9 @@ import { Preview } from "../preview";
 export const CropInteractBox = () => {
   const boxRef = useRef<HTMLDivElement>(null);
 
-  const { handleCropStart, initialCrop } = useCropInteraction({ boxRef });
+  const { handleCropStart, boxHandlers, initialCrop } = useCropInteraction({
+    boxRef,
+  });
   const { x, y, w, h } = initialCrop;
 
   return (
@@ -17,6 +19,7 @@ export const CropInteractBox = () => {
       <CropBox
         boxRef={boxRef}
         rect={initialCrop}
+        boxHandlers={boxHandlers}
         onCropStart={handleCropStart}
       />
     </>
