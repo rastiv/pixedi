@@ -7,6 +7,7 @@ A lightweight, embeddable React image editor component.
 ## Features
 
 - Crop with free or fixed-ratio selection
+- Shape crop — mask the image with one of 20 shapes, filled or outlined
 - Resize by exact pixel dimensions
 - Horizontal and vertical flip
 - Rotation
@@ -99,15 +100,15 @@ function AppBase64() {
 
 ### Settings
 
-| Setting        | Type                                                                           | Default                                                    | Description                                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `tools`        | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters">` | `["resize","crop","presetCrop","flip","rotate","filters"]` | Tools to show in the sidebar. A single tool switches to [single-tool mode](#single-tool-mode). Use an empty array to disable editing. |
-| `infobar`      | `boolean`                                                                      | `true`                                                     | Show the image info panel below the canvas.                                                                                           |
-| `quality`      | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
-| `saveAsWEBP`   | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                                                       |
-| `exportAs`     | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
-| `background`   | `"circled" \| "diagonals" \| "rhombus"`                                        | —                                                          | Apply a decorative pattern to the editor frame background.                                                                            |
-| `maxImageSize` | `number`                                                                       | —                                                          | Max length in px of the longest side of the saved image. Larger images are downscaled proportionally on Save.                         |
+| Setting        | Type                                                                                       | Default                                                             | Description                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `tools`        | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters" \| "shapes">` | `["resize","crop","presetCrop","flip","rotate","filters","shapes"]` | Tools to show in the sidebar. A single tool switches to [single-tool mode](#single-tool-mode). Use an empty array to disable editing. |
+| `infobar`      | `boolean`                                                                                  | `true`                                                              | Show the image info panel below the canvas.                                                                                           |
+| `quality`      | `number`                                                                                   | `0.85`                                                              | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
+| `saveAsWEBP`   | `boolean`                                                                                  | `false`                                                             | Encode the final image as WebP.                                                                                                       |
+| `exportAs`     | `"blob" \| "base64"`                                                                       | `"blob"`                                                            | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
+| `background`   | `"circled" \| "diagonals" \| "rhombus"`                                                    | —                                                                   | Apply a decorative pattern to the editor frame background.                                                                            |
+| `maxImageSize` | `number`                                                                                   | —                                                                   | Max length in px of the longest side of the saved image. Larger images are downscaled proportionally on Save.                         |
 
 ## Localization
 
@@ -138,6 +139,7 @@ Available keys and their default English values:
 | `flip`                 | `Flip`                 |
 | `rotate`               | `Rotate`               |
 | `filters`              | `Filters`              |
+| `shapes`               | `Shapes`               |
 | `width`                | `Width`                |
 | `height`               | `Height`               |
 | `freeform`             | `Free form`            |
@@ -155,6 +157,8 @@ Available keys and their default English values:
 | `hueRotate`            | `Hue Rotate`           |
 | `brightness`           | `Brightness`           |
 | `contrast`             | `Contrast`             |
+| `fullfield`            | `Fullfield`            |
+| `outlined`             | `Outlined`             |
 | `msgNoTools`           | `No tools selected`    |
 | `msgFailedToLoadImage` | `Failed to load image` |
 
@@ -214,6 +218,13 @@ SVG-based filters selected from a dropdown. Each is a non-destructive preset app
 ### Compare mode
 
 Click the Compare button in the filter toolbar to toggle a side-by-side before/after view. The original image is shown at full opacity while the comparison is active.
+
+## Shape crop
+
+The Shapes tool (`"shapes"`) crops the image to a silhouette selected from a dropdown of 20 shapes (star, heart, shield, tag, flower, droplet, moon, circle, ellipse, polygons, and more). A toolbar toggle switches between two modes:
+
+- **Fullfield** — the image is clipped to the filled shape.
+- **Outlined** — only the shape's outline is kept, with a border-width slider (in % of the image).
 
 ## Widget CDN
 

@@ -11,6 +11,7 @@ Pixedi provides a ready-to-use image editing UI with cropping, resizing, image a
 ## Features
 
 - **Crop** — free-form or fixed-ratio selection
+- **Shape crop** — mask the image with one of 20 shapes (star, heart, circle, polygon, …), filled or outlined
 - **Resize** — set exact pixel dimensions
 - **Flip** — horizontal and vertical
 - **Rotate** — arbitrary angle
