@@ -9,3 +9,4 @@ export { Slider } from "./slider/Slider";
 export { Tooltip } from "./tooltip/Tooltip";
 export { SurfaceTool } from "./surface-tool/SurfaceTool";
 export { SurfaceToolOffsetProvider } from "./surface-tool/SurfaceToolOffsetProvider";
+export { OrbitalSelector } from "./orbital-selector/OrbitalSelector";
