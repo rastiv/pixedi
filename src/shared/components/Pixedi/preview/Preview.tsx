@@ -19,39 +19,50 @@ type PreviewLayerProps = {
 
 // every layer renders one history segment; earlier segments are nested inside
 // as the "image" of the later ones, so baked shapes transform with later edits
+// places the source image inside the region box; a region cut out of a tilted
+// view is turned back around its center
+const getContentStyle = ({
+  region,
+  initWidth,
+  initHeight,
+}: PreviewData): React.CSSProperties => {
+  const { cx, cy, w, h, angle } = region;
+  return {
+    width: `${(initWidth / w) * 100}%`,
+    height: `${(initHeight / h) * 100}%`,
+    left: `${-((cx - w / 2) / w) * 100}%`,
+    top: `${-((cy - h / 2) / h) * 100}%`,
+    ...(angle
+      ? {
+          transformOrigin: `${(cx / initWidth) * 100}% ${(cy / initHeight) * 100}%`,
+          transform: `rotate(${-angle}deg)`,
+        }
+      : {}),
+  };
+};
+
 const PreviewLayer = ({ layers, previewUrl }: PreviewLayerProps) => {
-  const {
-    box,
-    boxWidth,
-    boxHeight,
-    viewWidth,
-    viewHeight,
-    rotation,
-    flipH,
-    flipV,
-  } = layers.at(-1)!;
+  const layer = layers.at(-1)!;
+  const { region, viewWidth, viewHeight, beta, scale, flipX, flipY } = layer;
   const inner = layers.slice(0, -1);
   const innerShape = inner.at(-1)?.shape;
-  const contentStyle = {
-    width: `${(1 / box.w) * 100}%`,
-    height: `${(1 / box.h) * 100}%`,
-    left: `${-(box.x / box.w) * 100}%`,
-    top: `${-(box.y / box.h) * 100}%`,
-  };
+  const contentStyle = getContentStyle(layer);
 
+  // flips live outside the rotation so they mirror the view as it is seen,
+  // the rotate layer zooms in to keep the frame covered at any angle
   return (
     <div
-      className={styles.rotate}
+      className={styles.flip}
       style={{
-        width: `${(boxWidth / viewWidth) * 100}%`,
-        height: `${(boxHeight / viewHeight) * 100}%`,
-        transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+        transform: `scale(${flipX ? -1 : 1}, ${flipY ? -1 : 1})`,
       }}
     >
       <div
-        className={styles.flip}
+        className={styles.rotate}
         style={{
-          transform: `scale(${flipH ? -1 : 1}, ${flipV ? -1 : 1})`,
+          width: `${(region.w / viewWidth) * 100}%`,
+          height: `${(region.h / viewHeight) * 100}%`,
+          transform: `translate(-50%, -50%) rotate(${beta}deg)${scale !== 1 ? ` scale(${scale})` : ""}`,
         }}
       >
         {inner.length ? (

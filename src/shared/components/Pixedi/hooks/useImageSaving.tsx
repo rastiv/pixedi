@@ -32,10 +32,8 @@ export const useImageSaving = () => {
     try {
       const processor = await imageProcessor(originalBlob);
 
-      for (const { crop, flip, rotate, resize, shape } of steps) {
-        if (crop) processor.crop(crop.x, crop.y, crop.w, crop.h);
-        if (flip) processor.flip(flip.horizontal, flip.vertical);
-        if (rotate) processor.rotate(rotate.degrees);
+      for (const { transform, resize, shape } of steps) {
+        if (transform) processor.transform(transform);
         if (resize) processor.resize(resize.width, resize.height);
         if (shape) processor.shape(shape);
       }

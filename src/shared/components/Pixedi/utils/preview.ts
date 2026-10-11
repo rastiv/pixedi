@@ -4,72 +4,71 @@ import {
   type HistoryItem,
   type ShapeMask,
 } from "../types";
-import { isQuarterTurn } from "../utils/crop";
 
-type Mat = [[number, number], [number, number]];
+const EPSILON = 1e-6;
 
-const clamp = (v: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, v));
+export const normalizeAngle = (degrees: number) =>
+  ((degrees % 360) + 360) % 360;
 
-const mul = (a: Mat, b: Mat): Mat => [
-  [
-    a[0][0] * b[0][0] + a[0][1] * b[1][0],
-    a[0][0] * b[0][1] + a[0][1] * b[1][1],
-  ],
-  [
-    a[1][0] * b[0][0] + a[1][1] * b[1][0],
-    a[1][0] * b[0][1] + a[1][1] * b[1][1],
-  ],
-];
-
-const normalizeDegrees = (degrees: number) =>
-  (((Math.round(degrees / 90) % 4) + 4) % 4) * 90;
-
-// clockwise rotation in a y-down coordinate space
-const rotationMatrix = (degrees: number): Mat => {
-  switch (normalizeDegrees(degrees)) {
-    case 90:
-      return [
-        [0, -1],
-        [1, 0],
-      ];
-    case 180:
-      return [
-        [-1, 0],
-        [0, -1],
-      ];
-    case 270:
-      return [
-        [0, 1],
-        [-1, 0],
-      ];
-    default:
-      return [
-        [1, 0],
-        [0, 1],
-      ];
-  }
+// the shortest signed turn from one angle to another, in (-180, 180]
+export const shortestTurn = (from: number, to: number) => {
+  const delta = normalizeAngle(to - from);
+  return delta > 180 ? delta - 360 : delta;
 };
 
-const flipMatrix = (flipH: boolean, flipV: boolean): Mat => [
-  [flipH ? -1 : 1, 0],
-  [0, flipV ? -1 : 1],
-];
+// the angle equivalent to `degrees` that is closest to `reference`
+export const closestTurn = (degrees: number, reference: number) =>
+  reference + shortestTurn(reference, degrees);
 
-// Linear part mapping view coords -> crop-space coords, i.e. the inverse of the
-// view transform: Flip . Rot(-rotation)
-const orientationMatrix = (rotation: number, flipH: boolean, flipV: boolean) =>
-  mul(flipMatrix(flipH, flipV), rotationMatrix(-rotation));
+// exact values on quarter turns, so 90deg does not leave a 1e-16 zoom behind
+const trig = (degrees: number): [cos: number, sin: number] => {
+  const angle = normalizeAngle(degrees);
+  if (angle === 0) return [1, 0];
+  if (angle === 90) return [0, 1];
+  if (angle === 180) return [-1, 0];
+  if (angle === 270) return [0, -1];
+  const rad = (angle * Math.PI) / 180;
+  return [Math.cos(rad), Math.sin(rad)];
+};
 
-// offset that keeps the mapped unit square inside the unit square
-const offsetOf = (m: Mat) => [
-  m[0][0] < 0 || m[0][1] < 0 ? 1 : 0,
-  m[1][0] < 0 || m[1][1] < 0 ? 1 : 0,
-];
+// clockwise rotation in a y-down coordinate space (same as css/canvas rotate)
+const rotate = (x: number, y: number, degrees: number): [number, number] => {
+  const [cos, sin] = trig(degrees);
+  return [x * cos - y * sin, x * sin + y * cos];
+};
 
-const applyOrientation = (m: Mat, u: number, v: number) => {
-  const c = offsetOf(m);
-  return [m[0][0] * u + m[0][1] * v + c[0], m[1][0] * u + m[1][1] * v + c[1]];
+// the frame orientation follows the nearest quarter turn
+const quarterOf = (degrees: number) => Math.round(degrees / 90);
+
+const isOdd = (value: number) => Math.abs(value) % 2 === 1;
+
+// true when the frame is closer to a 90/270 turn, which swaps its axes
+export const isSwapped = (degrees: number) => isOdd(quarterOf(degrees));
+
+// the zoom that makes the rotated region cover the whole frame
+export const getCoverScale = (
+  frameWidth: number,
+  frameHeight: number,
+  width: number,
+  height: number,
+  degrees: number,
+) => {
+  const [cos, sin] = trig(degrees).map(Math.abs);
+  return Math.max(
+    (frameWidth * cos + frameHeight * sin) / width,
+    (frameWidth * sin + frameHeight * cos) / height,
+    1,
+  );
+};
+
+// the part of the original image in play, in source pixels; `angle` is the
+// rotation of its axes in image space (0 unless a crop was made on a tilted view)
+export type Region = {
+  cx: number;
+  cy: number;
+  w: number;
+  h: number;
+  angle: number;
 };
 
 // an open shape tool has no rect yet, only a saved one changes the image
@@ -92,39 +91,64 @@ const getFilters = (items: HistoryItem[]): string[] =>
   );
 
 export type Preview = {
-  box: { x: number; y: number; w: number; h: number };
-  boxWidth: number;
-  boxHeight: number;
+  region: Region;
+  // rotation of the region layer in the view, unnormalized so css animates
+  // the short way round
+  beta: number;
+  // zoom that keeps the rotated region covering the whole frame
+  scale: number;
+  // flips in view space, applied outside the rotation
+  flipX: boolean;
+  flipY: boolean;
+  // the absolute angle the user sees (the last rotate in the segment)
+  degrees: number;
   newWidth: number;
   newHeight: number;
   initWidth: number;
   initHeight: number;
+  // frame sizes in region pixels
   viewWidth: number;
   viewHeight: number;
-  rotation: number;
-  flipH: boolean;
-  flipV: boolean;
   filters: string[];
   shape: ShapeMask | null;
+};
+
+const getFrame = (region: Region, beta: number) => {
+  const swapped = isSwapped(beta);
+  const viewWidth = swapped ? region.h : region.w;
+  const viewHeight = swapped ? region.w : region.h;
+  return {
+    viewWidth,
+    viewHeight,
+    scale: getCoverScale(viewWidth, viewHeight, region.w, region.h, beta),
+  };
 };
 
 export const getPreview = (items: HistoryItem[]): Preview => {
   let initWidth = 1;
   let initHeight = 1;
-  let box = { x: 0, y: 0, w: 1, h: 1 };
-  let rotation = 0;
-  let flipH = false;
-  let flipV = false;
+  let region: Region = { cx: 0.5, cy: 0.5, w: 1, h: 1, angle: 0 };
+  let beta = 0;
+  let flipX = false;
+  let flipY = false;
+  let degrees = 0;
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     if (item.action.name === ActionName.INITIAL) {
       initWidth = item.width;
       initHeight = item.height;
-      box = { x: 0, y: 0, w: 1, h: 1 };
-      rotation = 0;
-      flipH = false;
-      flipV = false;
+      region = {
+        cx: initWidth / 2,
+        cy: initHeight / 2,
+        w: initWidth,
+        h: initHeight,
+        angle: 0,
+      };
+      beta = 0;
+      flipX = false;
+      flipY = false;
+      degrees = 0;
     } else if (
       item.action.name === ActionName.CROP ||
       item.action.name === ActionName.SHAPES
@@ -133,54 +157,47 @@ export const getPreview = (items: HistoryItem[]): Preview => {
       const t = (item.action.args.y ?? 0) / 100;
       const cw = (item.action.args.w ?? 100) / 100;
       const ch = (item.action.args.h ?? 100) / 100;
+      const { viewWidth, viewHeight, scale } = getFrame(region, beta);
 
-      // map the crop rect corners from view space into crop space
-      const m = orientationMatrix(rotation, flipH, flipV);
-      const corners = [
-        applyOrientation(m, l, t),
-        applyOrientation(m, l + cw, t),
-        applyOrientation(m, l, t + ch),
-        applyOrientation(m, l + cw, t + ch),
-      ];
-      const s0 = Math.min(...corners.map((p) => p[0]));
-      const s1 = Math.max(...corners.map((p) => p[0]));
-      const t0 = Math.min(...corners.map((p) => p[1]));
-      const t1 = Math.max(...corners.map((p) => p[1]));
+      // the crop rect in centered view pixels
+      const vx = (l + cw / 2 - 0.5) * viewWidth;
+      const vy = (t + ch / 2 - 0.5) * viewHeight;
+      const vw = cw * viewWidth;
+      const vh = ch * viewHeight;
 
-      box = {
-        x: box.x + s0 * box.w,
-        y: box.y + t0 * box.h,
-        w: box.w * (s1 - s0),
-        h: box.h * (t1 - t0),
+      // back through the view transform (flip, rotate, zoom) into region
+      // pixels, then into image pixels
+      const [lx, ly] = rotate(flipX ? -vx : vx, flipY ? -vy : vy, -beta);
+      const [ix, iy] = rotate(lx / scale, ly / scale, region.angle);
+
+      // the quarter turn and the flips stay on the view, only the residual
+      // tilt moves into the new region, which is axis aligned with the view
+      const quarter = quarterOf(beta);
+      const residual = beta - quarter * 90;
+      const swapped = isOdd(quarter);
+      region = {
+        cx: region.cx + ix,
+        cy: region.cy + iy,
+        w: (swapped ? vh : vw) / scale,
+        h: (swapped ? vw : vh) / scale,
+        angle: region.angle - residual,
       };
-      // cropping never changes the orientation
+      beta = quarter * 90;
     } else if (item.action.name === ActionName.FLIP) {
-      // the history item names the axes as the user sees them, but the flip
-      // layer lives under the rotate layer - at 90/270 the axes are swapped
-      const swapped = isQuarterTurn(rotation);
-      const horizontal = swapped
-        ? item.action.args.vertical
-        : item.action.args.horizontal;
-      const vertical = swapped
-        ? item.action.args.horizontal
-        : item.action.args.vertical;
-      if (horizontal) flipH = !flipH;
-      if (vertical) flipV = !flipV;
+      // the history item names the axes as the user sees them, and the flips
+      // live outside the rotation, so they apply as they are
+      if (item.action.args.horizontal) flipX = !flipX;
+      if (item.action.args.vertical) flipY = !flipY;
     } else if (item.action.name === ActionName.ROTATE) {
-      // degrees are absolute (and kept unnormalized so CSS animates the short
-      // way round): the last rotate up to the pointer wins
-      rotation = item.action.args.degrees;
+      // degrees are absolute: the delta is applied in view space, so a
+      // mirrored view turns the layer the other way round
+      const delta = item.action.args.degrees - degrees;
+      beta += flipX !== flipY ? -delta : delta;
+      degrees = item.action.args.degrees;
     }
   }
 
-  // crop dimensions in original image pixels (axis-aligned in image space)
-  const boxWidth = box.w * initWidth;
-  const boxHeight = box.h * initHeight;
-
-  // 90/270 rotations swap the visible axes, so the view ratio flips
-  const swapped = isQuarterTurn(rotation);
-  const viewWidth = swapped ? boxHeight : boxWidth;
-  const viewHeight = swapped ? boxWidth : boxHeight;
+  const { viewWidth, viewHeight, scale } = getFrame(region, beta);
 
   const lastItem = items.at(-1);
   const newWidth = lastItem?.width || 0;
@@ -198,21 +215,64 @@ export const getPreview = (items: HistoryItem[]): Preview => {
   }
 
   return {
-    box,
-    boxWidth,
-    boxHeight,
+    region,
+    beta,
+    scale,
+    flipX,
+    flipY,
+    degrees,
     newWidth,
     newHeight,
     initWidth,
     initHeight,
     viewWidth,
     viewHeight,
-    rotation,
-    flipH,
-    flipV,
     filters,
     shape,
   };
+};
+
+// stored sizes after rotating the last history item to `degrees`; they only
+// swap when the frame flips between landscape and portrait, which keeps a
+// previous resize intact
+export const getRotatedSizes = (items: HistoryItem[], degrees: number) => {
+  const { width, height } = items.at(-1)!;
+  const segment = splitSegments(items).at(-1)!;
+  const before = getPreview(segment);
+  const after = getPreview([
+    ...segment,
+    { width, height, action: { name: ActionName.ROTATE, args: { degrees } } },
+  ]);
+  return isSwapped(before.beta) === isSwapped(after.beta)
+    ? { width, height }
+    : { width: height, height: width };
+};
+
+const isIdentity = ({
+  region,
+  beta,
+  flipX,
+  flipY,
+  initWidth,
+  initHeight,
+}: Preview) =>
+  !flipX &&
+  !flipY &&
+  normalizeAngle(beta) < EPSILON &&
+  Math.abs(region.angle) < EPSILON &&
+  Math.abs(region.cx - initWidth / 2) < EPSILON &&
+  Math.abs(region.cy - initHeight / 2) < EPSILON &&
+  Math.abs(region.w - initWidth) < EPSILON &&
+  Math.abs(region.h - initHeight) < EPSILON;
+
+export type TransformStep = {
+  region: Region;
+  beta: number;
+  scale: number;
+  flipX: boolean;
+  flipY: boolean;
+  width: number;
+  height: number;
 };
 
 // a shape bakes its mask into the image, so every committed shape closes a
@@ -252,67 +312,49 @@ export const getProcessingSteps = (items: HistoryItem[]) => {
   return { steps, filters: getLastFilterArgs(items) };
 };
 
-export const getActions = (items: HistoryItem[]) => {
+export const getActions = (
+  items: HistoryItem[],
+): {
+  transform?: TransformStep;
+  resize?: { width: number; height: number };
+  filters?: ActionFilter;
+  shape?: ShapeMask;
+} => {
+  const preview = getPreview(items);
   const {
-    box,
-    flipH,
-    flipV,
-    rotation,
+    region,
+    beta,
+    scale,
+    flipX,
+    flipY,
     newWidth,
     newHeight,
-    initWidth,
-    initHeight,
     viewWidth,
     viewHeight,
     shape,
-  } = getPreview(items);
+  } = preview;
 
   const ActionFilter = getLastFilterArgs(items);
 
-  const clampedX = clamp(box.x, 0, 1);
-  const clampedY = clamp(box.y, 0, 1);
-  const clampedBox = {
-    x: clampedX,
-    y: clampedY,
-    w: clamp(box.w, 0, 1 - clampedX),
-    h: clamp(box.h, 0, 1 - clampedY),
-  };
-
-  // the stored degrees are absolute and unnormalized, so 360 has to collapse
-  // to a no-op instead of being handed to the processor
-  const degrees = normalizeDegrees(rotation);
-
   return {
-    ...(clampedBox.x === 0 &&
-    clampedBox.y === 0 &&
-    clampedBox.w === 1 &&
-    clampedBox.h === 1
+    // crop, flips and rotation collapse into one draw; the stored degrees are
+    // absolute and unnormalized, so a full turn collapses to a no-op
+    ...(isIdentity(preview)
       ? {}
       : {
-          crop: {
-            x: Math.round(initWidth * box.x),
-            y: Math.round(initHeight * box.y),
-            w: Math.round(initWidth * box.w),
-            h: Math.round(initHeight * box.h),
+          transform: {
+            region,
+            beta: normalizeAngle(beta),
+            scale,
+            flipX,
+            flipY,
+            width: Math.max(1, Math.round(viewWidth)),
+            height: Math.max(1, Math.round(viewHeight)),
           },
         }),
-    ...(degrees !== 0
-      ? {
-          rotate: {
-            degrees,
-          },
-        }
-      : {}),
-    ...(flipH || flipV
-      ? {
-          flip: {
-            horizontal: flipH,
-            vertical: flipV,
-          },
-        }
-      : {}),
     // the view sizes already account for the crop and the axis swap, so only a
-    // deliberate resize makes the stored sizes differ from them
+    // deliberate resize (or the zoom of a crop on a tilted view, which keeps
+    // the oriented scale) makes the stored sizes differ from them
     ...(Math.round(viewWidth) !== newWidth ||
     Math.round(viewHeight) !== newHeight
       ? {

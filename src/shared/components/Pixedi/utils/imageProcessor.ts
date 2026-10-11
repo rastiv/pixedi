@@ -8,6 +8,7 @@ import type {
 import { shapes } from "../constants/shapes";
 import { createPreviewBlob, hasAlphaChannel } from "./crop";
 import { SHAPE_MITER_LIMIT } from "./shape";
+import { isSwapped, type TransformStep } from "./preview";
 
 export const fitToMaxSize = (
   width: number,
@@ -70,54 +71,39 @@ export async function imageProcessor(blob: Blob) {
     return tempCanvas;
   };
 
-  const crop = (x: number, y: number, w: number, h: number) => {
+  // crop, flips and rotation in a single draw: the region is moved to the
+  // output center, tilted, zoomed to cover the frame, rotated and flipped
+  const transform = ({
+    region,
+    beta,
+    scale,
+    flipX,
+    flipY,
+    width,
+    height,
+  }: TransformStep) => {
     if (!ctx) return;
 
     const tempCanvas = snapshot();
+    const frameWidth = isSwapped(beta) ? region.h : region.w;
+    const frameHeight = isSwapped(beta) ? region.w : region.h;
 
-    canvas.width = w;
-    canvas.height = h;
+    canvas.width = width;
+    canvas.height = height;
 
-    ctx.clearRect(0, 0, w, h);
-    ctx.drawImage(tempCanvas, x, y, w, h, 0, 0, w, h);
-  };
-
-  const flip = (horizontal: boolean, vertical: boolean) => {
-    if (!ctx) return;
-
-    const tempCanvas = snapshot();
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, width, height);
     ctx.save();
-
-    ctx.translate(horizontal ? canvas.width : 0, vertical ? canvas.height : 0);
-
-    ctx.scale(horizontal ? -1 : 1, vertical ? -1 : 1);
-
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    ctx.translate(width / 2, height / 2);
+    // absorbs the rounding of the output size
+    ctx.scale(width / frameWidth, height / frameHeight);
+    ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+    ctx.rotate((beta * Math.PI) / 180);
+    ctx.scale(scale, scale);
+    ctx.rotate((-region.angle * Math.PI) / 180);
+    ctx.translate(-region.cx, -region.cy);
     ctx.drawImage(tempCanvas, 0, 0);
-    ctx.restore();
-  };
-
-  const rotate = (angle: number) => {
-    if (!ctx) return;
-
-    const tempCanvas = snapshot();
-
-    const rad = (angle * Math.PI) / 180;
-    const sin = Math.abs(Math.sin(rad));
-    const cos = Math.abs(Math.cos(rad));
-
-    // Bounding box of the rotated source
-    canvas.width = Math.round(tempCanvas.width * cos + tempCanvas.height * sin);
-    canvas.height = Math.round(
-      tempCanvas.width * sin + tempCanvas.height * cos,
-    );
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(rad);
-    ctx.drawImage(tempCanvas, -tempCanvas.width / 2, -tempCanvas.height / 2);
     ctx.restore();
   };
 
@@ -243,9 +229,7 @@ export async function imageProcessor(blob: Blob) {
   };
 
   return {
-    crop,
-    flip,
-    rotate,
+    transform,
     resize,
     filters,
     shape,

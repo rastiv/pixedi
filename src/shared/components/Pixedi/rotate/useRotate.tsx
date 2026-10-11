@@ -1,43 +1,37 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { useToolCommit } from "../hooks";
 import { ActionName } from "../types";
-import { getOrientedSizes } from "../utils/crop";
+import { closestTurn, getRotatedSizes, normalizeAngle } from "../utils/preview";
 
 export const useRotate = () => {
-  const { getLastRotation, getLastHistoryItem, setCurrentAction } =
-    usePixediContext();
+  const { getLastRotation, history, setCurrentAction } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
-  const { width, height } = getLastHistoryItem();
 
-  const lastRotation = getLastRotation();
-  const baseAngleRef = useRef(lastRotation);
-  const angleRef = useRef(lastRotation);
+  const [baseDegrees] = useState(getLastRotation);
+  // kept within half a turn of the opening angle, so repeated full turns of
+  // the thumb never pile up (the preview animates the short way on its own)
+  const [degrees, setDegrees] = useState(baseDegrees);
+  const selectorValue = normalizeAngle(degrees);
 
-  const handleRotate = (value: number) => {
-    angleRef.current += value;
-    setCurrentAction({
-      name: ActionName.ROTATE,
-      args: { degrees: angleRef.current },
-    });
+  const handleRotate = (angle: number) => {
+    const next = closestTurn(angle, baseDegrees);
+    if (next === degrees) return;
+    setDegrees(next);
+    setCurrentAction({ name: ActionName.ROTATE, args: { degrees: next } });
   };
 
   const handleSave = () => {
+    const items = history.items.slice(0, history.pointer + 1);
     commit({
-      ...getOrientedSizes(
-        width,
-        height,
-        baseAngleRef.current,
-        angleRef.current,
-      ),
-      action: {
-        name: ActionName.ROTATE,
-        args: { degrees: angleRef.current },
-      },
+      ...getRotatedSizes(items, degrees),
+      action: { name: ActionName.ROTATE, args: { degrees } },
     });
   };
 
   return {
+    selectorValue,
+    isChanged: degrees !== baseDegrees,
     handleRotate,
     handleSave,
     handleClose: close,

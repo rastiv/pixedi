@@ -18,9 +18,7 @@ const get = vi.fn(async () => ({
 vi.mock("./utils/imageProcessor", () => ({
   blobToBase64: vi.fn(async () => "data:image/png;base64,saved"),
   imageProcessor: vi.fn(async () => ({
-    crop: vi.fn(),
-    flip: vi.fn(),
-    rotate: vi.fn(),
+    transform: vi.fn(),
     resize: vi.fn(),
     filters: vi.fn(),
     get,

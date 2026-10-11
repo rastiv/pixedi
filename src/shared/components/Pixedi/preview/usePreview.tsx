@@ -1,8 +1,11 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePixediContext } from "../provider/usePixediContext";
 import { ActionName, type CropRect, type ShapeMask } from "../types";
-import { getOrientedSizes } from "../utils/crop";
-import { getPreviewLayers } from "../utils/preview";
+import {
+  closestTurn,
+  getPreviewLayers,
+  getRotatedSizes,
+} from "../utils/preview";
 import { applyShapeMaskGeometry, applyShapeMaskImage } from "../utils/shape";
 
 type UsePreviewProps = {
@@ -16,15 +19,8 @@ export const usePreview = ({
   isFilter,
   isMasked,
 }: UsePreviewProps) => {
-  const {
-    history,
-    previewUrl,
-    currentAction,
-    getLastRotation,
-    eventBus,
-    showCompare,
-    i18n,
-  } = usePixediContext();
+  const { history, previewUrl, currentAction, eventBus, showCompare, i18n } =
+    usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
   const previousActionRef = useRef(currentAction?.name);
@@ -35,20 +31,42 @@ export const usePreview = ({
     const { width, height } = history.items.at(history.pointer)!;
     historyItems.push({
       ...(currentAction.name === ActionName.ROTATE
-        ? getOrientedSizes(
-            width,
-            height,
-            getLastRotation(),
-            currentAction.args.degrees,
-          )
+        ? getRotatedSizes(historyItems, currentAction.args.degrees)
         : { width, height }),
       action: currentAction,
     });
   }
 
   const preview = getPreviewLayers(historyItems);
+
+  // css animates the raw angle difference, so going from 1197deg back to 0
+  // would replay three full turns; every layer is rendered at the equivalent
+  // angle closest to what is on screen, which never turns more than half way
+  const targetBetas = preview.layers.map((layer) => layer.beta);
+  const [shownBetas, setShownBetas] = useState(targetBetas);
+  const [previousTargets, setPreviousTargets] = useState(targetBetas);
+  const targetsChanged =
+    targetBetas.length !== previousTargets.length ||
+    targetBetas.some((beta, index) => beta !== previousTargets[index]);
+  if (targetsChanged) {
+    setPreviousTargets(targetBetas);
+    setShownBetas(
+      targetBetas.map((beta, index) =>
+        closestTurn(beta, shownBetas[index] ?? beta),
+      ),
+    );
+  }
+  const layers = preview.layers.map((layer, index) => ({
+    ...layer,
+    beta: targetsChanged ? layer.beta : (shownBetas[index] ?? layer.beta),
+  }));
+
   const layerCount = preview.layers.length;
   const previousLayerCountRef = useRef(layerCount);
+  // a crop on a tilted view moves the tilt from the rotate layer into the
+  // region, which looks the same but would animate as a spin
+  const regionAngle = preview.layers.at(-1)!.region.angle;
+  const previousRegionAngleRef = useRef(regionAngle);
 
   useLayoutEffect(() => {
     const previousAction = previousActionRef.current;
@@ -57,13 +75,16 @@ export const usePreview = ({
     // a committed (or undone) shape moves the transforms into a new inner
     // layer while the reused outer one resets, so animating would replay them
     const layersChanged = previousLayerCountRef.current !== layerCount;
+    const tiltMoved = previousRegionAngleRef.current !== regionAngle;
     previousActionRef.current = nextAction;
     previousPreviewUrlRef.current = previewUrl;
     previousLayerCountRef.current = layerCount;
+    previousRegionAngleRef.current = regionAngle;
 
     const actionChanged =
       previousAction && nextAction && previousAction !== nextAction;
-    if (!actionChanged && !previewChanged && !layersChanged) return;
+    if (!actionChanged && !previewChanged && !layersChanged && !tiltMoved)
+      return;
 
     const preview = previewRef.current;
     if (!preview) return;
@@ -85,7 +106,7 @@ export const usePreview = ({
       cancelAnimationFrame(frame);
       restoreTransitions();
     };
-  }, [currentAction?.name, previewUrl, layerCount]);
+  }, [currentAction?.name, previewUrl, layerCount, regionAngle]);
 
   useLayoutEffect(() => {
     if (isFilter && !showCompare && previewRef.current) {
@@ -175,5 +196,5 @@ export const usePreview = ({
     return () => controller.abort();
   }, [isClipped, isFilter, isMasked, currentAction?.name, eventBus]);
 
-  return { previewRef, filterRef, previewUrl, i18n, ...preview };
+  return { previewRef, filterRef, previewUrl, i18n, ...preview, layers };
 };
