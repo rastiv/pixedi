@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# 1.16.0
+
+- Add orbital selector component.
+- Use orbital selector in rotate tool.
+- Code improvement of some interactions.
+
 # 1.15.1
 
 - Fix label color in dark theme.
