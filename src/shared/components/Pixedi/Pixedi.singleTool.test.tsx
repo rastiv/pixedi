@@ -18,16 +18,14 @@ const get = vi.fn(async () => ({
 vi.mock("./utils/imageProcessor", () => ({
   blobToBase64: vi.fn(async () => "data:image/png;base64,saved"),
   imageProcessor: vi.fn(async () => ({
-    crop: vi.fn(),
-    flip: vi.fn(),
-    rotate: vi.fn(),
+    transform: vi.fn(),
     resize: vi.fn(),
     filters: vi.fn(),
     get,
   })),
 }));
 
-const settings: Settings = { tools: ["rotate"] };
+const settings: Settings = { tools: ["flip"] };
 
 const renderSingleTool = (onSave = vi.fn(), onBack = vi.fn()) => {
   const view = render(
@@ -71,7 +69,7 @@ describe("Pixedi single tool mode", () => {
   it("opens the only tool without the header", () => {
     const { container } = renderSingleTool();
 
-    expect(getButton(container, "+90°")).toBeTruthy();
+    expect(getButton(container, "Horizontal")).toBeTruthy();
     expect(container.textContent).not.toContain("Reset");
   });
 
@@ -87,7 +85,7 @@ describe("Pixedi single tool mode", () => {
   it("processes the image and calls onSave", async () => {
     const { container, onSave } = renderSingleTool();
 
-    fireEvent.click(getButton(container, "+90°"));
+    fireEvent.click(getButton(container, "Horizontal"));
     fireEvent.click(getButton(container, "Save"));
 
     await waitFor(() => expect(onSave).toHaveBeenCalledWith(newBlob));
@@ -104,7 +102,7 @@ describe("Pixedi single tool mode", () => {
     );
     const { container } = renderSingleTool(onSave);
 
-    fireEvent.click(getButton(container, "+90°"));
+    fireEvent.click(getButton(container, "Horizontal"));
     fireEvent.click(getButton(container, "Save"));
 
     await waitFor(() => expect(onSave).toHaveBeenCalled());

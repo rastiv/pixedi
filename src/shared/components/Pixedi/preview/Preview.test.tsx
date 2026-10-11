@@ -103,9 +103,10 @@ const renderPreview = (degrees: number) => {
 
   fireEvent.click(container.querySelector("button")!);
 
+  // preview > filter > flip > rotate > img
   const image = container.querySelector("img")!;
-  const rotateLayer = image.parentElement?.parentElement;
-  const preview = rotateLayer?.parentElement?.parentElement;
+  const rotateLayer = image.parentElement;
+  const preview = rotateLayer?.parentElement?.parentElement?.parentElement;
 
   expect(rotateLayer).not.toBeNull();
   expect(preview).not.toBeNull();
@@ -175,7 +176,10 @@ describe("Preview image replacement", () => {
       image.parentElement!.parentElement!.parentElement!.parentElement!;
 
     fireEvent.click(getByText("Commit flip"));
-    expect(image.parentElement!.style.transform).toBe("scale(-1, 1)");
+    // the flip layer wraps the rotate layer, so it mirrors the view as seen
+    expect(image.parentElement!.parentElement!.style.transform).toBe(
+      "scale(-1, 1)",
+    );
 
     fireEvent.click(getByText("Replace image"));
     expect(image.getAttribute("src")).toBe("blob:saved-preview");
@@ -298,9 +302,10 @@ describe("Preview rotation geometry", () => {
     { degrees: 0, rotation: 0, viewWidth: 800, viewHeight: 600 },
     { degrees: 90, rotation: 90, viewWidth: 600, viewHeight: 800 },
     { degrees: 180, rotation: 180, viewWidth: 800, viewHeight: 600 },
-    // degrees are passed through unnormalized so CSS rotates the short way
+    // the shown angle is the equivalent closest to the previous one, so CSS
+    // always rotates the short way and a full turn does not spin at all
     { degrees: -90, rotation: -90, viewWidth: 600, viewHeight: 800 },
-    { degrees: 360, rotation: 360, viewWidth: 800, viewHeight: 600 },
+    { degrees: 360, rotation: 0, viewWidth: 800, viewHeight: 600 },
   ])(
     "uses orientation-aware dimensions at $degrees degrees",
     ({ degrees, rotation, viewWidth, viewHeight }) => {
@@ -318,4 +323,72 @@ describe("Preview rotation geometry", () => {
       );
     },
   );
+
+  it("zooms a free angle in so the frame stays covered", () => {
+    const { preview, rotateLayer } = renderPreview(30);
+    const rad = (30 * Math.PI) / 180;
+    const scale = Math.max(
+      (800 * Math.cos(rad) + 600 * Math.sin(rad)) / 800,
+      (800 * Math.sin(rad) + 600 * Math.cos(rad)) / 600,
+    );
+
+    // 30deg is closest to 0, so the frame keeps its orientation
+    expect(preview.style.aspectRatio).toBe("800 / 600");
+    const [, angle, zoom] = rotateLayer.style.transform.match(
+      /rotate\((.+)deg\) scale\((.+)\)/,
+    )!;
+    expect(Number(angle)).toBe(30);
+    expect(Number(zoom)).toBeCloseTo(scale);
+  });
+
+  it("returns from several full turns without spinning back through them", () => {
+    const Rotations = () => {
+      const { setCurrentAction } = usePixediContext();
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() =>
+              setCurrentAction({ name: "rotate", args: { degrees: 1197 } })
+            }
+          >
+            Spin
+          </button>
+          <button type="button" onClick={() => setCurrentAction(null)}>
+            Cancel
+          </button>
+        </>
+      );
+    };
+    const { container, getByText } = render(
+      <PixediProvider
+        mimeType="png"
+        previewUrl="data:image/png;base64,initial"
+        originalBlob={new Blob([], { type: "image/png" })}
+        width={800}
+        height={600}
+        settings={{}}
+        isAlpha={false}
+        translations={{}}
+      >
+        <Preview />
+        <Rotations />
+      </PixediProvider>,
+    );
+    const rotateLayer = () => container.querySelector("img")!.parentElement!;
+
+    fireEvent.click(getByText("Spin"));
+    expect(rotateLayer().style.transform).toContain("rotate(117deg)");
+
+    fireEvent.click(getByText("Cancel"));
+    expect(rotateLayer().style.transform).toBe(
+      "translate(-50%, -50%) rotate(0deg)",
+    );
+  });
+
+  it("swaps the frame once the angle is closer to a quarter turn", () => {
+    const { preview } = renderPreview(105);
+
+    expect(preview.style.aspectRatio).toBe("600 / 800");
+  });
 });

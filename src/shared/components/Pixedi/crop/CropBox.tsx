@@ -1,4 +1,4 @@
-import type { RefObject } from "react";
+import type { DOMAttributes, RefObject } from "react";
 import { CropLines } from "./CropLines";
 import { CropPointer } from "./CropPointer";
 import { CropPointers } from "./CropPointers";
@@ -11,14 +11,19 @@ import styles from "./Crop.module.css";
 type CropBoxProps = {
   boxRef: RefObject<HTMLDivElement | null>;
   rect: CropRect;
-  onCropStart: (
-    e: React.MouseEvent | React.TouchEvent,
-    type: Direction,
-    cursor?: string,
-  ) => void;
+  boxHandlers: Pick<
+    DOMAttributes<HTMLDivElement>,
+    "onPointerDown" | "onPointerMove" | "onPointerUp" | "onPointerCancel"
+  >;
+  onCropStart: (type: Direction, cursor?: string) => void;
 };
 
-export const CropBox = ({ boxRef, rect, onCropStart }: CropBoxProps) => {
+export const CropBox = ({
+  boxRef,
+  rect,
+  boxHandlers,
+  onCropStart,
+}: CropBoxProps) => {
   const { getLastHistoryItem } = usePixediContext();
   const mobile = useMobile();
   const { width, height } = getLastHistoryItem();
@@ -40,13 +45,14 @@ export const CropBox = ({ boxRef, rect, onCropStart }: CropBoxProps) => {
           top: `${y}%`,
           left: `${x}%`,
         }}
+        {...boxHandlers}
       >
         <CropLines />
         {mobile ? (
-          <CropPointer onMouseDown={onCropStart} />
+          <CropPointer onPointerDown={onCropStart} />
         ) : (
           <>
-            <CropPointers onMouseDown={onCropStart} />
+            <CropPointers onPointerDown={onCropStart} />
             <CropInfo />
           </>
         )}

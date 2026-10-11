@@ -10,7 +10,7 @@ export const FilterInteractBox = () => {
   const { width, height } = getLastHistoryItem();
   const compareRef = useRef<HTMLDivElement>(null);
 
-  const { handleDragStart } = useFilterInteraction({ compareRef });
+  const { dragHandlers } = useFilterInteraction({ compareRef });
 
   return (
     <div
@@ -25,11 +25,7 @@ export const FilterInteractBox = () => {
             className={styles.compare}
             style={{ left: "50%" }}
           >
-            <div
-              className={styles.compareThumb}
-              onMouseDown={handleDragStart}
-              onTouchStart={handleDragStart}
-            >
+            <div className={styles.compareThumb} {...dragHandlers}>
               <Compare />
             </div>
           </div>

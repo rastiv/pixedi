@@ -1,9 +1,19 @@
 import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { SurfaceTool } from "./SurfaceTool";
 import { SurfaceToolOffsetProvider } from "./SurfaceToolOffsetProvider";
 
+// jsdom does not implement pointer capture
+beforeAll(() => {
+  const captured = new Set<number>();
+  Element.prototype.setPointerCapture = (id: number) => captured.add(id);
+  Element.prototype.hasPointerCapture = (id: number) => captured.has(id);
+  Element.prototype.releasePointerCapture = (id: number) => captured.delete(id);
+});
+
 afterEach(cleanup);
+
+const POINTER = { pointerId: 1, button: 0 };
 
 const PARENT = { width: 400, height: 300 };
 // where the css anchor (bottom 16px, horizontally centered) puts a 100x20 tool
@@ -39,44 +49,61 @@ describe("SurfaceTool", () => {
     const { container } = render(<Harness />);
     const { tool, handle } = setup(container);
 
-    fireEvent.mouseDown(handle, { clientX: 200, clientY: 200 });
-    fireEvent.mouseMove(document, { clientX: 250, clientY: 190 });
-    fireEvent.mouseUp(document);
+    fireEvent.pointerDown(handle, { ...POINTER, clientX: 200, clientY: 200 });
+    fireEvent.pointerMove(handle, { ...POINTER, clientX: 250, clientY: 190 });
+    fireEvent.pointerUp(handle, POINTER);
 
     expect(tool.style.transform).toBe("translate(calc(-50% + 50px), -10px)");
   });
 
-  it("lets the handle mousedown reach document listeners", () => {
+  // a prevented pointerdown suppresses the compatibility mousedown that
+  // click-outside listeners (e.g. select dropdowns) rely on
+  it("lets the handle pointerdown reach document listeners unprevented", () => {
     const { container } = render(<Harness />);
     const { handle } = setup(container);
-    const onMouseDown = vi.fn();
-    document.addEventListener("mousedown", onMouseDown);
+    const onPointerDown = vi.fn((e: Event) => e.defaultPrevented);
+    document.addEventListener("pointerdown", onPointerDown);
 
-    fireEvent.mouseDown(handle, { clientX: 200, clientY: 200 });
-    document.removeEventListener("mousedown", onMouseDown);
+    fireEvent.pointerDown(handle, { ...POINTER, clientX: 200, clientY: 200 });
+    document.removeEventListener("pointerdown", onPointerDown);
 
-    expect(onMouseDown).toHaveBeenCalledOnce();
+    expect(onPointerDown).toHaveBeenCalledOnce();
+    expect(onPointerDown).toHaveReturnedWith(false);
   });
 
   it("keeps the tool inside its parent", () => {
     const { container } = render(<Harness />);
     const { tool, handle } = setup(container);
 
-    fireEvent.mouseDown(handle, { clientX: 200, clientY: 200 });
-    fireEvent.mouseMove(document, { clientX: 5000, clientY: 5000 });
+    fireEvent.pointerDown(handle, { ...POINTER, clientX: 200, clientY: 200 });
+    fireEvent.pointerMove(handle, { ...POINTER, clientX: 5000, clientY: 5000 });
 
     expect(tool.style.transform).toBe("translate(calc(-50% + 150px), 16px)");
 
-    fireEvent.mouseMove(document, { clientX: -5000, clientY: -5000 });
+    fireEvent.pointerMove(handle, {
+      ...POINTER,
+      clientX: -5000,
+      clientY: -5000,
+    });
 
     expect(tool.style.transform).toBe("translate(calc(-50% + -150px), -264px)");
   });
 
   it("ignores pointer moves that did not start on the handle", () => {
     const { container } = render(<Harness />);
-    const { tool } = setup(container);
+    const { tool, handle } = setup(container);
 
-    fireEvent.mouseMove(document, { clientX: 250, clientY: 190 });
+    fireEvent.pointerMove(handle, { ...POINTER, clientX: 250, clientY: 190 });
+
+    expect(tool.style.transform).toBe("translate(calc(-50% + 0px), 0px)");
+  });
+
+  it("ignores moves from a second pointer", () => {
+    const { container } = render(<Harness />);
+    const { tool, handle } = setup(container);
+
+    fireEvent.pointerDown(handle, { ...POINTER, clientX: 200, clientY: 200 });
+    fireEvent.pointerMove(handle, { pointerId: 2, clientX: 250, clientY: 190 });
 
     expect(tool.style.transform).toBe("translate(calc(-50% + 0px), 0px)");
   });
@@ -85,9 +112,9 @@ describe("SurfaceTool", () => {
     const { container, rerender } = render(<Harness label="first" />);
     const { handle } = setup(container);
 
-    fireEvent.mouseDown(handle, { clientX: 200, clientY: 200 });
-    fireEvent.mouseMove(document, { clientX: 250, clientY: 190 });
-    fireEvent.mouseUp(document);
+    fireEvent.pointerDown(handle, { ...POINTER, clientX: 200, clientY: 200 });
+    fireEvent.pointerMove(handle, { ...POINTER, clientX: 250, clientY: 190 });
+    fireEvent.pointerUp(handle, POINTER);
 
     rerender(<Harness label="second" />);
     const { tool } = setup(container);

@@ -19,7 +19,7 @@ export const SurfaceTool = ({
   // dragging always needs the element, so it is tracked here and mirrored into
   // the optional caller ref
   const surfaceRef = useRef<HTMLDivElement>(null);
-  const { handleDragStart } = useSurfaceTool({
+  const { dragHandlers } = useSurfaceTool({
     surfaceRef,
     hasAdditional: !!additional,
   });
@@ -35,11 +35,7 @@ export const SurfaceTool = ({
       <div
         className={`${styles.content} ${additional ? styles.noTopRadius : ""}`}
       >
-        <Drag
-          className={styles.drag}
-          onMouseDown={handleDragStart}
-          onTouchStart={handleDragStart}
-        />
+        <Drag className={styles.drag} {...dragHandlers} />
         <div className={`${className}`}>{children}</div>
       </div>
     </div>

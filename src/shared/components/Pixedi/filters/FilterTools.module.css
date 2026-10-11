@@ -113,6 +113,9 @@
   border: solid 1px var(--accent-blue);
   color: var(--accent-blue);
   cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 
   svg {
     width: 20px;

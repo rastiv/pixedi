@@ -9,7 +9,9 @@ import { ActionName, type ShapeMask } from "../types";
 export const ShapeInteractBox = () => {
   const { currentAction } = usePixediContext();
   const boxRef = useRef<HTMLDivElement>(null);
-  const { handleCropStart, initialCrop } = useCropInteraction({ boxRef });
+  const { handleCropStart, boxHandlers, initialCrop } = useCropInteraction({
+    boxRef,
+  });
   const { x, y, w, h } = initialCrop;
 
   const mask: ShapeMask =
@@ -30,6 +32,7 @@ export const ShapeInteractBox = () => {
       <CropBox
         boxRef={boxRef}
         rect={initialCrop}
+        boxHandlers={boxHandlers}
         onCropStart={handleCropStart}
       />
     </>

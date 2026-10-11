@@ -7,7 +7,7 @@ A standalone UMD build of the Pixedi image editor for non-React environments. It
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.3.0/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.15.1/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):
@@ -17,6 +17,8 @@ For the latest version (use only for testing):
 ```
 
 The script exposes `window.PixediWidget`.
+
+The widget includes every tool of the React component — crop, shape crop, resize, flip, free-angle rotation, filters and social-media presets. See the [package README](https://github.com/rastiv/pixedi/blob/main/README.npm.md) for how each tool behaves.
 
 ## Usage
 
@@ -58,15 +60,15 @@ Creates the editor inside the element with the given `containerId`. Only one wid
 
 ### `Settings`
 
-| Setting        | Type                                                                           | Default                                                    | Description                                                                                                                           |
-| -------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `tools`        | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters">` | `["resize","crop","presetCrop","flip","rotate","filters"]` | Tools to show in the sidebar. A single tool switches to [single-tool mode](#single-tool-mode). Use an empty array to disable editing. |
-| `infobar`      | `boolean`                                                                      | `true`                                                     | Show the image info panel below the canvas.                                                                                           |
-| `quality`      | `number`                                                                       | `0.85`                                                     | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
-| `saveAsWEBP`   | `boolean`                                                                      | `false`                                                    | Encode the final image as WebP.                                                                                                       |
-| `exportAs`     | `"blob" \| "base64"`                                                           | `"blob"`                                                   | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
-| `background`   | `"circled" \| "diagonals" \| "rhombus"`                                        | —                                                          | Apply a decorative pattern to the editor frame background.                                                                            |
-| `maxImageSize` | `number`                                                                       | —                                                          | Max length in px of the longest side of the saved image. Larger images are downscaled proportionally on Save.                         |
+| Setting        | Type                                                                                       | Default                                                             | Description                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `tools`        | `Array<"resize" \| "crop" \| "presetCrop" \| "flip" \| "rotate" \| "filters" \| "shapes">` | `["resize","crop","presetCrop","flip","rotate","filters","shapes"]` | Tools to show in the sidebar. A single tool switches to [single-tool mode](#single-tool-mode). Use an empty array to disable editing. |
+| `infobar`      | `boolean`                                                                                  | `true`                                                              | Show the image info panel below the canvas.                                                                                           |
+| `quality`      | `number`                                                                                   | `0.85`                                                              | Output compression quality (`0`–`1`) for JPEG/WebP.                                                                                   |
+| `saveAsWEBP`   | `boolean`                                                                                  | `false`                                                             | Encode the final image as WebP.                                                                                                       |
+| `exportAs`     | `"blob" \| "base64"`                                                                       | `"blob"`                                                            | Pass the result to `onSave` as a `Blob` or as a base64 data URI (`data:<mimeType>;base64,...`).                                       |
+| `background`   | `"circled" \| "diagonals" \| "rhombus"`                                                    | —                                                                   | Apply a decorative pattern to the editor frame background.                                                                            |
+| `maxImageSize` | `number`                                                                                   | —                                                                   | Max length in px of the longest side of the saved image. Larger images are downscaled proportionally on Save.                         |
 
 ## Localization
 
@@ -98,6 +100,7 @@ Available keys and their default English values:
 | `flip`                 | `Flip`                 |
 | `rotate`               | `Rotate`               |
 | `filters`              | `Filters`              |
+| `shapes`               | `Shapes`               |
 | `width`                | `Width`                |
 | `height`               | `Height`               |
 | `freeform`             | `Free form`            |
@@ -115,6 +118,8 @@ Available keys and their default English values:
 | `hueRotate`            | `Hue Rotate`           |
 | `brightness`           | `Brightness`           |
 | `contrast`             | `Contrast`             |
+| `fullfield`            | `Fullfield`            |
+| `outlined`             | `Outlined`             |
 | `msgNoTools`           | `No tools selected`    |
 | `msgFailedToLoadImage` | `Failed to load image` |
 
