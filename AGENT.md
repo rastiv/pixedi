@@ -69,7 +69,10 @@ pnpm test:watch       # Run Vitest in watch mode
 pnpm lint             # Run ESLint
 pnpm type-check       # Run TypeScript check (lib source only)
 pnpm storybook        # Run Storybook dev server on port 6006
+pnpm build-storybook  # Build a static Storybook
 ```
+
+Before finishing a change, run `pnpm lint`, `pnpm type-check`, `pnpm test` and `pnpm build`. `prettier --check` reports every file on Windows because of CRLF line endings; that is not a real formatting issue.
 
 ## Important Conventions
 
@@ -81,16 +84,38 @@ pnpm storybook        # Run Storybook dev server on port 6006
 - **The widget mounts into a Shadow DOM** and exposes `window.PixediWidget`.
 - **Type declarations** for the library are emitted to `dist/lib/index.d.ts` from `tsconfig.lib.json`.
 - **Test environment mocks canvas APIs** because jsdom does not support `HTMLCanvasElement` rendering.
-- **UI strings are customizable** via the `translations` prop (`Record<string, string>`); English defaults live in `src/shared/components/Pixedi/constants/common.ts` and consumer overrides are merged shallowly in `Pixedi.tsx`.
+- **UI strings are customizable** via the `translations` prop (`Record<string, string>`); English defaults live in `src/shared/components/Pixedi/constants/translations.ts` and consumer overrides are merged shallowly in `Pixedi.tsx`.
+- **Tool hooks commit through `useToolCommit`** (`hooks/useToolCommit.tsx`): it adds the item to the history, or saves directly in single-tool mode (`settings.tools` has exactly one entry). The header Save runs `useImageSaving`, which processes the whole history.
+- **Keep component logic in a sibling hook** (e.g. `OrbitalSelector.tsx` + `useOrbitalSelector.tsx`, `CropBox` + `useCropInteraction`); components stay mostly markup.
+
+## Geometry Model
+
+All edits are history items; pixels only change on Save. `utils/preview.ts` folds a history segment (split at committed shapes, which bake their mask) into one geometry:
+
+- `region` — the source area in play (`cx`, `cy`, `w`, `h`, `angle`, in source pixels); tilted only after a crop on a rotated view.
+- `beta` + `scale` — layer rotation and the cover zoom that keeps the rotated region filling the frame. The frame follows the nearest quarter turn (`isSwapped`), so it swaps axes past 45°.
+- `flipX` / `flipY` — flips in **view** space, applied outside the rotation.
+- `degrees` — the absolute angle the user sees; ROTATE items store absolute degrees and stay editable.
+
+The preview (`preview/Preview.tsx`: flip layer → rotate/zoom layer → image) and the canvas (`imageProcessor.transform`, one `drawImage`) both render from this geometry. `getActions` emits `transform` + `resize` + `shape` steps (filters are applied once, globally). Use `getRotatedSizes` for the stored sizes of a rotation, and keep the "crop continuity" / canvas-matrix tests in `utils/preview.test.ts` and `utils/imageProcessor.test.ts` passing when touching this code. The preview shows each angle at its equivalent closest to the current one (`closestTurn`), so CSS never spins through full turns.
+
+## Pointer Interactions
+
+- Use **Pointer Events + `setPointerCapture`** on the pressed element for drags (crop box, surface tool, filter compare, orbital dial) — not `document`/`window` mouse/touch listeners. Track the active `pointerId` and ignore other pointers; only start on `e.button === 0`.
+- **Do not `preventDefault()` on `pointerdown`** — it suppresses the compatibility `mousedown` that click-outside listeners (`useSelect`, `useSelectIcon`) rely on. Use `touch-action: none` and `user-select: none` on the handle instead.
+- `window` listeners remain correct for gestures that don't start on an element (wheel / pinch zoom in `useResize`).
+- jsdom has no pointer capture: tests stub `Element.prototype.setPointerCapture` / `hasPointerCapture` / `releasePointerCapture` (see `SurfaceTool.test.tsx`).
 
 ## CI / CD
 
-`.github/workflows/deploy.yml` runs on every push to `main` and on version tags:
+`.github/workflows/deploy.yml` runs **only on version tags** (`v*.*.*`):
 
 1. Install dependencies (`pnpm install --frozen-lockfile`)
 2. Lint, type-check, test
 3. Build widget + library and upload `dist/` as artifact
-4. **On version tag only:** publish to npm (`README.npm.md` is used as the package README)
+4. Publish to npm, skipped if the version already exists (`README.npm.md` is copied over `README.md` as the package README)
+
+Keep the pinned CDN version in `README.npm.md` and `README.widget.md` in sync with `package.json#version` when releasing.
 
 **No web-app deployment happens from this repo.** The demo web application lives in a separate private repository with its own CI/CD pipeline.
 
@@ -101,3 +126,4 @@ pnpm storybook        # Run Storybook dev server on port 6006
 - Do not change the `outDir` of individual builds without updating `package.json#files`.
 - Do not import from `src/app/`, `src/features/`, or `src/main.tsx` inside `src/shared/components/Pixedi` — it is the reusable core.
 - Do not add a Cloudflare Pages / `wrangler` deploy step to the CI pipeline. Web-app deployment is the responsibility of the separate web-app repo.
+- Do not reintroduce separate crop/flip/rotate processor steps or quarter-turn-only math; all geometry goes through the region model and the single `transform` step.

@@ -7,7 +7,7 @@ A standalone UMD build of the Pixedi image editor for non-React environments. It
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.3.0/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.15.1/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):
@@ -17,6 +17,8 @@ For the latest version (use only for testing):
 ```
 
 The script exposes `window.PixediWidget`.
+
+The widget includes every tool of the React component — crop, shape crop, resize, flip, free-angle rotation, filters and social-media presets. See the [package README](https://github.com/rastiv/pixedi/blob/main/README.npm.md) for how each tool behaves.
 
 ## Usage
 

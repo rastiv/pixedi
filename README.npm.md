@@ -2,7 +2,7 @@
 
 A lightweight, embeddable React image editor component.
 
-`pixedi` provides a ready-to-use image editing UI with cropping, resizing, image adjustments, predefined artistic filters, horizontal/vertical flip, rotation, undo/redo, and social-media size presets. It is built for React applications.
+`pixedi` provides a ready-to-use image editing UI with cropping, resizing, image adjustments, predefined artistic filters, horizontal/vertical flip, free-angle rotation, undo/redo, and social-media size presets. It is built for React applications.
 
 ## Features
 
@@ -10,7 +10,7 @@ A lightweight, embeddable React image editor component.
 - Shape crop — mask the image with one of 20 shapes, filled or outlined
 - Resize by exact pixel dimensions
 - Horizontal and vertical flip
-- Rotation
+- Free-angle rotation with automatic zoom (see [Rotate](#rotate))
 - **Image filters** — two modes (see [Filters](#filters) below)
 - Undo/redo history
 - Social-media size presets (Facebook, Instagram, LinkedIn)
@@ -219,6 +219,16 @@ SVG-based filters selected from a dropdown. Each is a non-destructive preset app
 
 Click the Compare button in the filter toolbar to toggle a side-by-side before/after view. The original image is shown at full opacity while the comparison is active.
 
+## Rotate
+
+The Rotate tool (`"rotate"`) shows an orbital dial over the image. Drag the thumb to any angle, or click one of the presets every 45°; the preview follows live and the current angle is shown in the middle of the dial.
+
+- **No empty corners** — at angles that are not a multiple of 90° the image is zoomed in just enough to cover the frame, and the overflow is trimmed.
+- **Orientation** — the frame follows the nearest quarter turn: a 1400×1100 image becomes 1100×1400 from 45° up to 135°, and so on.
+- **Output size** — the saved image keeps the oriented size, so free angles upscale the zoomed area slightly.
+- **Apply / cancel** — the green ✓ adds the rotation to the history (or saves directly in [single-tool mode](#single-tool-mode)); the red ✕ discards it.
+- **Editable** — reopening the tool shows the committed angle, and changing it re-renders from the original image instead of zooming again. Crop, flip, resize and shapes keep working on a rotated image.
+
 ## Shape crop
 
 The Shapes tool (`"shapes"`) crops the image to a silhouette selected from a dropdown of 20 shapes (star, heart, shield, tag, flower, droplet, moon, circle, ellipse, polygons, and more). A toolbar toggle switches between two modes:
@@ -233,7 +243,7 @@ For non-React environments, use the standalone UMD widget from a CDN. See [`READ
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.3.0/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.15.1/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):
