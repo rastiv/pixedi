@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+# 1.16.1
+
+- Remove unused components, hooks, and utilities.
+
 # 1.16.0
 
 - Add orbital selector component.
