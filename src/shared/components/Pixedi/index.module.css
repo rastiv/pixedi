@@ -73,24 +73,8 @@
 .textRed {
   color: var(--color-red);
 }
-.bgRed {
-  background-color: var(--color-red);
-}
-.bgGreen {
-  background-color: var(--color-green);
-}
-.textGreen {
-  color: var(--color-green);
-}
-.mask {
-  background-color: var(--overlay-bg);
-}
 .semibold {
   font-weight: 600;
-  letter-spacing: 0.4px;
-}
-.bold {
-  font-weight: bold;
   letter-spacing: 0.4px;
 }
 .system {
