@@ -115,15 +115,6 @@
     flex-shrink: 0;
   }
 }
-.itemRightContainer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.itemRight {
-  font-size: 14px;
-  color: var(--muted-foreground);
-}
 .itemCheck {
   width: 14px;
   height: 14px;

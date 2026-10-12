@@ -48,7 +48,7 @@ src/
   app/          # Local dev SPA — routing, providers, global styles (not published)
   features/     # Local dev pages (not published)
   shared/       # Reusable code
-    components/ # Pixedi (published), plus demo-only components (Header, ImageCard, Modal)
+    components/ # Pixedi (published), plus demo-only components (Header, Modal)
     config/     # Dev SPA config/constants (not published)
   main.tsx      # Dev SPA entry point (not published)
   widget.tsx    # UMD widget entry point (mounts Pixedi into shadow DOM)

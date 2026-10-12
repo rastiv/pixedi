@@ -19,7 +19,6 @@ export const translations = {
   before: "Before",
   after: "After",
   saturate: "Saturate",
-  greyscale: "Greyscale",
   sepia: "Sepia",
   invert: "Invert",
   hueRotate: "Hue Rotate",

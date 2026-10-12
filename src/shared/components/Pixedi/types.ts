@@ -9,10 +9,6 @@ export type Breakpoint = keyof typeof breakpoints;
 
 export type Direction = "tl" | "tr" | "bl" | "br";
 
-export type ActionWithVal = {
-  val: boolean;
-};
-
 export const ActionName = {
   INITIAL: "initial",
   RESIZE: "resize",
