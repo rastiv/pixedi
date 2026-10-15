@@ -7,7 +7,7 @@ import {
   type Direction,
 } from "../types";
 
-const minSize = 32;
+const minSize = 1;
 
 // tools driven by the crop box; shapes are always cut from a square
 export const getCropSettings = (
@@ -22,240 +22,34 @@ export const getCropSettings = (
   return null;
 };
 
-const getCropTL = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  startY: number,
-  clientX: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  fallback: CropRect,
-): CropRect => {
-  let { x, y, w, h } = crop;
+const clamp = (value: number, min: number, max: number): number =>
+  Math.min(Math.max(value, min), max);
 
-  if (isFree) {
-    const right = width - crop.w - crop.x;
-    x += clientX - startX;
-    if (x < 0) x = 0;
-    w = width - x - right;
-    if (w < minSize) {
-      w = minSize;
-      x = width - right - minSize;
-    }
-
-    const bottom = height - h - y;
-    y += clientY - startY;
-    if (y < 0) y = 0;
-    h = height - y - bottom;
-    if (h < minSize) {
-      h = minSize;
-      y = height - bottom - minSize;
-    }
-  } else {
-    if (ratio >= 1) {
-      const difW = clientX - startX;
-      const difH = Math.round(difW / ratio);
-      w -= difW;
-      h -= difH;
-      x += difW;
-      y += difH;
-    } else {
-      const difH = clientY - startY;
-      const difW = Math.round(difH * ratio);
-      w -= difW;
-      h -= difH;
-      x += difW;
-      y += difH;
-    }
-    if (x < 0 || y < 0 || w < minSize || h < minSize) {
-      return fallback;
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropTR = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  startY: number,
-  clientX: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  fallback: CropRect,
-): CropRect => {
-  const { x } = crop;
-  let { y, w, h } = crop;
-
-  if (isFree) {
-    w += clientX - startX;
-    if (w + x > width) w = width - x;
-    if (w < minSize) w = minSize;
-
-    const bottom = height - h - y;
-    y += clientY - startY;
-    if (y < 0) y = 0;
-    h = height - y - bottom;
-    if (h < minSize) {
-      h = minSize;
-      y = height - bottom - minSize;
-    }
-  } else {
-    if (ratio > 1) {
-      const difW = clientX - startX;
-      const difH = Math.round(difW / ratio);
-      w += difW;
-      h += difH;
-      y -= difH;
-    } else {
-      const difH = clientY - startY;
-      const difW = Math.round(difH * ratio);
-      w -= difW;
-      h -= difH;
-      y += difH;
-    }
-    if (w + x > width || y < 0 || w < minSize || h < minSize) {
-      return fallback;
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropBL = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  startY: number,
-  clientX: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  fallback: CropRect,
-): CropRect => {
-  const { y } = crop;
-  let { x, w, h } = crop;
-
-  if (isFree) {
-    h += clientY - startY;
-    if (h + y > height) h = height - y;
-    if (h < minSize) h = minSize;
-
-    const right = width - crop.w - crop.x;
-    x += clientX - startX;
-    if (x < 0) x = 0;
-    w = width - x - right;
-    if (w < minSize) {
-      w = minSize;
-      x = width - right - minSize;
-    }
-  } else {
-    if (ratio >= 1) {
-      const difW = clientX - startX;
-      const difH = Math.round(difW / ratio);
-      w -= difW;
-      h -= difH;
-      x += difW;
-    } else {
-      const difH = clientY - startY;
-      const difW = Math.round(difH * ratio);
-      w += difW;
-      h += difH;
-      x -= difW;
-    }
-    if (h + y > height || x < 0 || w < minSize || h < minSize) {
-      return fallback;
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getCropBR = (
-  isFree: boolean,
-  ratio: number,
-  startX: number,
-  startY: number,
-  clientX: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-  fallback: CropRect,
-): CropRect => {
-  const { x, y } = crop;
-  let { w, h } = crop;
-
-  if (isFree) {
-    w += clientX - startX;
-    if (w + x > width) w = width - x;
-    if (w < minSize) w = minSize;
-
-    h += clientY - startY;
-    if (h + y > height) h = height - y;
-    if (h < minSize) h = minSize;
-  } else {
-    if (ratio >= 1) {
-      const difW = clientX - startX;
-      const difH = Math.round(difW / ratio);
-      w += difW;
-      h += difH;
-    } else {
-      const difH = clientY - startY;
-      const difW = Math.round(difH * ratio);
-      w += difW;
-      h += difH;
-    }
-    if (h + y > height || w + x > width || w < minSize || h < minSize) {
-      return fallback;
-    }
-  }
-
-  return { x, y, w, h };
-};
-
-const getFixedCrop = (
-  dir: Direction,
-  ratio: number,
-  startX: number,
-  startY: number,
-  clientX: number,
-  clientY: number,
-  width: number,
-  height: number,
-  crop: CropRect,
-): CropRect => {
+// the corner opposite to the dragged handle stays put; dragging past it flips
+// the rect to the other side instead of stopping at a minimum size
+const getAnchor = (dir: Direction, crop: CropRect) => {
   const movesLeft = dir === "tl" || dir === "bl";
   const movesTop = dir === "tl" || dir === "tr";
-  const right = crop.x + crop.w;
-  const bottom = crop.y + crop.h;
-  const deltaX = clientX - startX;
-  const deltaY = clientY - startY;
-  const desiredWidth =
-    ratio >= 1
-      ? crop.w + (movesLeft ? -deltaX : deltaX)
-      : (crop.h + (movesTop ? -deltaY : deltaY)) * ratio;
-  const availableWidth = movesLeft ? right : width - crop.x;
-  const availableHeight = movesTop ? bottom : height - crop.y;
-  const maxWidth = Math.min(availableWidth, availableHeight * ratio);
-  const minimumWidth = Math.max(minSize, minSize * ratio);
-  const w = Math.min(Math.max(desiredWidth, minimumWidth), maxWidth);
-  const h = w / ratio;
-
   return {
-    x: movesLeft ? right - w : crop.x,
-    y: movesTop ? bottom - h : crop.y,
-    w,
-    h,
+    movesLeft,
+    movesTop,
+    anchorX: movesLeft ? crop.x + crop.w : crop.x,
+    anchorY: movesTop ? crop.y + crop.h : crop.y,
+    cornerX: movesLeft ? crop.x : crop.x + crop.w,
+    cornerY: movesTop ? crop.y : crop.y + crop.h,
   };
 };
+
+const getSide = (anchor: number, pointer: number, towardStart: boolean) =>
+  pointer === anchor ? (towardStart ? -1 : 1) : Math.sign(pointer - anchor);
+
+// lays a span of `length` from the anchor on the given side, inside the frame
+const placeSpan = (
+  anchor: number,
+  length: number,
+  side: number,
+  size: number,
+): number => clamp(side > 0 ? anchor : anchor - length, 0, size - length);
 
 export const getCropPoints = (
   dir: Direction,
@@ -268,75 +62,46 @@ export const getCropPoints = (
   width: number,
   height: number,
   crop: CropRect,
-  fallback: CropRect,
 ): CropRect => {
-  if (!isFree) {
-    return getFixedCrop(
-      dir,
-      ratio,
-      startX,
-      startY,
-      clientX,
-      clientY,
-      width,
-      height,
-      crop,
-    );
+  const { movesLeft, movesTop, anchorX, anchorY, cornerX, cornerY } = getAnchor(
+    dir,
+    crop,
+  );
+  const pointerX = clamp(cornerX + clientX - startX, 0, width);
+  const pointerY = clamp(cornerY + clientY - startY, 0, height);
+  const sideX = getSide(anchorX, pointerX, movesLeft);
+  const sideY = getSide(anchorY, pointerY, movesTop);
+
+  if (isFree) {
+    const w = Math.max(Math.abs(pointerX - anchorX), minSize);
+    const h = Math.max(Math.abs(pointerY - anchorY), minSize);
+    return {
+      x: placeSpan(anchorX, w, sideX, width),
+      y: placeSpan(anchorY, h, sideY, height),
+      w,
+      h,
+    };
   }
 
-  if (dir === "tl")
-    return getCropTL(
-      isFree,
-      ratio,
-      startX,
-      startY,
-      clientX,
-      clientY,
-      width,
-      height,
-      crop,
-      fallback,
-    );
-  if (dir === "tr")
-    return getCropTR(
-      isFree,
-      ratio,
-      startX,
-      startY,
-      clientX,
-      clientY,
-      width,
-      height,
-      crop,
-      fallback,
-    );
-  if (dir === "bl")
-    return getCropBL(
-      isFree,
-      ratio,
-      startX,
-      startY,
-      clientX,
-      clientY,
-      width,
-      height,
-      crop,
-      fallback,
-    );
-  if (dir === "br")
-    return getCropBR(
-      isFree,
-      ratio,
-      startX,
-      startY,
-      clientX,
-      clientY,
-      width,
-      height,
-      crop,
-      fallback,
-    );
-  return { x: 0, y: 0, w: 0, h: 0 };
+  const desiredWidth =
+    ratio >= 1
+      ? Math.abs(pointerX - anchorX)
+      : Math.abs(pointerY - anchorY) * ratio;
+  const availableWidth = sideX > 0 ? width - anchorX : anchorX;
+  const availableHeight = sideY > 0 ? height - anchorY : anchorY;
+  const maxWidth = Math.min(availableWidth, availableHeight * ratio);
+  const w = Math.max(
+    Math.min(desiredWidth, maxWidth),
+    Math.max(minSize, minSize * ratio),
+  );
+  const h = w / ratio;
+
+  return {
+    x: placeSpan(anchorX, w, sideX, width),
+    y: placeSpan(anchorY, h, sideY, height),
+    w,
+    h,
+  };
 };
 
 export const getInitalCrop = (

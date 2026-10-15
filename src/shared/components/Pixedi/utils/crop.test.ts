@@ -7,8 +7,6 @@ import {
   snapRectToRatio,
 } from "./crop";
 
-const fallback = { x: 10, y: 20, w: 80, h: 60 };
-
 describe("getInitalCrop", () => {
   it.each([
     [1, 200, 100, { x: 31, y: 12, w: 38, h: 76 }],
@@ -36,75 +34,69 @@ describe("getInitalCrop", () => {
 });
 
 describe("getCropPoints", () => {
-  it("keeps free-form edge resizing within the frame and minimum width", () => {
-    const crop = getCropPoints(
-      "br",
-      true,
-      1,
-      100,
-      0,
-      -100,
-      0,
-      100,
-      100,
-      { x: 10, y: 20, w: 40, h: 50 },
-      fallback,
-    );
+  it("flips a free-form crop past its anchor and keeps it within the frame", () => {
+    const crop = getCropPoints("br", true, 1, 100, 0, -100, 0, 100, 100, {
+      x: 10,
+      y: 20,
+      w: 40,
+      h: 50,
+    });
 
-    expect(crop).toEqual({ x: 10, y: 20, w: 32, h: 50 });
+    expect(crop).toEqual({ x: 0, y: 20, w: 10, h: 50 });
+  });
+
+  it("shrinks a free-form crop down to a single pixel", () => {
+    const crop = getCropPoints("tl", true, 1, 0, 0, 40, 50, 100, 100, {
+      x: 10,
+      y: 20,
+      w: 40,
+      h: 50,
+    });
+
+    expect(crop).toEqual({ x: 49, y: 69, w: 1, h: 1 });
+  });
+
+  it("flips a fixed-ratio crop past its anchor", () => {
+    const crop = getCropPoints("br", false, 2, 0, 0, -100, -60, 200, 200, {
+      x: 100,
+      y: 100,
+      w: 40,
+      h: 20,
+    });
+
+    expect(crop).toEqual({ x: 40, y: 70, w: 60, h: 30 });
   });
 
   it("keeps free-form corner resizing within parent bounds", () => {
-    const crop = getCropPoints(
-      "br",
-      true,
-      1,
-      0,
-      0,
-      200,
-      200,
-      100,
-      100,
-      { x: 20, y: 30, w: 40, h: 40 },
-      fallback,
-    );
+    const crop = getCropPoints("br", true, 1, 0, 0, 200, 200, 100, 100, {
+      x: 20,
+      y: 30,
+      w: 40,
+      h: 40,
+    });
 
     expect(crop).toEqual({ x: 20, y: 30, w: 80, h: 70 });
   });
 
   it("preserves fixed ratios when the requested resize remains valid", () => {
-    const crop = getCropPoints(
-      "br",
-      false,
-      2,
-      100,
-      0,
-      120,
-      0,
-      200,
-      200,
-      { x: 50, y: 50, w: 80, h: 40 },
-      fallback,
-    );
+    const crop = getCropPoints("br", false, 2, 100, 0, 120, 0, 200, 200, {
+      x: 50,
+      y: 50,
+      w: 80,
+      h: 40,
+    });
 
     expect(crop).toEqual({ x: 50, y: 50, w: 100, h: 50 });
     expect(crop.w / crop.h).toBe(2);
   });
 
   it("reaches the top boundary when a fixed-ratio crop is expanded past it", () => {
-    const crop = getCropPoints(
-      "tl",
-      false,
-      1,
-      100,
-      100,
-      98,
-      98,
-      600,
-      400,
-      { x: 80.6, y: 0.6, w: 399.4, h: 399.4 },
-      { x: 80.6, y: 0.6, w: 399.4, h: 399.4 },
-    );
+    const crop = getCropPoints("tl", false, 1, 100, 100, 98, 98, 600, 400, {
+      x: 80.6,
+      y: 0.6,
+      w: 399.4,
+      h: 399.4,
+    });
 
     expect(crop.y).toBe(0);
     expect(crop.h).toBe(400);
@@ -112,19 +104,12 @@ describe("getCropPoints", () => {
   });
 
   it("constrains fixed-ratio resizes to the frame boundary", () => {
-    const crop = getCropPoints(
-      "br",
-      false,
-      2,
-      100,
-      0,
-      200,
-      0,
-      100,
-      100,
-      { x: 10, y: 20, w: 80, h: 40 },
-      fallback,
-    );
+    const crop = getCropPoints("br", false, 2, 100, 0, 200, 0, 100, 100, {
+      x: 10,
+      y: 20,
+      w: 80,
+      h: 40,
+    });
 
     expect(crop).toEqual({ x: 10, y: 20, w: 90, h: 45 });
   });
