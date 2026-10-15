@@ -242,7 +242,7 @@ For non-React environments, use the standalone UMD widget from a CDN. See [`READ
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.16.1/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.16.2/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):
