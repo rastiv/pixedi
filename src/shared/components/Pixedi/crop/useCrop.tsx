@@ -42,10 +42,10 @@ export const useCrop = () => {
 
     const updatedWidth =
       currentAction.args?.preset?.width ||
-      Math.round((width * clipPathRef.current.w) / 100);
+      Math.max(1, Math.round((width * clipPathRef.current.w) / 100));
     const updatedHeight =
       currentAction.args?.preset?.height ||
-      Math.round((height * clipPathRef.current.h) / 100);
+      Math.max(1, Math.round((height * clipPathRef.current.h) / 100));
 
     commit({
       width: updatedWidth,

@@ -93,8 +93,8 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     emitCropUpdate(eventBus, {
       x: Math.round((rect.x / 100) * width),
       y: Math.round((rect.y / 100) * height),
-      w: Math.round((rect.w / 100) * width),
-      h: Math.round((rect.h / 100) * height),
+      w: Math.max(1, Math.round((rect.w / 100) * width)),
+      h: Math.max(1, Math.round((rect.h / 100) * height)),
     });
     emitClipPathUpdate(eventBus, rect);
   };
@@ -148,7 +148,6 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
         frameW,
         frameH,
         toPixels(startRectRef.current, frameW, frameH),
-        toPixels(rectRef.current, frameW, frameH),
       );
       const rect = toPercent(resized, frameW, frameH);
       commit(
