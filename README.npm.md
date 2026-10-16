@@ -4,6 +4,10 @@ A lightweight, embeddable React image editor component.
 
 `pixedi` provides a ready-to-use image editing UI with cropping, resizing, image adjustments, predefined artistic filters, horizontal/vertical flip, free-angle rotation, undo/redo, and social-media size presets. It is built for React applications.
 
+- **Website:** [pixedi.rastiv.dev](https://pixedi.rastiv.dev/)
+- **Live demo:** [pixedi.rastiv.dev/demo](https://pixedi.rastiv.dev/demo)
+- **Documentation:** [pixedi.rastiv.dev/docs](https://pixedi.rastiv.dev/docs)
+
 ## Features
 
 - Crop with free or fixed-ratio selection

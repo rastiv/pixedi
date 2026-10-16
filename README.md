@@ -7,6 +7,10 @@ Pixedi provides a ready-to-use image editing UI with cropping, resizing, image a
 1. **Pixedi React component** — install from npm.
 2. **Standalone UMD widget** — embed via CDN in any HTML page.
 
+- **Website:** [pixedi.rastiv.dev](https://pixedi.rastiv.dev/)
+- **Live demo:** [pixedi.rastiv.dev/demo](https://pixedi.rastiv.dev/demo)
+- **Documentation:** [pixedi.rastiv.dev/docs](https://pixedi.rastiv.dev/docs)
+
 A small demo SPA (`src/app`, `src/features`) is kept in the repo for local development only; it is neither built by `pnpm build` nor published.
 
 ## Features
@@ -94,6 +98,7 @@ SVG filter definitions (`UrlFilters`) are rendered once in the component tree. T
 
 ## Consumer Documentation
 
+- **[Online docs](https://pixedi.rastiv.dev/docs)** — full documentation on the Pixedi website.
 - **[Consumer usage](./README.npm.md)** — React component props and settings.
 - **[Widget usage](./README.widget.md)** — standalone UMD widget: `init`, `setTheme`, `destroy`, API reference.
 
@@ -105,7 +110,7 @@ Pushing a version tag (`v*.*.*`) triggers the CI/CD pipeline in `.github/workflo
 2. Build the widget and the library, and upload `dist/` as an artifact.
 3. Publish the React component to npm (skipped if the version already exists), using `README.npm.md` as the package README.
 
-No web app is deployed from this repository.
+No web app is deployed from this repository; the website at [pixedi.rastiv.dev](https://pixedi.rastiv.dev/) is maintained and deployed separately.
 
 ## Tech Stack
 

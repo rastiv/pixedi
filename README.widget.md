@@ -2,6 +2,10 @@
 
 A standalone UMD build of the Pixedi image editor for non-React environments. It mounts into a Shadow DOM, so its styles are fully isolated from the host page.
 
+- **Website:** [pixedi.rastiv.dev](https://pixedi.rastiv.dev/)
+- **Live demo:** [pixedi.rastiv.dev/demo](https://pixedi.rastiv.dev/demo)
+- **Documentation:** [pixedi.rastiv.dev/docs](https://pixedi.rastiv.dev/docs)
+
 ## Installation
 
 Pin to a specific version in production:
