@@ -1,3 +1,37 @@
+// textures are drawn in a fixed TEXTURE_SIZE box and stretched over the image
+// through feImage, so effects look the same in the scaled-down preview and on
+// the full-size canvas used by Save
+const TEXTURE_SIZE = 1000;
+
+const svgTexture = (content: string) =>
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='${TEXTURE_SIZE}' height='${TEXTURE_SIZE}' viewBox='0 0 ${TEXTURE_SIZE} ${TEXTURE_SIZE}' preserveAspectRatio='none'>${content}</svg>`,
+  );
+
+// pixel-based primitives such as feTurbulence render at a fixed density here
+const noiseTexture = (primitives: string) =>
+  svgTexture(
+    `<filter id='n' x='0' y='0' width='100%' height='100%'>${primitives}</filter><rect width='${TEXTURE_SIZE}' height='${TEXTURE_SIZE}' filter='url(#n)'/>`,
+  );
+
+const VIGNETTE_GRADIENT = svgTexture(
+  "<radialGradient id='g' r='0.75'><stop offset='0.5' stop-color='#fff'/><stop offset='1' stop-color='#111'/></radialGradient>" +
+    `<rect width='${TEXTURE_SIZE}' height='${TEXTURE_SIZE}' fill='url(#g)'/>`,
+);
+
+const CRT_LINES = noiseTexture(
+  "<feTurbulence type='fractalNoise' baseFrequency='0 0.9' numOctaves='1'/>" +
+    "<feColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -7'/>",
+);
+
+const GRAIN_TEXTURE = noiseTexture(
+  "<feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' result='grainNoise'/>" +
+    "<feTurbulence type='fractalNoise' baseFrequency='0.01 0.8' numOctaves='2'/>" +
+    "<feColorMatrix type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 12 -9.5' result='sharpScratches'/>" +
+    "<feBlend mode='multiply' in='grainNoise' in2='sharpScratches'/>",
+);
+
 export const UrlFilters = () => {
   return (
     <svg
@@ -45,21 +79,20 @@ export const UrlFilters = () => {
         0    0    0    1   0"
           />
         </filter>
-        <filter id="crt-lines">
-          <feTurbulence type="fractalNoise" baseFrequency="0 0.9" numOctaves="1" result="lines" />
-          <feColorMatrix
-            type="matrix"
-            values="
-        1 0 0 0 0
-        0 1 0 0 0
-        0 0 1 0 0
-        0 0 0 15 -7"
+        <filter id="crt-lines" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox">
+          <feImage
+            href={CRT_LINES}
+            x="0"
+            y="0"
+            width="1"
+            height="1"
+            preserveAspectRatio="xMidYMid slice"
             result="sharpLines"
           />
           <feComposite operator="in" in="SourceGraphic" in2="sharpLines" result="pattern" />
           <feBlend mode="overlay" in="SourceGraphic" in2="pattern" />
         </filter>
-        <filter id="grain" x="0%" y="0%" width="100%" height="100%">
+        <filter id="grain" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox">
           <feColorMatrix
             type="matrix"
             values="
@@ -69,28 +102,15 @@ export const UrlFilters = () => {
         0.000 0.000 0.000 1 0"
             result="sepiaBase"
           />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.6"
-            numOctaves="3"
-            result="grainNoise"
+          <feImage
+            href={GRAIN_TEXTURE}
+            x="0"
+            y="0"
+            width="1"
+            height="1"
+            preserveAspectRatio="xMidYMid slice"
+            result="textureOverlay"
           />
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.01 0.8"
-            numOctaves="2"
-            result="scratchNoise"
-          />
-          <feColorMatrix
-            type="matrix"
-            values="
-        1 0 0 0 0
-        0 1 0 0 0
-        0 0 1 0 0
-        0 0 0 12 -9.5"
-            result="sharpScratches"
-          />
-          <feBlend mode="multiply" in="grainNoise" in2="sharpScratches" result="textureOverlay" />
           <feBlend mode="overlay" in="sepiaBase" in2="textureOverlay" result="finalComposite" />
           <feComposite operator="in" in="finalComposite" in2="SourceGraphic" />
         </filter>
@@ -115,12 +135,23 @@ export const UrlFilters = () => {
          0     0     0    1 0"
           />
         </filter>
-        <filter id="util-vignette">
-          <feFlood flood-color="#111111" result="darkBase" />
-          <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="noise" />
-          <feColorMatrix
-            type="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 8 -3"
+        {/* sized in objectBoundingBox units so the preview and the full-size canvas match */}
+        <filter
+          id="util-vignette"
+          x="0"
+          y="0"
+          width="1"
+          height="1"
+          primitiveUnits="objectBoundingBox"
+          colorInterpolationFilters="sRGB"
+        >
+          <feImage
+            href={VIGNETTE_GRADIENT}
+            x="0"
+            y="0"
+            width="1"
+            height="1"
+            preserveAspectRatio="none"
             result="vignetteShape"
           />
           <feBlend mode="multiply" in="SourceGraphic" in2="vignetteShape" result="vignettedImage" />
