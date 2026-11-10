@@ -1,3 +1,11 @@
+const VIGNETTE_GRADIENT =
+  'data:image/svg+xml,' +
+  encodeURIComponent(
+    "<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'>" +
+      "<radialGradient id='g' r='0.75'><stop offset='0.5' stop-color='#fff'/><stop offset='1' stop-color='#111'/></radialGradient>" +
+      "<rect width='100' height='100' fill='url(#g)'/></svg>",
+  );
+
 export const UrlFilters = () => {
   return (
     <svg
@@ -115,12 +123,23 @@ export const UrlFilters = () => {
          0     0     0    1 0"
           />
         </filter>
-        <filter id="util-vignette">
-          <feFlood flood-color="#111111" result="darkBase" />
-          <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="1" result="noise" />
-          <feColorMatrix
-            type="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 8 -3"
+        {/* sized in objectBoundingBox units so the preview and the full-size canvas match */}
+        <filter
+          id="util-vignette"
+          x="0"
+          y="0"
+          width="1"
+          height="1"
+          primitiveUnits="objectBoundingBox"
+          colorInterpolationFilters="sRGB"
+        >
+          <feImage
+            href={VIGNETTE_GRADIENT}
+            x="0"
+            y="0"
+            width="1"
+            height="1"
+            preserveAspectRatio="none"
             result="vignetteShape"
           />
           <feBlend mode="multiply" in="SourceGraphic" in2="vignetteShape" result="vignettedImage" />
