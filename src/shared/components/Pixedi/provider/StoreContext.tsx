@@ -1,11 +1,6 @@
-import { createContext } from "react";
-import type { PixediContextType } from "./initialState";
-import type {
-  Action,
-  FuncSaveArgs,
-  HistoryItem,
-  ProcessedImage,
-} from "../types";
+import { createContext } from 'react';
+import type { PixediContextType } from './initialState';
+import type { Action, FuncSaveArgs, HistoryItem, ProcessedImage } from '../types';
 
 type StoreContextType = PixediContextType & {
   onSave: FuncSaveArgs;
@@ -25,6 +20,4 @@ type StoreContextType = PixediContextType & {
   eventBus: EventTarget;
 };
 
-export const StoreContext = createContext<StoreContextType | undefined>(
-  undefined,
-);
+export const StoreContext = createContext<StoreContextType | undefined>(undefined);

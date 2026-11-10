@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from 'react';
 
 type UseOrbitalSelectorArgs = {
   value: number;
@@ -15,11 +15,7 @@ function getAngle(el: HTMLElement, clientX: number, clientY: number): number {
   return Math.round((deg + 360) % 360) % 360;
 }
 
-export const useOrbitalSelector = ({
-  value,
-  onChange,
-  onInput,
-}: UseOrbitalSelectorArgs) => {
+export const useOrbitalSelector = ({ value, onChange, onInput }: UseOrbitalSelectorArgs) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const pointerIdRef = useRef<number | null>(null);
   const valueRef = useRef(value);

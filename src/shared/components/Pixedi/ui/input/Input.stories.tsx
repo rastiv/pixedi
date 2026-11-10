@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { Input } from "./Input";
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { Input } from './Input';
 
 const meta = {
-  title: "Pixedi/UI/Input",
+  title: 'Pixedi/UI/Input',
   component: Input,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
-    placeholder: "Type here...",
+    placeholder: 'Type here...',
     onChange: fn(),
   },
   decorators: [
@@ -24,21 +24,21 @@ type Story = StoryObj<typeof meta>;
 
 export const Text: Story = {
   args: {
-    type: "text",
-    value: "Sample text",
+    type: 'text',
+    value: 'Sample text',
   },
 };
 
 export const Number: Story = {
   args: {
-    type: "number",
+    type: 'number',
     value: 42,
   },
 };
 
 export const NumberWithArrows: Story = {
   args: {
-    type: "number",
+    type: 'number',
     hideArrows: false,
     value: 42,
   },

@@ -58,7 +58,7 @@
     border-radius: 10px;
   }
 }
-.wrapper[data-state="closed"] .content {
+.wrapper[data-state='closed'] .content {
   display: none;
 }
 

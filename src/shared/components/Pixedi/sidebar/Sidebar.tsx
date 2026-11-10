@@ -1,19 +1,14 @@
-import { Tooltip } from "../ui";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useSidebar, getToolIcon } from "./useSidebar";
-import styles from "./Sidebar.module.css";
+import { Tooltip } from '../ui';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useSidebar, getToolIcon } from './useSidebar';
+import styles from './Sidebar.module.css';
 
 type SidebarProps = {
   isMobile: boolean;
 };
 
 export const Sidebar = ({ isMobile }: SidebarProps) => {
-  const {
-    settings,
-    sidebar: isSidebarOpen,
-    i18n,
-    currentAction,
-  } = usePixediContext();
+  const { settings, sidebar: isSidebarOpen, i18n, currentAction } = usePixediContext();
   const tools = settings?.tools || [];
   const actionName = currentAction?.name;
 
@@ -21,8 +16,8 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
 
   return (
     <nav
-      className={`${styles.sidebar} ${isMobile ? styles.mobile : ""} ${
-        isMobile && isSidebarOpen ? styles.open : ""
+      className={`${styles.sidebar} ${isMobile ? styles.mobile : ''} ${
+        isMobile && isSidebarOpen ? styles.open : ''
       }`}
     >
       <Tooltip position="right" className={styles.tooltip}>
@@ -31,7 +26,7 @@ export const Sidebar = ({ isMobile }: SidebarProps) => {
           return (
             <div
               key={tool}
-              className={`${styles.item} ${actionName === tool ? styles.selected : ""}`}
+              className={`${styles.item} ${actionName === tool ? styles.selected : ''}`}
               onClick={() => click(tool)}
               data-tooltip={label}
               aria-label={label}

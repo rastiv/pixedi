@@ -1,10 +1,10 @@
-import { useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { Preview } from "../preview";
-import { CropBox, useCropInteraction } from "../crop";
-import { SHAPE_BORDER } from "../constants";
-import { getShapeMaskStyle } from "../utils/shape";
-import { ActionName, type ShapeMask } from "../types";
+import { useRef } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { Preview } from '../preview';
+import { CropBox, useCropInteraction } from '../crop';
+import { SHAPE_BORDER } from '../constants';
+import { getShapeMaskStyle } from '../utils/shape';
+import { ActionName, type ShapeMask } from '../types';
 
 export const ShapeInteractBox = () => {
   const { currentAction } = usePixediContext();
@@ -17,7 +17,7 @@ export const ShapeInteractBox = () => {
   const mask: ShapeMask =
     currentAction?.name === ActionName.SHAPES
       ? currentAction.args
-      : { shape: "heart", outlined: false, border: SHAPE_BORDER };
+      : { shape: 'heart', outlined: false, border: SHAPE_BORDER };
 
   return (
     <>

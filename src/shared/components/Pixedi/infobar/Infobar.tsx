@@ -1,5 +1,5 @@
-import { usePixediContext } from "../provider/usePixediContext";
-import styles from "./Infobar.module.css";
+import { usePixediContext } from '../provider/usePixediContext';
+import styles from './Infobar.module.css';
 
 const formatFileSize = (size: number) => {
   if (size < 1024) {
@@ -18,7 +18,7 @@ export const Infobar = () => {
   return (
     <div className={styles.infobar}>
       <div className={styles.filesize}>
-        {originalBlob ? formatFileSize(originalBlob.size) : "0 B"}
+        {originalBlob ? formatFileSize(originalBlob.size) : '0 B'}
       </div>
       <div className={styles.sizes}>
         {width} / {height}

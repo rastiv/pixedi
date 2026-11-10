@@ -13,9 +13,9 @@
   font-family: var(--font-sans);
 
   --font-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma,
-    Helvetica, Arial, sans-serif;
-  --font-mono: "Courier New", Courier, monospace;
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Tahoma, Helvetica, Arial,
+    sans-serif;
+  --font-mono: 'Courier New', Courier, monospace;
   --color-white: #fff;
   --color-white-fade: color-mix(in srgb, var(--color-white) 65%, transparent);
   --color-black: #000;
@@ -40,7 +40,7 @@
   --orbital-track: color-mix(in oklch, var(--color-black) 20%, transparent);
 }
 
-.root[data-theme="dark"] {
+.root[data-theme='dark'] {
   --color-white-fade: color-mix(in srgb, var(--color-black) 35%, transparent);
   --background: oklch(0.245 0 0);
   --background-fade: color-mix(in srgb, var(--background) 70%, transparent);
@@ -102,9 +102,9 @@
   grid-template-rows: 48px 1fr 32px;
   grid-template-columns: 48px 1fr;
   grid-template-areas:
-    "header header"
-    "sidebar frame"
-    "sidebar infobar";
+    'header header'
+    'sidebar frame'
+    'sidebar infobar';
 
   &.mobile {
     grid-template-columns: 0 1fr;
@@ -117,8 +117,8 @@
   grid-template-rows: 48px 1fr;
   grid-template-columns: 48px 1fr;
   grid-template-areas:
-    "header header"
-    "sidebar frame";
+    'header header'
+    'sidebar frame';
 
   &.mobile {
     grid-template-columns: 0 1fr;
@@ -131,5 +131,5 @@
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr;
-  grid-template-areas: "frame";
+  grid-template-areas: 'frame';
 }

@@ -1,15 +1,15 @@
-import "@testing-library/jest-dom/vitest";
-import { vi } from "vitest";
+import '@testing-library/jest-dom/vitest';
+import { vi } from 'vitest';
 
-vi.stubGlobal("createImageBitmap", vi.fn());
-vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(null);
-vi.spyOn(HTMLCanvasElement.prototype, "toDataURL").mockReturnValue("");
-vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation((cb) => {
+vi.stubGlobal('createImageBitmap', vi.fn());
+vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
+vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue('');
+vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation((cb) => {
   cb(null);
 });
 
 if (!globalThis.Path2D) {
-  vi.stubGlobal("Path2D", class Path2DMock {});
+  vi.stubGlobal('Path2D', class Path2DMock {});
 }
 
 if (!globalThis.ImageBitmap) {
@@ -17,5 +17,5 @@ if (!globalThis.ImageBitmap) {
     close() {}
   }
 
-  vi.stubGlobal("ImageBitmap", ImageBitmapMock);
+  vi.stubGlobal('ImageBitmap', ImageBitmapMock);
 }

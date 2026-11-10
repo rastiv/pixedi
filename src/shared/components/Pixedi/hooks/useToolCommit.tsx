@@ -1,10 +1,9 @@
-import { usePixediContext } from "../provider/usePixediContext";
-import { useImageSaving } from "./useImageSaving";
-import type { HistoryItem } from "../types";
+import { usePixediContext } from '../provider/usePixediContext';
+import { useImageSaving } from './useImageSaving';
+import type { HistoryItem } from '../types';
 
 export const useToolCommit = () => {
-  const { singleToolUI, addToHistory, setCurrentAction, setSidebar, onBack } =
-    usePixediContext();
+  const { singleToolUI, addToHistory, setCurrentAction, setSidebar, onBack } = usePixediContext();
   const { save, isSaving } = useImageSaving();
 
   // with a single tool there is no header, so the tool itself produces the

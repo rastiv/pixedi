@@ -1,8 +1,8 @@
-import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { SelectIcon } from "./SelectIcon";
-import { shapes } from "../../constants/shapes";
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { SelectIcon } from './SelectIcon';
+import { shapes } from '../../constants/shapes';
 
 const items = Object.entries(shapes).map(([value, label]) => ({
   value,
@@ -10,12 +10,12 @@ const items = Object.entries(shapes).map(([value, label]) => ({
 }));
 
 const meta = {
-  title: "Pixedi/UI/SelectIcon",
+  title: 'Pixedi/UI/SelectIcon',
   component: SelectIcon,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
     items,
-    value: "heart",
+    value: 'heart',
     onChange: fn(),
   },
   decorators: [

@@ -1,14 +1,12 @@
-import { useEffect, useRef } from "react";
-import { emitCompareUpdate } from "../eventBus";
-import { usePixediContext } from "../provider/usePixediContext";
+import { useEffect, useRef } from 'react';
+import { emitCompareUpdate } from '../eventBus';
+import { usePixediContext } from '../provider/usePixediContext';
 
 type UseFilterInteractionArgs = {
   compareRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const useFilterInteraction = ({
-  compareRef,
-}: UseFilterInteractionArgs) => {
+export const useFilterInteraction = ({ compareRef }: UseFilterInteractionArgs) => {
   const { eventBus } = usePixediContext();
   const pointerIdRef = useRef<number | null>(null);
 
@@ -31,8 +29,7 @@ export const useFilterInteraction = ({
     if (e.pointerId !== pointerIdRef.current || !compare || !parent) return;
 
     const { width, left } = parent.getBoundingClientRect();
-    const percent =
-      (Math.min(Math.max(e.clientX - left, 0), width) / width) * 100;
+    const percent = (Math.min(Math.max(e.clientX - left, 0), width) / width) * 100;
 
     compare.style.left = `${percent}%`;
     emitCompareUpdate(eventBus, percent);

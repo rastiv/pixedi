@@ -1,22 +1,16 @@
-import { useEffect, useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { emitShapeMaskUpdate } from "../eventBus";
-import { SHAPE_BORDER } from "../constants";
-import { getInitalCrop } from "../utils/crop";
-import {
-  ActionName,
-  type CropRect,
-  type ShapeMask,
-  type ShapeType,
-} from "../types";
+import { useEffect, useRef } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { emitShapeMaskUpdate } from '../eventBus';
+import { SHAPE_BORDER } from '../constants';
+import { getInitalCrop } from '../utils/crop';
+import { ActionName, type CropRect, type ShapeMask, type ShapeType } from '../types';
 
 const MIN_OUTLINE = 1;
 const MAX_OUTLINE = 25;
 
 export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
-  const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
-    usePixediContext();
+  const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const isShapes = currentAction?.name === ActionName.SHAPES;
@@ -26,7 +20,7 @@ export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
         outlined: currentAction.args.outlined,
         border: currentAction.args.border,
       }
-    : { shape: "heart", outlined: false, border: SHAPE_BORDER };
+    : { shape: 'heart', outlined: false, border: SHAPE_BORDER };
   const borderPercent = Math.round(mask.border * 1000) / 10;
 
   const clipPathRef = useRef<CropRect>(getInitalCrop(1, width, height));
@@ -42,16 +36,14 @@ export const useShape = (valueRef: React.RefObject<HTMLDivElement | null>) => {
       clipPathRef.current = (event as CustomEvent<CropRect>).detail;
     };
 
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
-    return () =>
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
+    eventBus.addEventListener('clip-path-update', onClipPathUpdate);
+    return () => eventBus.removeEventListener('clip-path-update', onClipPathUpdate);
   }, [isShapes, width, height, eventBus]);
 
   const update = (args: Partial<ShapeMask>) =>
     setCurrentAction({ name: ActionName.SHAPES, args: { ...mask, ...args } });
 
-  const handleChangeShape = (value: string) =>
-    update({ shape: value as ShapeType });
+  const handleChangeShape = (value: string) => update({ shape: value as ShapeType });
 
   const handleToggleOutlined = () => update({ outlined: !mask.outlined });
 

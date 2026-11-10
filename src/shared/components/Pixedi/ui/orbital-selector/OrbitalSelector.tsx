@@ -1,5 +1,5 @@
-import { useOrbitalSelector } from "./useOrbitalSelector";
-import styles from "./OrbitalSelector.module.css";
+import { useOrbitalSelector } from './useOrbitalSelector';
+import styles from './OrbitalSelector.module.css';
 
 type OrbitalSelectorProps = {
   value: number;
@@ -18,13 +18,14 @@ export const OrbitalSelector = ({
   onChange,
   onInput,
 }: OrbitalSelectorProps) => {
-  const { containerRef, currentValue, isDragging, selectAngle, thumbHandlers } =
-    useOrbitalSelector({ value, onChange, onInput });
+  const { containerRef, currentValue, isDragging, selectAngle, thumbHandlers } = useOrbitalSelector(
+    { value, onChange, onInput },
+  );
 
   return (
     <div
       ref={containerRef}
-      className={`${styles.container} ${isDragging ? styles.dragging : ""} ${className ?? ""}`}
+      className={`${styles.container} ${isDragging ? styles.dragging : ''} ${className ?? ''}`}
     >
       <div className={styles.ring} />
 

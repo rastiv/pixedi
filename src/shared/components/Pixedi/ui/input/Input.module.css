@@ -41,6 +41,6 @@
   -webkit-appearance: none;
   margin: 0;
 }
-.numberClean[type="number"] {
+.numberClean[type='number'] {
   -moz-appearance: textfield;
 }

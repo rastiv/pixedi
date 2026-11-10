@@ -1,1 +1,1 @@
-export { ResizeTools } from "./ResizeTools";
+export { ResizeTools } from './ResizeTools';

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 export type SelectIconOption = {
   value: string;
@@ -18,13 +18,9 @@ const getClipBounds = (element: HTMLElement) => {
   let top = 0;
   let bottom = window.innerHeight;
 
-  for (
-    let parent = element.parentElement;
-    parent;
-    parent = parent.parentElement
-  ) {
+  for (let parent = element.parentElement; parent; parent = parent.parentElement) {
     const { overflow, overflowY } = getComputedStyle(parent);
-    if (overflow === "visible" && overflowY === "visible") continue;
+    if (overflow === 'visible' && overflowY === 'visible') continue;
     const rect = parent.getBoundingClientRect();
     top = Math.max(top, rect.top);
     bottom = Math.min(bottom, rect.bottom);
@@ -33,10 +29,7 @@ const getClipBounds = (element: HTMLElement) => {
   return { top, bottom };
 };
 
-export const useSelectIcon = ({
-  items,
-  onChange,
-}: Omit<UseSelectArgs, "value">) => {
+export const useSelectIcon = ({ items, onChange }: Omit<UseSelectArgs, 'value'>) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,15 +38,12 @@ export const useSelectIcon = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !event.composedPath().includes(containerRef.current)
-      ) {
+      if (containerRef.current && !event.composedPath().includes(containerRef.current)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useLayoutEffect(() => {
@@ -62,8 +52,8 @@ export const useSelectIcon = ({
     const content = contentRef.current;
     if (!isOpen || !wrapper || !trigger || !content) return;
 
-    content.style.removeProperty("top");
-    content.style.removeProperty("max-height");
+    content.style.removeProperty('top');
+    content.style.removeProperty('max-height');
 
     const gap = 4;
     const inset = 8;

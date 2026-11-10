@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { emitResizeUpdate } from "../eventBus";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { ActionName } from "../types";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { emitResizeUpdate } from '../eventBus';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { ActionName } from '../types';
 
 const MIN_SCALE = 15;
 const MAX_SCALE = 200;
@@ -116,9 +116,9 @@ export const useResize = (valueRef: React.RefObject<HTMLDivElement | null>) => {
 
     const controller = new AbortController();
     const { signal } = controller;
-    window.addEventListener("wheel", handleWheel, { signal });
-    window.addEventListener("touchstart", handleTouchStart, { signal });
-    window.addEventListener("touchmove", handleTouchMove, { signal });
+    window.addEventListener('wheel', handleWheel, { signal });
+    window.addEventListener('touchstart', handleTouchStart, { signal });
+    window.addEventListener('touchmove', handleTouchMove, { signal });
 
     return () => controller.abort();
   }, [updateScale]);

@@ -1,12 +1,12 @@
-import styles from "./ImageList.module.css";
+import styles from './ImageList.module.css';
 
 const imagesData = [
-  { id: "1", original: "/bird.jpg" },
-  { id: "2", original: "/butterfly.jpg" },
-  { id: "4", original: "/leafs.jpg" },
-  { id: "5", original: "/parrot.jpg" },
-  { id: "6", original: "/sunset.png" },
-  { id: "3", original: "/flowers.png" },
+  { id: '1', original: '/bird.jpg' },
+  { id: '2', original: '/butterfly.jpg' },
+  { id: '4', original: '/leafs.jpg' },
+  { id: '5', original: '/parrot.jpg' },
+  { id: '6', original: '/sunset.png' },
+  { id: '3', original: '/flowers.png' },
 ];
 
 type ImageListProps = {

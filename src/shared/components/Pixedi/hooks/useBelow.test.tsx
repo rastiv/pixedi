@@ -1,19 +1,19 @@
-import { act, renderHook } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { useBelow } from "./useBelow";
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { useBelow } from './useBelow';
 
-describe("useBellow", () => {
+describe('useBellow', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it("tracks whether the observed element is below the breakpoint", () => {
+  it('tracks whether the observed element is below the breakpoint', () => {
     let callback: ResizeObserverCallback | undefined;
     const observe = vi.fn();
     const disconnect = vi.fn();
 
     vi.stubGlobal(
-      "ResizeObserver",
+      'ResizeObserver',
       vi.fn(function (this: ResizeObserver, next: ResizeObserverCallback) {
         callback = next;
         this.observe = observe;
@@ -21,14 +21,11 @@ describe("useBellow", () => {
       }),
     );
 
-    const element = document.createElement("div");
-    const { result, unmount } = renderHook(() => useBelow("sm", element));
+    const element = document.createElement('div');
+    const { result, unmount } = renderHook(() => useBelow('sm', element));
     const resize = (width: number) => {
       act(() => {
-        callback?.(
-          [{ contentRect: { width } } as ResizeObserverEntry],
-          {} as ResizeObserver,
-        );
+        callback?.([{ contentRect: { width } } as ResizeObserverEntry], {} as ResizeObserver);
       });
     };
 

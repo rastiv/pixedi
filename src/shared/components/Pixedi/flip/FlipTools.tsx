@@ -1,7 +1,7 @@
-import { Button, SaveCloseGroup, SurfaceTool, Tooltip } from "../ui";
-import { FlipH, FlipV } from "../assets/icons";
-import { useFlip } from "./useFlip";
-import styles from "./Flip.module.css";
+import { Button, SaveCloseGroup, SurfaceTool, Tooltip } from '../ui';
+import { FlipH, FlipV } from '../assets/icons';
+import { useFlip } from './useFlip';
+import styles from './Flip.module.css';
 
 export const FlipTools = () => {
   const {
@@ -22,14 +22,12 @@ export const FlipTools = () => {
           variant="outline"
           className={styles.btnH}
           onClick={handleFlipHorizontal}
-          aria-label={i18n("horizontal")}
-          data-tooltip={i18n("horizontal")}
+          aria-label={i18n('horizontal')}
+          data-tooltip={i18n('horizontal')}
         >
           <FlipH
             style={{
-              color: flipHorizontal
-                ? "var(--accent-blue)"
-                : "var(--foreground)",
+              color: flipHorizontal ? 'var(--accent-blue)' : 'var(--foreground)',
             }}
           />
         </Button>
@@ -37,12 +35,12 @@ export const FlipTools = () => {
           variant="outline"
           className={styles.btnV}
           onClick={handleFlipVertical}
-          aria-label={i18n("vertical")}
-          data-tooltip={i18n("vertical")}
+          aria-label={i18n('vertical')}
+          data-tooltip={i18n('vertical')}
         >
           <FlipV
             style={{
-              color: flipVertical ? "var(--accent-blue)" : "var(--foreground)",
+              color: flipVertical ? 'var(--accent-blue)' : 'var(--foreground)',
             }}
           />
         </Button>

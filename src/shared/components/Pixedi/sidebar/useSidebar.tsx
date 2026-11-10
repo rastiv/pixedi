@@ -1,17 +1,9 @@
-import type { ReactNode } from "react";
-import {
-  Crop,
-  Filters,
-  FlipH,
-  Fullscreen,
-  Presets,
-  Rotate,
-  Shapes,
-} from "../assets/icons";
-import { usePixediContext } from "../provider/usePixediContext";
-import { DefaultFilterValues } from "../filters";
-import { SHAPE_BORDER } from "../constants";
-import { ActionName, type Tools } from "../types";
+import type { ReactNode } from 'react';
+import { Crop, Filters, FlipH, Fullscreen, Presets, Rotate, Shapes } from '../assets/icons';
+import { usePixediContext } from '../provider/usePixediContext';
+import { DefaultFilterValues } from '../filters';
+import { SHAPE_BORDER } from '../constants';
+import { ActionName, type Tools } from '../types';
 
 export const getToolIcon = (tool: Tools): ReactNode => {
   switch (tool) {
@@ -62,14 +54,14 @@ export const useSidebar = () => {
       case ActionName.CROP:
         setCurrentAction({
           name: ActionName.CROP,
-          args: { id: "freeform", ratio: width / height, isFree: true },
+          args: { id: 'freeform', ratio: width / height, isFree: true },
         });
         break;
       case ActionName.PRESET_CROP:
         setCurrentAction({
           name: ActionName.PRESET_CROP,
           args: {
-            id: "facebook-post",
+            id: 'facebook-post',
             ratio: 1200 / 630,
             isFree: false,
             preset: { width: 1200, height: 630 },
@@ -98,7 +90,7 @@ export const useSidebar = () => {
         setCurrentAction({
           name: ActionName.SHAPES,
           args: {
-            shape: "star",
+            shape: 'star',
             outlined: false,
             border: SHAPE_BORDER,
           },

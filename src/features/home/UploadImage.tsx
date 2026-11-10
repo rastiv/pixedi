@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import styles from "./UploadImage.module.css";
+import { useRef, useState } from 'react';
+import styles from './UploadImage.module.css';
 
 type UploadImageProps = {
   onFileSelect: (file: File) => void;
@@ -12,19 +12,19 @@ export const UploadImage = ({ onFileSelect }: UploadImageProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) onFileSelect(file);
-    e.target.value = "";
+    e.target.value = '';
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
-    if (file?.type.startsWith("image/")) onFileSelect(file);
+    if (file?.type.startsWith('image/')) onFileSelect(file);
   };
 
   return (
     <div
-      className={`${styles.uploadArea} ${isDragging ? styles.uploadAreaDragging : ""}`}
+      className={`${styles.uploadArea} ${isDragging ? styles.uploadAreaDragging : ''}`}
       onClick={() => fileInputRef.current?.click()}
       onDrop={handleDrop}
       onDragOver={(e) => {
@@ -38,7 +38,7 @@ export const UploadImage = ({ onFileSelect }: UploadImageProps) => {
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
       <svg
         xmlns="http://www.w3.org/2000/svg"

@@ -5,8 +5,8 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
-import styles from "./Slider.module.css";
+} from 'react';
+import styles from './Slider.module.css';
 
 export type SliderHandle = {
   getValue: () => number;
@@ -32,14 +32,14 @@ const getPercentage = (value: number, min: number, max: number) => {
 };
 
 const commitKeys = new Set([
-  "ArrowDown",
-  "ArrowLeft",
-  "ArrowRight",
-  "ArrowUp",
-  "End",
-  "Home",
-  "PageDown",
-  "PageUp",
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'End',
+  'Home',
+  'PageDown',
+  'PageUp',
 ]);
 
 export const Slider = ({
@@ -49,7 +49,7 @@ export const Slider = ({
   step = 1,
   disabled = false,
   isTooltip = false,
-  unit = "",
+  unit = '',
   className,
   onChange,
   onInput,
@@ -71,10 +71,7 @@ export const Slider = ({
   const updateProgress = (nextValue: number) => {
     setCurrentValue(nextValue);
     const percentage = getPercentage(nextValue, min, max);
-    containerRef.current?.style.setProperty(
-      "--slider-progress",
-      `${percentage}%`,
-    );
+    containerRef.current?.style.setProperty('--slider-progress', `${percentage}%`);
   };
 
   const commitValue = () => {
@@ -89,28 +86,23 @@ export const Slider = ({
     const nextValue = Number(inputRef.current.value);
     setCurrentValue(nextValue);
     const percentage = getPercentage(nextValue, min, max);
-    containerRef.current?.style.setProperty(
-      "--slider-progress",
-      `${percentage}%`,
-    );
+    containerRef.current?.style.setProperty('--slider-progress', `${percentage}%`);
   }, [value, min, max]);
 
   return (
     <div
       ref={containerRef}
-      className={`${styles.sliderContainer} ${disabled ? styles.disabled : ""} ${className || ""}`}
+      className={`${styles.sliderContainer} ${disabled ? styles.disabled : ''} ${className || ''}`}
       style={
         {
-          "--slider-progress": `${getPercentage(initialValue, min, max)}%`,
+          '--slider-progress': `${getPercentage(initialValue, min, max)}%`,
         } as CSSProperties
       }
     >
       <div className={styles.sliderTrack}>
         <div className={styles.sliderRange} />
         <div className={styles.sliderThumb} />
-        {isTooltip && (
-          <div className={styles.sliderTooltip}>{`${currentValue}${unit}`}</div>
-        )}
+        {isTooltip && <div className={styles.sliderTooltip}>{`${currentValue}${unit}`}</div>}
       </div>
       <input
         ref={inputRef}

@@ -1,27 +1,27 @@
-import { act, renderHook } from "@testing-library/react";
-import type { PropsWithChildren } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { PixediProvider } from "./PixediProvider";
-import { usePixediContext } from "./usePixediContext";
+import { act, renderHook } from '@testing-library/react';
+import type { PropsWithChildren } from 'react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { PixediProvider } from './PixediProvider';
+import { usePixediContext } from './usePixediContext';
 
 const initialItem = {
   width: 800,
   height: 600,
-  action: { name: "initial" as const, args: null },
+  action: { name: 'initial' as const, args: null },
 };
 
 const editedItem = {
   width: 400,
   height: 300,
-  action: { name: "resize" as const, args: { width: 400, height: 300 } },
+  action: { name: 'resize' as const, args: { width: 400, height: 300 } },
 };
 
 const secondEditedItem = {
   width: 200,
   height: 200,
   action: {
-    name: "crop" as const,
-    args: { id: "crop-1", ratio: 1, isFree: true, x: 0, y: 0, w: 200, h: 200 },
+    name: 'crop' as const,
+    args: { id: 'crop-1', ratio: 1, isFree: true, x: 0, y: 0, w: 200, h: 200 },
   },
 };
 
@@ -29,7 +29,7 @@ const wrapper = ({ children }: PropsWithChildren) => (
   <PixediProvider
     mimeType="png"
     previewUrl="data:image/png;base64,initial"
-    originalBlob={new Blob([], { type: "image/png" })}
+    originalBlob={new Blob([], { type: 'image/png' })}
     width={initialItem.width}
     height={initialItem.height}
     settings={{}}
@@ -40,68 +40,66 @@ const wrapper = ({ children }: PropsWithChildren) => (
   </PixediProvider>
 );
 
-describe("PixediProvider", () => {
+describe('PixediProvider', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it("never revokes the previewUrl it does not own", () => {
+  it('never revokes the previewUrl it does not own', () => {
     const revokeObjectURL = vi.fn();
-    vi.stubGlobal("URL", { ...URL, revokeObjectURL });
+    vi.stubGlobal('URL', { ...URL, revokeObjectURL });
 
     const { unmount } = renderHook(() => usePixediContext(), { wrapper });
     unmount();
 
-    expect(revokeObjectURL).not.toHaveBeenCalledWith(
-      "data:image/png;base64,initial",
-    );
+    expect(revokeObjectURL).not.toHaveBeenCalledWith('data:image/png;base64,initial');
   });
 
-  it("revokes only the preview urls it created through setImage", () => {
+  it('revokes only the preview urls it created through setImage', () => {
     const revokeObjectURL = vi.fn();
     const createObjectURL = vi
       .fn()
-      .mockReturnValueOnce("blob:first")
-      .mockReturnValueOnce("blob:second");
-    vi.stubGlobal("URL", { ...URL, createObjectURL, revokeObjectURL });
+      .mockReturnValueOnce('blob:first')
+      .mockReturnValueOnce('blob:second');
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL });
 
     const { result, unmount } = renderHook(() => usePixediContext(), {
       wrapper,
     });
 
     const processed = {
-      mimeType: "png",
+      mimeType: 'png',
       width: 400,
       height: 300,
-      newBlob: new Blob([], { type: "image/png" }),
-      previewBlob: new Blob([], { type: "image/webp" }),
+      newBlob: new Blob([], { type: 'image/png' }),
+      previewBlob: new Blob([], { type: 'image/webp' }),
       isAlpha: false,
     };
 
     act(() => {
       result.current.setImage(processed);
     });
-    expect(result.current.previewUrl).toBe("blob:first");
+    expect(result.current.previewUrl).toBe('blob:first');
     expect(revokeObjectURL).not.toHaveBeenCalled();
 
     act(() => {
       result.current.setImage(processed);
     });
-    expect(result.current.previewUrl).toBe("blob:second");
-    expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith("blob:first");
+    expect(result.current.previewUrl).toBe('blob:second');
+    expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith('blob:first');
 
     unmount();
-    expect(revokeObjectURL).toHaveBeenCalledWith("blob:second");
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:second');
   });
 
-  it("starts rotations from zero after a committed shape", () => {
+  it('starts rotations from zero after a committed shape', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
       result.current.addToHistory({
         width: 600,
         height: 800,
-        action: { name: "rotate", args: { degrees: 90 } },
+        action: { name: 'rotate', args: { degrees: 90 } },
       });
     });
     expect(result.current.getLastRotation()).toBe(90);
@@ -111,9 +109,9 @@ describe("PixediProvider", () => {
         width: 400,
         height: 400,
         action: {
-          name: "shapes",
+          name: 'shapes',
           args: {
-            shape: "heart",
+            shape: 'heart',
             outlined: false,
             border: 0.075,
             x: 0,
@@ -127,22 +125,22 @@ describe("PixediProvider", () => {
     expect(result.current.getLastRotation()).toBe(0);
   });
 
-  it("initializes the image history and editor state", () => {
+  it('initializes the image history and editor state', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     expect(result.current.history).toEqual({
       items: [initialItem],
       pointer: 0,
     });
-    expect(result.current.mimeType).toBe("png");
+    expect(result.current.mimeType).toBe('png');
     expect(result.current.currentAction).toBeNull();
     expect(result.current.getLastHistoryItem()).toEqual(initialItem);
   });
 
-  it("updates the selected action and sidebar visibility", () => {
+  it('updates the selected action and sidebar visibility', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
     const action = {
-      name: "resize" as const,
+      name: 'resize' as const,
       args: { width: 400, height: 300 },
     };
 
@@ -154,12 +152,12 @@ describe("PixediProvider", () => {
     expect(result.current.currentAction).toEqual(action);
   });
 
-  it("adds edits, clears the action, and discards redo history", () => {
+  it('adds edits, clears the action, and discards redo history', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
       result.current.setCurrentAction({
-        name: "resize",
+        name: 'resize',
         args: { width: 400, height: 300 },
       });
       result.current.addToHistory(editedItem);
@@ -168,7 +166,7 @@ describe("PixediProvider", () => {
       result.current.addToHistory({
         ...editedItem,
         action: {
-          name: "rotate" as const,
+          name: 'rotate' as const,
           args: { degrees: 90 },
         },
       });
@@ -182,14 +180,14 @@ describe("PixediProvider", () => {
       {
         ...editedItem,
         action: {
-          name: "rotate" as const,
+          name: 'rotate' as const,
           args: { degrees: 90 },
         },
       },
     ]);
   });
 
-  it("moves through history without exceeding its boundaries", () => {
+  it('moves through history without exceeding its boundaries', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {
@@ -212,7 +210,7 @@ describe("PixediProvider", () => {
     expect(result.current.getLastHistoryItem()).toEqual(editedItem);
   });
 
-  it("resets history to the initial item", () => {
+  it('resets history to the initial item', () => {
     const { result } = renderHook(() => usePixediContext(), { wrapper });
 
     act(() => {

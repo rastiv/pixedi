@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
-import { getCropSettings, getInitalCrop } from "../utils/crop";
-import { usePixediContext } from "../provider/usePixediContext";
-import type { CropRectExtended } from "../types";
-import styles from "./Crop.module.css";
+import { useEffect, useRef } from 'react';
+import { getCropSettings, getInitalCrop } from '../utils/crop';
+import { usePixediContext } from '../provider/usePixediContext';
+import type { CropRectExtended } from '../types';
+import styles from './Crop.module.css';
 
 export const CropInfo = () => {
   const xRef = useRef<HTMLDivElement>(null);
@@ -33,10 +33,10 @@ export const CropInfo = () => {
       if (hRef.current) hRef.current.textContent = h.toString();
     };
 
-    eventBus.addEventListener("crop-update", onCropUpdate);
+    eventBus.addEventListener('crop-update', onCropUpdate);
 
     return () => {
-      eventBus.removeEventListener("crop-update", onCropUpdate);
+      eventBus.removeEventListener('crop-update', onCropUpdate);
     };
   }, [ratio, height, width, eventBus]);
 

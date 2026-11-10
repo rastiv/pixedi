@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { ActionName } from "../types";
+import { useState } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { ActionName } from '../types';
 
 export const useFlip = () => {
   const { getLastHistoryItem, setCurrentAction, i18n } = usePixediContext();

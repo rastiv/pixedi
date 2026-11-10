@@ -1,6 +1,6 @@
-import { useRef } from "react";
-import { useCropInteraction, CropBox } from ".";
-import { Preview } from "../preview";
+import { useRef } from 'react';
+import { useCropInteraction, CropBox } from '.';
+import { Preview } from '../preview';
 
 export const CropInteractBox = () => {
   const boxRef = useRef<HTMLDivElement>(null);
@@ -12,10 +12,7 @@ export const CropInteractBox = () => {
 
   return (
     <>
-      <Preview
-        isClipped
-        style={{ clipPath: `xywh(${x}% ${y}% ${w}% ${h}%)` }}
-      />
+      <Preview isClipped style={{ clipPath: `xywh(${x}% ${y}% ${w}% ${h}%)` }} />
       <CropBox
         boxRef={boxRef}
         rect={initialCrop}

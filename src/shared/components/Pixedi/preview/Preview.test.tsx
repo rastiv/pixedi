@@ -1,8 +1,8 @@
-import { cleanup, fireEvent, render } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { PixediProvider } from "../provider/PixediProvider";
-import { usePixediContext } from "../provider/usePixediContext";
-import { Preview } from "./Preview";
+import { cleanup, fireEvent, render } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { PixediProvider } from '../provider/PixediProvider';
+import { usePixediContext } from '../provider/usePixediContext';
+import { Preview } from './Preview';
 
 afterEach(cleanup);
 
@@ -10,18 +10,14 @@ const SetRotation = ({ degrees }: { degrees: number }) => {
   const { setCurrentAction } = usePixediContext();
 
   return (
-    <button
-      type="button"
-      onClick={() => setCurrentAction({ name: "rotate", args: { degrees } })}
-    >
+    <button type="button" onClick={() => setCurrentAction({ name: 'rotate', args: { degrees } })}>
       Set rotation
     </button>
   );
 };
 
 const PreviewControls = () => {
-  const { setCurrentAction, addToHistory, setImage, eventBus } =
-    usePixediContext();
+  const { setCurrentAction, addToHistory, setImage, eventBus } = usePixediContext();
 
   return (
     <>
@@ -29,12 +25,10 @@ const PreviewControls = () => {
         type="button"
         onClick={() => {
           setCurrentAction({
-            name: "resize",
+            name: 'resize',
             args: { width: 1200, height: 900 },
           });
-          eventBus.dispatchEvent(
-            new CustomEvent<number>("resize-update", { detail: 150 }),
-          );
+          eventBus.dispatchEvent(new CustomEvent<number>('resize-update', { detail: 150 }));
         }}
       >
         Resize
@@ -43,8 +37,8 @@ const PreviewControls = () => {
         type="button"
         onClick={() =>
           setCurrentAction({
-            name: "crop",
-            args: { id: "1:1", ratio: 1, isFree: false },
+            name: 'crop',
+            args: { id: '1:1', ratio: 1, isFree: false },
           })
         }
       >
@@ -57,7 +51,7 @@ const PreviewControls = () => {
             width: 800,
             height: 600,
             action: {
-              name: "flip",
+              name: 'flip',
               args: { horizontal: true, vertical: false },
             },
           })
@@ -69,9 +63,9 @@ const PreviewControls = () => {
         type="button"
         onClick={() =>
           setImage({
-            newBlob: new Blob([], { type: "image/png" }),
-            previewBlob: new Blob([], { type: "image/webp" }),
-            mimeType: "image/png",
+            newBlob: new Blob([], { type: 'image/png' }),
+            previewBlob: new Blob([], { type: 'image/webp' }),
+            mimeType: 'image/png',
             width: 800,
             height: 600,
             isAlpha: false,
@@ -89,7 +83,7 @@ const renderPreview = (degrees: number) => {
     <PixediProvider
       mimeType="png"
       previewUrl="data:image/png;base64,initial"
-      originalBlob={new Blob([], { type: "image/png" })}
+      originalBlob={new Blob([], { type: 'image/png' })}
       width={800}
       height={600}
       settings={{}}
@@ -101,10 +95,10 @@ const renderPreview = (degrees: number) => {
     </PixediProvider>,
   );
 
-  fireEvent.click(container.querySelector("button")!);
+  fireEvent.click(container.querySelector('button')!);
 
   // preview > filter > flip > rotate > img
-  const image = container.querySelector("img")!;
+  const image = container.querySelector('img')!;
   const rotateLayer = image.parentElement;
   const preview = rotateLayer?.parentElement?.parentElement?.parentElement;
 
@@ -114,13 +108,13 @@ const renderPreview = (degrees: number) => {
   return { preview: preview!, rotateLayer: rotateLayer! };
 };
 
-describe("Preview resize geometry", () => {
-  it("resets an unsaved resize scale when another action is selected", () => {
+describe('Preview resize geometry', () => {
+  it('resets an unsaved resize scale when another action is selected', () => {
     const { container, getByText } = render(
       <PixediProvider
         mimeType="png"
         previewUrl="data:image/png;base64,initial"
-        originalBlob={new Blob([], { type: "image/png" })}
+        originalBlob={new Blob([], { type: 'image/png' })}
         width={800}
         height={600}
         settings={{}}
@@ -132,35 +126,34 @@ describe("Preview resize geometry", () => {
       </PixediProvider>,
     );
     const preview =
-      container.querySelector("img")!.parentElement!.parentElement!
-        .parentElement!.parentElement!;
+      container.querySelector('img')!.parentElement!.parentElement!.parentElement!.parentElement!;
 
-    fireEvent.click(getByText("Resize"));
-    expect(preview.style.transform).toBe("scale(1.5)");
+    fireEvent.click(getByText('Resize'));
+    expect(preview.style.transform).toBe('scale(1.5)');
 
-    fireEvent.click(getByText("Crop"));
-    expect(preview.style.transform).toBe("scale(1)");
-    expect(preview.style.transition).toBe("none");
+    fireEvent.click(getByText('Crop'));
+    expect(preview.style.transform).toBe('scale(1)');
+    expect(preview.style.transition).toBe('none');
     expect(
-      Array.from(preview.querySelectorAll<HTMLElement>("*")).every(
-        (element) => element.style.transition === "none",
+      Array.from(preview.querySelectorAll<HTMLElement>('*')).every(
+        (element) => element.style.transition === 'none',
       ),
     ).toBe(true);
   });
 });
 
-describe("Preview image replacement", () => {
-  it("disables animation when a processed image replaces saved transforms", () => {
-    vi.stubGlobal("URL", {
+describe('Preview image replacement', () => {
+  it('disables animation when a processed image replaces saved transforms', () => {
+    vi.stubGlobal('URL', {
       ...URL,
-      createObjectURL: vi.fn(() => "blob:saved-preview"),
+      createObjectURL: vi.fn(() => 'blob:saved-preview'),
       revokeObjectURL: vi.fn(),
     });
     const { container, getByText, unmount } = render(
       <PixediProvider
         mimeType="png"
         previewUrl="data:image/png;base64,initial"
-        originalBlob={new Blob([], { type: "image/png" })}
+        originalBlob={new Blob([], { type: 'image/png' })}
         width={800}
         height={600}
         settings={{}}
@@ -171,22 +164,19 @@ describe("Preview image replacement", () => {
         <PreviewControls />
       </PixediProvider>,
     );
-    const image = container.querySelector("img")!;
-    const preview =
-      image.parentElement!.parentElement!.parentElement!.parentElement!;
+    const image = container.querySelector('img')!;
+    const preview = image.parentElement!.parentElement!.parentElement!.parentElement!;
 
-    fireEvent.click(getByText("Commit flip"));
+    fireEvent.click(getByText('Commit flip'));
     // the flip layer wraps the rotate layer, so it mirrors the view as seen
-    expect(image.parentElement!.parentElement!.style.transform).toBe(
-      "scale(-1, 1)",
-    );
+    expect(image.parentElement!.parentElement!.style.transform).toBe('scale(-1, 1)');
 
-    fireEvent.click(getByText("Replace image"));
-    expect(image.getAttribute("src")).toBe("blob:saved-preview");
-    expect(preview.style.transition).toBe("none");
+    fireEvent.click(getByText('Replace image'));
+    expect(image.getAttribute('src')).toBe('blob:saved-preview');
+    expect(preview.style.transition).toBe('none');
     expect(
-      Array.from(preview.querySelectorAll<HTMLElement>("*")).every(
-        (element) => element.style.transition === "none",
+      Array.from(preview.querySelectorAll<HTMLElement>('*')).every(
+        (element) => element.style.transition === 'none',
       ),
     ).toBe(true);
 
@@ -195,59 +185,55 @@ describe("Preview image replacement", () => {
   });
 });
 
-describe("Preview clipping", () => {
+describe('Preview clipping', () => {
   it.each([
-    { isClipped: true, expected: "xywh(10% 20% 30% 40%)" },
-    { isClipped: false, expected: "" },
-  ])(
-    "applies clip-path updates only when isClipped is $isClipped",
-    ({ isClipped, expected }) => {
-      const ClipPathUpdate = () => {
-        const { eventBus } = usePixediContext();
+    { isClipped: true, expected: 'xywh(10% 20% 30% 40%)' },
+    { isClipped: false, expected: '' },
+  ])('applies clip-path updates only when isClipped is $isClipped', ({ isClipped, expected }) => {
+    const ClipPathUpdate = () => {
+      const { eventBus } = usePixediContext();
 
-        return (
-          <button
-            type="button"
-            onClick={() =>
-              eventBus.dispatchEvent(
-                new CustomEvent("clip-path-update", {
-                  detail: { x: 10, y: 20, w: 30, h: 40 },
-                }),
-              )
-            }
-          >
-            Update clip path
-          </button>
-        );
-      };
-      const { container, getByText } = render(
-        <PixediProvider
-          mimeType="png"
-          previewUrl="data:image/png;base64,initial"
-          originalBlob={new Blob([], { type: "image/png" })}
-          width={800}
-          height={600}
-          settings={{}}
-          isAlpha={false}
-          translations={{}}
+      return (
+        <button
+          type="button"
+          onClick={() =>
+            eventBus.dispatchEvent(
+              new CustomEvent('clip-path-update', {
+                detail: { x: 10, y: 20, w: 30, h: 40 },
+              }),
+            )
+          }
         >
-          <Preview isClipped={isClipped} />
-          <ClipPathUpdate />
-        </PixediProvider>,
+          Update clip path
+        </button>
       );
-      const preview =
-        container.querySelector("img")!.parentElement!.parentElement!
-          .parentElement!.parentElement!;
+    };
+    const { container, getByText } = render(
+      <PixediProvider
+        mimeType="png"
+        previewUrl="data:image/png;base64,initial"
+        originalBlob={new Blob([], { type: 'image/png' })}
+        width={800}
+        height={600}
+        settings={{}}
+        isAlpha={false}
+        translations={{}}
+      >
+        <Preview isClipped={isClipped} />
+        <ClipPathUpdate />
+      </PixediProvider>,
+    );
+    const preview =
+      container.querySelector('img')!.parentElement!.parentElement!.parentElement!.parentElement!;
 
-      fireEvent.click(getByText("Update clip path"));
+    fireEvent.click(getByText('Update clip path'));
 
-      expect(preview.style.clipPath).toBe(expected);
-    },
-  );
+    expect(preview.style.clipPath).toBe(expected);
+  });
 });
 
-describe("Preview filter compare", () => {
-  it("clears the compare clip-path when compare is switched off", () => {
+describe('Preview filter compare', () => {
+  it('clears the compare clip-path when compare is switched off', () => {
     const CompareControls = () => {
       const { eventBus, toggleCompare } = usePixediContext();
 
@@ -259,9 +245,7 @@ describe("Preview filter compare", () => {
           <button
             type="button"
             onClick={() =>
-              eventBus.dispatchEvent(
-                new CustomEvent("compare-update", { detail: 50 }),
-              )
+              eventBus.dispatchEvent(new CustomEvent('compare-update', { detail: 50 }))
             }
           >
             Update compare
@@ -273,7 +257,7 @@ describe("Preview filter compare", () => {
       <PixediProvider
         mimeType="png"
         previewUrl="data:image/png;base64,initial"
-        originalBlob={new Blob([], { type: "image/png" })}
+        originalBlob={new Blob([], { type: 'image/png' })}
         width={800}
         height={600}
         settings={{}}
@@ -285,19 +269,18 @@ describe("Preview filter compare", () => {
       </PixediProvider>,
     );
     const preview =
-      container.querySelector("img")!.parentElement!.parentElement!
-        .parentElement!.parentElement!;
+      container.querySelector('img')!.parentElement!.parentElement!.parentElement!.parentElement!;
 
-    fireEvent.click(getByText("Toggle compare"));
-    fireEvent.click(getByText("Update compare"));
-    expect(preview.style.clipPath).toBe("xywh(50% 0% 50% 100%)");
+    fireEvent.click(getByText('Toggle compare'));
+    fireEvent.click(getByText('Update compare'));
+    expect(preview.style.clipPath).toBe('xywh(50% 0% 50% 100%)');
 
-    fireEvent.click(getByText("Toggle compare"));
-    expect(preview.style.clipPath).toBe("");
+    fireEvent.click(getByText('Toggle compare'));
+    expect(preview.style.clipPath).toBe('');
   });
 });
 
-describe("Preview rotation geometry", () => {
+describe('Preview rotation geometry', () => {
   it.each([
     { degrees: 0, rotation: 0, viewWidth: 800, viewHeight: 600 },
     { degrees: 90, rotation: 90, viewWidth: 600, viewHeight: 800 },
@@ -307,24 +290,18 @@ describe("Preview rotation geometry", () => {
     { degrees: -90, rotation: -90, viewWidth: 600, viewHeight: 800 },
     { degrees: 360, rotation: 0, viewWidth: 800, viewHeight: 600 },
   ])(
-    "uses orientation-aware dimensions at $degrees degrees",
+    'uses orientation-aware dimensions at $degrees degrees',
     ({ degrees, rotation, viewWidth, viewHeight }) => {
       const { preview, rotateLayer } = renderPreview(degrees);
 
       expect(preview.style.aspectRatio).toBe(`${viewWidth} / ${viewHeight}`);
-      expect(parseFloat(rotateLayer.style.width)).toBeCloseTo(
-        (800 / viewWidth) * 100,
-      );
-      expect(parseFloat(rotateLayer.style.height)).toBeCloseTo(
-        (600 / viewHeight) * 100,
-      );
-      expect(rotateLayer.style.transform).toBe(
-        `translate(-50%, -50%) rotate(${rotation}deg)`,
-      );
+      expect(parseFloat(rotateLayer.style.width)).toBeCloseTo((800 / viewWidth) * 100);
+      expect(parseFloat(rotateLayer.style.height)).toBeCloseTo((600 / viewHeight) * 100);
+      expect(rotateLayer.style.transform).toBe(`translate(-50%, -50%) rotate(${rotation}deg)`);
     },
   );
 
-  it("zooms a free angle in so the frame stays covered", () => {
+  it('zooms a free angle in so the frame stays covered', () => {
     const { preview, rotateLayer } = renderPreview(30);
     const rad = (30 * Math.PI) / 180;
     const scale = Math.max(
@@ -333,24 +310,20 @@ describe("Preview rotation geometry", () => {
     );
 
     // 30deg is closest to 0, so the frame keeps its orientation
-    expect(preview.style.aspectRatio).toBe("800 / 600");
-    const [, angle, zoom] = rotateLayer.style.transform.match(
-      /rotate\((.+)deg\) scale\((.+)\)/,
-    )!;
+    expect(preview.style.aspectRatio).toBe('800 / 600');
+    const [, angle, zoom] = rotateLayer.style.transform.match(/rotate\((.+)deg\) scale\((.+)\)/)!;
     expect(Number(angle)).toBe(30);
     expect(Number(zoom)).toBeCloseTo(scale);
   });
 
-  it("returns from several full turns without spinning back through them", () => {
+  it('returns from several full turns without spinning back through them', () => {
     const Rotations = () => {
       const { setCurrentAction } = usePixediContext();
       return (
         <>
           <button
             type="button"
-            onClick={() =>
-              setCurrentAction({ name: "rotate", args: { degrees: 1197 } })
-            }
+            onClick={() => setCurrentAction({ name: 'rotate', args: { degrees: 1197 } })}
           >
             Spin
           </button>
@@ -364,7 +337,7 @@ describe("Preview rotation geometry", () => {
       <PixediProvider
         mimeType="png"
         previewUrl="data:image/png;base64,initial"
-        originalBlob={new Blob([], { type: "image/png" })}
+        originalBlob={new Blob([], { type: 'image/png' })}
         width={800}
         height={600}
         settings={{}}
@@ -375,20 +348,18 @@ describe("Preview rotation geometry", () => {
         <Rotations />
       </PixediProvider>,
     );
-    const rotateLayer = () => container.querySelector("img")!.parentElement!;
+    const rotateLayer = () => container.querySelector('img')!.parentElement!;
 
-    fireEvent.click(getByText("Spin"));
-    expect(rotateLayer().style.transform).toContain("rotate(117deg)");
+    fireEvent.click(getByText('Spin'));
+    expect(rotateLayer().style.transform).toContain('rotate(117deg)');
 
-    fireEvent.click(getByText("Cancel"));
-    expect(rotateLayer().style.transform).toBe(
-      "translate(-50%, -50%) rotate(0deg)",
-    );
+    fireEvent.click(getByText('Cancel'));
+    expect(rotateLayer().style.transform).toBe('translate(-50%, -50%) rotate(0deg)');
   });
 
-  it("swaps the frame once the angle is closer to a quarter turn", () => {
+  it('swaps the frame once the angle is closer to a quarter turn', () => {
     const { preview } = renderPreview(105);
 
-    expect(preview.style.aspectRatio).toBe("600 / 800");
+    expect(preview.style.aspectRatio).toBe('600 / 800');
   });
 });

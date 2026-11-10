@@ -1,14 +1,14 @@
-import { usePixediContext } from "../provider/usePixediContext";
-import { ResizeTools } from "../resize";
-import { CropTools, CropInteractBox } from "../crop";
-import { PresetTools } from "../preset";
-import { FlipTools } from "../flip";
-import { RotateTools } from "../rotate";
-import { FilterTools, FilterInteractBox } from "../filters";
-import { ShapeTools, ShapeInteractBox } from "../shapes";
-import { Preview } from "../preview";
-import { ActionName } from "../types";
-import styles from "./Frame.module.css";
+import { usePixediContext } from '../provider/usePixediContext';
+import { ResizeTools } from '../resize';
+import { CropTools, CropInteractBox } from '../crop';
+import { PresetTools } from '../preset';
+import { FlipTools } from '../flip';
+import { RotateTools } from '../rotate';
+import { FilterTools, FilterInteractBox } from '../filters';
+import { ShapeTools, ShapeInteractBox } from '../shapes';
+import { Preview } from '../preview';
+import { ActionName } from '../types';
+import styles from './Frame.module.css';
 
 export const Frame = () => {
   const { settings, currentAction } = usePixediContext();
@@ -24,7 +24,7 @@ export const Frame = () => {
 
   const frameClassName = `
     ${styles.frame} 
-    ${settings?.background ? styles[`bg-${settings.background}`] : ""}
+    ${settings?.background ? styles[`bg-${settings.background}`] : ''}
   `;
 
   return (
@@ -38,9 +38,7 @@ export const Frame = () => {
       {isFilters && <FilterTools />}
       {isShapes && <ShapeTools />}
 
-      {(isCrop || isPreset) && (
-        <CropInteractBox key={currentAction?.args?.id} />
-      )}
+      {(isCrop || isPreset) && <CropInteractBox key={currentAction?.args?.id} />}
       {isFilters && <FilterInteractBox />}
       {isShapes && <ShapeInteractBox />}
     </div>

@@ -1,8 +1,8 @@
-import { useRef } from "react";
-import { Lock } from "../assets/icons";
-import { SaveCloseGroup, InputPixel, SurfaceTool, Slider } from "../ui";
-import { useResize } from "./useResize";
-import styles from "./Resize.module.css";
+import { useRef } from 'react';
+import { Lock } from '../assets/icons';
+import { SaveCloseGroup, InputPixel, SurfaceTool, Slider } from '../ui';
+import { useResize } from './useResize';
+import styles from './Resize.module.css';
 
 export const ResizeTools = () => {
   const valueRef = useRef<HTMLDivElement>(null);
@@ -46,17 +46,13 @@ export const ResizeTools = () => {
   );
 
   return (
-    <SurfaceTool
-      ref={resizeRef}
-      className={styles.tools}
-      additional={sliderContent}
-    >
+    <SurfaceTool ref={resizeRef} className={styles.tools} additional={sliderContent}>
       <div className={styles.toolsContainer}>
         <InputPixel
           value={width}
           name="width"
           label="Width"
-          style={{ width: "88px" }}
+          style={{ width: '88px' }}
           onChange={(event) => setWidth(Number(event.target.value))}
           onBlur={handleWidthBlur}
         />
@@ -65,7 +61,7 @@ export const ResizeTools = () => {
           value={height}
           name="height"
           label="Height"
-          style={{ width: "88px" }}
+          style={{ width: '88px' }}
           onChange={(event) => setHeight(Number(event.target.value))}
           onBlur={handleHeightBlur}
         />

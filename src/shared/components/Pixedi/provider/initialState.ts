@@ -1,8 +1,8 @@
-import { DefaultFilterValues } from "../filters/DefaultFilterValues";
-import { SHAPE_BORDER } from "../constants/shapes";
-import { type History, type Action, ActionName } from "../types";
+import { DefaultFilterValues } from '../filters/DefaultFilterValues';
+import { SHAPE_BORDER } from '../constants/shapes';
+import { type History, type Action, ActionName } from '../types';
 
-import type { Settings } from "../types";
+import type { Settings } from '../types';
 
 export type PixediContextType = {
   history: History;
@@ -18,11 +18,7 @@ export type PixediContextType = {
   singleToolUI: boolean;
 };
 
-const getInitialAction = (
-  tools: string[],
-  width: number,
-  height: number,
-): Action | null => {
+const getInitialAction = (tools: string[], width: number, height: number): Action | null => {
   if (tools.length === 1) {
     switch (tools[0]) {
       case ActionName.RESIZE:
@@ -30,13 +26,13 @@ const getInitialAction = (
       case ActionName.CROP:
         return {
           name: ActionName.CROP,
-          args: { id: "freeform", ratio: width / height, isFree: true },
+          args: { id: 'freeform', ratio: width / height, isFree: true },
         };
       case ActionName.PRESET_CROP:
         return {
           name: ActionName.PRESET_CROP,
           args: {
-            id: "facebook-post",
+            id: 'facebook-post',
             ratio: 1200 / 630,
             isFree: false,
             preset: { width: 1200, height: 630 },
@@ -49,12 +45,12 @@ const getInitialAction = (
         };
       case ActionName.ROTATE:
         return { name: ActionName.ROTATE, args: { degrees: 0 } };
-      case "filters":
+      case 'filters':
         return { name: ActionName.FILTERS, args: DefaultFilterValues() };
       case ActionName.SHAPES:
         return {
           name: ActionName.SHAPES,
-          args: { shape: "heart", outlined: false, border: SHAPE_BORDER },
+          args: { shape: 'heart', outlined: false, border: SHAPE_BORDER },
         };
       default:
         return null;
@@ -76,8 +72,8 @@ export const initialSettings: Settings = {
   infobar: true,
   quality: 0.85,
   saveAsWEBP: false,
-  exportAs: "blob",
-  background: "circled",
+  exportAs: 'blob',
+  background: 'circled',
 };
 
 export const getInitialState = (

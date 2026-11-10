@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { SaveCloseGroup } from "./SaveCloseGroup";
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { SaveCloseGroup } from './SaveCloseGroup';
 
 const meta = {
-  title: "Pixedi/UI/SaveCloseGroup",
+  title: 'Pixedi/UI/SaveCloseGroup',
   component: SaveCloseGroup,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
     onSave: fn(),
     onClose: fn(),

@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { useSurfaceToolOffset } from "./SurfaceToolContext";
-import type { SurfaceToolOffset } from "./SurfaceToolContext";
+import { useEffect, useRef } from 'react';
+import { useSurfaceToolOffset } from './SurfaceToolContext';
+import type { SurfaceToolOffset } from './SurfaceToolContext';
 
 type UseSurfaceToolArgs = {
   surfaceRef: React.RefObject<HTMLDivElement | null>;
@@ -36,10 +36,7 @@ function getOffsetBounds(el: HTMLDivElement, offset: SurfaceToolOffset) {
   };
 }
 
-export const useSurfaceTool = ({
-  surfaceRef,
-  hasAdditional,
-}: UseSurfaceToolArgs) => {
+export const useSurfaceTool = ({ surfaceRef, hasAdditional }: UseSurfaceToolArgs) => {
   const offsetRef = useSurfaceToolOffset();
   const pointerIdRef = useRef<number | null>(null);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -79,16 +76,8 @@ export const useSurfaceTool = ({
     }
 
     commit(el, {
-      dx: clamp(
-        startOffsetRef.current.dx + (e.clientX - start.x),
-        bounds.minDx,
-        bounds.maxDx,
-      ),
-      dy: clamp(
-        startOffsetRef.current.dy + (e.clientY - start.y),
-        bounds.minDy,
-        bounds.maxDy,
-      ),
+      dx: clamp(startOffsetRef.current.dx + (e.clientX - start.x), bounds.minDx, bounds.maxDx),
+      dy: clamp(startOffsetRef.current.dy + (e.clientY - start.y), bounds.minDy, bounds.maxDy),
     });
   };
 
@@ -121,7 +110,7 @@ export const useSurfaceTool = ({
     // restore the offset a previously mounted tool was dragged to
     clampToParent();
 
-    if (typeof ResizeObserver === "undefined" || !el.parentElement) return;
+    if (typeof ResizeObserver === 'undefined' || !el.parentElement) return;
 
     const observer = new ResizeObserver(clampToParent);
     observer.observe(el.parentElement);

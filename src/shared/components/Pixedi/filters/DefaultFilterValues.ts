@@ -1,4 +1,4 @@
-import type { ActionFilter } from "../types";
+import type { ActionFilter } from '../types';
 
 export const DefaultFilterValues = (): ActionFilter => ({
   saturate: 100,

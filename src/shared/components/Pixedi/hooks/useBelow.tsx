@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-import { breakpoints, type Breakpoint } from "../types";
+import { useEffect, useState } from 'react';
+import { breakpoints, type Breakpoint } from '../types';
 
-export function useBelow(
-  breakpoint: Breakpoint,
-  element: HTMLElement | null,
-): boolean {
+export function useBelow(breakpoint: Breakpoint, element: HTMLElement | null): boolean {
   const [isBelow, setIsBelow] = useState(true);
 
   useEffect(() => {

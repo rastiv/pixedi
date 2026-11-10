@@ -1,12 +1,8 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { ActionName, type CropRect, type ShapeMask } from "../types";
-import {
-  closestTurn,
-  getPreviewLayers,
-  getRotatedSizes,
-} from "../utils/preview";
-import { applyShapeMaskGeometry, applyShapeMaskImage } from "../utils/shape";
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { ActionName, type CropRect, type ShapeMask } from '../types';
+import { closestTurn, getPreviewLayers, getRotatedSizes } from '../utils/preview';
+import { applyShapeMaskGeometry, applyShapeMaskImage } from '../utils/shape';
 
 type UsePreviewProps = {
   isClipped?: boolean;
@@ -14,13 +10,8 @@ type UsePreviewProps = {
   isMasked?: boolean;
 };
 
-export const usePreview = ({
-  isClipped,
-  isFilter,
-  isMasked,
-}: UsePreviewProps) => {
-  const { history, previewUrl, currentAction, eventBus, showCompare, i18n } =
-    usePixediContext();
+export const usePreview = ({ isClipped, isFilter, isMasked }: UsePreviewProps) => {
+  const { history, previewUrl, currentAction, eventBus, showCompare, i18n } = usePixediContext();
   const previewRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
   const previousActionRef = useRef(currentAction?.name);
@@ -50,11 +41,7 @@ export const usePreview = ({
     targetBetas.some((beta, index) => beta !== previousTargets[index]);
   if (targetsChanged) {
     setPreviousTargets(targetBetas);
-    setShownBetas(
-      targetBetas.map((beta, index) =>
-        closestTurn(beta, shownBetas[index] ?? beta),
-      ),
-    );
+    setShownBetas(targetBetas.map((beta, index) => closestTurn(beta, shownBetas[index] ?? beta)));
   }
   const layers = preview.layers.map((layer, index) => ({
     ...layer,
@@ -81,23 +68,21 @@ export const usePreview = ({
     previousLayerCountRef.current = layerCount;
     previousRegionAngleRef.current = regionAngle;
 
-    const actionChanged =
-      previousAction && nextAction && previousAction !== nextAction;
-    if (!actionChanged && !previewChanged && !layersChanged && !tiltMoved)
-      return;
+    const actionChanged = previousAction && nextAction && previousAction !== nextAction;
+    if (!actionChanged && !previewChanged && !layersChanged && !tiltMoved) return;
 
     const preview = previewRef.current;
     if (!preview) return;
 
-    const elements = [preview, ...preview.querySelectorAll<HTMLElement>("*")];
+    const elements = [preview, ...preview.querySelectorAll<HTMLElement>('*')];
     elements.forEach((element) => {
-      element.style.transition = "none";
+      element.style.transition = 'none';
     });
     preview.getBoundingClientRect();
 
     const restoreTransitions = () => {
       elements.forEach((element) => {
-        element.style.removeProperty("transition");
+        element.style.removeProperty('transition');
       });
     };
     const frame = requestAnimationFrame(restoreTransitions);
@@ -110,17 +95,17 @@ export const usePreview = ({
 
   useLayoutEffect(() => {
     if (isFilter && !showCompare && previewRef.current) {
-      previewRef.current.style.removeProperty("clip-path");
+      previewRef.current.style.removeProperty('clip-path');
     }
   }, [isFilter, showCompare]);
 
   useEffect(() => {
     if (isClipped && previewRef.current) {
-      previewRef.current.style.transition = "none";
+      previewRef.current.style.transition = 'none';
     }
 
     if (currentAction?.name !== ActionName.RESIZE && previewRef.current) {
-      previewRef.current.style.transform = "scale(1)";
+      previewRef.current.style.transform = 'scale(1)';
     }
 
     const onResizeUpdate = (event: Event) => {
@@ -138,17 +123,13 @@ export const usePreview = ({
       const { x, y, w, h } = customEvent.detail;
       if (previewRef.current) {
         previewRef.current.style.clipPath = `xywh(${x}% ${y}% ${w}% ${h}%)`;
-        if (isMasked)
-          applyShapeMaskGeometry(previewRef.current, { x, y, w, h });
+        if (isMasked) applyShapeMaskGeometry(previewRef.current, { x, y, w, h });
       }
     };
 
     const onShapeMaskUpdate = (event: Event) => {
       if (!isMasked || !previewRef.current) return;
-      applyShapeMaskImage(
-        previewRef.current,
-        (event as CustomEvent<ShapeMask>).detail,
-      );
+      applyShapeMaskImage(previewRef.current, (event as CustomEvent<ShapeMask>).detail);
     };
 
     const onFilterUpdate = (event: Event) => {
@@ -162,11 +143,9 @@ export const usePreview = ({
         } else {
           const filterString = Object.entries(filters)
             .map(([key, value]) =>
-              key === "hueRotate"
-                ? `hue-rotate(${value}deg)`
-                : `${key}(${value}%)`,
+              key === 'hueRotate' ? `hue-rotate(${value}deg)` : `${key}(${value}%)`,
             )
-            .join(" ");
+            .join(' ');
           filterRef.current.style.filter = filterString;
         }
       }
@@ -185,13 +164,13 @@ export const usePreview = ({
     const controller = new AbortController();
     const { signal } = controller;
 
-    eventBus.addEventListener("resize-update", onResizeUpdate, { signal });
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate, { signal });
-    eventBus.addEventListener("shape-mask-update", onShapeMaskUpdate, {
+    eventBus.addEventListener('resize-update', onResizeUpdate, { signal });
+    eventBus.addEventListener('clip-path-update', onClipPathUpdate, { signal });
+    eventBus.addEventListener('shape-mask-update', onShapeMaskUpdate, {
       signal,
     });
-    eventBus.addEventListener("filter-update", onFilterUpdate, { signal });
-    eventBus.addEventListener("compare-update", onCompareUpdate, { signal });
+    eventBus.addEventListener('filter-update', onFilterUpdate, { signal });
+    eventBus.addEventListener('compare-update', onCompareUpdate, { signal });
 
     return () => controller.abort();
   }, [isClipped, isFilter, isMasked, currentAction?.name, eventBus]);

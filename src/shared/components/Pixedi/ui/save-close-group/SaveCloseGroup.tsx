@@ -1,6 +1,6 @@
-import { Check, Loader, X } from "../../assets/icons";
-import { Button } from "../button/Button";
-import styles from "./SaveCloseGroup.module.css";
+import { Check, Loader, X } from '../../assets/icons';
+import { Button } from '../button/Button';
+import styles from './SaveCloseGroup.module.css';
 
 type SaveCloseGroupProps = {
   onSave: () => void;

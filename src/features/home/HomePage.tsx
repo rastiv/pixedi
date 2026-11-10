@@ -1,15 +1,15 @@
-import { useRef, useState } from "react";
-import { Pixedi } from "@/shared/components/Pixedi";
-import { Modal } from "@/shared/components/Modal";
-import { ImagePreview } from "./ImagePreview";
-import { ImageList } from "./ImageList";
-import { UploadImage } from "./UploadImage";
-import styles from "./HomePage.module.css";
+import { useRef, useState } from 'react';
+import { Pixedi } from '@/shared/components/Pixedi';
+import { Modal } from '@/shared/components/Modal';
+import { ImagePreview } from './ImagePreview';
+import { ImageList } from './ImageList';
+import { UploadImage } from './UploadImage';
+import styles from './HomePage.module.css';
 
 const HomePage = () => {
   const [openModal, setOpenModal] = useState(false);
   const [blob, setBlob] = useState<Blob | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>('');
   const uploadUrlRef = useRef<string | null>(null);
 
   const handleSave = async (image: Blob | string) => {
@@ -58,16 +58,16 @@ const HomePage = () => {
   const handleDownload = () => {
     if (!blob) return;
     const mimeToExt: Record<string, string> = {
-      "image/png": "png",
-      "image/jpeg": "jpg",
-      "image/jpg": "jpg",
-      "image/gif": "gif",
-      "image/webp": "webp",
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/gif': 'gif',
+      'image/webp': 'webp',
     };
-    const mimeType = blob.type || "image/webp";
-    const ext = mimeToExt[mimeType] || "webp";
+    const mimeType = blob.type || 'image/webp';
+    const ext = mimeToExt[mimeType] || 'webp';
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `picture-${Date.now()}.${ext}`;
     a.click();
@@ -88,16 +88,10 @@ const HomePage = () => {
         size="lg"
         className={styles.modal}
       >
-        {blob && (
-          <ImagePreview
-            blob={blob}
-            onClose={handleClose}
-            onDownload={handleDownload}
-          />
-        )}
+        {blob && <ImagePreview blob={blob} onClose={handleClose} onDownload={handleDownload} />}
         {!blob && (
           <Pixedi
-            image={selectedImage || ""}
+            image={selectedImage || ''}
             onBack={handleCancel}
             onSave={handleSave}
             // theme={"dark"}
@@ -108,7 +102,7 @@ const HomePage = () => {
             // }}
             settings={{
               quality: 0.85,
-              background: "circled",
+              background: 'circled',
               // tools: ["crop"],
               // maxImageSize: 1920,
             }}

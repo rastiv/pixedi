@@ -1,23 +1,22 @@
-import { useEffect, useRef } from "react";
-import { presetsData } from "../constants";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { ActionName, type CropRect } from "../types";
-import { getInitalCrop } from "../utils/crop";
+import { useEffect, useRef } from 'react';
+import { presetsData } from '../constants';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { ActionName, type CropRect } from '../types';
+import { getInitalCrop } from '../utils/crop';
 
 const presetOptions = presetsData.map((p) => p.options).flat();
 const flattenPresets = () => presetOptions;
 
 export const usePreset = () => {
-  const { currentAction, getLastHistoryItem, setCurrentAction, eventBus } =
-    usePixediContext();
+  const { currentAction, getLastHistoryItem, setCurrentAction, eventBus } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const currentValue =
     currentAction?.name === ActionName.PRESET_CROP &&
     presetOptions.some((preset) => preset.value === currentAction.args.id)
       ? currentAction.args.id
-      : "";
+      : '';
 
   const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
 
@@ -34,10 +33,10 @@ export const usePreset = () => {
       clipPathRef.current = customEvent.detail;
     };
 
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
+    eventBus.addEventListener('clip-path-update', onClipPathUpdate);
 
     return () => {
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
+      eventBus.removeEventListener('clip-path-update', onClipPathUpdate);
     };
   }, [currentAction, width, height, eventBus]);
 

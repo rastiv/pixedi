@@ -1,16 +1,10 @@
-import { Select, SaveCloseGroup, SurfaceTool } from "../ui";
-import { usePreset } from "./usePreset";
-import styles from "./Preset.module.css";
+import { Select, SaveCloseGroup, SurfaceTool } from '../ui';
+import { usePreset } from './usePreset';
+import styles from './Preset.module.css';
 
 export const PresetTools = () => {
-  const {
-    currentValue,
-    presetsData,
-    handleChange,
-    handleSave,
-    handleClose,
-    isSaving,
-  } = usePreset();
+  const { currentValue, presetsData, handleChange, handleSave, handleClose, isSaving } =
+    usePreset();
 
   return (
     <SurfaceTool className={styles.tools}>
@@ -21,11 +15,7 @@ export const PresetTools = () => {
         items={presetsData}
         className={styles.select}
       />
-      <SaveCloseGroup
-        onSave={handleSave}
-        onClose={handleClose}
-        saving={isSaving}
-      />
+      <SaveCloseGroup onSave={handleSave} onClose={handleClose} saving={isSaving} />
     </SurfaceTool>
   );
 };

@@ -7,8 +7,8 @@
   gap: 0;
 }
 
-.container[data-position="left"],
-.container[data-position="right"] {
+.container[data-position='left'],
+.container[data-position='right'] {
   flex-direction: column;
 }
 
@@ -35,7 +35,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -3px;
     left: 50%;
@@ -46,7 +46,7 @@
   }
 }
 
-.popup[data-position="top"] {
+.popup[data-position='top'] {
   transform: translate(-50%, -100%);
 
   &::before {
@@ -57,7 +57,7 @@
   }
 }
 
-.popup[data-position="bottom"] {
+.popup[data-position='bottom'] {
   transform: translate(-50%, 0);
 
   &::before {
@@ -68,7 +68,7 @@
   }
 }
 
-.popup[data-position="left"] {
+.popup[data-position='left'] {
   transform: translate(-100%, -50%);
 
   &::before {
@@ -79,7 +79,7 @@
   }
 }
 
-.popup[data-position="right"] {
+.popup[data-position='right'] {
   transform: translate(0, -50%);
 
   &::before {
@@ -113,8 +113,8 @@
   transform: translateX(calc(-1 * var(--tooltip-offset, 0px)));
 }
 
-.track[data-position="left"],
-.track[data-position="right"] {
+.track[data-position='left'],
+.track[data-position='right'] {
   flex-direction: column;
   transform: translateY(calc(-1 * var(--tooltip-offset, 0px)));
 }

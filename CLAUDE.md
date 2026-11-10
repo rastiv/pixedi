@@ -83,8 +83,8 @@ When touching this code keep the "crop continuity" / canvas-matrix tests in `uti
 - **Component + sibling hook**: components stay mostly markup, logic lives in `useXxx.tsx` next to it (`OrbitalSelector` + `useOrbitalSelector`, `CropBox` + `useCropInteraction`).
 - **Relative imports inside `src/shared/components/Pixedi`**; the `@/` alias (→ `src/`) is used by the dev SPA and `src/widget.tsx`. Never import dev-SPA code (`src/app`, `src/features`, `src/main.tsx`, `src/shared/config`) into Pixedi.
 - Styles are CSS Modules (`*.module.css`) next to the component; theming via `data-theme` on the root.
-- Comments are sparse, lowercase, and explain *why*.
-- Formatting: Prettier config is `.prettierrc` (single quotes, `printWidth: 100`, LF). It was previously misnamed `.prettierr` and never loaded, so most existing code is still in Prettier-default style (double quotes, 80 columns) until the codebase is reformatted; format-on-save will rewrite touched files to the new style. `prettier --check` also flags every file on Windows because of CRLF checkouts; that part is not a real issue.
+- Comments are sparse, lowercase, and explain _why_.
+- Formatting: Prettier config is `.prettierrc` (single quotes, semicolons, trailing commas, `printWidth: 100`). The whole codebase is formatted with it; `pnpm-lock.yaml` is in `.prettierignore`. On Windows check with `pnpm exec prettier --check . --end-of-line auto` — without the flag every file is flagged because of CRLF checkouts.
 
 ## Testing
 

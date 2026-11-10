@@ -1,14 +1,9 @@
-import { useEffect, useMemo, useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import {
-  getCropPoints,
-  getCropSettings,
-  getInitalCrop,
-  snapRectToRatio,
-} from "../utils/crop";
-import type { CropRect, Direction } from "../types";
-import { emitCropUpdate, emitClipPathUpdate } from "../eventBus";
-import { useMobile } from "../hooks";
+import { useEffect, useMemo, useRef } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { getCropPoints, getCropSettings, getInitalCrop, snapRectToRatio } from '../utils/crop';
+import type { CropRect, Direction } from '../types';
+import { emitCropUpdate, emitClipPathUpdate } from '../eventBus';
+import { useMobile } from '../hooks';
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -28,11 +23,7 @@ function getFrameSize(el: HTMLElement): { frameW: number; frameH: number } {
   return { frameW: width, frameH: height };
 }
 
-function toPixels(
-  { x, y, w, h }: CropRect,
-  frameW: number,
-  frameH: number,
-): CropRect {
+function toPixels({ x, y, w, h }: CropRect, frameW: number, frameH: number): CropRect {
   return {
     x: (x / 100) * frameW,
     y: (y / 100) * frameH,
@@ -41,11 +32,7 @@ function toPixels(
   };
 }
 
-function toPercent(
-  { x, y, w, h }: CropRect,
-  frameW: number,
-  frameH: number,
-): CropRect {
+function toPercent({ x, y, w, h }: CropRect, frameW: number, frameH: number): CropRect {
   return {
     x: (x / frameW) * 100,
     y: (y / frameH) * 100,
@@ -68,14 +55,11 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     isFree: true,
   };
 
-  const initialCrop = useMemo(
-    () => getInitalCrop(ratio, width, height),
-    [ratio, width, height],
-  );
+  const initialCrop = useMemo(() => getInitalCrop(ratio, width, height), [ratio, width, height]);
 
   const pointerIdRef = useRef<number | null>(null);
   const startPointRef = useRef<{ x: number; y: number } | null>(null);
-  const directionRef = useRef<Direction | "">("");
+  const directionRef = useRef<Direction | ''>('');
   // the crop rect lives here in frame percentages and is never read back from
   // the dom, so repeated gestures cannot accumulate layout rounding errors
   const rectRef = useRef<CropRect>(initialCrop);
@@ -112,8 +96,8 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (pointerIdRef.current !== null) return;
     if (e.button !== 0) {
-      directionRef.current = "";
-      e.currentTarget.style.cursor = "";
+      directionRef.current = '';
+      e.currentTarget.style.cursor = '';
       return;
     }
 
@@ -150,10 +134,7 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
         toPixels(startRectRef.current, frameW, frameH),
       );
       const rect = toPercent(resized, frameW, frameH);
-      commit(
-        elCrop,
-        isFree ? rect : snapRectToRatio(rect, ratio, width, height),
-      );
+      commit(elCrop, isFree ? rect : snapRectToRatio(rect, ratio, width, height));
       return;
     }
 
@@ -177,8 +158,8 @@ export const useCropInteraction = ({ boxRef }: UseCropInteractionArgs) => {
     }
     pointerIdRef.current = null;
     startPointRef.current = null;
-    directionRef.current = "";
-    e.currentTarget.style.cursor = "";
+    directionRef.current = '';
+    e.currentTarget.style.cursor = '';
   };
 
   const boxHandlers = {

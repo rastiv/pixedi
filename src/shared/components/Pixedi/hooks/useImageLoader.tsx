@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import ImageLoadWorker from "../workers/imageLoad.ts?worker&inline";
+import { useState, useEffect, useRef } from 'react';
+import ImageLoadWorker from '../workers/imageLoad.ts?worker&inline';
 
 type UseImageLoaderProps = {
   src: string | Blob;
@@ -17,18 +17,15 @@ type UseImageLoader = {
   isAlpha: boolean;
 };
 
-export const useImageLoader = ({
-  src,
-  skip = false,
-}: UseImageLoaderProps): UseImageLoader => {
+export const useImageLoader = ({ src, skip = false }: UseImageLoaderProps): UseImageLoader => {
   const [state, setState] = useState<UseImageLoader>({
     loading: skip ? false : true,
-    error: "",
+    error: '',
     width: 0,
     height: 0,
-    mimeType: "",
+    mimeType: '',
     originalBlob: null,
-    previewUrl: "",
+    previewUrl: '',
     isAlpha: false,
   });
 
@@ -64,7 +61,7 @@ export const useImageLoader = ({
         previewUrlRef.current = URL.createObjectURL(result.previewBlob);
         setState({
           loading: false,
-          error: "",
+          error: '',
           mimeType: result.mimeType,
           width: result.width,
           height: result.height,
@@ -76,7 +73,7 @@ export const useImageLoader = ({
         setState((prev) => ({
           ...prev,
           loading: false,
-          error: result.error || "Error processing image.",
+          error: result.error || 'Error processing image.',
         }));
       }
     };

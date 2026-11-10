@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Tooltip } from "./Tooltip";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Tooltip } from './Tooltip';
 
 const meta = {
-  title: "Pixedi/UI/Tooltip",
+  title: 'Pixedi/UI/Tooltip',
   component: Tooltip,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div style={{ padding: "80px", display: "inline-block" }}>
+      <div style={{ padding: '80px', display: 'inline-block' }}>
         <Story />
       </div>
     ),
@@ -18,15 +18,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const itemStyle = {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: "40px",
-  height: "40px",
-  cursor: "pointer",
-  background: "#eee",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '40px',
+  height: '40px',
+  cursor: 'pointer',
+  background: '#eee',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
 } as const;
 
 const items = [

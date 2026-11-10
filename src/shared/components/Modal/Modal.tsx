@@ -1,20 +1,14 @@
-import styles from "./Modal.module.css";
+import styles from './Modal.module.css';
 
 type ModalProps = {
   children: React.ReactNode;
   open: boolean;
   onClose: () => void;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 };
 
-export const Modal = ({
-  children,
-  open,
-  onClose,
-  size = "md",
-  className,
-}: ModalProps) => {
+export const Modal = ({ children, open, onClose, size = 'md', className }: ModalProps) => {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -26,11 +20,7 @@ export const Modal = ({
   return (
     <div className={styles.modal}>
       <div className={styles.modalOverlay} onClick={handleBackdropClick}></div>
-      <div
-        className={`${styles.modalContent} ${styles[size]} ${className || ""}`}
-      >
-        {children}
-      </div>
+      <div className={`${styles.modalContent} ${styles[size]} ${className || ''}`}>{children}</div>
     </div>
   );
 };
