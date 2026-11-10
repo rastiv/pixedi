@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+# 1.16.4
+
+- Fix Vignette Shadow, Grain / Noise and CRT Monitor filters looking different after Save than in the preview.
+
 # 1.16.3
 
 - Add website and documentation links to README files.
