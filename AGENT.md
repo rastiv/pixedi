@@ -19,7 +19,7 @@ The core component lives in `src/shared/components/Pixedi`.
 - **Router**: `react-router` v8 (devDependency — used by the local dev SPA only)
 - **Testing**: Vitest + jsdom + Testing Library
 - **Linting**: ESLint + `typescript-eslint`
-- **Formatting**: Prettier (config in `.prettierr`)
+- **Formatting**: Prettier (config in `.prettierrc`)
 
 ## Build Targets
 
