@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Add website and documentation links to README files.
 - Fix Prettier config filename and reformat the codebase.
+- Publish to npm through Trusted Publishing (OIDC) instead of an access token.
 
 # 1.16.2
 

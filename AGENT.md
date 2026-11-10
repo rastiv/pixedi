@@ -113,7 +113,7 @@ The preview (`preview/Preview.tsx`: flip layer → rotate/zoom layer → image) 
 1. Install dependencies (`pnpm install --frozen-lockfile`)
 2. Lint, type-check, test
 3. Build widget + library and upload `dist/` as artifact
-4. Publish to npm, skipped if the version already exists (`README.npm.md` is copied over `README.md` as the package README)
+4. Publish to npm via npm Trusted Publishing (OIDC, no `NPM_TOKEN`; the tag must match `package.json#version`), skipped if the version already exists (`README.npm.md` is copied over `README.md` as the package README)
 
 Keep the pinned CDN version in `README.npm.md` and `README.widget.md` in sync with `package.json#version` when releasing.
 

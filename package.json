@@ -3,6 +3,10 @@
   "version": "1.16.3",
   "license": "MIT",
   "description": "A lightweight, embeddable React image editor component.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rastiv/pixedi.git"
+  },
   "type": "module",
   "packageManager": "pnpm@11.17.0",
   "main": "./dist/lib/index.umd.cjs",

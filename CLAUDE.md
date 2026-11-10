@@ -98,6 +98,7 @@ When touching this code keep the "crop continuity" / canvas-matrix tests in `uti
 - `react-router` and anything else the dev SPA needs stays in **devDependencies**.
 - Widget CSS is injected by JS (`vite-plugin-css-injected-by-js`, injected into the shadow root) so the UMD file is self-contained.
 - Changing a build `outDir` requires updating `package.json#files`.
-- CI (`.github/workflows/deploy.yml`) runs **only on `v*.*.*` tags**: install (`--frozen-lockfile`) → lint, type-check, test → build → npm publish (skipped if the version exists; `README.npm.md` replaces `README.md` in the package).
+- CI (`.github/workflows/deploy.yml`) runs **only on `v*.*.*` tags**: install (`--frozen-lockfile`) → lint, type-check, test → build → npm publish via **npm Trusted Publishing** (OIDC, `id-token: write`, no `NPM_TOKEN`; the tag must equal `v` + `package.json#version`; skipped if the version exists; `README.npm.md` replaces `README.md` in the package).
+- Releasing = push the commit **and** the tag (`git push origin main && git push origin vX.Y.Z`); a plain `git push` does not send tags, so CI never starts.
 - On release: bump `package.json#version`, add a `# x.y.z` entry at the top of `CHANGELOG.md`, and sync the pinned CDN version in `README.npm.md` and `README.widget.md`.
 - No web-app deployment from this repo — don't add Cloudflare Pages / `wrangler` steps.

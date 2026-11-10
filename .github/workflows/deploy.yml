@@ -6,6 +6,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -50,21 +53,24 @@ jobs:
     needs: build-and-test
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    # npm Trusted Publishing (OIDC, no token or secret). Configured on npmjs.com:
+    # package pixedi → Settings → Trusted Publisher → GitHub Actions, rastiv/pixedi, deploy.yml.
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          version: 11.17.0
-
+      # Node 24 ships npm 11, which is required for Trusted Publishing
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
+
+      - name: Tag must match package.json version
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
 
       - name: Download dist artifact
         uses: actions/download-artifact@v8
@@ -75,13 +81,9 @@ jobs:
       - name: Publish React Component to NPM
         run: |
           cp README.npm.md README.md
-          pnpm config set registry https://registry.npmjs.org
-          pnpm config set //registry.npmjs.org/:_authToken "$NODE_AUTH_TOKEN"
           VERSION=$(node -p "require('./package.json').version")
           if npm view pixedi@$VERSION version > /dev/null 2>&1; then
             echo "pixedi@$VERSION already published, skipping"
           else
-            pnpm publish --no-git-checks
+            npm publish --access public
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
