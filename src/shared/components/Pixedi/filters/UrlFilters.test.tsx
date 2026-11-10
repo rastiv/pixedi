@@ -1,17 +1,26 @@
-import { render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { cleanup, render } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
 import { UrlFilters } from './UrlFilters';
 
 describe('UrlFilters', () => {
-  it('sizes the vignette relative to the image so preview and saved image match', () => {
-    const { container } = render(<UrlFilters />);
-    const vignette = container.querySelector('#util-vignette');
+  afterEach(cleanup);
 
-    expect(vignette).toHaveAttribute('primitiveUnits', 'objectBoundingBox');
-    // pixel-based noise renders differently at preview and full size
-    expect(vignette?.querySelector('feTurbulence')).toBeNull();
-    expect(vignette?.querySelector('feImage')?.getAttribute('href')).toMatch(
-      /^data:image\/svg\+xml,/,
-    );
+  it('does not use pixel-based noise that renders differently in preview and on save', () => {
+    const { container } = render(<UrlFilters />);
+
+    expect(container.querySelector('feTurbulence')).toBeNull();
   });
+
+  it.each(['util-vignette', 'crt-lines', 'grain'])(
+    'sizes the %s texture relative to the image',
+    (id) => {
+      const { container } = render(<UrlFilters />);
+      const filter = container.querySelector(`#${id}`);
+
+      expect(filter).toHaveAttribute('primitiveUnits', 'objectBoundingBox');
+      expect(filter?.querySelector('feImage')?.getAttribute('href')).toMatch(
+        /^data:image\/svg\+xml,/,
+      );
+    },
+  );
 });
