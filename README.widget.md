@@ -11,7 +11,7 @@ A standalone UMD build of the Pixedi image editor for non-React environments. It
 Pin to a specific version in production:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/pixedi@1.16.2/dist/widget/pixedi-widget.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixedi@1.16.3/dist/widget/pixedi-widget.js"></script>
 ```
 
 For the latest version (use only for testing):

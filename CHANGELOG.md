@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+# 1.16.3
+
+- Add website and documentation links to README files.
+- Fix Prettier config filename and reformat the codebase.
+
 # 1.16.2
 
 - Improve background patterns.
