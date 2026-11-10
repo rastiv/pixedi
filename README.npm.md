@@ -43,17 +43,17 @@ npm install react react-dom
 ### Import
 
 ```tsx
-import { Pixedi } from "pixedi";
+import { Pixedi } from 'pixedi';
 ```
 
 ### Usage
 
 ```tsx
-import { Pixedi } from "pixedi";
+import { Pixedi } from 'pixedi';
 
 function App() {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Pixedi
         image="https://example.com/photo.jpg"
         onSave={async (image) => {
@@ -63,7 +63,7 @@ function App() {
         }}
         onBack={() => {
           // Handle back/cancel action
-          console.log("User cancelled editing");
+          console.log('User cancelled editing');
         }}
       />
     </div>
@@ -72,7 +72,7 @@ function App() {
 
 function AppBase64() {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: '100vw', height: '100vh' }}>
       <Pixedi
         image="https://example.com/photo.jpg"
         onSave={async (base64) => {
@@ -80,10 +80,10 @@ function AppBase64() {
           console.log(base64);
         }}
         onBack={() => {
-          console.log("User cancelled editing");
+          console.log('User cancelled editing');
         }}
         settings={{
-          exportAs: "base64",
+          exportAs: 'base64',
         }}
       />
     </div>
@@ -122,11 +122,11 @@ Pass a `translations` object to override any UI label. Only the keys you provide
 <Pixedi
   image="https://example.com/photo.jpg"
   onSave={async (image) => console.log(image)}
-  onBack={() => console.log("User cancelled editing")}
+  onBack={() => console.log('User cancelled editing')}
   translations={{
-    save: "Enregistrer",
-    crop: "Recadrer",
-    filters: "Filtres",
+    save: 'Enregistrer',
+    crop: 'Recadrer',
+    filters: 'Filtres',
   }}
 />
 ```
@@ -173,8 +173,8 @@ Passing exactly one entry in `settings.tools` renders a minimal editor: no heade
 <Pixedi
   image="https://example.com/photo.jpg"
   onSave={async (image) => console.log(image)}
-  onBack={() => console.log("User cancelled editing")}
-  settings={{ tools: ["crop"] }}
+  onBack={() => console.log('User cancelled editing')}
+  settings={{ tools: ['crop'] }}
 />
 ```
 

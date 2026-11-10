@@ -34,7 +34,7 @@
   color: var(--muted-foreground);
   transition: transform 0.2s;
 }
-.wrapper[data-state="open"] .triggerArrow {
+.wrapper[data-state='open'] .triggerArrow {
   transform: rotate(180deg);
 }
 .content {
@@ -68,7 +68,7 @@
   }
 }
 
-.wrapper[data-state="closed"] .content {
+.wrapper[data-state='closed'] .content {
   display: none;
 }
 .groupLabel {

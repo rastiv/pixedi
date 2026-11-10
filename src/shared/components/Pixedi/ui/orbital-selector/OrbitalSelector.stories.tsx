@@ -1,15 +1,15 @@
-import { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { OrbitalSelector } from "./OrbitalSelector";
+import { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { OrbitalSelector } from './OrbitalSelector';
 
 const quarterAngles = [0, 90, 180, 270];
 const octantAngles = [0, 45, 90, 135, 180, 225, 270, 315];
 
 const meta = {
-  title: "Pixedi/UI/OrbitalSelector",
+  title: 'Pixedi/UI/OrbitalSelector',
   component: OrbitalSelector,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
     value: 0,
     angles: octantAngles,
@@ -17,7 +17,7 @@ const meta = {
     onInput: fn(),
   },
   argTypes: {
-    value: { control: { type: "range", min: 0, max: 359, step: 1 } },
+    value: { control: { type: 'range', min: 0, max: 359, step: 1 } },
   },
   decorators: [
     // the track is a translucent white ring meant to sit on top of a photo
@@ -27,8 +27,7 @@ const meta = {
           width: 320,
           padding: 24,
           borderRadius: 8,
-          background:
-            "linear-gradient(135deg, #3a4a3f 0%, #6b5b45 50%, #2f3a4a 100%)",
+          background: 'linear-gradient(135deg, #3a4a3f 0%, #6b5b45 50%, #2f3a4a 100%)',
         }}
       >
         <Story />
@@ -54,9 +53,9 @@ const meta = {
         {args.children ?? (
           <output
             style={{
-              fontFamily: "var(--font-mono)",
+              fontFamily: 'var(--font-mono)',
               fontWeight: 600,
-              color: "var(--color-white)",
+              color: 'var(--color-white)',
             }}
           >
             {value}°
@@ -98,11 +97,11 @@ export const CustomContent: Story = {
     children: (
       <div
         style={{
-          padding: "6px 12px",
+          padding: '6px 12px',
           borderRadius: 4,
-          background: "var(--background)",
-          color: "var(--accent-blue)",
-          fontFamily: "var(--font-mono)",
+          background: 'var(--background)',
+          color: 'var(--accent-blue)',
+          fontFamily: 'var(--font-mono)',
           fontWeight: 600,
         }}
       >

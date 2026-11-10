@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { getInitialState } from "./initialState";
-import { StoreContext } from "./StoreContext";
-import type { PixediContextType } from "./initialState";
-import { isCommittedShape } from "../utils/preview";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { getInitialState } from './initialState';
+import { StoreContext } from './StoreContext';
+import type { PixediContextType } from './initialState';
+import { isCommittedShape } from '../utils/preview';
 import {
   ActionName,
   type Action,
@@ -10,7 +10,7 @@ import {
   type HistoryItem,
   type ProcessedImage,
   type Settings,
-} from "../types";
+} from '../types';
 
 type PixediProviderProps = {
   children: React.ReactNode;
@@ -73,10 +73,7 @@ export const PixediProvider = ({
   const addToHistory = (payload: HistoryItem) =>
     setState((store) => {
       const incrementedPointer = store.history.pointer + 1;
-      const updatedItems = [
-        ...store.history.items.slice(0, incrementedPointer),
-        payload,
-      ];
+      const updatedItems = [...store.history.items.slice(0, incrementedPointer), payload];
       return {
         ...store,
         currentAction: null,
@@ -87,8 +84,7 @@ export const PixediProvider = ({
       };
     });
 
-  const toggleCompare = () =>
-    setState((store) => ({ ...store, showCompare: !store.showCompare }));
+  const toggleCompare = () => setState((store) => ({ ...store, showCompare: !store.showCompare }));
 
   const getLastHistoryItem = (): HistoryItem => {
     const { items, pointer } = state.history;
@@ -106,10 +102,7 @@ export const PixediProvider = ({
     const { items, pointer } = state.history;
     return (
       items
-        .filter(
-          (item, index) =>
-            index <= pointer && item.action.name === ActionName.FILTERS,
-        )
+        .filter((item, index) => index <= pointer && item.action.name === ActionName.FILTERS)
         .at(-1) ?? null
     );
   };
@@ -120,10 +113,7 @@ export const PixediProvider = ({
     // a committed shape bakes the rotation in, so later rotations start at 0
     const lastRotateItem = items
       .slice(0, pointer + 1)
-      .findLast(
-        (item) =>
-          item.action.name === ActionName.ROTATE || isCommittedShape(item),
-      );
+      .findLast((item) => item.action.name === ActionName.ROTATE || isCommittedShape(item));
     if (lastRotateItem?.action.name === ActionName.ROTATE) {
       return lastRotateItem.action.args.degrees;
     }
@@ -157,8 +147,7 @@ export const PixediProvider = ({
       };
     });
 
-  const setSidebar = (payload: boolean) =>
-    setState((store) => ({ ...store, sidebar: payload }));
+  const setSidebar = (payload: boolean) => setState((store) => ({ ...store, sidebar: payload }));
 
   const eventBus = useMemo(() => new EventTarget(), []);
 

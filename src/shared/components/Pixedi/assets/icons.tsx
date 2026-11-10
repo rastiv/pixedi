@@ -1,72 +1,72 @@
-import * as React from "react";
+import * as React from 'react';
 
-const baseSvgProps: React.ComponentPropsWithoutRef<"svg"> = {
-  xmlns: "http://w3.org",
-  width: "24",
-  height: "24",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: "2",
-  strokeLinecap: "round",
-  strokeLinejoin: "round",
+const baseSvgProps: React.ComponentPropsWithoutRef<'svg'> = {
+  xmlns: 'http://w3.org',
+  width: '24',
+  height: '24',
+  viewBox: '0 0 24 24',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: '2',
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
 };
 
-export const Check = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Check = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M20 6 9 17l-5-5" />
   </svg>
 );
 
-export const X = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const X = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M18 6 6 18" />
     <path d="m6 6 12 12" />
   </svg>
 );
 
-export const Lock = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Lock = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
   </svg>
 );
 
-export const ArrowLeft = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const ArrowLeft = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="m12 19-7-7 7-7" />
     <path d="M19 12H5" />
   </svg>
 );
 
-export const ChevronDown = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const ChevronDown = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="m6 9 6 6 6-6" />
   </svg>
 );
 
-export const Undo = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Undo = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M3 7v6h6" />
     <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
   </svg>
 );
 
-export const Redo = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Redo = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 7v6h-6" />
     <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7" />
   </svg>
 );
 
-export const Crop = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Crop = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M6 2v14a2 2 0 0 0 2 2h14" />
     <path d="M18 22V8a2 2 0 0 0-2-2H2" />
   </svg>
 );
 
-export const Image = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Image = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
     <circle cx="9" cy="9" r="2" />
@@ -74,25 +74,25 @@ export const Image = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Square = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Square = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="18" height="18" x="3" y="3" rx="2" />
   </svg>
 );
 
-export const Rectangle16x9 = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Rectangle16x9 = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="20" height="12" x="2" y="6" rx="2" />
   </svg>
 );
 
-export const Rectangle4x3 = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Rectangle4x3 = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="20" height="15" x="2" y="4.5" rx="2" />
   </svg>
 );
 
-export const Fullscreen = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Fullscreen = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M3 7V5a2 2 0 0 1 2-2h2" />
     <path d="M17 3h2a2 2 0 0 1 2 2v2" />
@@ -102,7 +102,7 @@ export const Fullscreen = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const FlipH = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const FlipH = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3" />
     <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3" />
@@ -113,7 +113,7 @@ export const FlipH = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const FlipV = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const FlipV = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
     <path d="M21 16v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3" />
@@ -124,14 +124,14 @@ export const FlipV = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Rotate = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Rotate = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
     <path d="M21 3v5h-5" />
   </svg>
 );
 
-export const Presets = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Presets = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="7" height="7" x="3" y="3" rx="1" />
     <rect width="7" height="7" x="3" y="14" rx="1" />
@@ -142,7 +142,7 @@ export const Presets = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Filters = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Filters = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M10 5H3" />
     <path d="M12 19H3" />
@@ -156,7 +156,7 @@ export const Filters = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const SidebarOpen = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const SidebarOpen = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="18" height="18" x="3" y="3" rx="2" />
     <path d="M9 3v18" />
@@ -164,7 +164,7 @@ export const SidebarOpen = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const SidebarClose = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const SidebarClose = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <rect width="18" height="18" x="3" y="3" rx="2" />
     <path d="M9 3v18" />
@@ -172,9 +172,7 @@ export const SidebarClose = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const PredefinedFilters = (
-  props: React.ComponentPropsWithoutRef<"svg">,
-) => (
+export const PredefinedFilters = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M15 4V2" />
     <path d="M15 16v-2" />
@@ -188,7 +186,7 @@ export const PredefinedFilters = (
   </svg>
 );
 
-export const Compare = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Compare = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M12 3v18" />
     <path d="m16 16 4-4-4-4" />
@@ -196,7 +194,7 @@ export const Compare = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Drag = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Drag = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <circle cx="9" cy="12" r="1" />
     <circle cx="9" cy="5" r="1" />
@@ -207,13 +205,13 @@ export const Drag = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Shapes = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Shapes = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
   </svg>
 );
 
-export const Stripes = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Stripes = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M11.5 20 L20 11.5" />
     <path d="M18.5 20 L20 18.5" />
@@ -223,7 +221,7 @@ export const Stripes = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Dashed = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Dashed = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M5 3a2 2 0 0 0-2 2" />
     <path d="M19 3a2 2 0 0 1 2 2" />
@@ -240,7 +238,7 @@ export const Dashed = (props: React.ComponentPropsWithoutRef<"svg">) => (
   </svg>
 );
 
-export const Loader = (props: React.ComponentPropsWithoutRef<"svg">) => (
+export const Loader = (props: React.ComponentPropsWithoutRef<'svg'>) => (
   <svg {...baseSvgProps} {...props}>
     <path d="M21 12a9 9 0 1 1-6.219-8.56">
       <animateTransform

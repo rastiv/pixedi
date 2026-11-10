@@ -1,10 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { injectCSS, removeCSS } from "virtual:css-injected-by-js";
-import type { FuncSaveArgs, Settings } from "@/shared/components/Pixedi/types";
-import { Pixedi } from "@/shared/components/Pixedi";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { injectCSS, removeCSS } from 'virtual:css-injected-by-js';
+import type { FuncSaveArgs, Settings } from '@/shared/components/Pixedi/types';
+import { Pixedi } from '@/shared/components/Pixedi';
 
-type WidgetTheme = "light" | "dark";
+type WidgetTheme = 'light' | 'dark';
 
 type WidgetOptions = {
   containerId: string;
@@ -57,7 +57,7 @@ const PixediWidget: PixediWidget = {
     let shadowRoot = container.shadowRoot;
     if (!shadowRoot) {
       try {
-        shadowRoot = container.attachShadow({ mode: "open" });
+        shadowRoot = container.attachShadow({ mode: 'open' });
       } catch {
         return;
       }
@@ -71,7 +71,7 @@ const PixediWidget: PixediWidget = {
       shadowRoot,
     };
 
-    const render = (theme: WidgetTheme = "light") =>
+    const render = (theme: WidgetTheme = 'light') =>
       root.render(
         <React.StrictMode>
           <Pixedi
@@ -100,7 +100,7 @@ const PixediWidget: PixediWidget = {
   },
 };
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   (window as PixediWindow).PixediWidget = PixediWidget;
 }
 

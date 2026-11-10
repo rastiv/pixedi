@@ -1,8 +1,8 @@
-import { usePreview } from "./usePreview";
-import { usePixediContext } from "../provider/usePixediContext";
-import { getShapeMaskStyle } from "../utils/shape";
-import type { Preview as PreviewData } from "../utils/preview";
-import styles from "./Preview.module.css";
+import { usePreview } from './usePreview';
+import { usePixediContext } from '../provider/usePixediContext';
+import { getShapeMaskStyle } from '../utils/shape';
+import type { Preview as PreviewData } from '../utils/preview';
+import styles from './Preview.module.css';
 
 type PreviewType = {
   isClipped?: boolean;
@@ -21,11 +21,7 @@ type PreviewLayerProps = {
 // as the "image" of the later ones, so baked shapes transform with later edits
 // places the source image inside the region box; a region cut out of a tilted
 // view is turned back around its center
-const getContentStyle = ({
-  region,
-  initWidth,
-  initHeight,
-}: PreviewData): React.CSSProperties => {
+const getContentStyle = ({ region, initWidth, initHeight }: PreviewData): React.CSSProperties => {
   const { cx, cy, w, h, angle } = region;
   return {
     width: `${(initWidth / w) * 100}%`,
@@ -62,7 +58,7 @@ const PreviewLayer = ({ layers, previewUrl }: PreviewLayerProps) => {
         style={{
           width: `${(region.w / viewWidth) * 100}%`,
           height: `${(region.h / viewHeight) * 100}%`,
-          transform: `translate(-50%, -50%) rotate(${beta}deg)${scale !== 1 ? ` scale(${scale})` : ""}`,
+          transform: `translate(-50%, -50%) rotate(${beta}deg)${scale !== 1 ? ` scale(${scale})` : ''}`,
         }}
       >
         {inner.length ? (
@@ -75,31 +71,23 @@ const PreviewLayer = ({ layers, previewUrl }: PreviewLayerProps) => {
             </div>
           </div>
         ) : (
-          <img
-            className={styles.image}
-            src={previewUrl}
-            alt="Preview Image"
-            style={contentStyle}
-          />
+          <img className={styles.image} src={previewUrl} alt="Preview Image" style={contentStyle} />
         )}
       </div>
     </div>
   );
 };
 
-export const Preview = ({
-  isClipped,
-  isFilter,
-  isMasked,
-  faded,
-  style = {},
-}: PreviewType) => {
+export const Preview = ({ isClipped, isFilter, isMasked, faded, style = {} }: PreviewType) => {
   const { showCompare } = usePixediContext();
-  const { previewRef, filterRef, previewUrl, layers, filters, i18n } =
-    usePreview({ isClipped, isFilter, isMasked });
+  const { previewRef, filterRef, previewUrl, layers, filters, i18n } = usePreview({
+    isClipped,
+    isFilter,
+    isMasked,
+  });
   const { viewWidth, viewHeight } = layers.at(-1)!;
 
-  const previewClassName = `${styles.preview} ${faded ? styles.faded : ""}`;
+  const previewClassName = `${styles.preview} ${faded ? styles.faded : ''}`;
 
   return (
     <div
@@ -111,18 +99,12 @@ export const Preview = ({
       }}
     >
       {showCompare && !isFilter && (
-        <div className={`${styles.label} ${styles.before}`}>
-          {i18n("before")}
-        </div>
+        <div className={`${styles.label} ${styles.before}`}>{i18n('before')}</div>
       )}
       {showCompare && isFilter && (
-        <div className={`${styles.label} ${styles.after}`}>{i18n("after")}</div>
+        <div className={`${styles.label} ${styles.after}`}>{i18n('after')}</div>
       )}
-      <div
-        ref={filterRef}
-        className={styles.filter}
-        style={{ filter: filters.join(" ") }}
-      >
+      <div ref={filterRef} className={styles.filter} style={{ filter: filters.join(' ') }}>
         <PreviewLayer layers={layers} previewUrl={previewUrl} />
       </div>
     </div>

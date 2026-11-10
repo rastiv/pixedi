@@ -1,16 +1,12 @@
-import type { CSSProperties } from "react";
-import { shapes } from "../constants/shapes";
-import type { CropRect, ShapeMask } from "../types";
+import type { CSSProperties } from 'react';
+import { shapes } from '../constants/shapes';
+import type { CropRect, ShapeMask } from '../types';
 
 // sharp corners need a miter join, which would spike out past the unit square,
 // so the outline is drawn twice as wide and clipped to the inside of the path
 export const SHAPE_MITER_LIMIT = 10;
 
-export const getShapeMaskImage = ({
-  shape,
-  outlined,
-  border,
-}: ShapeMask): string => {
+export const getShapeMaskImage = ({ shape, outlined, border }: ShapeMask): string => {
   const d = shapes[shape];
   const body = outlined
     ? `<clipPath id='s'><path d='${d}'/></clipPath><path d='${d}' clip-path='url(#s)' fill='none' stroke='white' stroke-width='${border * 2}' stroke-linejoin='miter' stroke-miterlimit='${SHAPE_MITER_LIMIT}'/>`
@@ -37,11 +33,11 @@ export const getShapeMaskStyle = (
   const { size, position } = getShapeMaskGeometry(rect);
   return {
     maskImage: image,
-    maskRepeat: "no-repeat",
+    maskRepeat: 'no-repeat',
     maskSize: size,
     maskPosition: position,
     WebkitMaskImage: image,
-    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskRepeat: 'no-repeat',
     WebkitMaskSize: size,
     WebkitMaskPosition: position,
   };
@@ -50,13 +46,13 @@ export const getShapeMaskStyle = (
 export const applyShapeMaskImage = (el: HTMLElement, mask: ShapeMask) => {
   const image = getShapeMaskImage(mask);
   el.style.maskImage = image;
-  el.style.setProperty("-webkit-mask-image", image);
+  el.style.setProperty('-webkit-mask-image', image);
 };
 
 export const applyShapeMaskGeometry = (el: HTMLElement, rect: CropRect) => {
   const { size, position } = getShapeMaskGeometry(rect);
   el.style.maskSize = size;
   el.style.maskPosition = position;
-  el.style.setProperty("-webkit-mask-size", size);
-  el.style.setProperty("-webkit-mask-position", position);
+  el.style.setProperty('-webkit-mask-size', size);
+  el.style.setProperty('-webkit-mask-position', position);
 };

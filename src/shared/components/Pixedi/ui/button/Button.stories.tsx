@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { Button } from "./Button";
-import { Check } from "../../assets/icons";
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { Button } from './Button';
+import { Check } from '../../assets/icons';
 
 const meta = {
-  title: "Pixedi/UI/Button",
+  title: 'Pixedi/UI/Button',
   component: Button,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
-    children: "Button",
+    children: 'Button',
     onClick: fn(),
   },
 } satisfies Meta<typeof Button>;
@@ -20,13 +20,13 @@ export const Default: Story = {};
 
 export const Outline: Story = {
   args: {
-    variant: "outline",
+    variant: 'outline',
   },
 };
 
 export const Ghost: Story = {
   args: {
-    variant: "ghost",
+    variant: 'ghost',
   },
 };
 

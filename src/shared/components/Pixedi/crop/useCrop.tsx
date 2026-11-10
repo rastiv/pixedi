@@ -1,16 +1,15 @@
-import { useEffect, useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { ActionName, type CropRect } from "../types";
-import { getInitalCrop } from "../utils/crop";
+import { useEffect, useRef } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { ActionName, type CropRect } from '../types';
+import { getInitalCrop } from '../utils/crop';
 
 export const useCrop = () => {
-  const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } =
-    usePixediContext();
+  const { setCurrentAction, currentAction, getLastHistoryItem, eventBus } = usePixediContext();
   const { commit, close, isSaving } = useToolCommit();
   const { width, height } = getLastHistoryItem();
   const { name, args } = currentAction || {};
-  const currentValue = name === ActionName.CROP ? (args?.id as string) : "";
+  const currentValue = name === ActionName.CROP ? (args?.id as string) : '';
   const originRatio = width / height;
 
   const clipPathRef = useRef<CropRect>({ x: 0, y: 0, w: 0, h: 0 });
@@ -28,10 +27,10 @@ export const useCrop = () => {
       clipPathRef.current = customEvent.detail;
     };
 
-    eventBus.addEventListener("clip-path-update", onClipPathUpdate);
+    eventBus.addEventListener('clip-path-update', onClipPathUpdate);
 
     return () => {
-      eventBus.removeEventListener("clip-path-update", onClipPathUpdate);
+      eventBus.removeEventListener('clip-path-update', onClipPathUpdate);
     };
   }, [currentAction, width, height, eventBus]);
 
@@ -68,11 +67,11 @@ export const useCrop = () => {
         id: value,
         ratio: /^\d+:\d+$/.test(value)
           ? value
-              .split(":")
+              .split(':')
               .map(Number)
               .reduce((a, b) => a / b)
           : originRatio,
-        isFree: value === "freeform",
+        isFree: value === 'freeform',
       },
     });
   };

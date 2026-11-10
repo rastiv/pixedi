@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
-import { InputPixel } from "./InputPixel";
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
+import { InputPixel } from './InputPixel';
 
 const meta = {
-  title: "Pixedi/UI/InputPixel",
+  title: 'Pixedi/UI/InputPixel',
   component: InputPixel,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
-    label: "Width",
+    label: 'Width',
     value: 120,
     onChange: fn(),
   },
@@ -27,7 +27,7 @@ export const Default: Story = {};
 
 export const WithValue: Story = {
   args: {
-    label: "Height",
+    label: 'Height',
     value: 240,
   },
 };

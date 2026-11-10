@@ -42,7 +42,7 @@
     background-color: var(--accent);
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 0px;
       bottom: 0px;

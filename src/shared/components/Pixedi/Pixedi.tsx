@@ -1,21 +1,16 @@
-import { useState } from "react";
-import { PixediProvider } from "./provider/PixediProvider";
-import { initialSettings } from "./provider/initialState";
-import { translations as initilaTranslations } from "./constants";
-import { useBelow, useImageLoader } from "./hooks";
-import { Header } from "./header";
-import { Sidebar } from "./sidebar";
-import { Infobar } from "./infobar";
-import { Frame } from "./frame";
-import { Loader } from "./assets/icons";
-import { UrlFilters } from "./filters/UrlFilters";
-import {
-  type FuncSaveArgs,
-  type Theme,
-  type Settings,
-  ActionName,
-} from "./types";
-import styles from "./index.module.css";
+import { useState } from 'react';
+import { PixediProvider } from './provider/PixediProvider';
+import { initialSettings } from './provider/initialState';
+import { translations as initilaTranslations } from './constants';
+import { useBelow, useImageLoader } from './hooks';
+import { Header } from './header';
+import { Sidebar } from './sidebar';
+import { Infobar } from './infobar';
+import { Frame } from './frame';
+import { Loader } from './assets/icons';
+import { UrlFilters } from './filters/UrlFilters';
+import { type FuncSaveArgs, type Theme, type Settings, ActionName } from './types';
+import styles from './index.module.css';
 
 type PixediProps = {
   image: string | Blob;
@@ -30,13 +25,13 @@ export const Pixedi = ({
   image,
   onSave,
   onBack,
-  theme = "light",
+  theme = 'light',
   settings = initialSettings,
   translations,
 }: PixediProps) => {
   const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
 
-  const isBelowSm = useBelow("sm", wrapper);
+  const isBelowSm = useBelow('sm', wrapper);
 
   const defaultSettings = {
     ...initialSettings,
@@ -45,27 +40,17 @@ export const Pixedi = ({
 
   const defaultTranslations = { ...initilaTranslations, ...translations };
 
-  const {
-    loading,
-    error,
-    mimeType,
-    width,
-    height,
-    originalBlob,
-    previewUrl,
-    isAlpha,
-  } = useImageLoader({
-    src: image,
-    skip: defaultSettings?.tools?.length === 0,
-  });
+  const { loading, error, mimeType, width, height, originalBlob, previewUrl, isAlpha } =
+    useImageLoader({
+      src: image,
+      skip: defaultSettings?.tools?.length === 0,
+    });
 
   if (defaultSettings?.tools?.length === 0) {
     return (
       <div className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         <div className={styles.system}>
-          <div className={styles.textRed}>
-            {defaultTranslations?.msgNoTools || "msgNoTools"}
-          </div>
+          <div className={styles.textRed}>{defaultTranslations?.msgNoTools || 'msgNoTools'}</div>
         </div>
       </div>
     );
@@ -79,8 +64,7 @@ export const Pixedi = ({
           {error && <div className={styles.textRed}>{error}</div>}
           {!loading && !error && (!originalBlob || !mimeType) && (
             <div className={styles.textRed}>
-              {defaultTranslations?.msgFailedToLoadImage ||
-                "msgFailedToLoadImage"}
+              {defaultTranslations?.msgFailedToLoadImage || 'msgFailedToLoadImage'}
             </div>
           )}
         </div>
@@ -101,11 +85,7 @@ export const Pixedi = ({
       onSave={onSave}
       onBack={onBack}
     >
-      <div
-        ref={setWrapper}
-        className={`${styles.root} ${styles.wrapper}`}
-        data-theme={theme}
-      >
+      <div ref={setWrapper} className={`${styles.root} ${styles.wrapper}`} data-theme={theme}>
         {defaultSettings?.tools?.includes(ActionName.FILTERS) && <UrlFilters />}
 
         {defaultSettings?.tools?.length === 1 ? (
@@ -116,7 +96,7 @@ export const Pixedi = ({
           <div
             className={`${
               defaultSettings?.infobar ? styles.grid : styles.gridNoInfobar
-            } ${isBelowSm ? styles.mobile : ""}`}
+            } ${isBelowSm ? styles.mobile : ''}`}
           >
             <Header isMobile={isBelowSm} />
             <Sidebar isMobile={isBelowSm} />

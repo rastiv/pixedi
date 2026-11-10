@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Separator } from "./Separator";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Separator } from './Separator';
 
 const meta = {
-  title: "Pixedi/UI/Separator",
+  title: 'Pixedi/UI/Separator',
   component: Separator,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof Separator>;
 
 export default meta;
@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Horizontal: Story = {
   args: {
-    orientation: "horizontal",
+    orientation: 'horizontal',
   },
   decorators: [
     (Story) => (
@@ -25,11 +25,11 @@ export const Horizontal: Story = {
 
 export const Vertical: Story = {
   args: {
-    orientation: "vertical",
+    orientation: 'vertical',
   },
   decorators: [
     (Story) => (
-      <div style={{ height: 100, display: "flex" }}>
+      <div style={{ height: 100, display: 'flex' }}>
         <Story />
       </div>
     ),

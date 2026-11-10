@@ -1,10 +1,10 @@
-import { ChevronDown, Check } from "../../assets/icons";
-import styles from "./Select.module.css";
-import rootStyles from "../../index.module.css";
-import { useSelect } from "./useSelect";
-import type { SelectOption } from "./useSelect";
+import { ChevronDown, Check } from '../../assets/icons';
+import styles from './Select.module.css';
+import rootStyles from '../../index.module.css';
+import { useSelect } from './useSelect';
+import type { SelectOption } from './useSelect';
 
-export type { SelectOption } from "./useSelect";
+export type { SelectOption } from './useSelect';
 
 type SelectProps = {
   items: SelectOption[];
@@ -18,8 +18,8 @@ type SelectProps = {
 export const Select = ({
   items,
   value,
-  placeholder = "Select an option",
-  className = "",
+  placeholder = 'Select an option',
+  className = '',
   onChange,
   renderOption,
 }: SelectProps) => {
@@ -37,14 +37,9 @@ export const Select = ({
     <div
       ref={containerRef}
       className={`${styles.wrapper} ${className}`.trim()}
-      data-state={isOpen ? "open" : "closed"}
+      data-state={isOpen ? 'open' : 'closed'}
     >
-      <button
-        ref={triggerRef}
-        type="button"
-        className={styles.trigger}
-        onClick={toggleOpen}
-      >
+      <button ref={triggerRef} type="button" className={styles.trigger} onClick={toggleOpen}>
         <span>{selectedLabel ?? placeholder}</span>
         <ChevronDown className={styles.triggerArrow} />
       </button>
@@ -55,9 +50,7 @@ export const Select = ({
             return (
               <div key={`group-${index}`}>
                 {/* Group Name */}
-                <div className={`${styles.groupLabel} ${rootStyles.semibold}`}>
-                  {item.label}
-                </div>
+                <div className={`${styles.groupLabel} ${rootStyles.semibold}`}>{item.label}</div>
                 {item.options.map((option) => (
                   <div
                     key={option.value}
@@ -71,9 +64,7 @@ export const Select = ({
                     )}
                     <div className={styles.itemAddon}>
                       {option.rightLabel && <span>{option.rightLabel}</span>}
-                      {value === option.value && (
-                        <Check className={styles.itemCheck} />
-                      )}
+                      {value === option.value && <Check className={styles.itemCheck} />}
                       {value !== option.value && <b />}
                     </div>
                   </div>

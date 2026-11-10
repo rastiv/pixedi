@@ -7,23 +7,20 @@ export const breakpoints = {
 
 export type Breakpoint = keyof typeof breakpoints;
 
-export type Direction = "tl" | "tr" | "bl" | "br";
+export type Direction = 'tl' | 'tr' | 'bl' | 'br';
 
 export const ActionName = {
-  INITIAL: "initial",
-  RESIZE: "resize",
-  CROP: "crop",
-  PRESET_CROP: "presetCrop",
-  FLIP: "flip",
-  ROTATE: "rotate",
-  FILTERS: "filters",
-  SHAPES: "shapes",
+  INITIAL: 'initial',
+  RESIZE: 'resize',
+  CROP: 'crop',
+  PRESET_CROP: 'presetCrop',
+  FLIP: 'flip',
+  ROTATE: 'rotate',
+  FILTERS: 'filters',
+  SHAPES: 'shapes',
 } as const;
 
-export type Tools = Exclude<
-  (typeof ActionName)[keyof typeof ActionName],
-  "initial"
->;
+export type Tools = Exclude<(typeof ActionName)[keyof typeof ActionName], 'initial'>;
 
 export type Sizes = {
   width: number;
@@ -111,7 +108,7 @@ export type History = {
 
 export type FuncSaveArgs = (payload: Blob | string) => Promise<void> | void;
 
-export type Theme = "light" | "dark";
+export type Theme = 'light' | 'dark';
 
 export type Option<T = string> = {
   value: T;
@@ -150,29 +147,29 @@ export type Settings = {
   infobar?: boolean;
   quality?: number;
   saveAsWEBP?: boolean;
-  exportAs?: "blob" | "base64";
-  background?: "circled" | "diagonals" | "rhombus";
+  exportAs?: 'blob' | 'base64';
+  background?: 'circled' | 'diagonals' | 'rhombus';
   maxImageSize?: number;
 };
 
 export type ShapeType =
-  | "star"
-  | "heart"
-  | "shield"
-  | "tag"
-  | "flower"
-  | "settings"
-  | "droplet"
-  | "pointer"
-  | "sparkle"
-  | "astroid"
-  | "badge"
-  | "moon"
-  | "circle"
-  | "ellipse"
-  | "triangle"
-  | "rectangle"
-  | "square"
-  | "pentagon"
-  | "hexagon"
-  | "octagon";
+  | 'star'
+  | 'heart'
+  | 'shield'
+  | 'tag'
+  | 'flower'
+  | 'settings'
+  | 'droplet'
+  | 'pointer'
+  | 'sparkle'
+  | 'astroid'
+  | 'badge'
+  | 'moon'
+  | 'circle'
+  | 'ellipse'
+  | 'triangle'
+  | 'rectangle'
+  | 'square'
+  | 'pentagon'
+  | 'hexagon'
+  | 'octagon';

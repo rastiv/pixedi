@@ -31,16 +31,16 @@ The widget includes every tool of the React component — crop, shape crop, resi
 
 <script>
   const widget = PixediWidget.init({
-    containerId: "editor",
-    image: "https://example.com/photo.jpg",
-    theme: "light",
+    containerId: 'editor',
+    image: 'https://example.com/photo.jpg',
+    theme: 'light',
     onSave: async (image) => {
       // image is a Blob by default, or a base64 data URI when
       // settings.exportAs is "base64"
       console.log(image);
     },
     onBack: () => {
-      console.log("User cancelled editing");
+      console.log('User cancelled editing');
     },
   });
 </script>
@@ -80,14 +80,14 @@ Pass a `translations` object to override any UI label. Only the keys you provide
 
 ```js
 PixediWidget.init({
-  containerId: "editor",
-  image: "https://example.com/photo.jpg",
+  containerId: 'editor',
+  image: 'https://example.com/photo.jpg',
   onSave: async (image) => console.log(image),
-  onBack: () => console.log("User cancelled editing"),
+  onBack: () => console.log('User cancelled editing'),
   translations: {
-    save: "Enregistrer",
-    crop: "Recadrer",
-    filters: "Filtres",
+    save: 'Enregistrer',
+    crop: 'Recadrer',
+    filters: 'Filtres',
   },
 });
 ```
@@ -132,11 +132,11 @@ Passing exactly one entry in `settings.tools` renders a minimal editor: no heade
 
 ```js
 PixediWidget.init({
-  containerId: "editor",
-  image: "https://example.com/photo.jpg",
+  containerId: 'editor',
+  image: 'https://example.com/photo.jpg',
   onSave: async (image) => console.log(image),
-  onBack: () => console.log("User cancelled editing"),
-  settings: { tools: ["crop"] },
+  onBack: () => console.log('User cancelled editing'),
+  settings: { tools: ['crop'] },
 });
 ```
 
@@ -164,19 +164,17 @@ Example — follow a `data-theme` attribute on `<html>`:
 
 ```js
 const widget = PixediWidget.init({
-  containerId: "editor",
+  containerId: 'editor',
   image: photo,
   onSave,
   onBack,
 });
 
 new MutationObserver(() => {
-  widget.setTheme(
-    document.documentElement.dataset.theme === "dark" ? "dark" : "light",
-  );
+  widget.setTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
 }).observe(document.documentElement, {
   attributes: true,
-  attributeFilter: ["data-theme"],
+  attributeFilter: ['data-theme'],
 });
 ```
 

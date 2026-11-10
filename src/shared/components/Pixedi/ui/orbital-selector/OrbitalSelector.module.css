@@ -23,7 +23,7 @@
   cursor: pointer;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -40,7 +40,7 @@
     );
   }
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -73,7 +73,7 @@
   transition: transform 0.2s ease;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -88,7 +88,7 @@
     transform: translateX(-50%) scale(1.5);
   }
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;

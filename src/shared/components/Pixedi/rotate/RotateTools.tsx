@@ -1,16 +1,9 @@
-import { OrbitalSelector, SaveCloseGroup } from "../ui";
-import { useRotate } from "./useRotate";
-import styles from "./Rotate.module.css";
+import { OrbitalSelector, SaveCloseGroup } from '../ui';
+import { useRotate } from './useRotate';
+import styles from './Rotate.module.css';
 
 export const RotateTools = () => {
-  const {
-    selectorValue,
-    isChanged,
-    handleRotate,
-    handleSave,
-    handleClose,
-    isSaving,
-  } = useRotate();
+  const { selectorValue, isChanged, handleRotate, handleSave, handleClose, isSaving } = useRotate();
 
   return (
     <div className={styles.rotate}>

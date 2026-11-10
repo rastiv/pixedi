@@ -1,20 +1,13 @@
-import { useState } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { imageProcessor, blobToBase64 } from "../utils/imageProcessor";
-import { getProcessingSteps } from "../utils/preview";
-import type { HistoryItem } from "../types";
+import { useState } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { imageProcessor, blobToBase64 } from '../utils/imageProcessor';
+import { getProcessingSteps } from '../utils/preview';
+import type { HistoryItem } from '../types';
 
 export const useImageSaving = () => {
   const [isSaving, setIsSaving] = useState(false);
-  const {
-    setImage,
-    settings,
-    history,
-    originalBlob,
-    setCurrentAction,
-    resetHistory,
-    onSave,
-  } = usePixediContext();
+  const { setImage, settings, history, originalBlob, setCurrentAction, resetHistory, onSave } =
+    usePixediContext();
 
   // a pending item lets a tool save a change that is not in the history yet
   const save = async (pendingItem?: HistoryItem) => {
@@ -40,14 +33,13 @@ export const useImageSaving = () => {
       if (filters) processor.filters(filters);
 
       // shapes leave transparent corners, which only WEBP keeps compactly
-      const { newBlob, previewBlob, mimeType, width, height, isAlpha } =
-        await processor.get({
-          ...settings,
-          saveAsWEBP: settings.saveAsWEBP || hasShape,
-        });
+      const { newBlob, previewBlob, mimeType, width, height, isAlpha } = await processor.get({
+        ...settings,
+        saveAsWEBP: settings.saveAsWEBP || hasShape,
+      });
 
-      let base64 = "";
-      if (settings.exportAs === "base64") {
+      let base64 = '';
+      if (settings.exportAs === 'base64') {
         base64 = await blobToBase64(newBlob);
       }
 

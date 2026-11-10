@@ -1,14 +1,8 @@
-import {
-  ActionName,
-  type ActionFilter,
-  type HistoryItem,
-  type ShapeMask,
-} from "../types";
+import { ActionName, type ActionFilter, type HistoryItem, type ShapeMask } from '../types';
 
 const EPSILON = 1e-6;
 
-export const normalizeAngle = (degrees: number) =>
-  ((degrees % 360) + 360) % 360;
+export const normalizeAngle = (degrees: number) => ((degrees % 360) + 360) % 360;
 
 // the shortest signed turn from one angle to another, in (-180, 180]
 export const shortestTurn = (from: number, to: number) => {
@@ -78,14 +72,14 @@ export const isCommittedShape = (item: HistoryItem): boolean =>
   item.action.args.h !== undefined;
 
 const getLastFilterArgs = (items: HistoryItem[]) =>
-  items.filter((item) => item.action.name === ActionName.FILTERS).at(-1)?.action
-    .args as ActionFilter | undefined;
+  items.filter((item) => item.action.name === ActionName.FILTERS).at(-1)?.action.args as
+    ActionFilter | undefined;
 
 const getFilters = (items: HistoryItem[]): string[] =>
   Object.entries(getLastFilterArgs(items) || {}).map(([key, value]) =>
-    key === "url"
+    key === 'url'
       ? `url(#${value})`
-      : key === "hueRotate"
+      : key === 'hueRotate'
         ? `hue-rotate(${value}deg)`
         : `${key}(${value}%)`,
   );
@@ -149,10 +143,7 @@ export const getPreview = (items: HistoryItem[]): Preview => {
       flipX = false;
       flipY = false;
       degrees = 0;
-    } else if (
-      item.action.name === ActionName.CROP ||
-      item.action.name === ActionName.SHAPES
-    ) {
+    } else if (item.action.name === ActionName.CROP || item.action.name === ActionName.SHAPES) {
       const l = (item.action.args.x ?? 0) / 100;
       const t = (item.action.args.y ?? 0) / 100;
       const cw = (item.action.args.w ?? 100) / 100;
@@ -206,10 +197,7 @@ export const getPreview = (items: HistoryItem[]): Preview => {
   const filters = getFilters(items);
 
   let shape: ShapeMask | null = null;
-  if (
-    lastItem?.action.name === ActionName.SHAPES &&
-    isCommittedShape(lastItem)
-  ) {
+  if (lastItem?.action.name === ActionName.SHAPES && isCommittedShape(lastItem)) {
     const { shape: type, outlined, border } = lastItem.action.args;
     shape = { shape: type, outlined, border };
   }
@@ -248,14 +236,7 @@ export const getRotatedSizes = (items: HistoryItem[], degrees: number) => {
     : { width: height, height: width };
 };
 
-const isIdentity = ({
-  region,
-  beta,
-  flipX,
-  flipY,
-  initWidth,
-  initHeight,
-}: Preview) =>
+const isIdentity = ({ region, beta, flipX, flipY, initWidth, initHeight }: Preview) =>
   !flipX &&
   !flipY &&
   normalizeAngle(beta) < EPSILON &&
@@ -321,18 +302,8 @@ export const getActions = (
   shape?: ShapeMask;
 } => {
   const preview = getPreview(items);
-  const {
-    region,
-    beta,
-    scale,
-    flipX,
-    flipY,
-    newWidth,
-    newHeight,
-    viewWidth,
-    viewHeight,
-    shape,
-  } = preview;
+  const { region, beta, scale, flipX, flipY, newWidth, newHeight, viewWidth, viewHeight, shape } =
+    preview;
 
   const ActionFilter = getLastFilterArgs(items);
 
@@ -355,8 +326,7 @@ export const getActions = (
     // the view sizes already account for the crop and the axis swap, so only a
     // deliberate resize (or the zoom of a crop on a tilted view, which keeps
     // the oriented scale) makes the stored sizes differ from them
-    ...(Math.round(viewWidth) !== newWidth ||
-    Math.round(viewHeight) !== newHeight
+    ...(Math.round(viewWidth) !== newWidth || Math.round(viewHeight) !== newHeight
       ? {
           resize: {
             width: newWidth,

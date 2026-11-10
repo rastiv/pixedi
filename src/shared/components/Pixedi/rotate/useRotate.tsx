@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useToolCommit } from "../hooks";
-import { ActionName } from "../types";
-import { closestTurn, getRotatedSizes, normalizeAngle } from "../utils/preview";
+import { useState } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useToolCommit } from '../hooks';
+import { ActionName } from '../types';
+import { closestTurn, getRotatedSizes, normalizeAngle } from '../utils/preview';
 
 export const useRotate = () => {
   const { getLastRotation, history, setCurrentAction } = usePixediContext();

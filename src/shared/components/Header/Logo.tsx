@@ -1,13 +1,9 @@
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
 const Logo = () => {
   return (
     <div className={styles.logo}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        className={styles.logoIcon}
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={styles.logoIcon}>
         <path d="M3 8V3h5" className={styles.logoIconC2} />
         <path d="M16 3h5v5" className={styles.logoIconC1} />
         <path d="M21 16v5h-5" className={styles.logoIconC2} />

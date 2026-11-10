@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
-import React from "react";
-import type { Preview } from "@storybook/react";
-import "@/app/styles/index.css";
-import rootStyles from "@/shared/components/Pixedi/index.module.css";
+import React from 'react';
+import type { Preview } from '@storybook/react';
+import '@/app/styles/index.css';
+import rootStyles from '@/shared/components/Pixedi/index.module.css';
 
 const preview: Preview = {
   parameters: {
@@ -15,14 +15,14 @@ const preview: Preview = {
   },
   globalTypes: {
     theme: {
-      description: "Global theme for components",
-      defaultValue: "light",
+      description: 'Global theme for components',
+      defaultValue: 'light',
       toolbar: {
-        title: "Theme",
-        icon: "circlehollow",
+        title: 'Theme',
+        icon: 'circlehollow',
         items: [
-          { value: "light", icon: "sun", title: "Light Mode" },
-          { value: "dark", icon: "moon", title: "Dark Mode" },
+          { value: 'light', icon: 'sun', title: 'Light Mode' },
+          { value: 'dark', icon: 'moon', title: 'Dark Mode' },
         ],
         dynamicTitle: true,
       },
@@ -30,19 +30,18 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const selectedTheme = context.globals.theme || "light";
+      const selectedTheme = context.globals.theme || 'light';
 
       return React.createElement(
-        "div",
+        'div',
         {
-          "data-theme": selectedTheme,
+          'data-theme': selectedTheme,
           className: rootStyles.root,
           style: {
             padding: 24,
-            minHeight: "100vh",
-            backgroundColor:
-              selectedTheme === "dark" ? "#22252a" : "oklch(1 0 0)",
-            transition: "background-color 0.2s ease",
+            minHeight: '100vh',
+            backgroundColor: selectedTheme === 'dark' ? '#22252a' : 'oklch(1 0 0)',
+            transition: 'background-color 0.2s ease',
           },
         },
         React.createElement(Story),

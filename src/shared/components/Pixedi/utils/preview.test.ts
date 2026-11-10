@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import type { CropRect, HistoryItem } from "../types";
+import { describe, expect, it } from 'vitest';
+import type { CropRect, HistoryItem } from '../types';
 import {
   closestTurn,
   getActions,
@@ -12,12 +12,12 @@ import {
   splitSegments,
   type Preview,
   type Region,
-} from "./preview";
+} from './preview';
 
 const initial: HistoryItem = {
   width: 6099,
   height: 4014,
-  action: { name: "initial", args: null },
+  action: { name: 'initial', args: null },
 };
 
 const fullRegion: Region = {
@@ -28,26 +28,18 @@ const fullRegion: Region = {
   angle: 0,
 };
 
-const rotateItem = (
-  degrees: number,
-  width: number,
-  height: number,
-): HistoryItem => ({
+const rotateItem = (degrees: number, width: number, height: number): HistoryItem => ({
   width,
   height,
-  action: { name: "rotate", args: { degrees } },
+  action: { name: 'rotate', args: { degrees } },
 });
 
-const cropItem = (
-  rect: CropRect,
-  width: number,
-  height: number,
-): HistoryItem => ({
+const cropItem = (rect: CropRect, width: number, height: number): HistoryItem => ({
   width,
   height,
   action: {
-    name: "crop",
-    args: { id: "free", ratio: 1, isFree: true, ...rect },
+    name: 'crop',
+    args: { id: 'free', ratio: 1, isFree: true, ...rect },
   },
 });
 
@@ -61,20 +53,17 @@ const closeRegion = (region: Region) => ({
 
 const rad = (degrees: number) => (degrees * Math.PI) / 180;
 
-describe("getPreview", () => {
-  it("keeps the view sizes in sync with the stored history sizes", () => {
+describe('getPreview', () => {
+  it('keeps the view sizes in sync with the stored history sizes', () => {
     // rotate degrees are absolute, so the second rotate lands on 270 in total
     const rotated = rotateItem(90, 4014, 6099);
     const flipped: HistoryItem = {
       width: 4014,
       height: 6099,
-      action: { name: "flip", args: { horizontal: true, vertical: false } },
+      action: { name: 'flip', args: { horizontal: true, vertical: false } },
     };
     const items = [initial, rotated, flipped];
-    const rotatedAgain = rotateItem(
-      270,
-      ...sizesOf(getRotatedSizes(items, 270)),
-    );
+    const rotatedAgain = rotateItem(270, ...sizesOf(getRotatedSizes(items, 270)));
 
     const preview = getPreview([...items, rotatedAgain]);
 
@@ -91,7 +80,7 @@ describe("getPreview", () => {
     expect(preview.scale).toBe(1);
   });
 
-  it("maps a crop authored in view space back into image space", () => {
+  it('maps a crop authored in view space back into image space', () => {
     const { region, viewWidth, viewHeight, beta } = getPreview([
       initial,
       rotateItem(90, 4014, 6099),
@@ -99,15 +88,13 @@ describe("getPreview", () => {
     ]);
 
     // the top-left quarter of a 90deg view is the bottom-left quarter of the image
-    expect(region).toEqual(
-      closeRegion({ cx: 1524.75, cy: 3010.5, w: 3049.5, h: 2007, angle: 0 }),
-    );
+    expect(region).toEqual(closeRegion({ cx: 1524.75, cy: 3010.5, w: 3049.5, h: 2007, angle: 0 }));
     expect(beta).toBe(90);
     expect(viewWidth).toBeCloseTo(initial.height / 2);
     expect(viewHeight).toBeCloseTo(initial.width / 2);
   });
 
-  it("zooms a free angle in and swaps the frame past 45 degrees", () => {
+  it('zooms a free angle in and swaps the frame past 45 degrees', () => {
     const portrait: HistoryItem = { ...initial, width: 2272, height: 3408 };
     const { viewWidth, viewHeight, scale, beta } = getPreview([
       portrait,
@@ -119,29 +106,21 @@ describe("getPreview", () => {
     expect(viewHeight).toBe(2272);
     expect(scale).toBeCloseTo(
       Math.max(
-        (3408 * Math.abs(Math.cos(rad(105))) +
-          2272 * Math.abs(Math.sin(rad(105)))) /
-          2272,
-        (3408 * Math.abs(Math.sin(rad(105))) +
-          2272 * Math.abs(Math.cos(rad(105)))) /
-          3408,
+        (3408 * Math.abs(Math.cos(rad(105))) + 2272 * Math.abs(Math.sin(rad(105)))) / 2272,
+        (3408 * Math.abs(Math.sin(rad(105))) + 2272 * Math.abs(Math.cos(rad(105)))) / 3408,
       ),
     );
   });
 
-  it("keeps the angle editable instead of compounding the zoom", () => {
-    const edited = getPreview([
-      initial,
-      rotateItem(105, 4014, 6099),
-      rotateItem(110, 4014, 6099),
-    ]);
+  it('keeps the angle editable instead of compounding the zoom', () => {
+    const edited = getPreview([initial, rotateItem(105, 4014, 6099), rotateItem(110, 4014, 6099)]);
     const direct = getPreview([initial, rotateItem(110, 4014, 6099)]);
 
     expect(edited.beta).toBe(110);
     expect(edited.scale).toBe(direct.scale);
   });
 
-  it("moves the tilt into the region when cropping a rotated view", () => {
+  it('moves the tilt into the region when cropping a rotated view', () => {
     const base: HistoryItem = { ...initial, width: 800, height: 600 };
     const scale = getCoverScale(800, 600, 800, 600, 15);
     const items = [
@@ -172,7 +151,7 @@ describe("getPreview", () => {
     expect(unrotated.scale).toBeGreaterThan(1);
   });
 
-  it("mirrors the view on a flip and reverses later turns inside it", () => {
+  it('mirrors the view on a flip and reverses later turns inside it', () => {
     const base: HistoryItem = { ...initial, width: 800, height: 600 };
     const items: HistoryItem[] = [
       base,
@@ -180,7 +159,7 @@ describe("getPreview", () => {
       {
         width: 800,
         height: 600,
-        action: { name: "flip", args: { horizontal: true, vertical: false } },
+        action: { name: 'flip', args: { horizontal: true, vertical: false } },
       },
     ];
 
@@ -208,106 +187,99 @@ const viewToImage = (preview: Preview, u: number, v: number) => {
   return [region.cx + ix, region.cy + iy];
 };
 
-describe("crop continuity", () => {
+describe('crop continuity', () => {
   it.each([
     { degrees: 15, flip: false },
     { degrees: 105, flip: false },
     { degrees: -30, flip: true },
     { degrees: 200, flip: true },
-  ])(
-    "shows the same pixels after cropping at $degrees deg (flip $flip)",
-    ({ degrees, flip }) => {
-      const base: HistoryItem = { ...initial, width: 800, height: 600 };
-      const items: HistoryItem[] = [
-        base,
-        ...(flip
-          ? [
-              {
-                width: 800,
-                height: 600,
-                action: {
-                  name: "flip",
-                  args: { horizontal: true, vertical: false },
-                },
-              } as HistoryItem,
-            ]
-          : []),
-        rotateItem(degrees, 800, 600),
-      ];
-      const rect = { x: 10, y: 20, w: 50, h: 40 };
-      const before = getPreview(items);
-      const after = getPreview([...items, cropItem(rect, 100, 100)]);
+  ])('shows the same pixels after cropping at $degrees deg (flip $flip)', ({ degrees, flip }) => {
+    const base: HistoryItem = { ...initial, width: 800, height: 600 };
+    const items: HistoryItem[] = [
+      base,
+      ...(flip
+        ? [
+            {
+              width: 800,
+              height: 600,
+              action: {
+                name: 'flip',
+                args: { horizontal: true, vertical: false },
+              },
+            } as HistoryItem,
+          ]
+        : []),
+      rotateItem(degrees, 800, 600),
+    ];
+    const rect = { x: 10, y: 20, w: 50, h: 40 };
+    const before = getPreview(items);
+    const after = getPreview([...items, cropItem(rect, 100, 100)]);
 
-      const corners = [
-        [0, 0],
-        [1, 0],
-        [0, 1],
-        [1, 1],
-      ];
-      for (const [u, v] of corners) {
-        const expected = viewToImage(
-          before,
-          (rect.x + u * rect.w) / 100,
-          (rect.y + v * rect.h) / 100,
-        );
-        const actual = viewToImage(after, u, v);
-        expect(actual[0]).toBeCloseTo(expected[0], 6);
-        expect(actual[1]).toBeCloseTo(expected[1], 6);
-      }
-      // the new frame keeps the aspect ratio of the crop rect
-      expect(after.viewWidth / after.viewHeight).toBeCloseTo(
-        (rect.w * before.viewWidth) / (rect.h * before.viewHeight),
+    const corners = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+    ];
+    for (const [u, v] of corners) {
+      const expected = viewToImage(
+        before,
+        (rect.x + u * rect.w) / 100,
+        (rect.y + v * rect.h) / 100,
       );
-    },
-  );
+      const actual = viewToImage(after, u, v);
+      expect(actual[0]).toBeCloseTo(expected[0], 6);
+      expect(actual[1]).toBeCloseTo(expected[1], 6);
+    }
+    // the new frame keeps the aspect ratio of the crop rect
+    expect(after.viewWidth / after.viewHeight).toBeCloseTo(
+      (rect.w * before.viewWidth) / (rect.h * before.viewHeight),
+    );
+  });
 });
 
-const sizesOf = ({ width, height }: { width: number; height: number }) =>
-  [width, height] as const;
+const sizesOf = ({ width, height }: { width: number; height: number }) => [width, height] as const;
 
-describe("closestTurn", () => {
+describe('closestTurn', () => {
   it.each([
     { degrees: 0, reference: 1197, expected: 1080 },
     { degrees: 1197, reference: 0, expected: 117 },
     { degrees: 350, reference: 10, expected: -10 },
     { degrees: -90, reference: 0, expected: -90 },
     { degrees: 270, reference: 0, expected: -90 },
-  ])(
-    "maps $degrees to $expected next to $reference",
-    ({ degrees, reference, expected }) => {
-      expect(closestTurn(degrees, reference)).toBe(expected);
-    },
-  );
+  ])('maps $degrees to $expected next to $reference', ({ degrees, reference, expected }) => {
+    expect(closestTurn(degrees, reference)).toBe(expected);
+  });
 });
 
-describe("getRotatedSizes", () => {
+describe('getRotatedSizes', () => {
   const resized: HistoryItem[] = [
     initial,
     {
       width: 1200,
       height: 800,
-      action: { name: "resize", args: { width: 1200, height: 800 } },
+      action: { name: 'resize', args: { width: 1200, height: 800 } },
     },
   ];
 
-  it("swaps a previous resize when the frame turns on its side", () => {
+  it('swaps a previous resize when the frame turns on its side', () => {
     expect(getRotatedSizes(resized, 90)).toEqual({ width: 800, height: 1200 });
     expect(getRotatedSizes(resized, 105)).toEqual({ width: 800, height: 1200 });
   });
 
-  it("keeps the sizes for angles closer to the current orientation", () => {
+  it('keeps the sizes for angles closer to the current orientation', () => {
     expect(getRotatedSizes(resized, 30)).toEqual({ width: 1200, height: 800 });
     expect(getRotatedSizes(resized, 180)).toEqual({ width: 1200, height: 800 });
   });
 
-  it("rounds a tie at 45 degrees up to the next quarter turn", () => {
+  it('rounds a tie at 45 degrees up to the next quarter turn', () => {
     expect(isSwapped(45)).toBe(true);
     expect(isSwapped(135)).toBe(false);
   });
 });
 
-describe("getActions", () => {
-  it("does not emit a resize for a rotation that only swaps the axes", () => {
+describe('getActions', () => {
+  it('does not emit a resize for a rotation that only swaps the axes', () => {
     expect(getActions([initial, rotateItem(90, 4014, 6099)])).toEqual({
       transform: {
         region: fullRegion,
@@ -321,24 +293,22 @@ describe("getActions", () => {
     });
   });
 
-  it("collapses a full turn to no actions at all", () => {
+  it('collapses a full turn to no actions at all', () => {
     expect(getActions([initial, rotateItem(360, 6099, 4014)])).toEqual({});
   });
 
-  it("normalizes negative degrees before handing them over", () => {
-    expect(
-      getActions([initial, rotateItem(-90, 4014, 6099)]).transform?.beta,
-    ).toBe(270);
+  it('normalizes negative degrees before handing them over', () => {
+    expect(getActions([initial, rotateItem(-90, 4014, 6099)]).transform?.beta).toBe(270);
   });
 
-  it("emits a deliberate resize in view space alongside the rotation", () => {
+  it('emits a deliberate resize in view space alongside the rotation', () => {
     const actions = getActions([
       initial,
       rotateItem(90, 4014, 6099),
       {
         width: 2007,
         height: 3050,
-        action: { name: "resize", args: { width: 2007, height: 3050 } },
+        action: { name: 'resize', args: { width: 2007, height: 3050 } },
       },
     ]);
 
@@ -346,11 +316,9 @@ describe("getActions", () => {
     expect(actions.resize).toEqual({ width: 2007, height: 3050 });
   });
 
-  it("emits the crop region in original image pixels", () => {
+  it('emits the crop region in original image pixels', () => {
     // the crop sizes match the view, so no resize rides along with it
-    expect(
-      getActions([initial, cropItem({ x: 0, y: 0, w: 50, h: 50 }, 3050, 2007)]),
-    ).toEqual({
+    expect(getActions([initial, cropItem({ x: 0, y: 0, w: 50, h: 50 }, 3050, 2007)])).toEqual({
       transform: {
         region: closeRegion({
           cx: 1524.75,
@@ -369,7 +337,7 @@ describe("getActions", () => {
     });
   });
 
-  it("keeps the oriented scale after cropping a zoomed view", () => {
+  it('keeps the oriented scale after cropping a zoomed view', () => {
     const base: HistoryItem = { ...initial, width: 800, height: 600 };
     const actions = getActions([
       base,
@@ -388,8 +356,8 @@ const shapeItem = (args: Partial<CropRect> = {}): HistoryItem => ({
   width: 2000,
   height: 2000,
   action: {
-    name: "shapes",
-    args: { shape: "heart", outlined: false, border: 0.075, ...args },
+    name: 'shapes',
+    args: { shape: 'heart', outlined: false, border: 0.075, ...args },
   },
 });
 
@@ -397,33 +365,29 @@ const committedShape = shapeItem({ x: 10, y: 0, w: 50, h: 100 });
 const filter: HistoryItem = {
   width: 6099,
   height: 4014,
-  action: { name: "filters", args: { url: "sepia" } },
+  action: { name: 'filters', args: { url: 'sepia' } },
 };
 
-describe("splitSegments", () => {
-  it("closes a segment on a committed shape", () => {
-    const segments = splitSegments([
-      initial,
-      committedShape,
-      rotateItem(90, 2000, 2000),
-    ]);
+describe('splitSegments', () => {
+  it('closes a segment on a committed shape', () => {
+    const segments = splitSegments([initial, committedShape, rotateItem(90, 2000, 2000)]);
 
     expect(segments).toHaveLength(2);
     expect(segments[0]).toEqual([initial, committedShape]);
     expect(segments[1][0]).toEqual({
       width: 2000,
       height: 2000,
-      action: { name: "initial", args: null },
+      action: { name: 'initial', args: null },
     });
   });
 
-  it("ignores an open shape without a rect", () => {
+  it('ignores an open shape without a rect', () => {
     expect(splitSegments([initial, shapeItem()])).toHaveLength(1);
   });
 });
 
-describe("getProcessingSteps", () => {
-  it("crops and masks first, then applies later edits to the result", () => {
+describe('getProcessingSteps', () => {
+  it('crops and masks first, then applies later edits to the result', () => {
     const { steps, filters } = getProcessingSteps([
       initial,
       filter,
@@ -449,7 +413,7 @@ describe("getProcessingSteps", () => {
           height: 4014,
         },
         resize: { width: 2000, height: 2000 },
-        shape: { shape: "heart", outlined: false, border: 0.075 },
+        shape: { shape: 'heart', outlined: false, border: 0.075 },
       },
       {
         transform: {
@@ -464,17 +428,17 @@ describe("getProcessingSteps", () => {
       },
     ]);
     // filters are global and applied once over the final output
-    expect(filters).toEqual({ url: "sepia" });
+    expect(filters).toEqual({ url: 'sepia' });
   });
 });
 
-describe("getPreviewLayers", () => {
-  it("renders one layer per segment with the shape on the closed one", () => {
+describe('getPreviewLayers', () => {
+  it('renders one layer per segment with the shape on the closed one', () => {
     const { layers } = getPreviewLayers([initial, committedShape]);
 
     expect(layers).toHaveLength(2);
     expect(layers[0].shape).toEqual({
-      shape: "heart",
+      shape: 'heart',
       outlined: false,
       border: 0.075,
     });

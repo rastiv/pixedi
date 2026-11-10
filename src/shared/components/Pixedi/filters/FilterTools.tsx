@@ -1,17 +1,10 @@
-import { useRef } from "react";
-import { filterUrlsData } from "../constants";
-import { Compare, Filters, PredefinedFilters } from "../assets/icons";
-import {
-  Button,
-  SaveCloseGroup,
-  Select,
-  SurfaceTool,
-  Tooltip,
-  Slider,
-} from "../ui";
-import type { SelectOption } from "../ui/select/Select";
-import { useFilters } from "./useFilters";
-import styles from "./FilterTools.module.css";
+import { useRef } from 'react';
+import { filterUrlsData } from '../constants';
+import { Compare, Filters, PredefinedFilters } from '../assets/icons';
+import { Button, SaveCloseGroup, Select, SurfaceTool, Tooltip, Slider } from '../ui';
+import type { SelectOption } from '../ui/select/Select';
+import { useFilters } from './useFilters';
+import styles from './FilterTools.module.css';
 
 export const FilterTools = () => {
   const valueRef = useRef<HTMLDivElement>(null);
@@ -39,11 +32,7 @@ export const FilterTools = () => {
   const getFilterOptionWhenUrl = (option: SelectOption) => {
     return (
       <div className={styles.option}>
-        <img
-          src={previewUrl}
-          alt={option.label}
-          style={{ filter: `url(#${option.value})` }}
-        />
+        <img src={previewUrl} alt={option.label} style={{ filter: `url(#${option.value})` }} />
       </div>
     );
   };
@@ -73,10 +62,10 @@ export const FilterTools = () => {
         <Tooltip position="top">
           <Button
             variant="outline"
-            aria-label={i18n("compare")}
-            data-tooltip={i18n("compare")}
+            aria-label={i18n('compare')}
+            data-tooltip={i18n('compare')}
             onClick={handleToggleCompare}
-            className={showCompare ? styles.active : ""}
+            className={showCompare ? styles.active : ''}
           >
             <Compare />
           </Button>
@@ -84,8 +73,8 @@ export const FilterTools = () => {
         <Tooltip position="top">
           <Button
             variant="outline"
-            aria-label={isUrl ? i18n("filters") : i18n("predefinedFilters")}
-            data-tooltip={isUrl ? i18n("filters") : i18n("predefinedFilters")}
+            aria-label={isUrl ? i18n('filters') : i18n('predefinedFilters')}
+            data-tooltip={isUrl ? i18n('filters') : i18n('predefinedFilters')}
             onClick={toggleIsUrl}
           >
             {isUrl ? <Filters /> : <PredefinedFilters />}
@@ -99,11 +88,7 @@ export const FilterTools = () => {
           renderOption={isUrl ? getFilterOptionWhenUrl : undefined}
           onChange={isUrl ? handleChangeWhenUrl : handleChange}
         />
-        <SaveCloseGroup
-          onSave={handleSave}
-          onClose={handleClose}
-          saving={isSaving}
-        />
+        <SaveCloseGroup onSave={handleSave} onClose={handleClose} saving={isSaving} />
       </div>
     </SurfaceTool>
   );

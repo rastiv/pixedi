@@ -1,13 +1,13 @@
-import { forwardRef } from "react";
-import styles from "./Separator.module.css";
+import { forwardRef } from 'react';
+import styles from './Separator.module.css';
 
-type SeparatorProps = React.ComponentPropsWithoutRef<"hr"> & {
-  orientation?: "horizontal" | "vertical";
+type SeparatorProps = React.ComponentPropsWithoutRef<'hr'> & {
+  orientation?: 'horizontal' | 'vertical';
   className?: string;
 };
 
 export const Separator = forwardRef<HTMLHRElement, SeparatorProps>(
-  ({ className = "", orientation = "horizontal", ...props }, ref) => {
+  ({ className = '', orientation = 'horizontal', ...props }, ref) => {
     const combinedClasses = `${styles.separator} ${className}`.trim();
 
     return (
@@ -23,4 +23,4 @@ export const Separator = forwardRef<HTMLHRElement, SeparatorProps>(
   },
 );
 
-Separator.displayName = "Separator";
+Separator.displayName = 'Separator';

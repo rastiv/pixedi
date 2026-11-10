@@ -1,1 +1,1 @@
-export { FlipTools } from "./FlipTools";
+export { FlipTools } from './FlipTools';

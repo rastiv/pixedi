@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
-import styles from "./Tooltip.module.css";
-import { TOOLTIP_DELAY, useTooltip } from "./useTooltip";
-import type { TooltipPosition } from "./useTooltip";
+import type { ReactNode } from 'react';
+import styles from './Tooltip.module.css';
+import { TOOLTIP_DELAY, useTooltip } from './useTooltip';
+import type { TooltipPosition } from './useTooltip';
 
 type TooltipProps = {
   children: ReactNode;
@@ -14,10 +14,10 @@ type TooltipProps = {
 
 export const Tooltip = ({
   children,
-  position = "top",
+  position = 'top',
   delay = TOOLTIP_DELAY,
-  className = "",
-  classNameTitle = "",
+  className = '',
+  classNameTitle = '',
   style,
 }: TooltipProps) => {
   const {
@@ -40,16 +40,13 @@ export const Tooltip = ({
       className={styles.tooltip}
       style={{ ...cssVars, ...style }}
     >
-      <div
-        data-position={position}
-        className={`${styles.container} ${className}`}
-      >
+      <div data-position={position} className={`${styles.container} ${className}`}>
         {children}
       </div>
       <div
         aria-hidden="true"
         data-position={position}
-        className={`${styles.popup} ${isAnimated ? styles.animated : ""}`}
+        className={`${styles.popup} ${isAnimated ? styles.animated : ''}`}
       >
         <div className={styles.mask}>
           <div ref={trackRef} data-position={position} className={styles.track}>

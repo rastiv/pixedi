@@ -1,11 +1,11 @@
-import { PREVIEW_MAX_DIMENSION, PREVIEW_QUALITY } from "../constants";
+import { PREVIEW_MAX_DIMENSION, PREVIEW_QUALITY } from '../constants';
 import {
   ActionName,
   type Action,
   type CropRect,
   type CropRectExtended,
   type Direction,
-} from "../types";
+} from '../types';
 
 const minSize = 1;
 
@@ -13,10 +13,7 @@ const minSize = 1;
 export const getCropSettings = (
   action: Action | null,
 ): { ratio: number; isFree: boolean } | null => {
-  if (
-    action?.name === ActionName.CROP ||
-    action?.name === ActionName.PRESET_CROP
-  )
+  if (action?.name === ActionName.CROP || action?.name === ActionName.PRESET_CROP)
     return { ratio: action.args.ratio, isFree: action.args.isFree };
   if (action?.name === ActionName.SHAPES) return { ratio: 1, isFree: false };
   return null;
@@ -28,8 +25,8 @@ const clamp = (value: number, min: number, max: number): number =>
 // the corner opposite to the dragged handle stays put; dragging past it flips
 // the rect to the other side instead of stopping at a minimum size
 const getAnchor = (dir: Direction, crop: CropRect) => {
-  const movesLeft = dir === "tl" || dir === "bl";
-  const movesTop = dir === "tl" || dir === "tr";
+  const movesLeft = dir === 'tl' || dir === 'bl';
+  const movesTop = dir === 'tl' || dir === 'tr';
   return {
     movesLeft,
     movesTop,
@@ -44,12 +41,8 @@ const getSide = (anchor: number, pointer: number, towardStart: boolean) =>
   pointer === anchor ? (towardStart ? -1 : 1) : Math.sign(pointer - anchor);
 
 // lays a span of `length` from the anchor on the given side, inside the frame
-const placeSpan = (
-  anchor: number,
-  length: number,
-  side: number,
-  size: number,
-): number => clamp(side > 0 ? anchor : anchor - length, 0, size - length);
+const placeSpan = (anchor: number, length: number, side: number, size: number): number =>
+  clamp(side > 0 ? anchor : anchor - length, 0, size - length);
 
 export const getCropPoints = (
   dir: Direction,
@@ -63,10 +56,7 @@ export const getCropPoints = (
   height: number,
   crop: CropRect,
 ): CropRect => {
-  const { movesLeft, movesTop, anchorX, anchorY, cornerX, cornerY } = getAnchor(
-    dir,
-    crop,
-  );
+  const { movesLeft, movesTop, anchorX, anchorY, cornerX, cornerY } = getAnchor(dir, crop);
   const pointerX = clamp(cornerX + clientX - startX, 0, width);
   const pointerY = clamp(cornerY + clientY - startY, 0, height);
   const sideX = getSide(anchorX, pointerX, movesLeft);
@@ -84,16 +74,11 @@ export const getCropPoints = (
   }
 
   const desiredWidth =
-    ratio >= 1
-      ? Math.abs(pointerX - anchorX)
-      : Math.abs(pointerY - anchorY) * ratio;
+    ratio >= 1 ? Math.abs(pointerX - anchorX) : Math.abs(pointerY - anchorY) * ratio;
   const availableWidth = sideX > 0 ? width - anchorX : anchorX;
   const availableHeight = sideY > 0 ? height - anchorY : anchorY;
   const maxWidth = Math.min(availableWidth, availableHeight * ratio);
-  const w = Math.max(
-    Math.min(desiredWidth, maxWidth),
-    Math.max(minSize, minSize * ratio),
-  );
+  const w = Math.max(Math.min(desiredWidth, maxWidth), Math.max(minSize, minSize * ratio));
   const h = w / ratio;
 
   return {
@@ -208,21 +193,21 @@ export const createPreviewBlob = async (bitmap: ImageBitmap): Promise<Blob> => {
   const previewHeight = Math.round(height * scale);
 
   const canvas = new OffscreenCanvas(previewWidth, previewHeight);
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Failed to get 2D context for preview canvas");
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Failed to get 2D context for preview canvas');
   ctx.drawImage(bitmap, 0, 0, previewWidth, previewHeight);
 
   return canvas.convertToBlob({
-    type: "image/webp",
+    type: 'image/webp',
     quality: PREVIEW_QUALITY,
   });
 };
 
 export function hasAlphaChannel(bitmap: ImageBitmap): boolean {
   const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
   if (!ctx) {
-    throw new Error("Failed to create 2D context for canvas.");
+    throw new Error('Failed to create 2D context for canvas.');
   }
   ctx.drawImage(bitmap, 0, 0);
 

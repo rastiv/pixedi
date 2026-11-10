@@ -1,7 +1,7 @@
-import { useRef, type ReactNode } from "react";
-import { Drag } from "../../assets/icons";
-import { useSurfaceTool } from "./useSurfaceTool";
-import styles from "./SurfaceTool.module.css";
+import { useRef, type ReactNode } from 'react';
+import { Drag } from '../../assets/icons';
+import { useSurfaceTool } from './useSurfaceTool';
+import styles from './SurfaceTool.module.css';
 
 type SurfaceToolProps = {
   children: ReactNode;
@@ -10,12 +10,7 @@ type SurfaceToolProps = {
   ref?: React.RefObject<HTMLDivElement | null>;
 };
 
-export const SurfaceTool = ({
-  children,
-  additional,
-  className = "",
-  ref,
-}: SurfaceToolProps) => {
+export const SurfaceTool = ({ children, additional, className = '', ref }: SurfaceToolProps) => {
   // dragging always needs the element, so it is tracked here and mirrored into
   // the optional caller ref
   const surfaceRef = useRef<HTMLDivElement>(null);
@@ -32,9 +27,7 @@ export const SurfaceTool = ({
   return (
     <div ref={setRef} className={styles.surface}>
       <div className={styles.additional}>{additional}</div>
-      <div
-        className={`${styles.content} ${additional ? styles.noTopRadius : ""}`}
-      >
+      <div className={`${styles.content} ${additional ? styles.noTopRadius : ''}`}>
         <Drag className={styles.drag} {...dragHandlers} />
         <div className={`${className}`}>{children}</div>
       </div>

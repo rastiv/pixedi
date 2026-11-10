@@ -1,4 +1,4 @@
-import styles from "./ImagePreview.module.css";
+import styles from './ImagePreview.module.css';
 
 type ImagePreviewProps = {
   blob: Blob;
@@ -6,11 +6,7 @@ type ImagePreviewProps = {
   onDownload: () => void;
 };
 
-export const ImagePreview = ({
-  blob,
-  onClose,
-  onDownload,
-}: ImagePreviewProps) => {
+export const ImagePreview = ({ blob, onClose, onDownload }: ImagePreviewProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.frame}>
@@ -19,18 +15,10 @@ export const ImagePreview = ({
         </div>
       </div>
       <div className={styles.footer}>
-        <button
-          type="button"
-          className={`${styles.btn} ${styles.ghost}`}
-          onClick={onDownload}
-        >
+        <button type="button" className={`${styles.btn} ${styles.ghost}`} onClick={onDownload}>
           Download
         </button>
-        <button
-          type="button"
-          className={`${styles.btn} ${styles.primary}`}
-          onClick={onClose}
-        >
+        <button type="button" className={`${styles.btn} ${styles.primary}`} onClick={onClose}>
           Close
         </button>
       </div>

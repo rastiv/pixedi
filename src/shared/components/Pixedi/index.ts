@@ -1,1 +1,1 @@
-export { Pixedi } from "./Pixedi";
+export { Pixedi } from './Pixedi';

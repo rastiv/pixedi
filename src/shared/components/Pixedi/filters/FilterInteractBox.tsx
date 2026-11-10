@@ -1,9 +1,9 @@
-import { useRef } from "react";
-import { usePixediContext } from "../provider/usePixediContext";
-import { Compare } from "../assets/icons";
-import { Preview } from "../preview";
-import { useFilterInteraction } from "./useFilterInteraction";
-import styles from "./FilterTools.module.css";
+import { useRef } from 'react';
+import { usePixediContext } from '../provider/usePixediContext';
+import { Compare } from '../assets/icons';
+import { Preview } from '../preview';
+import { useFilterInteraction } from './useFilterInteraction';
+import styles from './FilterTools.module.css';
 
 export const FilterInteractBox = () => {
   const { showCompare, getLastHistoryItem } = usePixediContext();
@@ -13,18 +13,11 @@ export const FilterInteractBox = () => {
   const { dragHandlers } = useFilterInteraction({ compareRef });
 
   return (
-    <div
-      className={styles.filterInteract}
-      style={{ aspectRatio: `${width} / ${height}` }}
-    >
+    <div className={styles.filterInteract} style={{ aspectRatio: `${width} / ${height}` }}>
       <Preview isFilter={true} />
       {showCompare && (
         <>
-          <div
-            ref={compareRef}
-            className={styles.compare}
-            style={{ left: "50%" }}
-          >
+          <div ref={compareRef} className={styles.compare} style={{ left: '50%' }}>
             <div className={styles.compareThumb} {...dragHandlers}>
               <Compare />
             </div>

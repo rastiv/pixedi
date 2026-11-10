@@ -6,10 +6,10 @@ import {
   Children,
   isValidElement,
   useMemo,
-} from "react";
-import type { ReactNode, CSSProperties } from "react";
+} from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
-export type TooltipPosition = "top" | "bottom" | "left" | "right";
+export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
 type Size = { w: number; h: number };
 
@@ -21,7 +21,7 @@ export const TOOLTIP_DELAY = 500;
 
 export const useTooltip = (
   children: ReactNode,
-  position: TooltipPosition = "top",
+  position: TooltipPosition = 'top',
   delay: number = TOOLTIP_DELAY,
 ) => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -35,14 +35,14 @@ export const useTooltip = (
   const titleRefs = useRef<(HTMLDivElement | null)[]>([]);
   const showTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingRef = useRef<PendingShow | null>(null);
-  const isVerticalLayout = position === "left" || position === "right";
+  const isVerticalLayout = position === 'left' || position === 'right';
 
   const titles = useMemo(() => {
     const result: string[] = [];
     Children.forEach(children, (child) => {
       if (isValidElement(child)) {
-        const { "data-tooltip": tooltip } = child.props as {
-          "data-tooltip"?: string;
+        const { 'data-tooltip': tooltip } = child.props as {
+          'data-tooltip'?: string;
         };
         if (tooltip) {
           result.push(tooltip);
@@ -52,7 +52,7 @@ export const useTooltip = (
     return result;
   }, [children]);
 
-  const titlesKey = titles.join("\u0000");
+  const titlesKey = titles.join('\u0000');
   const titleCount = titles.length;
 
   useLayoutEffect(() => {
@@ -61,8 +61,7 @@ export const useTooltip = (
         .slice(0, titleCount)
         .map((el) => ({ w: el?.offsetWidth ?? 0, h: el?.offsetHeight ?? 0 }));
       setSizes((prev) =>
-        prev.length === next.length &&
-        prev.every((s, i) => s.w === next[i].w && s.h === next[i].h)
+        prev.length === next.length && prev.every((s, i) => s.w === next[i].w && s.h === next[i].h)
           ? prev
           : next,
       );
@@ -71,7 +70,7 @@ export const useTooltip = (
     measure();
 
     const track = trackRef.current;
-    if (!track || typeof ResizeObserver === "undefined") return;
+    if (!track || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(measure);
     observer.observe(track);
     return () => observer.disconnect();
@@ -110,9 +109,7 @@ export const useTooltip = (
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = (e.target as HTMLElement).closest(
-      "[data-tooltip]",
-    ) as HTMLElement | null;
+    const target = (e.target as HTMLElement).closest('[data-tooltip]') as HTMLElement | null;
 
     if (!target) {
       cancelShow();
@@ -123,11 +120,7 @@ export const useTooltip = (
     const parent = target.parentElement;
     if (!parent) return;
     const index = Array.from(parent.children).indexOf(target);
-    if (
-      index === -1 ||
-      (isVisible && index === activeIndex) ||
-      pendingRef.current?.index === index
-    )
+    if (index === -1 || (isVisible && index === activeIndex) || pendingRef.current?.index === index)
       return;
 
     const containerRect = containerRef.current?.getBoundingClientRect();
@@ -137,7 +130,7 @@ export const useTooltip = (
     const nextPosition = isVerticalLayout
       ? {
           x:
-            position === "left"
+            position === 'left'
               ? rect.left - containerRect.left - 4
               : rect.right - containerRect.left + 4,
           y: rect.top - containerRect.top + rect.height / 2,
@@ -145,7 +138,7 @@ export const useTooltip = (
       : {
           x: rect.left - containerRect.left + rect.width / 2,
           y:
-            position === "top"
+            position === 'top'
               ? rect.top - containerRect.top - 8
               : rect.bottom - containerRect.top + 8,
         };
@@ -175,17 +168,15 @@ export const useTooltip = (
 
   const index = activeIndex ?? 0;
   const activeSize = sizes[index];
-  const offset = sizes
-    .slice(0, index)
-    .reduce((acc, s) => acc + (isVerticalLayout ? s.h : s.w), 0);
+  const offset = sizes.slice(0, index).reduce((acc, s) => acc + (isVerticalLayout ? s.h : s.w), 0);
 
   const cssVars = {
-    "--tooltip-x": tooltipPosition ? `${tooltipPosition.x}px` : "0px",
-    "--tooltip-y": tooltipPosition ? `${tooltipPosition.y}px` : "0px",
-    "--tooltip-opacity": isVisible ? "1" : "0",
-    "--tooltip-w": activeSize?.w ? `${activeSize.w}px` : "auto",
-    "--tooltip-h": activeSize?.h ? `${activeSize.h}px` : "auto",
-    "--tooltip-offset": `${offset}px`,
+    '--tooltip-x': tooltipPosition ? `${tooltipPosition.x}px` : '0px',
+    '--tooltip-y': tooltipPosition ? `${tooltipPosition.y}px` : '0px',
+    '--tooltip-opacity': isVisible ? '1' : '0',
+    '--tooltip-w': activeSize?.w ? `${activeSize.w}px` : 'auto',
+    '--tooltip-h': activeSize?.h ? `${activeSize.h}px` : 'auto',
+    '--tooltip-offset': `${offset}px`,
   } as CSSProperties;
 
   return {

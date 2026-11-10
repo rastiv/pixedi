@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
-import { Slider } from "./Slider";
+import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
+import { Slider } from './Slider';
 
 const meta: Meta<typeof Slider> = {
-  title: "Pixedi/UI/Slider",
+  title: 'Pixedi/UI/Slider',
   component: Slider,
   args: {
     min: 0,
@@ -12,7 +12,7 @@ const meta: Meta<typeof Slider> = {
     step: 1,
   },
   argTypes: {
-    onChange: { action: "changed" },
+    onChange: { action: 'changed' },
   },
 };
 

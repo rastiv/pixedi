@@ -1,4 +1,4 @@
-declare module "virtual:css-injected-by-js" {
+declare module 'virtual:css-injected-by-js' {
   type CSSInjectionOptions = {
     target?: HTMLElement | ShadowRoot;
   };

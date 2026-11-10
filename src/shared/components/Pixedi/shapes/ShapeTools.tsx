@@ -1,17 +1,10 @@
-import { useRef } from "react";
-import {
-  Button,
-  SelectIcon,
-  Tooltip,
-  SaveCloseGroup,
-  SurfaceTool,
-  Slider,
-} from "../ui";
-import { shapes } from "../constants";
-import { Dashed, Stripes } from "../assets/icons";
-import { usePixediContext } from "../provider/usePixediContext";
-import { useShape } from "./useShape";
-import styles from "./Shape.module.css";
+import { useRef } from 'react';
+import { Button, SelectIcon, Tooltip, SaveCloseGroup, SurfaceTool, Slider } from '../ui';
+import { shapes } from '../constants';
+import { Dashed, Stripes } from '../assets/icons';
+import { usePixediContext } from '../provider/usePixediContext';
+import { useShape } from './useShape';
+import styles from './Shape.module.css';
 
 const selectItems = Object.entries(shapes).map(([key, value]) => ({
   value: key,
@@ -35,7 +28,7 @@ export const ShapeTools = () => {
     MIN_OUTLINE,
     MAX_OUTLINE,
   } = useShape(valueRef);
-  const outlineLabel = outlined ? i18n("fullfield") : i18n("outlined");
+  const outlineLabel = outlined ? i18n('fullfield') : i18n('outlined');
 
   const sliderContent = outlined && (
     <div className={styles.sliderContainer}>
@@ -78,11 +71,7 @@ export const ShapeTools = () => {
           />
           {outlined && <div className={styles.spacer} />}
         </div>
-        <SaveCloseGroup
-          onSave={handleSave}
-          onClose={handleClose}
-          saving={isSaving}
-        />
+        <SaveCloseGroup onSave={handleSave} onClose={handleClose} saving={isSaving} />
       </div>
     </SurfaceTool>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 export type SelectOption = {
   value: string;
@@ -20,13 +20,9 @@ const getClipBounds = (element: HTMLElement) => {
   let top = 0;
   let bottom = window.innerHeight;
 
-  for (
-    let parent = element.parentElement;
-    parent;
-    parent = parent.parentElement
-  ) {
+  for (let parent = element.parentElement; parent; parent = parent.parentElement) {
     const { overflow, overflowY } = getComputedStyle(parent);
-    if (overflow === "visible" && overflowY === "visible") continue;
+    if (overflow === 'visible' && overflowY === 'visible') continue;
     const rect = parent.getBoundingClientRect();
     top = Math.max(top, rect.top);
     bottom = Math.min(bottom, rect.bottom);
@@ -67,15 +63,12 @@ export const useSelect = ({ items, value, onChange }: UseSelectArgs) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !event.composedPath().includes(containerRef.current)
-      ) {
+      if (containerRef.current && !event.composedPath().includes(containerRef.current)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useLayoutEffect(() => {
@@ -84,8 +77,8 @@ export const useSelect = ({ items, value, onChange }: UseSelectArgs) => {
     const content = contentRef.current;
     if (!isOpen || !wrapper || !trigger || !content) return;
 
-    content.style.removeProperty("top");
-    content.style.removeProperty("max-height");
+    content.style.removeProperty('top');
+    content.style.removeProperty('max-height');
 
     const gap = 4;
     const inset = 8;

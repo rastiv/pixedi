@@ -1,7 +1,7 @@
-import { createPreviewBlob, hasAlphaChannel } from "../utils/crop";
+import { createPreviewBlob, hasAlphaChannel } from '../utils/crop';
 
 self.onmessage = async (e: MessageEvent<string | Blob>) => {
-  let fallbackMime = "";
+  let fallbackMime = '';
 
   try {
     let blob: Blob;
@@ -12,12 +12,12 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
       let src = e.data.trim();
 
       if (
-        !src.startsWith("http://") &&
-        !src.startsWith("https://") &&
-        !src.startsWith("blob:") &&
-        !src.startsWith("data:")
+        !src.startsWith('http://') &&
+        !src.startsWith('https://') &&
+        !src.startsWith('blob:') &&
+        !src.startsWith('data:')
       ) {
-        fallbackMime = "image/png";
+        fallbackMime = 'image/png';
         src = `data:${fallbackMime};base64,${src}`;
       }
 
@@ -29,7 +29,7 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
       blob = await response.blob();
     }
 
-    const mimeType = blob.type || fallbackMime || "image/unknown";
+    const mimeType = blob.type || fallbackMime || 'image/unknown';
 
     const bitmap = await createImageBitmap(blob);
     const { width, height } = bitmap;
@@ -54,7 +54,7 @@ self.onmessage = async (e: MessageEvent<string | Blob>) => {
       error:
         error instanceof Error
           ? error.message
-          : "An error occurred during image loader worker execution.",
+          : 'An error occurred during image loader worker execution.',
     });
   }
 };

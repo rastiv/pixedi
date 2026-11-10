@@ -1,17 +1,9 @@
-import {
-  ArrowLeft,
-  Check,
-  Undo,
-  Redo,
-  Loader,
-  SidebarOpen,
-  SidebarClose,
-} from "../assets/icons";
-import { usePixediContext } from "../provider/usePixediContext";
-import { Button } from "../ui";
-import { useImageSaving } from "../hooks/useImageSaving";
-import buttonStyles from "../ui/button/Button.module.css";
-import styles from "./Header.module.css";
+import { ArrowLeft, Check, Undo, Redo, Loader, SidebarOpen, SidebarClose } from '../assets/icons';
+import { usePixediContext } from '../provider/usePixediContext';
+import { Button } from '../ui';
+import { useImageSaving } from '../hooks/useImageSaving';
+import buttonStyles from '../ui/button/Button.module.css';
+import styles from './Header.module.css';
 
 type HeaderProps = {
   isMobile: boolean;
@@ -19,16 +11,8 @@ type HeaderProps = {
 
 export const Header = ({ isMobile }: HeaderProps) => {
   const { save, reset, isSaving } = useImageSaving();
-  const {
-    sidebar,
-    history,
-    undo,
-    redo,
-    i18n,
-    setSidebar,
-    setCurrentAction,
-    onBack,
-  } = usePixediContext();
+  const { sidebar, history, undo, redo, i18n, setSidebar, setCurrentAction, onBack } =
+    usePixediContext();
 
   const showHistory = history.items.length > 1 && !isSaving;
   const disabledUndo = history.pointer === 0;
@@ -54,7 +38,7 @@ export const Header = ({ isMobile }: HeaderProps) => {
     <div className={styles.header}>
       <div className={styles.left}>
         <div
-          className={`${styles.sidebarToggle} ${isMobile ? styles.mobile : ""}`}
+          className={`${styles.sidebarToggle} ${isMobile ? styles.mobile : ''}`}
           onClick={handleToggleSidebar}
         >
           {!sidebar ? (
@@ -63,11 +47,7 @@ export const Header = ({ isMobile }: HeaderProps) => {
             <SidebarClose className={styles.sidebarIcon} />
           )}
         </div>
-        <Button
-          variant="ghost"
-          className={buttonStyles.rect}
-          onClick={() => onBack()}
-        >
+        <Button variant="ghost" className={buttonStyles.rect} onClick={() => onBack()}>
           <ArrowLeft />
         </Button>
       </div>
@@ -99,11 +79,11 @@ export const Header = ({ isMobile }: HeaderProps) => {
           </div>
         )}
         <Button variant="outline" disabled={disableReset} onClick={reset}>
-          <span className={styles.btnText}>{i18n("reset")}</span>
+          <span className={styles.btnText}>{i18n('reset')}</span>
         </Button>
         <Button disabled={disableSave} onClick={() => save()}>
           {isSaving ? <Loader /> : <Check />}
-          <span className={styles.btnText}>{i18n("save")}</span>
+          <span className={styles.btnText}>{i18n('save')}</span>
         </Button>
       </div>
     </div>
